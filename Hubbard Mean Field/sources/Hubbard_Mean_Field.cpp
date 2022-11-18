@@ -18,8 +18,8 @@ int main()
 	Utility::InputFileReader input("params.config");
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
-	const int T_STEPS = 32;
-	const int U_STEPS = 40;
+	const int T_STEPS = 48;
+	const int U_STEPS = 60;
 
 	typedef std::vector<double> data_vector;
 	std::vector<data_vector> data_cdw(T_STEPS, data_vector(U_STEPS + 1));
@@ -29,7 +29,7 @@ int main()
 	data_vector U_vals(U_STEPS + 1);
 
 	const double T_MIN = 0, T_MAX = 2;
-	const double U_MIN = -5, U_MAX = 5;
+	const double U_MIN = -5, U_MAX = 0;
 
 	//Hubbard::HubbardCDW model(0.8125, -2.25, -2);
 	//Hubbard::BasicHubbardModel::data_set ret = model.compute(true);
@@ -63,9 +63,6 @@ int main()
 	Utility::saveData(data_cdw, "../data/basic_hubbard_cdw.txt", comments);
 	Utility::saveData(data_sc, "../data/basic_hubbard_sc.txt", comments);
 	Utility::saveData(data_eta, "../data/basic_hubbard_eta.txt", comments);
-
-	Utility::saveData(T_vals, "../data/basic_hubbard_T.txt");
-	Utility::saveData(U_vals, "../data/basic_hubbard_U.txt");
-
+	
 	return 0;
 }
