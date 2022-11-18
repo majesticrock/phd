@@ -9,12 +9,20 @@ CDW = (np.loadtxt("data/basic_hubbard_cdw.txt"))
 SC =  (np.loadtxt("data/basic_hubbard_sc.txt"))
 ETA = (np.loadtxt("data/basic_hubbard_eta.txt"))
 
-T = np.loadtxt("data/basic_hubbard_T.txt")
-U = np.loadtxt("data/basic_hubbard_U.txt")
-
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
-Z = np.zeros((T_SIZE, U_SIZE))
+
+with open("data/basic_hubbard_cdw.txt") as fp:
+    for i, line in enumerate(fp):
+        if i == 2:
+            ls = line.split()
+            U = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), U_SIZE)
+        elif i == 3:
+            ls = line.split()
+            T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE)
+        elif i > 3:
+            break
+
 
 for i in range(0, T_SIZE):
     for j in range(0, U_SIZE):
