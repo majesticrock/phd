@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <omp.h>
+#include <mpi.h>
 #include <string>
 #include "Utility/InputFileReader.hpp"
 #include "Utility/OutputWriter.hpp"
@@ -12,9 +13,15 @@
 
 int Hubbard::Constants::K_DISCRETIZATION = 100;
 
-int main()
+int main(int argc, char** argv)
 {
-	omp_set_num_threads(16);
+	// First call MPI_Init
+	MPI_Init(&argc, &argv);
+
+	// Get my rank and the number of ranks
+	int rank, n_ranks;
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Comm_size(MPI_COMM_WORLD, &n_ranks);
 
 	Utility::InputFileReader input("params.config");
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
