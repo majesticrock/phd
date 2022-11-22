@@ -17,7 +17,8 @@ namespace Hubbard {
 		};
 	public:
 		struct data_set {
-			double delta_sc, delta_cdw, delta_eta;
+			double delta_cdw, delta_sc, delta_eta;
+			void print() const;
 		};
 		BasicHubbardModel(double _temperature, double _U);
 

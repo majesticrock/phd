@@ -8,6 +8,11 @@
 using Eigen::MatrixXd;
 
 namespace Hubbard {
+	void BasicHubbardModel::data_set::print() const {
+		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta 
+			<< "\t" << sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta) << std::endl;
+	}
+
 	double BasicHubbardModel::unperturbed_energy(double k_x, double k_y) const
 	{
 		return -2 * (cos(k_x) + cos(k_y));
@@ -36,9 +41,9 @@ namespace Hubbard {
 	BasicHubbardModel::BasicHubbardModel(double _temperature, double _U)
 		: Model(_temperature, _U)
 	{
-		this->delta_sc = 0.05;
-		this->delta_cdw = 0.05;
-		this->delta_eta = 0;
+		this->delta_sc = 0.1;
+		this->delta_cdw = 0.1;
+		this->delta_eta = 0.01;
 
 		this->hamilton = MatrixXd::Zero(4, 4);
 	}
@@ -52,7 +57,7 @@ namespace Hubbard {
 		double old_parameters[3] = { 100, 100, 100 };
 		double error = 100;
 		double error_cdw = 100, error_cdw_osc = 100;
-		double error_sc  = 100, error_sc_osc  = 100;
+		double error_sc = 100, error_sc_osc = 100;
 		double error_eta = 100, error_eta_osc = 100;
 		const int MAX_STEPS = 10000;
 
@@ -79,8 +84,6 @@ namespace Hubbard {
 					cdw += rho(0, 1);
 					sc += rho(0, 2);
 					eta += rho(0, 3);
-
-					//std::cout << rho << "\n" << std::endl;
 				}
 			}
 
@@ -94,11 +97,11 @@ namespace Hubbard {
 			error = error_cdw + error_sc + error_eta;
 
 			delta_cdw = 0.5 * old_parameters[0] + 0.5 * delta_cdw;
-			delta_sc  = 0.5 * old_parameters[1] + 0.5 * delta_sc ;
+			delta_sc = 0.5 * old_parameters[1] + 0.5 * delta_sc;
 			delta_eta = 0.5 * old_parameters[2] + 0.5 * delta_eta;
 
 			error_cdw_osc = abs(delta_cdw + old_parameters[0]);
-			error_sc_osc  = abs(delta_sc + old_parameters[1]);
+			error_sc_osc = abs(delta_sc + old_parameters[1]);
 			error_eta_osc = abs(delta_eta + old_parameters[2]);
 
 			delta_cdw = ((error_cdw_osc) < EPSILON) ? 0 : delta_cdw;

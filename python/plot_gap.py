@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+from matplotlib.colors import ListedColormap
 
 CDW = (np.loadtxt("data/basic_hubbard_cdw.txt"))
 SC =  (np.loadtxt("data/basic_hubbard_sc.txt"))
@@ -21,20 +23,21 @@ with open("data/basic_hubbard_cdw.txt") as fp:
 
 data = np.sqrt(CDW*CDW + SC*SC + ETA*ETA)
 
-fig, ax = plt.subplots(2, 1)
-
-for i in range(0, 20, 2):
-    ax[0].plot(T, data.transpose()[i], label="$U=" + str(U[i]) + "$")
-
-for i in range(0, 20, 2):
-    ax[1].plot(U, data[i], label="$T=" + str(T[i]) + "$")
+length = 100
+colors = cm.gist_rainbow(np.linspace(0, 1, length))
+my_cmap = ListedColormap(colors[:,:-1])
+fig, ax = plt.subplots(1, 1, figsize=(9,6), constrained_layout=True)
+sm = plt.cm.ScalarMappable(cmap=my_cmap, norm=plt.Normalize(vmin=U[0], vmax=U[length - 1]))
 
 
-ax[0].set_xlabel(r"$T/t$")
-ax[1].set_xlabel(r"$U/t$")
-ax[0].set_ylabel(r"$\Delta_{tot}$")
-ax[1].set_ylabel(r"$\Delta_{tot}$")
-#ax[0].legend()
-#ax[1].legend()
-plt.tight_layout()
+for i in range(0, length, 1):
+    ax.plot(T, data.transpose()[i], c=colors[i], label="$U=" + str(U[i]) + "$")
+
+cbar = fig.colorbar(sm, ax=ax, label='$U/t$')
+cbar.set_ticks(U[0::8])
+cbar.set_ticklabels(U[0::8])
+
+ax.set_xlabel(r"$T/t$")
+ax.set_ylabel(r"$\Delta_{tot}$")
+
 plt.show()

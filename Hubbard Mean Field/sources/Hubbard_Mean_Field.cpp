@@ -7,6 +7,7 @@
 #include "Utility/OutputWriter.hpp"
 #include "Hubbard/BasicHubbardModel.hpp"
 #include "Hubbard/HubbardCDW.hpp"
+#include "Hubbard/UsingBroyden.hpp"
 #include "Hubbard/Constants.hpp"
 
 int Hubbard::Constants::K_DISCRETIZATION = 100;
@@ -18,8 +19,8 @@ int main()
 	Utility::InputFileReader input("params.config");
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
-	const int T_STEPS = 48;
-	const int U_STEPS = 60;
+	const int T_STEPS = 64;
+	const int U_STEPS = 128;
 
 	typedef std::vector<double> data_vector;
 	std::vector<data_vector> data_cdw(T_STEPS, data_vector(U_STEPS + 1));
@@ -28,12 +29,19 @@ int main()
 	data_vector T_vals(T_STEPS);
 	data_vector U_vals(U_STEPS + 1);
 
-	const double T_MIN = 0, T_MAX = 2;
+	const double T_MIN = 0, T_MAX = 1.2;
 	const double U_MIN = -5, U_MAX = 0;
 
-	//Hubbard::HubbardCDW model(0.8125, -2.25, -2);
-	//Hubbard::BasicHubbardModel::data_set ret = model.compute(true);
-	//return 0;
+#define DO_TEST1
+#ifdef DO_TEST
+	double test_vals[] = { 1, -4.5 };
+	Hubbard::HubbardCDW model(test_vals[0], test_vals[1], -0.5);
+	model.compute(true).print();
+
+	Hubbard::UsingBroyden model2(test_vals[0], test_vals[1], -0.5);
+	model2.compute(true).print();
+	return 0;
+#endif // DO_TEST
 
 #pragma omp parallel for schedule(dynamic)
 	for (int T = 0; T < T_STEPS; T++)
@@ -44,10 +52,10 @@ int main()
 		{
 			double U_val = U_MIN + ((U_MAX - U_MIN) * U) / U_STEPS;
 			U_vals[U] = U_val;
-			Hubbard::BasicHubbardModel model(T_val, U_val);
-			Hubbard::BasicHubbardModel::data_set ret = model.compute();
 			//Hubbard::HubbardCDW model(T_val, U_val, -0.5);
 			//Hubbard::HubbardCDW::data_set ret = model.compute();
+			Hubbard::UsingBroyden model(T_val, U_val, -0.5);
+			Hubbard::UsingBroyden::data_set ret = model.compute();
 
 			data_cdw[T][U] = ret.delta_cdw;
 			data_sc[T][U] = ret.delta_sc;
@@ -63,6 +71,6 @@ int main()
 	Utility::saveData(data_cdw, "../data/basic_hubbard_cdw.txt", comments);
 	Utility::saveData(data_sc, "../data/basic_hubbard_sc.txt", comments);
 	Utility::saveData(data_eta, "../data/basic_hubbard_eta.txt", comments);
-	
+
 	return 0;
 }

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 import matplotlib as mpl
 
-eps = 1e-6
+eps = 1e-8
 
 CDW = (np.loadtxt("data/basic_hubbard_cdw.txt"))
 SC =  (np.loadtxt("data/basic_hubbard_sc.txt"))
@@ -58,5 +58,5 @@ legend_elements = [Patch(facecolor='green', label=r'$\Delta_{SC}$'),
 ax.legend(handles=legend_elements, loc='upper right')
 
 plt.xlabel(r"$U / t$")
-plt.ylabel(r"$V / t$")
+plt.ylabel(r"$T / t$")
 plt.show()
