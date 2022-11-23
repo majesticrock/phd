@@ -1,4 +1,4 @@
-CXX = g++
+CXX = mpicxx
 
 INCLUDEFLAGS = -I ~/usr/local/include
 
@@ -19,7 +19,6 @@ SRCS=$(addprefix Utility/, $(UTIL_SRCS)) $(addprefix Hubbard/, $(HBBRD_SRCS)) $(
 OBJS=$(addprefix build/, $(subst .cpp,.o,$(SRCS)))
 
 all: build build/main 
-	./build/main params.config
 
 build/main: $(OBJS) | build
 	$(CXX) $(INCLUDEFLAGS) -o build/main $(OBJS) $(CXXFLAGS) $(LDLIBS)

@@ -14,7 +14,8 @@ namespace Utility {
 		return out.str();
 	}
 
-	void saveData(std::vector<double> data, std::string filename);
-	void saveData(std::vector<std::vector<double>> data, std::string filename);
-	void saveData(std::vector<std::vector<double>> data, std::string filename, std::vector<std::string> comments);
+	void saveData(std::vector<double>& data, std::string filename);
+	void saveData(std::vector<std::vector<double>>& data, std::string filename);
+	void saveData(std::vector<std::vector<double>>& data, std::string filename, std::vector<std::string> comments);
+	void saveData(std::vector<double>& data, const int linebreak, std::string filename, std::vector<std::string> comments);
 }
