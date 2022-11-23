@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 	for (int T = 0; T < T_STEPS; T++)
 	{
 		double T_val = T_MIN + ((T_MAX - T_MIN) * T) / T_STEPS;
-		#pragma omp parallel for schedule(dynamic)
+		//#pragma omp parallel for schedule(dynamic)
 		for (int U = 0; U <= U_STEPS; U++)
 		{
 			double U_val = U_MIN + ((U_MAX - U_MIN) * U) / U_STEPS;
