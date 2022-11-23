@@ -25,7 +25,7 @@
                                 ## Feature-Output by "cat /etc/slurm/slurm.conf | grep Feature"
 module purge
 module add gcc/11.3.0-full
-module add 
+module add mpi/openmpi3-x86_64
 cd /home/althueser/phd/Hubbard\ Mean\ Field/        ## go to working directory
 
 date
