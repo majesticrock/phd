@@ -30,7 +30,7 @@ int main(int argc, char** argv)
 	int T_STEPS = GLOBAL_T_STEPS / numberOfRanks;
 	int U_STEPS = 160;
 	// T_MIN, T_MAX for all ranks
-	const double GLOBAL_T_LIMS[4] = {0, 1.2};
+	const double GLOBAL_T_LIMS[4] = {-2, 2};
 	// Limits for the current rank
 	double T_RANK_RANGE = (GLOBAL_T_LIMS[1] - GLOBAL_T_LIMS[0]) / numberOfRanks;
 	double T_MIN = GLOBAL_T_LIMS[0] + rank * T_RANK_RANGE, T_MAX = T_MIN + T_RANK_RANGE;
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 			double U_val = U_MIN + ((U_MAX - U_MIN) * U) / U_STEPS;
 			//Hubbard::BasicHubbardModel model(T_val, U_val);
 			//Hubbard::BasicHubbardModel::data_set ret = model.compute();
-			Hubbard::UsingBroyden model(T_val, U_val, 0);
+			Hubbard::UsingBroyden model(0, U_val, T_val);
 			Hubbard::UsingBroyden::data_set ret = model.compute();
 
 			data_cdw[(T * (U_STEPS + 1)) + U] = ret.delta_cdw;
