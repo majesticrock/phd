@@ -28,7 +28,8 @@ namespace Utility {
 					J_new = Eigen::MatrixXd::Identity(DIM, DIM);
 				func(x0, F_new);
 
-				while (diff_x > EPS_X && diff_F > EPS_F && iter_num++ <= MAX_ITER) {
+				while (diff_x > EPS_X && diff_F > EPS_F && iter_num++ <= MAX_ITER && F_new.squaredNorm() > EPS_F) {
+					
 					delta_x = -J_new * F_new;
 					x0 += delta_x;
 					diff_x = delta_x.norm();

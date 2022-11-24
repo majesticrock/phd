@@ -15,9 +15,9 @@ namespace Hubbard {
 			F(0) *= (this->U - this->V) / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 			F(1) *= (this->U + this->V) / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 			F(2) *= (this->U + this->V) / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
-			this->delta_cdw = F(0);
-			this->delta_sc  = F(1);
-			this->delta_eta = F(2);
+			this->delta_cdw = 0.5 * (F(0) + this->delta_cdw);
+			this->delta_sc = 0.5 * (F(1) + this->delta_sc);
+			this->delta_eta = 0.5 * (F(2) + this->delta_eta);
 		};
 	public:
 		struct data_set {
