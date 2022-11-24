@@ -96,11 +96,11 @@ int main(int argc, char** argv)
 			data_cdw[(T * SECOND_IT_STEPS) + U] = ret.delta_cdw;
 			data_sc[(T * SECOND_IT_STEPS) + U] = ret.delta_sc;
 			data_eta[(T * SECOND_IT_STEPS) + U] = ret.delta_eta;
-			if (modelParameters.U < -2.5) {
-				if ((abs(data_sc[(T * SECOND_IT_STEPS) + U]) + abs(data_cdw[(T * SECOND_IT_STEPS) + U])) < 1e-7) {
-					std::cout << modelParameters << std::endl;
-				}
-			}
+			//if (modelParameters.U < -2.5) {
+			//	if ((abs(data_sc[(T * SECOND_IT_STEPS) + U]) + abs(data_cdw[(T * SECOND_IT_STEPS) + U])) < 1e-7) {
+			//		std::cout << modelParameters << std::endl;
+			//	}
+			//}
 			modelParameters.incrementSecondIterator();
 		}
 
