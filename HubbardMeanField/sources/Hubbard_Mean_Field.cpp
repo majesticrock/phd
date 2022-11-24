@@ -18,6 +18,7 @@ int Hubbard::Constants::K_DISCRETIZATION = 100;
 
 std::ostream& operator<<(std::ostream& os, Hubbard::Model::ModelParameters& mp) {
 	os << mp.temperature << "\t" << mp.U << "\t" << mp.V;
+	return os;
 }
 
 int main(int argc, char** argv)
