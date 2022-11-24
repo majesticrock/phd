@@ -29,7 +29,6 @@ namespace Utility {
 				func(x0, F_new);
 
 				while (diff_x > EPS_X && diff_F > EPS_F && iter_num++ <= MAX_ITER && F_new.squaredNorm() > EPS_F) {
-					
 					delta_x = -J_new * F_new;
 					x0 += delta_x;
 					diff_x = delta_x.norm();
@@ -42,13 +41,8 @@ namespace Utility {
 					J_old = J_new;
 					estimate_jacobian(J_new, J_old, delta_x, delta_F);
 				}
-
 				//std::cout << delta_x.norm() << "   " << iter_num << std::endl;
-
-				if (F_new.norm() > 1e-10) {
-					return false;
-				}
-				return true;
+				return (F_new.norm() < 1e-10);
 			};
 		}
 	}

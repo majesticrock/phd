@@ -92,10 +92,6 @@ namespace Hubbard {
 		Eigen::VectorXd f0 = Eigen::Vector3d(delta_cdw, delta_sc, delta_eta);
 		for (size_t i = 0; i < 25; i++)
 		{
-			if (print) {
-				std::cout << i << ":\t" << std::fixed << std::setprecision(8)
-					<< delta_cdw << "\t" << delta_sc << "\t" << delta_eta << std::endl;
-			}
 			func(x0, f0);
 			x0(0) = delta_cdw;
 			x0(1) = delta_sc;
