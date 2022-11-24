@@ -41,16 +41,16 @@ int main(int argc, char** argv)
 	data_vector  data_sc(T_STEPS * (U_STEPS + 1));
 	data_vector data_eta(T_STEPS * (U_STEPS + 1));
 
-#define DO_TEST1
-#ifdef DO_TEST
-	double test_vals[] = { 1, -4.5 };
-	Hubbard::HubbardCDW model(test_vals[0], test_vals[1], -0.5);
-	model.compute(true).print();
+//#define _DO_TEST
+#ifdef _DO_TEST
+	double test_vals[] = { 0, -4.97, -0.025 };
+	Hubbard::HubbardCDW model(test_vals[0], test_vals[1], test_vals[2]);
+	//model.compute(true).print();
 
-	Hubbard::UsingBroyden model2(test_vals[0], test_vals[1], -0.5);
+	Hubbard::UsingBroyden model2(test_vals[0], test_vals[1], test_vals[2]);
 	model2.compute(true).print();
-	return 0;
-#endif // DO_TEST
+	return MPI_Finalize();
+#endif // _DO_TEST
 
 	for (int T = 0; T < T_STEPS; T++)
 	{
