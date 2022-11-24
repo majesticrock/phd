@@ -121,9 +121,9 @@ int main(int argc, char** argv)
 		std::string output_folder = input.getString("output_folder");
 		std::filesystem::create_directories("../data/" + output_folder);
 
-		Utility::saveData(recieve_cdw, SECOND_IT_STEPS + 1, "../data/" + output_folder + "cdw.txt", comments);
-		Utility::saveData(recieve_sc, SECOND_IT_STEPS + 1, "../data/" + output_folder + "sc.txt", comments);
-		Utility::saveData(recieve_eta, SECOND_IT_STEPS + 1, "../data/" + output_folder + "eta.txt", comments);
+		Utility::saveData(recieve_cdw, SECOND_IT_STEPS, "../data/" + output_folder + "cdw.txt", comments);
+		Utility::saveData(recieve_sc, SECOND_IT_STEPS, "../data/" + output_folder + "sc.txt", comments);
+		Utility::saveData(recieve_eta, SECOND_IT_STEPS, "../data/" + output_folder + "eta.txt", comments);
 	}
 
 	return MPI_Finalize();
