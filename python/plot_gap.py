@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/V/"
+data_folder = "data/T/"
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
 SC =  (np.loadtxt(data_folder + "sc.txt"))
@@ -25,7 +25,7 @@ with open(data_folder + "cdw.txt") as fp:
 
 data = np.sqrt(CDW*CDW + SC*SC + ETA*ETA)
 
-length = 32
+length = len(U)
 colors = cm.gist_rainbow(np.linspace(0, 1, length))
 my_cmap = ListedColormap(colors[:,:-1])
 fig, ax = plt.subplots(1, 1, figsize=(9,6), constrained_layout=True)
