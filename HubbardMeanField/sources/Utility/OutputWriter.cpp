@@ -108,7 +108,7 @@ namespace Utility {
 			out << std::scientific << std::setprecision(10);
 			for (int i = 0; i < data.size(); i++)
 			{
-				if(i % linebreak == 0){
+				if (i % linebreak == 0) {
 					out << "\n";
 				}
 				out << data[i];

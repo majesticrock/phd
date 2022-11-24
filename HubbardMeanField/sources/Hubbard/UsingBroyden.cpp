@@ -39,8 +39,8 @@ namespace Hubbard {
 		hamilton(3, 3) = -unperturbed_energy(-k_x + M_PI, -k_y + M_PI);
 	}
 
-	UsingBroyden::UsingBroyden(double _temperature, double _U, double _V)
-		: Model(_temperature, _U), V(_V)
+	UsingBroyden::UsingBroyden(ModelParameters& _params)
+		: Model(_params), V(_params.V)
 	{
 		this->delta_cdw = abs(U - V) * 0.5;
 		this->delta_sc = abs(U + V) * 0.5;
@@ -97,8 +97,6 @@ namespace Hubbard {
 			x0(1) = delta_sc;
 			x0(2) = delta_eta;
 		}
-
-		std::cout << x0 << std::endl;
 
 		if (!Utility::Roots::Broyden::compute(func, x0)) {
 			std::cerr << "No convergence for [T, U, V] = [" << this->temperature << ", " << this->U << ", " << this->V << "]" << std::endl;
