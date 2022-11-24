@@ -5,14 +5,14 @@ from matplotlib.colors import ListedColormap
 
 data_folder = "data/V/"
 
-CDW = (np.loadtxt(data_folder + "basic_hubbard_cdw.txt"))
-SC =  (np.loadtxt(data_folder + "basic_hubbard_sc.txt"))
-ETA = (np.loadtxt(data_folder + "basic_hubbard_eta.txt"))
+CDW = (np.loadtxt(data_folder + "cdw.txt"))
+SC =  (np.loadtxt(data_folder + "sc.txt"))
+ETA = (np.loadtxt(data_folder + "eta.txt"))
 
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
 
-with open(data_folder + "basic_hubbard_cdw.txt") as fp:
+with open(data_folder + "cdw.txt") as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()
