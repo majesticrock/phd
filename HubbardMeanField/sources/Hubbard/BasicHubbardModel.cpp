@@ -114,7 +114,8 @@ namespace Hubbard {
 				{
 					total += old_parameters[i] * old_parameters[i];
 				}
-				std::cout << std::fixed << std::setprecision(8) << delta_cdw << "\t" << delta_sc << "\t" << delta_eta << "\t" << sqrt(total) << "\t" << error << std::endl;
+				std::cout << i << ":\t" << std::fixed << std::setprecision(8) 
+					<< delta_cdw << "\t" << delta_sc << "\t" << delta_eta << "\t" << sqrt(total) << "\t" << error << std::endl;
 			}
 			if (i == MAX_STEPS - 1) {
 				std::cerr << "[T, U] = [" << this->temperature << ", " << this->U << "]\tConvergence at " << error << std::endl;
