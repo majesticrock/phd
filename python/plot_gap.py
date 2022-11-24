@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/T0.5/"
+data_folder = "data/U-2/"
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
 SC =  (np.loadtxt(data_folder + "sc.txt"))
@@ -18,11 +18,11 @@ with open(data_folder + "cdw.txt") as fp:
         if i == 2:
             ls = line.split()
             labels[0] = ls[1].split("_")[0]
-            U = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), U_SIZE)
+            U = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), U_SIZE+1)[:U_SIZE]
         elif i == 3:
             ls = line.split()
             labels[1] = ls[1].split("_")[0]
-            T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE)
+            T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE+1)[:T_SIZE]
         elif i > 3:
             break
 
@@ -39,8 +39,8 @@ for i in range(0, length, 1):
     ax.plot(T, data.transpose()[i], c=colors[i], label="$" + labels[0] + "=" + str(U[i]) + "$")
 
 cbar = fig.colorbar(sm, ax=ax, label='$U/t$')
-cbar.set_ticks(U[0::10])
-cbar.set_ticklabels(U[0::10])
+cbar.set_ticks(U[0::8])
+cbar.set_ticklabels(U[0::8])
 
 ax.set_xlabel(r"$" + labels[1] + "/t$")
 ax.set_ylabel(r"$\Delta_{tot}$")
