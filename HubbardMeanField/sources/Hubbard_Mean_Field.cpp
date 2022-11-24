@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 
 	//#define _DO_TEST
 #ifdef _DO_TEST
-	Hubbard::Model::ModelParameters mP(0, 0, -0.025, 0, 0, "", "");
+	Hubbard::Model::ModelParameters mP(0.5, -2.875, -0.31446541, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 	model.compute(true).print();
 	std::cout << std::endl;
@@ -77,20 +77,20 @@ int main(int argc, char** argv)
 		input.getString("global_iterator_type"), input.getString("second_iterator_type"));
 
 	typedef std::vector<double> data_vector;
-	data_vector data_cdw(FIRST_IT_STEPS * (SECOND_IT_STEPS + 1));
-	data_vector  data_sc(FIRST_IT_STEPS * (SECOND_IT_STEPS + 1));
-	data_vector data_eta(FIRST_IT_STEPS * (SECOND_IT_STEPS + 1));
+	data_vector data_cdw(FIRST_IT_STEPS * SECOND_IT_STEPS);
+	data_vector  data_sc(FIRST_IT_STEPS * SECOND_IT_STEPS);
+	data_vector data_eta(FIRST_IT_STEPS * SECOND_IT_STEPS);
 
 	for (int T = 0; T < FIRST_IT_STEPS; T++)
 	{
-		for (int U = 0; U <= SECOND_IT_STEPS; U++)
+		for (int U = 0; U < SECOND_IT_STEPS; U++)
 		{
 			Hubbard::UsingBroyden model(modelParameters);
 			Hubbard::UsingBroyden::data_set ret = model.compute();
 
-			data_cdw[(T * (SECOND_IT_STEPS + 1)) + U] = ret.delta_cdw;
-			data_sc[(T * (SECOND_IT_STEPS + 1)) + U] = ret.delta_sc;
-			data_eta[(T * (SECOND_IT_STEPS + 1)) + U] = ret.delta_eta;
+			data_cdw[(T * SECOND_IT_STEPS) + U] = ret.delta_cdw;
+			data_sc[(T * SECOND_IT_STEPS) + U] = ret.delta_sc;
+			data_eta[(T * SECOND_IT_STEPS) + U] = ret.delta_eta;
 
 			modelParameters.incrementSecondIterator();
 		}
@@ -102,21 +102,21 @@ int main(int argc, char** argv)
 
 	std::vector<double> recieve_cdw, recieve_sc, recieve_eta;
 	if (rank == 0) {
-		recieve_cdw.resize(GLOBAL_IT_STEPS * (SECOND_IT_STEPS + 1));
-		recieve_sc.resize(GLOBAL_IT_STEPS * (SECOND_IT_STEPS + 1));
-		recieve_eta.resize(GLOBAL_IT_STEPS * (SECOND_IT_STEPS + 1));
+		recieve_cdw.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
+		recieve_sc.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
+		recieve_eta.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
 	}
-	MPI_Gather(data_cdw.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, recieve_cdw.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	MPI_Gather(data_sc.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, recieve_sc.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	MPI_Gather(data_eta.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, recieve_eta.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(data_cdw.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_cdw.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(data_sc.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_sc.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(data_eta.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_eta.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
 	if (rank == 0) {
 		std::vector<std::string> comments;
 		comments.push_back(input.getString("second_iterator_type") + "_MIN=" + std::to_string(SECOND_IT_MIN) 
-			+ "   " + input.getString("second_iterator_type") + "_MAX = " + std::to_string(SECOND_IT_MAX));
+			+ "   " + input.getString("second_iterator_type") + "_MAX=" + std::to_string(SECOND_IT_MAX));
 
 		comments.push_back(input.getString("global_iterator_type") + "_MIN=" + std::to_string(GLOBAL_IT_LIMS[0]) 
-			+ "   " + input.getString("global_iterator_type") + "_MAX = " + std::to_string(GLOBAL_IT_LIMS[1]));
+			+ "   " + input.getString("global_iterator_type") + "_MAX=" + std::to_string(GLOBAL_IT_LIMS[1]));
 
 		std::string output_folder = input.getString("output_folder");
 		std::filesystem::create_directories("../data/" + output_folder);
