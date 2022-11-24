@@ -8,12 +8,12 @@ namespace Hubbard {
 		double V;
 
 		virtual inline void setParameters(double cdw, double sc, double eta) override {
-			this->delta_cdw = ((this->U - this->V ) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * cdw;
-			this->delta_sc =  ((this->U + this->V ) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * sc;
-			this->delta_eta = ((this->U + this->V ) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * eta;
+			this->delta_cdw = ((this->U - this->V) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * cdw;
+			this->delta_sc = ((this->U + this->V) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * sc;
+			this->delta_eta = ((this->U + this->V) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * eta;
 		};
 
 	public:
-		HubbardCDW(double _temperature, double _U, double _V);
+		HubbardCDW(ModelParameters& _params);
 	};
 }

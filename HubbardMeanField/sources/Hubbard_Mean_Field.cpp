@@ -18,6 +18,10 @@ int Hubbard::Constants::K_DISCRETIZATION = 100;
 
 int main(int argc, char** argv)
 {
+	if (argc < 2) {
+		std::cerr << "Invalid number of arguments: Use mpirun -n <threads> <path_to_executable> <configfile>" << std::endl;
+		return -1;
+	}
 	// First call MPI_Init
 	MPI_Init(&argc, &argv);
 
@@ -26,76 +30,97 @@ int main(int argc, char** argv)
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &numberOfRanks);
 
-	Utility::InputFileReader input("params.config");
+	Utility::InputFileReader input(argv[1]);
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
-	const int GLOBAL_T_STEPS = 160;
-	int T_STEPS = GLOBAL_T_STEPS / numberOfRanks;
-	int U_STEPS = 160;
-	// T_MIN, T_MAX for all ranks
-	const double GLOBAL_T_LIMS[4] = {-2, 2};
-	// Limits for the current rank
-	double T_RANK_RANGE = (GLOBAL_T_LIMS[1] - GLOBAL_T_LIMS[0]) / numberOfRanks;
-	double T_MIN = GLOBAL_T_LIMS[0] + rank * T_RANK_RANGE, T_MAX = T_MIN + T_RANK_RANGE;
-	double U_MIN = -5, U_MAX = 0;
-
-	typedef std::vector<double> data_vector;
-	data_vector data_cdw(T_STEPS * (U_STEPS + 1));
-	data_vector  data_sc(T_STEPS * (U_STEPS + 1));
-	data_vector data_eta(T_STEPS * (U_STEPS + 1));
-
-//#define _DO_TEST
+	//#define _DO_TEST
 #ifdef _DO_TEST
-	double test_vals[] = { 0, 0, -0.025 };
-	Hubbard::HubbardCDW model(test_vals[0], test_vals[1], test_vals[2]);
+	Hubbard::Model::ModelParameters mP(0, 0, -0.025, 0, 0, "", "");
+	Hubbard::HubbardCDW model(mP);
 	model.compute(true).print();
 	std::cout << std::endl;
-	Hubbard::UsingBroyden model2(test_vals[0], test_vals[1], test_vals[2]);
+	Hubbard::UsingBroyden model2(mP);
 	model2.compute(true).print();
 	return MPI_Finalize();
 #endif // _DO_TEST
 
-	for (int T = 0; T < T_STEPS; T++)
+	// Setup the parameters T, U, V
+	std::vector<double> model_params = input.getDoubleList("model_parameters");
+
+	// Setup the number of steps
+	int GLOBAL_IT_STEPS = input.getInt("global_iterator_steps");
+	int FIRST_IT_STEPS = GLOBAL_IT_STEPS / numberOfRanks;
+	int SECOND_IT_STEPS = input.getInt("second_iterator_steps");
+
+	double GLOBAL_IT_LIMS[2] = { 0, input.getDouble("global_iterator_upper_limit") };
+	std::vector<std::string> option_list = { "T", "U", "V" };
+
+	double SECOND_IT_MIN = 0, SECOND_IT_MAX = input.getDouble("second_iterator_upper_limit");
+	double FIRST_IT_RANGE = 0;
+	double FIRST_IT_MIN = 0, FIRST_IT_MAX = 0;
+	for (int i = 0; i < option_list.size(); i++)
 	{
-		double T_val = T_MIN + ((T_MAX - T_MIN) * T) / T_STEPS;
-		//#pragma omp parallel for schedule(dynamic)
-		for (int U = 0; U <= U_STEPS; U++)
+		if (input.getString("global_iterator_type") == option_list[i]) {
+			GLOBAL_IT_LIMS[0] = model_params[i];
+			FIRST_IT_RANGE = (GLOBAL_IT_LIMS[1] - GLOBAL_IT_LIMS[0]) / numberOfRanks;
+			FIRST_IT_MIN = GLOBAL_IT_LIMS[0] + rank * FIRST_IT_RANGE;
+			FIRST_IT_MAX = FIRST_IT_MIN + FIRST_IT_RANGE;
+			model_params[i] = FIRST_IT_MIN;
+		}
+		if (input.getString("second_iterator_type") == option_list[i]) {
+			SECOND_IT_MIN = model_params[i];
+		}
+	}
+
+	Hubbard::Model::ModelParameters modelParameters(model_params[0], model_params[1], model_params[2],
+		(FIRST_IT_MAX - FIRST_IT_MIN) / FIRST_IT_STEPS, (SECOND_IT_MAX - SECOND_IT_MIN) / SECOND_IT_STEPS,
+		input.getString("global_iterator_type"), input.getString("second_iterator_type"));
+
+	typedef std::vector<double> data_vector;
+	data_vector data_cdw(FIRST_IT_STEPS * (SECOND_IT_STEPS + 1));
+	data_vector  data_sc(FIRST_IT_STEPS * (SECOND_IT_STEPS + 1));
+	data_vector data_eta(FIRST_IT_STEPS * (SECOND_IT_STEPS + 1));
+
+	for (int T = 0; T < FIRST_IT_STEPS; T++)
+	{
+		for (int U = 0; U <= SECOND_IT_STEPS; U++)
 		{
-			double U_val = U_MIN + ((U_MAX - U_MIN) * U) / U_STEPS;
-			//Hubbard::BasicHubbardModel model(T_val, U_val);
-			//Hubbard::BasicHubbardModel::data_set ret = model.compute();
-			Hubbard::UsingBroyden model(0, U_val, T_val);
+			Hubbard::UsingBroyden model(modelParameters);
 			Hubbard::UsingBroyden::data_set ret = model.compute();
 
-			data_cdw[(T * (U_STEPS + 1)) + U] = ret.delta_cdw;
-			data_sc[(T * (U_STEPS + 1)) + U] = ret.delta_sc;
-			data_eta[(T * (U_STEPS + 1)) + U] = ret.delta_eta;
+			data_cdw[(T * (SECOND_IT_STEPS + 1)) + U] = ret.delta_cdw;
+			data_sc[(T * (SECOND_IT_STEPS + 1)) + U] = ret.delta_sc;
+			data_eta[(T * (SECOND_IT_STEPS + 1)) + U] = ret.delta_eta;
+
+			modelParameters.incrementSecondIterator();
 		}
 
-		std::cout << "T=" << T_val << " done!" << std::endl;
+		modelParameters.printGlobal();
+		std::cout << " done!" << std::endl;
+		modelParameters.incrementGlobalIterator();
 	}
 
 	std::vector<double> recieve_cdw, recieve_sc, recieve_eta;
-	if(rank == 0){
-		recieve_cdw.resize(GLOBAL_T_STEPS * (U_STEPS + 1));
-		recieve_sc.resize(GLOBAL_T_STEPS * (U_STEPS + 1));
-		recieve_eta.resize(GLOBAL_T_STEPS * (U_STEPS + 1));
+	if (rank == 0) {
+		recieve_cdw.resize(GLOBAL_IT_STEPS * (SECOND_IT_STEPS + 1));
+		recieve_sc.resize(GLOBAL_IT_STEPS * (SECOND_IT_STEPS + 1));
+		recieve_eta.resize(GLOBAL_IT_STEPS * (SECOND_IT_STEPS + 1));
 	}
-	MPI_Gather(data_cdw.data(), T_STEPS * (U_STEPS + 1), MPI_DOUBLE, recieve_cdw.data(), T_STEPS * (U_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	MPI_Gather(data_sc.data(), T_STEPS * (U_STEPS + 1), MPI_DOUBLE, recieve_sc.data(), T_STEPS * (U_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	MPI_Gather(data_eta.data(), T_STEPS * (U_STEPS + 1), MPI_DOUBLE, recieve_eta.data(), T_STEPS * (U_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(data_cdw.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, recieve_cdw.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(data_sc.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, recieve_sc.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Gather(data_eta.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, recieve_eta.data(), FIRST_IT_STEPS * (SECOND_IT_STEPS + 1), MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-	if(rank == 0){
+	if (rank == 0) {
 		std::vector<std::string> comments;
-		comments.push_back("U_min=" + std::to_string(U_MIN) + "   U_max=" + std::to_string(U_MAX));
-		comments.push_back("T_min=" + std::to_string(GLOBAL_T_LIMS[0]) + "   T_max=" + std::to_string(GLOBAL_T_LIMS[1]));
+		comments.push_back("SECOND_IT_MIN=" + std::to_string(SECOND_IT_MIN) + "   SECOND_IT_MAX=" + std::to_string(SECOND_IT_MAX));
+		comments.push_back("FIRST_IT_MIN=" + std::to_string(GLOBAL_IT_LIMS[0]) + "   FIRST_IT_MAX=" + std::to_string(GLOBAL_IT_LIMS[1]));
 
 		std::string output_folder = input.getString("output_folder");
 		std::filesystem::create_directories("../data/" + output_folder);
-		
-		Utility::saveData(recieve_cdw, U_STEPS + 1, "../data/" + output_folder + "cdw.txt", comments);
-		Utility::saveData(recieve_sc, U_STEPS + 1 , "../data/" + output_folder + "sc.txt", comments);
-		Utility::saveData(recieve_eta, U_STEPS + 1, "../data/" + output_folder + "eta.txt", comments);
+
+		Utility::saveData(recieve_cdw, SECOND_IT_STEPS + 1, "../data/" + output_folder + "cdw.txt", comments);
+		Utility::saveData(recieve_sc, SECOND_IT_STEPS + 1, "../data/" + output_folder + "sc.txt", comments);
+		Utility::saveData(recieve_eta, SECOND_IT_STEPS + 1, "../data/" + output_folder + "eta.txt", comments);
 	}
 
 	return MPI_Finalize();

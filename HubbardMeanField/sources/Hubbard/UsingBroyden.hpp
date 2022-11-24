@@ -24,7 +24,7 @@ namespace Hubbard {
 			double delta_cdw, delta_sc, delta_eta;
 			void print() const;
 		};
-		UsingBroyden(double _temperature, double _U, double _V);
+		UsingBroyden(ModelParameters& _params);
 
 		data_set compute(const bool print = false);
 	};
