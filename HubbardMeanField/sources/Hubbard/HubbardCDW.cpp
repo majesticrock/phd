@@ -11,10 +11,10 @@ namespace Hubbard {
 		this->delta_cdw = abs(U - V) * 0.5;
 		this->delta_sc = abs(U + V) * 0.5;
 		if (V > 0) {
-			this->delta_sc *= 0.5;
+			this->delta_sc *= 0.25;
 		}
 		else {
-			this->delta_cdw *= 0.5;
+			this->delta_cdw *= 0.25;
 		}
 		this->delta_eta = 0.01;
 
