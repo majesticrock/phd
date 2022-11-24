@@ -3,14 +3,16 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-CDW = (np.loadtxt("data/basic_hubbard_cdw.txt"))
-SC =  (np.loadtxt("data/basic_hubbard_sc.txt"))
-ETA = (np.loadtxt("data/basic_hubbard_eta.txt"))
+data_folder = "data/V/"
+
+CDW = (np.loadtxt(data_folder + "basic_hubbard_cdw.txt"))
+SC =  (np.loadtxt(data_folder + "basic_hubbard_sc.txt"))
+ETA = (np.loadtxt(data_folder + "basic_hubbard_eta.txt"))
 
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
 
-with open("data/basic_hubbard_cdw.txt") as fp:
+with open(data_folder + "basic_hubbard_cdw.txt") as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()

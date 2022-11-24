@@ -42,8 +42,8 @@ namespace Hubbard {
 	UsingBroyden::UsingBroyden(double _temperature, double _U, double _V)
 		: Model(_temperature, _U), V(_V)
 	{
-		this->delta_sc = 0.8;
-		this->delta_cdw = 0.8;
+		this->delta_cdw = abs(U + V) * 0.5;
+		this->delta_sc = abs(U - V) * 0.5;
 		this->delta_eta = 0.01;
 
 		this->hamilton = MatrixXd::Zero(4, 4);
@@ -94,7 +94,7 @@ namespace Hubbard {
 
 		
 		if (!Utility::Roots::Broyden::compute(func, x0)) {
-			std::cerr << "No convergence for [T, U] = [" << this->temperature << ", " << this->U << "]" << std::endl;
+			std::cerr << "No convergence for [T, U, V] = [" << this->temperature << ", " << this->U << ", " << this->V << "]" << std::endl;
 			delta_cdw = 0;
 			delta_sc = 0;
 			delta_eta = 0;
