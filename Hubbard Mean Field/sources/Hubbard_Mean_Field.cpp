@@ -87,9 +87,11 @@ int main(int argc, char** argv)
 		comments.push_back("U_min=" + std::to_string(U_MIN) + "   U_max=" + std::to_string(U_MAX));
 		comments.push_back("T_min=" + std::to_string(GLOBAL_T_LIMS[0]) + "   T_max=" + std::to_string(GLOBAL_T_LIMS[1]));
 
-		Utility::saveData(recieve_cdw, U_STEPS + 1, "../data/basic_hubbard_cdw.txt", comments);
-		Utility::saveData(recieve_sc, U_STEPS + 1, "../data/basic_hubbard_sc.txt", comments);
-		Utility::saveData(recieve_eta, U_STEPS + 1, "../data/basic_hubbard_eta.txt", comments);
+		std::string output_folder = input.getString("output_folder");
+
+		Utility::saveData(recieve_cdw, U_STEPS + 1, "../data" + output_folder + "/cdw.txt", comments);
+		Utility::saveData(recieve_sc, U_STEPS + 1 , "../data" + output_folder + "/sc.txt", comments);
+		Utility::saveData(recieve_eta, U_STEPS + 1, "../data" + output_folder + "/eta.txt", comments);
 	}
 
 	return MPI_Finalize();
