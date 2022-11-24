@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/T/"
+data_folder = "data/T0/"
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
 SC =  (np.loadtxt(data_folder + "sc.txt"))

@@ -21,7 +21,7 @@ SRCS=$(addprefix Utility/, $(UTIL_SRCS)) $(addprefix Hubbard/, $(HBBRD_SRCS)) $(
 OBJS=$(addprefix build/, $(subst .cpp,.o,$(SRCS)))
 
 all: build build/main 
-	mpirun -n 1 build/main params.config
+	mpirun -n 1 build/main params/params_T.config
 
 build/main: $(OBJS) | build
 	$(CXX) $(INCLUDEFLAGS) -o build/main $(OBJS) $(CXXFLAGS) $(LDLIBS)
