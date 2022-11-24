@@ -90,15 +90,20 @@ namespace Hubbard {
 		std::function<void(const Eigen::VectorXd&, Eigen::VectorXd&)> func = lambda_func;
 		Eigen::VectorXd x0 = Eigen::Vector3d(delta_cdw, delta_sc, delta_eta);
 		Eigen::VectorXd f0 = Eigen::Vector3d(delta_cdw, delta_sc, delta_eta);
-		for (size_t i = 0; i < 20; i++)
+		for (size_t i = 0; i < 25; i++)
 		{
+			if (print) {
+				std::cout << i << ":\t" << std::fixed << std::setprecision(8)
+					<< delta_cdw << "\t" << delta_sc << "\t" << delta_eta << std::endl;
+			}
 			func(x0, f0);
 			x0(0) = delta_cdw;
 			x0(1) = delta_sc;
 			x0(2) = delta_eta;
 		}
 
-		
+		std::cout << x0 << std::endl;
+
 		if (!Utility::Roots::Broyden::compute(func, x0)) {
 			std::cerr << "No convergence for [T, U, V] = [" << this->temperature << ", " << this->U << ", " << this->V << "]" << std::endl;
 			delta_cdw = 0;
