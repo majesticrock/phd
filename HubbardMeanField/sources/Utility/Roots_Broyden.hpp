@@ -17,7 +17,7 @@ namespace Utility {
 				constexpr double EPS_F = std::numeric_limits<double>::denorm_min();
 				constexpr double EPS_X = 1e-12;
 				double diff_x = 100, diff_F = 100;
-				const int MAX_ITER = 100;
+				const int MAX_ITER = 200;
 				int iter_num = 0;
 
 				Eigen::VectorXd F_old = Eigen::VectorXd::Zero(DIM),
@@ -41,6 +41,8 @@ namespace Utility {
 					J_old = J_new;
 					estimate_jacobian(J_new, J_old, delta_x, delta_F);
 				}
+
+				//std::cout << delta_x.norm() << "   " << iter_num << std::endl;
 
 				if (F_new.norm() > 1e-10) {
 					return false;

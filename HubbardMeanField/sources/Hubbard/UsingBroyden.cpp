@@ -103,7 +103,17 @@ namespace Hubbard {
 
 		if (print) {
 			func(x0, f0);
-			std::cout << x0 << "\n\n" << f0 << "\n\n" << f0.norm() << std::endl;
+			std::cout << "x0 = (";
+			for (int i = 0; i < 3; i++)
+			{
+				std::cout << " " << x0(i) << " ";
+			}
+			std::cout << ")\nf0 = (";
+			for (int i = 0; i < 3; i++)
+			{
+				std::cout << " " << f0(i) << " ";
+			}
+			std::cout << ")   -> |f0| = " << f0.norm() << std::endl;
 		}
 
 		return ret;
