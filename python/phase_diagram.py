@@ -9,6 +9,7 @@ CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
 SC =  abs(np.loadtxt(data_folder + "sc.txt"))
 ETA = abs(np.loadtxt(data_folder + "eta.txt"))
 
+labels = ["T", "U"]
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
 
@@ -16,9 +17,11 @@ with open(data_folder + "cdw.txt") as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()
+            labels[0] = ls[1].split("_")[0]
             U = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), U_SIZE)
         elif i == 3:
             ls = line.split()
+            labels[1] = ls[1].split("_")[0]
             T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE)
         elif i > 3:
             break
@@ -57,6 +60,6 @@ legend_elements = [Patch(facecolor='green', label=r'$\Delta_{SC}$'),
             Patch(facecolor='red', label=r'$\Delta_{CDW}$')]
 ax.legend(handles=legend_elements, loc='upper right')
 
-plt.xlabel(r"$U / t$")
-plt.ylabel(r"$T / t$")
+plt.xlabel(r"$" + labels[0] + "/t$")
+plt.ylabel(r"$" + labels[1] + "/t$")
 plt.show()
