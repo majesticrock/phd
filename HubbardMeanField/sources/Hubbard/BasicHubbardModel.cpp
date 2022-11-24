@@ -9,7 +9,7 @@ using Eigen::MatrixXd;
 
 namespace Hubbard {
 	void BasicHubbardModel::data_set::print() const {
-		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta 
+		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta
 			<< "\t" << sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta) << std::endl;
 	}
 
@@ -38,8 +38,8 @@ namespace Hubbard {
 		hamilton(3, 3) = -unperturbed_energy(-k_x + M_PI, -k_y + M_PI);
 	}
 
-	BasicHubbardModel::BasicHubbardModel(double _temperature, double _U)
-		: Model(_temperature, _U)
+	BasicHubbardModel::BasicHubbardModel(ModelParameters& _params)
+		: Model(_params)
 	{
 		this->delta_sc = 0.1;
 		this->delta_cdw = 0.1;
@@ -114,7 +114,7 @@ namespace Hubbard {
 				{
 					total += old_parameters[i] * old_parameters[i];
 				}
-				std::cout << i << ":\t" << std::fixed << std::setprecision(8) 
+				std::cout << i << ":\t" << std::fixed << std::setprecision(8)
 					<< delta_cdw << "\t" << delta_sc << "\t" << delta_eta << "\t" << sqrt(total) << "\t" << error << std::endl;
 			}
 			if (i == MAX_STEPS - 1) {

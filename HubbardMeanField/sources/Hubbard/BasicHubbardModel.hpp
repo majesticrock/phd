@@ -12,7 +12,7 @@ namespace Hubbard {
 		virtual void fillMatrix(double k_x, double k_y) override;
 		virtual inline void setParameters(double cdw, double sc, double eta) {
 			this->delta_cdw = cdw * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
-			this->delta_sc  = sc  * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
+			this->delta_sc = sc * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 			this->delta_eta = eta * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 		};
 	public:
@@ -20,7 +20,7 @@ namespace Hubbard {
 			double delta_cdw, delta_sc, delta_eta;
 			void print() const;
 		};
-		BasicHubbardModel(double _temperature, double _U);
+		BasicHubbardModel(ModelParameters& _params);
 
 		data_set compute(const bool print = false);
 	};

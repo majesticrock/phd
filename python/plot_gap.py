@@ -25,7 +25,7 @@ with open(data_folder + "cdw.txt") as fp:
 
 data = np.sqrt(CDW*CDW + SC*SC + ETA*ETA)
 
-length = 160
+length = 32
 colors = cm.gist_rainbow(np.linspace(0, 1, length))
 my_cmap = ListedColormap(colors[:,:-1])
 fig, ax = plt.subplots(1, 1, figsize=(9,6), constrained_layout=True)
