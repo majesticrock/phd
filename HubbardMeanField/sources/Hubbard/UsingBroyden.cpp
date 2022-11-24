@@ -90,7 +90,7 @@ namespace Hubbard {
 		std::function<void(const Eigen::VectorXd&, Eigen::VectorXd&)> func = lambda_func;
 		Eigen::VectorXd x0 = Eigen::Vector3d(delta_cdw, delta_sc, delta_eta);
 		Eigen::VectorXd f0 = Eigen::Vector3d(delta_cdw, delta_sc, delta_eta);
-		for (size_t i = 0; i < 25; i++)
+		for (size_t i = 0; i < 30; i++)
 		{
 			func(x0, f0);
 			x0(0) = delta_cdw;
