@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
 //#define _DO_TEST
 #ifdef _DO_TEST
-	double test_vals[] = { 0, -3.0625, -0.025 };
+	double test_vals[] = { 0, -4.90625, -0.025 };
 	Hubbard::HubbardCDW model(test_vals[0], test_vals[1], test_vals[2]);
 	//model.compute(true).print();
 	std::cout << std::endl;
