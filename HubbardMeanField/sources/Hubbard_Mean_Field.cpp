@@ -16,6 +16,10 @@
 
 int Hubbard::Constants::K_DISCRETIZATION = 100;
 
+std::ostream& operator<<(std::ostream& os, Hubbard::Model::ModelParameters& mp) {
+	os << mp.temperature << "\t" << mp.U << "\t" << mp.V;
+}
+
 int main(int argc, char** argv)
 {
 	if (argc < 2) {
@@ -35,7 +39,7 @@ int main(int argc, char** argv)
 
 	//#define _DO_TEST
 #ifdef _DO_TEST
-	Hubbard::Model::ModelParameters mP(0.5, -2.875, -0.31446541, 0, 0, "", "");
+	Hubbard::Model::ModelParameters mP(0.5, -3.25, -0.0125, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 	model.compute(true).print();
 	std::cout << std::endl;
@@ -91,7 +95,11 @@ int main(int argc, char** argv)
 			data_cdw[(T * SECOND_IT_STEPS) + U] = ret.delta_cdw;
 			data_sc[(T * SECOND_IT_STEPS) + U] = ret.delta_sc;
 			data_eta[(T * SECOND_IT_STEPS) + U] = ret.delta_eta;
-
+			if (modelParameters.U < -2.5) {
+				if ((abs(data_sc[(T * SECOND_IT_STEPS) + U]) + abs(data_cdw[(T * SECOND_IT_STEPS) + U])) < 1e-7) {
+					std::cout << modelParameters << std::endl;
+				}
+			}
 			modelParameters.incrementSecondIterator();
 		}
 

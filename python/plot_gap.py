@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/T0/"
+data_folder = "data/T0.5/"
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
 SC =  (np.loadtxt(data_folder + "sc.txt"))
@@ -39,8 +39,8 @@ for i in range(0, length, 1):
     ax.plot(T, data.transpose()[i], c=colors[i], label="$" + labels[0] + "=" + str(U[i]) + "$")
 
 cbar = fig.colorbar(sm, ax=ax, label='$U/t$')
-cbar.set_ticks(U[0::8])
-cbar.set_ticklabels(U[0::8])
+cbar.set_ticks(U[0::10])
+cbar.set_ticklabels(U[0::10])
 
 ax.set_xlabel(r"$" + labels[1] + "/t$")
 ax.set_ylabel(r"$\Delta_{tot}$")

@@ -18,11 +18,11 @@ with open(data_folder + "cdw.txt") as fp:
         if i == 2:
             ls = line.split()
             labels[0] = ls[1].split("_")[0]
-            U = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), U_SIZE)
+            U = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), U_SIZE+1)[:U_SIZE]
         elif i == 3:
             ls = line.split()
             labels[1] = ls[1].split("_")[0]
-            T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE)
+            T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE+1)[:T_SIZE]
         elif i > 3:
             break
 
