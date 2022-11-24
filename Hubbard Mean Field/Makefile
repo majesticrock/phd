@@ -1,8 +1,8 @@
 CXX = mpicxx
 
-INCLUDEFLAGS = -I ~/usr/local/include
+INCLUDEFLAGS = -isystem ~/usr/local/include
 
-CXXFLAGS = -g $(WARNINGS) -std=c++20 $(OPT) -fopenmp
+CXXFLAGS = -g $(WARNINGS) -std=c++17 $(OPT) -fopenmp
 
 LDLIBS = $(LINALG_FLAG)
 
