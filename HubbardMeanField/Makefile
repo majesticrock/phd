@@ -1,5 +1,7 @@
 CXX = mpicxx
 
+# -isystem rather than -I as this supresses warnings that occur during
+# the compilation of the eigen library (I cant fix them anyways)
 INCLUDEFLAGS = -isystem ~/usr/local/include
 
 CXXFLAGS = -g $(WARNINGS) -std=c++17 $(OPT) -fopenmp
