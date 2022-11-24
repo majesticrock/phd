@@ -1,9 +1,12 @@
 #define _USE_MATH_DEFINES
 
-#include <iostream>
 #include <omp.h>
 #include <mpi.h>
+
 #include <string>
+#include <iostream>
+#include <filesystem>
+
 #include "Utility/InputFileReader.hpp"
 #include "Utility/OutputWriter.hpp"
 #include "Hubbard/BasicHubbardModel.hpp"
@@ -43,10 +46,10 @@ int main(int argc, char** argv)
 
 //#define _DO_TEST
 #ifdef _DO_TEST
-	double test_vals[] = { 0, -4.97, -0.025 };
+	double test_vals[] = { 0, -3.0625, -0.025 };
 	Hubbard::HubbardCDW model(test_vals[0], test_vals[1], test_vals[2]);
 	//model.compute(true).print();
-
+	std::cout << std::endl;
 	Hubbard::UsingBroyden model2(test_vals[0], test_vals[1], test_vals[2]);
 	model2.compute(true).print();
 	return MPI_Finalize();
@@ -88,10 +91,11 @@ int main(int argc, char** argv)
 		comments.push_back("T_min=" + std::to_string(GLOBAL_T_LIMS[0]) + "   T_max=" + std::to_string(GLOBAL_T_LIMS[1]));
 
 		std::string output_folder = input.getString("output_folder");
-
-		Utility::saveData(recieve_cdw, U_STEPS + 1, "../data" + output_folder + "/cdw.txt", comments);
-		Utility::saveData(recieve_sc, U_STEPS + 1 , "../data" + output_folder + "/sc.txt", comments);
-		Utility::saveData(recieve_eta, U_STEPS + 1, "../data" + output_folder + "/eta.txt", comments);
+		std::filesystem::create_directories("../data/" + output_folder);
+		
+		Utility::saveData(recieve_cdw, U_STEPS + 1, "../data/" + output_folder + "cdw.txt", comments);
+		Utility::saveData(recieve_sc, U_STEPS + 1 , "../data/" + output_folder + "sc.txt", comments);
+		Utility::saveData(recieve_eta, U_STEPS + 1, "../data/" + output_folder + "eta.txt", comments);
 	}
 
 	return MPI_Finalize();

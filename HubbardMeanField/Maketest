@@ -1,8 +1,10 @@
 CXX = mpicxx
 
-INCLUDEFLAGS = -I ~/usr/local/include
+# -isystem rather than -I as this supresses warnings that occur during
+# the compilation of the eigen library (I cant fix them anyways)
+INCLUDEFLAGS = -isystem ~/usr/local/include
 
-CXXFLAGS = -g $(WARNINGS) -std=c++11 $(OPT) -fopenmp -D_DO_TEST
+CXXFLAGS = -g $(WARNINGS) -std=c++17 $(OPT) -fopenmp -D_DO_TEST
 
 LDLIBS = $(LINALG_FLAG)
 

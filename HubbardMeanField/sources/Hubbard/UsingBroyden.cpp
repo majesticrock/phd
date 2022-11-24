@@ -42,8 +42,8 @@ namespace Hubbard {
 	UsingBroyden::UsingBroyden(double _temperature, double _U, double _V)
 		: Model(_temperature, _U), V(_V)
 	{
-		this->delta_cdw = abs(U + V) * 0.5;
-		this->delta_sc = abs(U - V) * 0.5;
+		this->delta_cdw = abs(U - V) * 0.5;
+		this->delta_sc = abs(U + V) * 0.5;
 		this->delta_eta = 0.01;
 
 		this->hamilton = MatrixXd::Zero(4, 4);
