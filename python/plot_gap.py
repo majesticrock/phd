@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/U-2/"
+data_folder = "data/V-2/"
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
 SC =  (np.loadtxt(data_folder + "sc.txt"))
@@ -36,7 +36,7 @@ sm = plt.cm.ScalarMappable(cmap=my_cmap, norm=plt.Normalize(vmin=U[0], vmax=U[le
 
 
 for i in range(0, length, 1):
-    ax.plot(T, data.transpose()[i], c=colors[i], label="$" + labels[0] + "=" + str(U[i]) + "$")
+    ax.plot(T, data[i], c=colors[i], label="$" + labels[0] + "=" + str(U[i]) + "$")
 
 cbar = fig.colorbar(sm, ax=ax, label='$U/t$')
 cbar.set_ticks(U[0::8])

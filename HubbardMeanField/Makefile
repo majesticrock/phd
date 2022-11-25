@@ -13,7 +13,7 @@ WARNINGS = -Wall -Wno-sign-compare
 OPT = -march=native -O3
 
 HBBRD_SRCS=Model.cpp BasicHubbardModel.cpp HubbardCDW.cpp UsingBroyden.cpp
-UTIL_SRCS=InputFileReader.cpp OutputWriter.cpp
+UTIL_SRCS=InputFileReader.cpp OutputWriter.cpp Roots_Broyden.cpp
 
 PART_SRCS=
 SRCS=$(addprefix Utility/, $(UTIL_SRCS)) $(addprefix Hubbard/, $(HBBRD_SRCS)) $(PART_SRCS) Hubbard_Mean_Field.cpp
