@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from scipy.optimize import curve_fit
 
-data_folder = "data/U-2/"
+data_folder = "data/V-2/"
 
 CDW = (np.loadtxt(data_folder + "cdw.txt")).transpose()
 SC =  (np.loadtxt(data_folder + "sc.txt")).transpose()
@@ -54,9 +54,11 @@ for i in range(0, U_SIZE):
         elif(not skip):
             guess[1] = T[j]
             END = j + 1
+            if END < 6:
+                skip = True
             break
 
-    if(not skip):
+    if(not skip and END != 0):
         while(RANGE > END):
             RANGE -= 1
         popt, pcov =  curve_fit(func, T[END-RANGE:END], CDW[i][END-RANGE:END], guess)
@@ -74,9 +76,11 @@ for i in range(0, U_SIZE):
         elif(not skip):
             guess[1] = T[j]
             END = j + 1
+            if END < 6:
+                skip = True
             break
-
-    if(not skip):
+    
+    if(not skip and END != 0):
         while(RANGE > END):
             RANGE -= 1
         popt, pcov =  curve_fit(func, T[END-RANGE:END], SC[i][END-RANGE:END], guess)
@@ -89,7 +93,7 @@ plt.plot(U, fitted_sc, "k")
 plt.fill_between(U, fitted_sc, 0, alpha=0.4, label="SC")
 plt.plot(U, fitted_cdw, "k")
 plt.fill_between(U, fitted_cdw, 0, alpha=0.4, label="CDW")
-plt.xlabel("$V / t$")
+plt.xlabel("$" + labels[0] + " / t$")
 plt.ylabel("$T_C / t$")
 plt.legend(loc="upper center")
 plt.show()
