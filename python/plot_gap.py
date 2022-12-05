@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/V-2/"
+data_folder = "data/T0/"
+x_axis_is_first = False
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
 SC =  (np.loadtxt(data_folder + "sc.txt"))
@@ -28,21 +29,27 @@ with open(data_folder + "cdw.txt") as fp:
 
 data = np.sqrt(CDW*CDW + SC*SC + ETA*ETA)
 
+if(not x_axis_is_first):
+    T_SIZE, U_SIZE = U_SIZE, T_SIZE
+    U, T = T, U
+    data = data.transpose()
+    labels[0], labels[1] = labels[1], labels[0]
+
 length = len(U)
 colors = cm.gist_rainbow(np.linspace(0, 1, length))
 my_cmap = ListedColormap(colors[:,:-1])
 fig, ax = plt.subplots(1, 1, figsize=(9,6), constrained_layout=True)
-sm = plt.cm.ScalarMappable(cmap=my_cmap, norm=plt.Normalize(vmin=U[0], vmax=U[length - 1]))
+sm = plt.cm.ScalarMappable(cmap=my_cmap, norm=plt.Normalize(vmin=T[0], vmax=T[length - 1]))
 
 
 for i in range(0, length, 1):
-    ax.plot(T, data[i], c=colors[i], label="$" + labels[0] + "=" + str(U[i]) + "$")
+    ax.plot(U, data[i], c=colors[i])
 
-cbar = fig.colorbar(sm, ax=ax, label='$U/t$')
-cbar.set_ticks(U[0::8])
-cbar.set_ticklabels(U[0::8])
+cbar = fig.colorbar(sm, ax=ax, label='$' + labels[1] + '/t$')
+cbar.set_ticks(np.round(T[0::8], 4))
+cbar.set_ticklabels(np.round(T[0::8], 4))
 
-ax.set_xlabel(r"$" + labels[1] + "/t$")
+ax.set_xlabel(r"$" + labels[0] + "/t$")
 ax.set_ylabel(r"$\Delta_{tot}$")
 
 plt.show()
