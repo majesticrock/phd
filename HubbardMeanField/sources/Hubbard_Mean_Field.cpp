@@ -90,17 +90,19 @@ int main(int argc, char** argv)
 	{
 		for (int U = 0; U < SECOND_IT_STEPS; U++)
 		{
-			Hubbard::UsingBroyden model(modelParameters);
-			Hubbard::UsingBroyden::data_set ret = model.compute();
+			Hubbard::Model::data_set ret;
+			if (input.getBool("use_broyden")) {
+				Hubbard::UsingBroyden model(modelParameters);
+				ret = model.compute();
+			}
+			else {
+				Hubbard::HubbardCDW model(modelParameters);
+				ret = model.compute();
+			}
 
 			data_cdw[(T * SECOND_IT_STEPS) + U] = ret.delta_cdw;
 			data_sc[(T * SECOND_IT_STEPS) + U] = ret.delta_sc;
 			data_eta[(T * SECOND_IT_STEPS) + U] = ret.delta_eta;
-			//if (modelParameters.U < -2.5) {
-			//	if ((abs(data_sc[(T * SECOND_IT_STEPS) + U]) + abs(data_cdw[(T * SECOND_IT_STEPS) + U])) < 1e-7) {
-			//		std::cout << modelParameters << std::endl;
-			//	}
-			//}
 			modelParameters.incrementSecondIterator();
 		}
 

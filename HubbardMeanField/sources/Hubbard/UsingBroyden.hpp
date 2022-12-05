@@ -20,10 +20,6 @@ namespace Hubbard {
 			this->delta_eta = 0.5 * (F(2) + this->delta_eta);
 		};
 	public:
-		struct data_set {
-			double delta_cdw, delta_sc, delta_eta;
-			void print() const;
-		};
 		UsingBroyden(ModelParameters& _params);
 
 		data_set compute(const bool print = false);

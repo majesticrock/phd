@@ -16,10 +16,6 @@ namespace Hubbard {
 			this->delta_eta = eta * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 		};
 	public:
-		struct data_set {
-			double delta_cdw, delta_sc, delta_eta;
-			void print() const;
-		};
 		BasicHubbardModel(ModelParameters& _params);
 
 		data_set compute(const bool print = false);
