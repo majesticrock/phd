@@ -41,7 +41,10 @@ namespace Hubbard {
 			void incrementSecondIterator();
 			void printGlobal() const;
 		};
-
+		struct data_set {
+			double delta_cdw, delta_sc, delta_eta;
+			void print() const;
+		};
 		Model(double _temperature, double _U);
 		Model(ModelParameters& _params);
 	};

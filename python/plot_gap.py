@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/T0/"
+data_folder = "data/V-2/"
 x_axis_is_first = False
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
