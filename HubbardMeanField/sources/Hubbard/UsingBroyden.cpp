@@ -9,11 +9,6 @@
 using Eigen::MatrixXd;
 
 namespace Hubbard {
-	void UsingBroyden::data_set::print() const {
-		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta
-			<< "\t" << sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta) << std::endl;
-	}
-
 	double UsingBroyden::unperturbed_energy(double k_x, double k_y) const
 	{
 		return -2 * (cos(k_x) + cos(k_y));
@@ -55,7 +50,7 @@ namespace Hubbard {
 		this->hamilton = MatrixXd::Zero(4, 4);
 	}
 
-	UsingBroyden::data_set UsingBroyden::compute(const bool print/*=false*/)
+	Model::data_set UsingBroyden::compute(const bool print/*=false*/)
 	{
 		MatrixXd rho = MatrixXd::Zero(4, 4);
 		Eigen::SelfAdjointEigenSolver<MatrixXd> solver;

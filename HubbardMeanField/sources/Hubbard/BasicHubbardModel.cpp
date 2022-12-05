@@ -8,11 +8,6 @@
 using Eigen::MatrixXd;
 
 namespace Hubbard {
-	void BasicHubbardModel::data_set::print() const {
-		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta
-			<< "\t" << sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta) << std::endl;
-	}
-
 	double BasicHubbardModel::unperturbed_energy(double k_x, double k_y) const
 	{
 		return -2 * (cos(k_x) + cos(k_y));
@@ -48,7 +43,7 @@ namespace Hubbard {
 		this->hamilton = MatrixXd::Zero(4, 4);
 	}
 
-	Hubbard::BasicHubbardModel::data_set BasicHubbardModel::compute(const bool print/*=false*/)
+	Hubbard::Model::data_set BasicHubbardModel::compute(const bool print/*=false*/)
 	{
 		MatrixXd rho = MatrixXd::Zero(4, 4);
 		Eigen::SelfAdjointEigenSolver<MatrixXd> solver;
