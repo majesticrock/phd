@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 
 	//#define _DO_TEST
 #ifdef _DO_TEST
-	Hubbard::Model::ModelParameters mP(0.5, -2.875, -0.325, 0, 0, "", "");
+	Hubbard::Model::ModelParameters mP(0.005, 1.3, -2, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 	model.compute(true).print();
 	std::cout << std::endl;
