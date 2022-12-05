@@ -4,7 +4,7 @@ from matplotlib import colors
 import matplotlib as mpl
 
 eps = 1e-8
-data_folder = "data/V-2/"
+data_folder = "data/T0.5/"
 CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
 SC =  abs(np.loadtxt(data_folder + "sc.txt"))
 ETA = abs(np.loadtxt(data_folder + "eta.txt"))
@@ -52,7 +52,6 @@ cset1 = ax.contourf(X, Y-0.5*(T[1]-T[0]), SC, 1, cmap=cmap1, hatches=[None, None
 cset2 = ax.contourf(X, Y-0.5*(T[1]-T[0]), CDW, 1, cmap=cmap2, hatches=[None, r"//"], alpha=0.4)
 cset3 = ax.contourf(X, Y-0.5*(T[1]-T[0]), ETA, 1, cmap=cmap2, hatches=[None, r"\\"], alpha=0)
 #cbar = fig.colorbar(cset1)
-print(U)
 
 from matplotlib.patches import Patch
 
