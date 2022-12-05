@@ -85,12 +85,21 @@ namespace Hubbard {
 		std::function<void(const Eigen::VectorXd&, Eigen::VectorXd&)> func = lambda_func;
 		Eigen::VectorXd x0 = Eigen::Vector3d(delta_cdw, delta_sc, delta_eta);
 		Eigen::VectorXd f0 = Eigen::Vector3d(delta_cdw, delta_sc, delta_eta);
-		for (size_t i = 0; i < 100; i++)
+		for (size_t i = 0; i < 200 && f0.squaredNorm() > 1e-15; i++)
 		{
 			func(x0, f0);
-			x0(0) = delta_cdw;
-			x0(1) = delta_sc;
-			x0(2) = delta_eta;
+			if (abs(x0(0) + delta_cdw) < 1e-10) {
+				delta_cdw = 0;
+			}
+			if (abs(x0(1) + delta_sc) < 1e-10) {
+				delta_sc = 0;
+			}
+			if (abs(x0(2) + delta_eta) < 1e-10) {
+				delta_eta = 0;
+			}
+			x0(0) = 0.5 * (delta_cdw + x0(0));
+			x0(1) = 0.5 * (delta_sc  + x0(1));
+			x0(2) = 0.5 * (delta_eta + x0(2));
 		}
 
 		if (!Utility::Roots::Broyden::compute(func, x0)) {
