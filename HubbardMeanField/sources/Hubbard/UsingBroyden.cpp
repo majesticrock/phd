@@ -27,11 +27,11 @@ namespace Hubbard {
 
 		Eigen::MatrixXd buffer = hamilton.transpose();
 		hamilton += buffer;
-
-		hamilton(0, 0) = unperturbed_energy(k_x, k_y);
-		hamilton(1, 1) = unperturbed_energy(k_x + M_PI, k_y + M_PI);
-		hamilton(2, 2) = -unperturbed_energy(-k_x, -k_y);
-		hamilton(3, 3) = -unperturbed_energy(-k_x + M_PI, -k_y + M_PI);
+		double eps = unperturbed_energy(k_x, k_y);
+		hamilton(0, 0) = eps;
+		hamilton(1, 1) = -eps;
+		hamilton(2, 2) = -eps;
+		hamilton(3, 3) = eps;
 	}
 
 	UsingBroyden::UsingBroyden(ModelParameters& _params)

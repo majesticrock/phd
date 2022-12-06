@@ -45,7 +45,13 @@ namespace Hubbard {
 			double delta_cdw, delta_sc, delta_eta;
 			void print() const;
 		};
+
 		Model(double _temperature, double _U);
 		Model(ModelParameters& _params);
+		// reciever is the vector the resulting data will be stored in
+		// direction gives how strongly k_y is varied compared to x
+		// i.e. 0 means k_y does not vary at all while 1 means k_x and k_y vary at the same rate
+		// which results in a 45° angle in the first BZ
+		void getEnergies(std::vector<std::vector<double>>& reciever, double direction);
 	};
 }
