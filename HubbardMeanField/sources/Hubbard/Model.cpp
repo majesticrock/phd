@@ -1,32 +1,35 @@
+#define _USE_MATH_DEFINES
+
 #include "Model.hpp"
+#include "Constants.hpp"
 #include <iostream>
 
 namespace Hubbard {
-	void Model::data_set::print() const {
-		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta
-			<< "\t" << sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta) << std::endl;
-	}
 
 	Model::Model(double _temperature, double _U)
 		: temperature(_temperature), U(_U)
 	{
 	}
+
 	Model::Model(ModelParameters& _params)
 		: temperature(_params.temperature), U(_params.U)
 	{
 	}
-	void Model::ModelParameters::incrementer(std::string& s, const double step)
+
+	void Model::getEnergies(std::vector<std::vector<double>>& reciever, double direction)
 	{
-		if (s == "T") {
-			temperature += step;
-		}
-		else if (s == "U") {
-			U += step;
-		}
-		else if (s == "V") {
-			V += step;
+		reciever.reserve(2 * Constants::K_DISCRETIZATION);
+		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
+		double k_val = 0;
+		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
+		{
+			k_val = k * M_PI / Constants::K_DISCRETIZATION;
+			fillMatrix(k_val, direction * k_val);
+			solver.compute(hamilton, false);
+			reciever.push_back(std::vector<double>(solver.eigenvalues().data(), solver.eigenvalues().data() + solver.eigenvalues().size()));
 		}
 	}
+
 	Model::ModelParameters::ModelParameters(double _temperature, double _U, double _V, double _global_step, double _second_step,
 		std::string _global_iterator_type, std::string _second_iterator_type)
 		: global_iterator_type(_global_iterator_type), second_iterator_type(_second_iterator_type),
@@ -43,6 +46,20 @@ namespace Hubbard {
 		}
 		else {
 			second_it_min = 0;
+		}
+	}
+
+	// // // // // // // // // // // //
+	void Model::ModelParameters::incrementer(std::string& s, const double step)
+	{
+		if (s == "T") {
+			temperature += step;
+		}
+		else if (s == "U") {
+			U += step;
+		}
+		else if (s == "V") {
+			V += step;
 		}
 	}
 	void Model::ModelParameters::incrementGlobalIterator()
@@ -75,4 +92,9 @@ namespace Hubbard {
 			std::cout << V;
 		}
 	}
+	void Model::data_set::print() const {
+		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta
+			<< "\t" << sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta) << std::endl;
+	}
+
 }
