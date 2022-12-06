@@ -38,14 +38,18 @@ int main(int argc, char** argv)
 	Utility::InputFileReader input(argv[1]);
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
-	//#define _DO_TEST
+//#define _DO_TEST
 #ifdef _DO_TEST
-	Hubbard::Model::ModelParameters mP(0.005, 1.3, -2, 0, 0, "", "");
+	Hubbard::Model::ModelParameters mP(0, -1, 0.5, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 	model.compute(true).print();
 	std::cout << std::endl;
 	Hubbard::UsingBroyden model2(mP);
 	model2.compute(true).print();
+
+	std::vector<std::vector<double>> energies;
+	model2.getEnergies(energies, 1);
+	Utility::saveData(energies, "../data/energies.txt");
 	return MPI_Finalize();
 #endif // _DO_TEST
 

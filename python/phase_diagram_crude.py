@@ -4,7 +4,7 @@ from matplotlib import colors
 import matplotlib as mpl
 
 eps = 1e-5
-data_folder = "data/V-2/"
+data_folder = "data/T0/"
 CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
 SC =  abs(np.loadtxt(data_folder + "sc.txt"))
 ETA = abs(np.loadtxt(data_folder + "eta.txt"))
@@ -42,21 +42,21 @@ for i in range(0, T_SIZE):
             ETA[i][j] = 0
 
 X, Y = np.meshgrid(U, T)
-cmap1 = colors.ListedColormap(['white', 'green'])
-cmap2 = colors.ListedColormap(['white', 'red'])
+cmap1 = colors.ListedColormap(['white', 'C0'])
+cmap2 = colors.ListedColormap(['white', 'C1'])
 
 fig, ax = plt.subplots()
 
 mpl.rcParams["hatch.linewidth"] = 2.5
 cset1 = ax.contourf(X, Y-0.5*(T[1]-T[0]), SC, 1, cmap=cmap1, hatches=[None, None])
-cset2 = ax.contourf(X, Y-0.5*(T[1]-T[0]), CDW, 1, cmap=cmap2, hatches=[None, r"//"], alpha=0.4)
-cset3 = ax.contourf(X, Y-0.5*(T[1]-T[0]), ETA, 1, cmap=cmap2, hatches=[None, r"\\"], alpha=0)
+cset2 = ax.contourf(X, Y-0.5*(T[1]-T[0]), CDW, 1, cmap=cmap2, alpha=0.4)
+cset3 = ax.contourf(X, Y-0.5*(T[1]-T[0]), ETA, 1, cmap=cmap2, alpha=0)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch
 
-legend_elements = [Patch(facecolor='green', label=r'$\Delta_{SC}$'),
-            Patch(facecolor='red', label=r'$\Delta_{CDW}$')]
+legend_elements = [Patch(facecolor='C0', label=r'$\Delta_{SC}$'),
+            Patch(facecolor='C1', label=r'$\Delta_{CDW}$')]
 ax.legend(handles=legend_elements, loc='upper right')
 
 plt.xlabel(r"$" + labels[0] + "/t$")
