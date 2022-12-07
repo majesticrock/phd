@@ -10,8 +10,8 @@
 #SBATCH --partition=short       ## choose queue
 
 #SBATCH --ntasks=160             ## sets number of total mpi processes
-#SBATCH --tasks-per-node=40    ## mpi processes spawned per node
-#SBATCH --cpus-per-task=1       ## logical cores used per mpi process: should be 1, except if you want to combine OpenMP with$
+#SBATCH --tasks-per-node=10    ## mpi processes spawned per node
+#SBATCH --cpus-per-task=4       ## logical cores used per mpi process: should be 1, except if you want to combine OpenMP with$
 
 #SBATCH --mem=8gb               ## sets maximum allowed memory per node
 ##SBATCH --mem-per-cpu=100mb    ## sets maximum allowed memory per mpi process

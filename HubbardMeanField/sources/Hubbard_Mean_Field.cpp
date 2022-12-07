@@ -92,6 +92,7 @@ int main(int argc, char** argv)
 
 	for (int T = 0; T < FIRST_IT_STEPS; T++)
 	{
+#pragma omp parallel for num_threads(4)
 		for (int U = 0; U < SECOND_IT_STEPS; U++)
 		{
 			Hubbard::Model::data_set ret;
