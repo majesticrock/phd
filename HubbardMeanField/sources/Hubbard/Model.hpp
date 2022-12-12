@@ -37,6 +37,7 @@ namespace Hubbard {
 
 			ModelParameters(double _temperature, double _U, double _V, double global_step, double second_step,
 				std::string _global_iterator_type, std::string _second_iterator_type);
+			void setSecondIterator(int it_num);
 			void incrementGlobalIterator();
 			void incrementSecondIterator();
 			void printGlobal() const;
