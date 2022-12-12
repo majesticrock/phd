@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <filesystem>
+#include <chrono>
 
 #include "Utility/InputFileReader.hpp"
 #include "Utility/OutputWriter.hpp"
@@ -27,6 +28,7 @@ int main(int argc, char** argv)
 		std::cerr << "Invalid number of arguments: Use mpirun -n <threads> <path_to_executable> <configfile>" << std::endl;
 		return -1;
 	}
+
 	// First call MPI_Init
 	MPI_Init(&argc, &argv);
 
@@ -40,12 +42,22 @@ int main(int argc, char** argv)
 
 //#define _DO_TEST
 #ifdef _DO_TEST
-	Hubbard::Model::ModelParameters mP(0, -1, 0.5, 0, 0, "", "");
+	
+	Hubbard::Model::ModelParameters mP(0, -0.8752, 0, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
+
+	std::chrono::steady_clock::time_point test_b = std::chrono::steady_clock::now();
 	model.compute(true).print();
+	std::chrono::steady_clock::time_point test_e = std::chrono::steady_clock::now();
+	std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(test_e - test_b).count() << "[ms]" << std::endl;
+
 	std::cout << std::endl;
 	Hubbard::UsingBroyden model2(mP);
+
+	test_b = std::chrono::steady_clock::now();
 	model2.compute(true).print();
+	test_e = std::chrono::steady_clock::now();
+	std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(test_e - test_b).count() << "[ms]" << std::endl;
 
 	std::vector<std::vector<double>> energies;
 	model2.getEnergies(energies, 1);
@@ -67,6 +79,7 @@ int main(int argc, char** argv)
 	double SECOND_IT_MIN = 0, SECOND_IT_MAX = input.getDouble("second_iterator_upper_limit");
 	double FIRST_IT_RANGE = 0;
 	double FIRST_IT_MIN = 0, FIRST_IT_MAX = 0;
+
 	for (int i = 0; i < option_list.size(); i++)
 	{
 		if (input.getString("global_iterator_type") == option_list[i]) {
@@ -90,29 +103,30 @@ int main(int argc, char** argv)
 	data_vector  data_sc(FIRST_IT_STEPS * SECOND_IT_STEPS);
 	data_vector data_eta(FIRST_IT_STEPS * SECOND_IT_STEPS);
 
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
 	for (int T = 0; T < FIRST_IT_STEPS; T++)
 	{
-#pragma omp parallel for num_threads(4)
+#pragma omp parallel for num_threads(4) schedule(dynamic)
 		for (int U = 0; U < SECOND_IT_STEPS; U++)
 		{
+			Hubbard::Model::ModelParameters local = modelParameters;
+			local.setSecondIterator(U);
 			Hubbard::Model::data_set ret;
 			if (input.getBool("use_broyden")) {
-				Hubbard::UsingBroyden model(modelParameters);
+				Hubbard::UsingBroyden model(local);
 				ret = model.compute();
 			}
 			else {
-				Hubbard::HubbardCDW model(modelParameters);
+				Hubbard::HubbardCDW model(local);
 				ret = model.compute();
 			}
 
 			data_cdw[(T * SECOND_IT_STEPS) + U] = ret.delta_cdw;
 			data_sc[(T * SECOND_IT_STEPS) + U] = ret.delta_sc;
 			data_eta[(T * SECOND_IT_STEPS) + U] = ret.delta_eta;
-			modelParameters.incrementSecondIterator();
+			//modelParameters.incrementSecondIterator();
 		}
-
-		modelParameters.printGlobal();
-		std::cout << " done!" << std::endl;
 		modelParameters.incrementGlobalIterator();
 	}
 
@@ -127,6 +141,9 @@ int main(int argc, char** argv)
 	MPI_Gather(data_eta.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_eta.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
 	if (rank == 0) {
+		std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+		std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+
 		std::vector<std::string> comments;
 		comments.push_back(input.getString("second_iterator_type") + "_MIN=" + std::to_string(SECOND_IT_MIN)
 			+ "   " + input.getString("second_iterator_type") + "_MAX=" + std::to_string(SECOND_IT_MAX));

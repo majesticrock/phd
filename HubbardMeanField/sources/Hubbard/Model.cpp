@@ -62,18 +62,22 @@ namespace Hubbard {
 			V += step;
 		}
 	}
+	void Model::ModelParameters::setSecondIterator(int it_num)
+	{
+		if (second_iterator_type == "T") {
+			temperature = second_it_min + it_num * second_step;
+		}
+		else if (second_iterator_type == "U") {
+			U = second_it_min + it_num * second_step;
+		}
+		else if (second_iterator_type == "V") {
+			V = second_it_min + it_num * second_step;
+		}
+	}
 	void Model::ModelParameters::incrementGlobalIterator()
 	{
 		incrementer(global_iterator_type, global_step);
-		if (second_iterator_type == "T") {
-			temperature = second_it_min;
-		}
-		else if (second_iterator_type == "U") {
-			U = second_it_min;
-		}
-		else if (second_iterator_type == "V") {
-			V = second_it_min;
-		}
+		setSecondIterator(0);
 	}
 	void Model::ModelParameters::incrementSecondIterator()
 	{
