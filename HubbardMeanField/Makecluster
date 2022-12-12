@@ -1,0 +1,44 @@
+CXX = mpicxx
+
+# -isystem rather than -I as this supresses warnings that occur during
+# the compilation of the eigen library (I cant fix them anyways)
+INCLUDEFLAGS = -isystem ~/usr/local/include
+
+CXXFLAGS = -g $(WARNINGS) -std=c++17 $(OPT) -fopenmp
+
+LDLIBS = $(LINALG_FLAG)
+
+WARNINGS = -Wall -Wno-sign-compare
+
+OPT = -march=cascadelake -O3
+
+HBBRD_SRCS=Model.cpp BasicHubbardModel.cpp HubbardCDW.cpp UsingBroyden.cpp
+UTIL_SRCS=InputFileReader.cpp OutputWriter.cpp Roots_Broyden.cpp
+
+PART_SRCS=
+SRCS=$(addprefix Utility/, $(UTIL_SRCS)) $(addprefix Hubbard/, $(HBBRD_SRCS)) $(PART_SRCS) Hubbard_Mean_Field.cpp
+
+OBJS=$(addprefix build/, $(subst .cpp,.o,$(SRCS)))
+
+all: build build/main
+	module purge
+	module add gcc/11.3.0-full
+	module add mpi/openmpi3-x86_64
+
+build/main: $(OBJS) | build
+	$(CXX) $(INCLUDEFLAGS) -o build/main $(OBJS) $(CXXFLAGS) $(LDLIBS)
+
+build/%.o: sources/%.cpp
+	$(CXX) $(INCLUDEFLAGS) $< -o $@ -c $(CXXFLAGS)
+
+build:
+	mkdir -p build
+	mkdir -p build/Hubbard
+	mkdir -p build/Utility
+
+clean:
+	rm -f $(OBJS)
+	rm -f main
+	rm -rf build
+
+	
