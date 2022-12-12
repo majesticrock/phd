@@ -64,7 +64,7 @@ namespace Hubbard {
 			{
 				for (int l = -Constants::K_DISCRETIZATION; l < Constants::K_DISCRETIZATION; l++)
 				{
-					fillMatrix((k * M_PI) / Constants::K_DISCRETIZATION, (l * M_PI) / Constants::K_DISCRETIZATION);
+					fillMatrix(((k + l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION, ((k - l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION);
 					solver.compute(hamilton);
 					rho.fill(0);
 
@@ -73,10 +73,9 @@ namespace Hubbard {
 						rho(i, i) = fermi_dirac(solver.eigenvalues()(i));
 					}
 					rho = solver.eigenvectors() * rho * (solver.eigenvectors().transpose());
-
-					F(0) += rho(0, 1);
-					F(1) += rho(0, 2);
-					F(2) += rho(0, 3);
+					F(0) += (rho(1, 0) - rho(2, 3));
+					F(1) += (rho(0, 2) + rho(1, 3));
+					F(2) += (rho(0, 3) + rho(1, 2));
 				}
 			}
 			setParameters(F);
