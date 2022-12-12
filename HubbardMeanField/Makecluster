@@ -21,9 +21,6 @@ SRCS=$(addprefix Utility/, $(UTIL_SRCS)) $(addprefix Hubbard/, $(HBBRD_SRCS)) $(
 OBJS=$(addprefix build/, $(subst .cpp,.o,$(SRCS)))
 
 all: build build/main
-	module purge
-	module add gcc/11.3.0-full
-	module add mpi/openmpi3-x86_64
 
 build/main: $(OBJS) | build
 	$(CXX) $(INCLUDEFLAGS) -o build/main $(OBJS) $(CXXFLAGS) $(LDLIBS)
