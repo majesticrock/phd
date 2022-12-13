@@ -5,11 +5,11 @@
 
 ## Mandatory:
 #SBATCH --job-name=V
-#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_hubbard_V.txt    ## File for stdout & stderr
+#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_V.txt    ## File for stdout & stderr
 #SBATCH --time=24:00:00         ## maximum runtime; hours:minutes:seconds
 #SBATCH --partition=long       ## choose queue
 
-#SBATCH --ntasks=100             ## sets number of total mpi processes
+#SBATCH --ntasks=80             ## sets number of total mpi processes
 #SBATCH --tasks-per-node=10    ## mpi processes spawned per node
 #SBATCH --cpus-per-task=4       ## logical cores used per mpi process: should be 1, except if you want to combine OpenMP with$
 

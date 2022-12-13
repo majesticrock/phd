@@ -45,7 +45,7 @@ namespace Hubbard {
 		else {
 			this->delta_cdw *= 0.25;
 		}
-		this->delta_eta = 0.01;
+		this->delta_eta = 0;
 
 		this->hamilton = MatrixXd::Zero(4, 4);
 	}
