@@ -4,20 +4,20 @@
 ## or look up the slurm documentation under https://slurm.schedmed.com/sbatch.html
 
 ## Mandatory:
-#SBATCH --job-name=V_zoom
-#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_hubbard_VZ.txt    ## File for stdout & stderr
-#SBATCH --time=1:00:00         ## maximum runtime; hours:minutes:seconds
-#SBATCH --partition=short       ## choose queue
+#SBATCH --job-name=V_z
+#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_hubbard_V.txt    ## File for stdout & stderr
+#SBATCH --time=24:00:00         ## maximum runtime; hours:minutes:seconds
+#SBATCH --partition=long       ## choose queue
 
-#SBATCH --ntasks=160             ## sets number of total mpi processes
-#SBATCH --tasks-per-node=40    ## mpi processes spawned per node
-#SBATCH --cpus-per-task=1       ## logical cores used per mpi process: should be 1, except if you want to combine OpenMP with$
+#SBATCH --ntasks=100             ## sets number of total mpi processes
+#SBATCH --tasks-per-node=10    ## mpi processes spawned per node
+#SBATCH --cpus-per-task=4       ## logical cores used per mpi process: should be 1, except if you want to combine OpenMP with$
 
-#SBATCH --mem=8gb               ## sets maximum allowed memory per node
+#SBATCH --mem=4gb               ## sets maximum allowed memory per node
 ##SBATCH --mem-per-cpu=100mb    ## sets maximum allowed memory per mpi process
 
 #SBATCH --mail-user=joshua.althueser@tu-dortmund.de     ## replace mail by personal mail address
-##SBATCH --mail-type=END ## most relevant options: NONE, BEGIN, END, FAIL
+#SBATCH --mail-type=ALL ## most relevant options: NONE, BEGIN, END, FAIL
 
 ## Optional:
 #SBATCH --hint=nomultithread    ## deactivate Hyperthreading (recommended); for Hyperthreading comment out this line
