@@ -5,7 +5,7 @@
 
 ## Mandatory:
 #SBATCH --job-name=T
-#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_hubbard_T.txt    ## File for stdout & stderr
+#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_T.txt    ## File for stdout & stderr
 #SBATCH --time=1:00:00         ## maximum runtime; hours:minutes:seconds
 #SBATCH --partition=short       ## choose queue
 
