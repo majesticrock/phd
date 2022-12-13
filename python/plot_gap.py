@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 
-data_folder = "data/U-2/"
-x_axis_is_first = True
+data_folder = "data/V-2_big/"
+x_axis_is_first = False
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
 SC =  (np.loadtxt(data_folder + "sc.txt"))
