@@ -54,3 +54,4 @@ x64/
 *.exe
 *.out
 *.app
+python/__pycache__
