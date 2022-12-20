@@ -106,6 +106,9 @@ class Term:
 
     def isIdentity(self):
         return self.operators.size == 0
+    
+    def append(self, values):
+        self.operators = np.append(self.operators, values)
 
     def __eq__(self, other):
         if(self.coefficient != other.coefficient):
@@ -132,6 +135,51 @@ class Term:
             return ret
         for o in self.operators:
             ret += f"{o} "
+        return ret
+
+    def to_string_no_prefactor(self) -> str:
+        ret = ""
+        if(self.isIdentity()):
+            return ret + "\\mathbb{1}"
+        if(self.operators.size == 2):
+            ret += str_duo(self.operators[0], self.operators[1])
+            return ret
+        for o in self.operators:
+            ret += f"{o} "
+        return ret
+
+    def wick(self) -> str:
+        ret = ""
+        if(self.operators.size == 2):
+                ret += rf"\langle {self.to_string_no_prefactor()} \rangle"
+        else:
+            ret = r"\Big( "
+            for i in range(1, self.operators.size):
+                # spin conservation
+                y = Term(1, "", np.array([self.operators[0], self.operators[i]]))
+                if(self.operators[0].daggered == self.operators[i].daggered and self.operators[0].spin != self.operators[i].spin):
+                    x = Term(1, "", np.array([], dtype=Operator))
+                    for j in range(1, self.operators.size):
+                        if(j != i):
+                            x.append(self.operators[j])
+                    if(i % 2 == 0):
+                        ret += " - "
+                    else:
+                        ret += " + "
+                    ret += rf"\langle {y} \rangle"
+                    ret += x.wick()
+                elif(self.operators[0].daggered != self.operators[i].daggered and self.operators[0].spin == self.operators[i].spin):
+                    x = Term(1, "", np.array([], dtype=Operator))
+                    for j in range(1, self.operators.size):
+                        if(j != i):
+                            x.append(self.operators[j])
+                    if(i % 2 == 0):
+                        ret += " - "
+                    else:
+                        ret += " + "
+                    ret += rf"\langle {y} \rangle"
+                    ret += x.wick()
+            ret += r" \Big)"
         return ret
 
 @dataclass
@@ -233,6 +281,24 @@ class Expression:
                     self.terms = np.delete(self.terms, i)
                 else:
                     i += 1
+
+    def as_expectation_values(self) -> str:
+        ret = ""
+        for i, t in enumerate(self.terms):
+            if(i > 0):
+                ret += "\\\\\n&"
+            if(t.prefactor >= 0):
+                ret += "+ "
+            else:
+                ret += "- "
+            if(abs(t.prefactor) != 1):
+                ret += f"{abs(t.prefactor)} "
+            if(t.coefficient != ""):
+                ret += f"{t.coefficient} \\cdot "
+            ret += t.wick()
+
+        return ret
+            
 
 def sync_eps(momentum: Momentum, base=1):
     if(momentum.add_Q):
