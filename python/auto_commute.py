@@ -29,4 +29,4 @@ print(f"\\left[H, {ex_r}\\right] &= {commuted_with_H}\n")
 
 c = anti_commmute(ex_l, commuted_with_H)
 c.normalOrder()
-print(f"\\left\\{{ {ex_l}, \\left[ H, {ex_r} \\right] \\right\\}} &= {c}")
+print(f"\\left\\{{ {ex_l}, \\left[ H, {ex_r} \\right] \\right\\}} &= {c.as_expectation_values()}")
