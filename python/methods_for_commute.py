@@ -109,6 +109,9 @@ class Term:
 
     def isIdentity(self):
         return self.operators.size == 0
+    
+    def append(self, values):
+        self.operators = np.append(self.operators, values)
 
     def __eq__(self, other):
         if(self.coefficient != other.coefficient):
@@ -271,6 +274,24 @@ class Expression:
                     self.terms = np.delete(self.terms, i)
                 else:
                     i += 1
+
+    def as_expectation_values(self) -> str:
+        ret = ""
+        for i, t in enumerate(self.terms):
+            if(i > 0):
+                ret += "\\\\\n&"
+            if(t.prefactor >= 0):
+                ret += "+ "
+            else:
+                ret += "- "
+            if(abs(t.prefactor) != 1):
+                ret += f"{abs(t.prefactor)} "
+            if(t.coefficient != ""):
+                ret += f"{t.coefficient} \\cdot "
+            ret += t.wick()
+
+        return ret
+            
 
 def sync_eps(momentum: Momentum, base=1):
     if(momentum.add_Q):
