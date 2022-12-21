@@ -68,6 +68,9 @@ class Momentum:
     def additional_Q(self):
         self.add_Q = not self.add_Q
 
+    def copy(self):
+        return Momentum(self.value, self.positive, self.add_Q)
+
 @dataclass
 class Operator:
     momentum: Momentum
@@ -134,29 +137,64 @@ class Term:
             ret += f"{o} "
         return ret
 
+    def to_string_no_coefficient(self):
+        ret = ""
+        if(self.prefactor < 0):
+            ret = "- "
+        if(abs(self.prefactor) != 1):
+            ret += f"{abs(self.prefactor)} "
+        if(self.isIdentity()):
+            return ret + "\\mathbb{1}"
+        if(self.operators.size == 2):
+            ret += str_duo(self.operators[0], self.operators[1])
+            return ret
+        for o in self.operators:
+            ret += f"{o} "
+        return ret
+
 @dataclass
 class Expression:
     global_prefactor: int
     terms: np.ndarray
 
     def __str__(self):
+        first = True
         ret = ""
         if(self.global_prefactor != 1):
             ret = f"{self.global_prefactor} \\cdot \\Big["
         for i, t in enumerate(self.terms):
             if(i > 0):
                 if(self.terms[i].coefficient != self.terms[i - 1].coefficient):
-                        ret += "\\\\\n&"
+                    ret += "\\right) \\\\\n&"
+                    first = True
+            if(first):
+                first = False
+                ret += f"+{t.coefficient} \\left("
             if(t.prefactor >= 0):
                 ret += "+ "
-            ret += f"{t}"
-        
+            ret += f"{t.to_string_no_coefficient()}"
+        ret += "\\right) "
         if(self.global_prefactor != 1):
             ret += "\\Big]"
         return ret
 
     def append(self, values):
         self.terms = np.append(self.terms, values)
+
+    def sortByCoefficient(self):
+        i = 0
+        while i < self.terms.size:
+            start = i + 1
+            while(start < self.terms.size and self.terms[i].coefficient == self.terms[start].coefficient):
+                start += 1
+            for j in range(start + 1, self.terms.size):
+                if(self.terms[i].coefficient == self.terms[j].coefficient):
+                    self.terms[start], self.terms[j] = self.terms[j], self.terms[start]
+                    i += 1
+                    start += 1
+                j += 1
+            i += 1
+
 
     def sortTerms(self):
         for t in self.terms:
@@ -244,103 +282,7 @@ def dagger_it(src):
     src[0].daggered = not src[0].daggered
     src[1].daggered = not src[1].daggered
 
-def commute_bilinear_with_H(left: Operator, right: Operator, commuted_with_H: Expression):
-    if(left.daggered == right.daggered):
-        if(left.daggered):
-            if(not left.spin):
-                b = right
-                right = deepcopy(left)
-                left = deepcopy(b)
-            else:
-                commuted_with_H.global_prefactor = -1
-        elif(left.spin):
-            b = right
-            right = deepcopy(left)
-            left = deepcopy(b)
-            commuted_with_H.global_prefactor = -1
-
-        commuted_with_H.append([ Term(*sync_eps(left.momentum), np.array([right, left])), Term(*sync_eps(left.momentum, -1), np.array([left, right])) ])
-        ##########
-        buffer_l = deepcopy(left)
-        buffer_l.additional_Q()
-        buffer_r = deepcopy(right)
-        buffer_r.additional_Q()
-        commuted_with_H.append([ Term(1, "\\Delta_\\text{CDW}", np.array([right, buffer_l])), Term(-1, "\\Delta_\\text{CDW}", np.array([left, buffer_r])) ])
-        ##########
-        buffer_l = deepcopy(left)
-        buffer_l.make_sc()
-        buffer_r = deepcopy(right)
-        buffer_r.make_sc()
-        commuted_with_H.append([ Term(1, "\\Delta_\\text{SC}", np.array([buffer_l, right])), Term(1, "\\Delta_\\text{SC}", np.array([buffer_r, left])) ])
-        if(left.momentum == buffer_r.momentum):
-            commuted_with_H.append(Term(-1, "\\Delta_\\text{SC}", np.array([], dtype=Operator)))
-        ##########
-        buffer_l = deepcopy(buffer_l)
-        buffer_r = deepcopy(buffer_r)
-        buffer_l.additional_Q()
-        buffer_r.additional_Q()
-        if(left.daggered):
-            commuted_with_H.append([ Term(1, "\\Delta_\\eta^*", np.array([buffer_l, right])), Term(1, "\\Delta_\\eta^*", np.array([buffer_r, left])) ])
-            if(left.momentum == buffer_r.momentum):
-                commuted_with_H.append(Term(-1, "\\Delta_eta^*", np.array([], dtype=Operator)))
-        else:
-            commuted_with_H.append([ Term(1, "\\Delta_\\eta", np.array([buffer_l, right])), Term(1, "\\Delta_\\eta", np.array([buffer_r, left])) ])
-            if(left.momentum == buffer_r.momentum):
-                commuted_with_H.append(Term(-1, "\\Delta_eta", np.array([], dtype=Operator)))
-    else:
-        #ensure that we have a normal ordered term
-        if(right.daggered):
-            b = right
-            right = deepcopy(left)
-            left = deepcopy(b)
-            commuted_with_H.global_prefactor = -1
-            if(left.momentum == right.momentum and left.spin == right.spin):
-                commuted_with_H.append([Term(-1, "", np.array([], dtype=Operator))])
-
-        commuted_with_H.append([ Term(*sync_eps(left.momentum), np.array([left, right])), Term(*sync_eps(left.momentum, -1), np.array([left, right])) ])
-        ##########
-        buffer_l = deepcopy(left)
-        buffer_l.additional_Q()
-        buffer_r = deepcopy(right)
-        buffer_r.additional_Q()
-        commuted_with_H.append([ Term(1, "\\Delta_\\text{CDW}", np.array([buffer_l, right])), Term(-1, "\\Delta_\\text{CDW}", np.array([left, buffer_r])) ])
-        ##########
-        buffer_l = deepcopy(left)
-        buffer_r = deepcopy(right)
-        buffer_l.make_sc()
-        buffer_r.make_sc()
-
-        if(left.spin):
-            commuted_with_H.append([ Term(1, "\\Delta_\\text{SC}", np.array([buffer_l, right])) ])
-        else:
-            commuted_with_H.append([ Term(1, "\\Delta_\\text{SC}", np.array([right, buffer_l])) ])
-
-        if(right.spin):
-            commuted_with_H.append([ Term(-1, "\\Delta_\\text{SC}", np.array([left, buffer_r])) ])
-        else:
-            commuted_with_H.append([ Term(-1, "\\Delta_\\text{SC}", np.array([buffer_r, left])) ])
-
-        ##########
-        buffer_l = deepcopy(buffer_l)
-        buffer_r = deepcopy(buffer_r)
-        buffer_l.additional_Q()
-        buffer_r.additional_Q()
-        if(left.spin):
-            commuted_with_H.append([ Term(1, "\\Delta_\\eta^*", np.array([buffer_l, right])) ])
-        else:
-            commuted_with_H.append([ Term(1, "\\Delta_\\eta^*", np.array([right, buffer_l])) ])
-
-        if(right.spin):
-            commuted_with_H.append([ Term(-1, "\\Delta_\\eta", np.array([left, buffer_r])) ])
-        else:
-            commuted_with_H.append([ Term(-1, "\\Delta_\\eta", np.array([buffer_r, left])) ])
-
-    if(commuted_with_H.global_prefactor != 1):
-        for t in commuted_with_H.terms:
-            t.prefactor *= commuted_with_H.global_prefactor
-        commuted_with_H.global_prefactor = 1
-
-def anti_commmute(l: Expression, r: Expression):
+def anti_commute(l: Expression, r: Expression):
     commuted = Expression(l.global_prefactor * r.global_prefactor, np.array([], dtype=Term))
     for lt in l.terms:
         for rt in r.terms:
@@ -349,7 +291,7 @@ def anti_commmute(l: Expression, r: Expression):
 
     return commuted
 
-def commmute(l: Expression, r: Expression):
+def commute(l: Expression, r: Expression):
     commuted = Expression(l.global_prefactor * r.global_prefactor, np.array([], dtype=Term))
     for lt in l.terms:
         for rt in r.terms:

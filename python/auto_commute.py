@@ -13,20 +13,38 @@ dagger_it(CDW_U_D)
 dagger_it(CDW_D_D)
 ETA   = np.array([Operator(Momentum("k", False, True), False, False), Operator(Momentum("k", True, False), True, False)])
 ETA_D = np.array([Operator(Momentum("k", False, True), False, False), Operator(Momentum("k", True, False), True, False)])
+ETA_Q   = np.array([Operator(Momentum("k", False, False), False, False), Operator(Momentum("k", True, True), True, False)])
+ETA_Q_D = np.array([Operator(Momentum("k", False, False), False, False), Operator(Momentum("k", True, True), True, False)])
 dagger_it(ETA_D)
+dagger_it(ETA_Q_D)
 
-commuted_with_H = Expression(1, np.array([], dtype=Term))
-ex_l = Expression(1, np.array([ Term(1, "", N_U), Term(1, "", N_D) ]))
-ex_r = Expression(1, np.array([ Term(1, "", N_U), Term(1, "", N_D) ]))
+H = Expression(1, np.array([], dtype=Term))
+for k in [Momentum("k", True, False), Momentum("k", True, True), Momentum("k", False, False), Momentum("k", False, True)]:
+    H.append(Term(*sync_eps(k), np.array([Operator(k.copy(), True, True), Operator(k.copy(), True, False)])))
+    H.append(Term(*sync_eps(k), np.array([Operator(k.copy(), False, True), Operator(k.copy(), False, False)])))
 
-for i in range(0, ex_r.terms.size):
-    left  = ex_r.terms[i].operators[0]
-    right = ex_r.terms[i].operators[1]
-    commute_bilinear_with_H(left, right, commuted_with_H)
+    l = k.copy()
+    l.positive = not l.positive
+    H.append(Term(1, r"\Delta_\text{SC}", np.array([Operator(l.copy(), False, False), Operator(k.copy(), True, False)])))
+    H.append(Term(1, r"\Delta_\text{SC}", np.array([Operator(k.copy(), True, True), Operator(l.copy(), False, True)])))
 
+    l.additional_Q()
+    H.append(Term(1, r"\Delta_\eta^*"  , np.array([Operator(l.copy(), False, False), Operator(k.copy(), True, False)])))
+    H.append(Term(1, r"\Delta_\eta", np.array([Operator(k.copy(), True, True), Operator(l.copy(), False, True)])))
+
+    l.positive = not l.positive
+    H.append(Term(1, r"\Delta_\text{CDW}", np.array([Operator(k.copy(), True, True), Operator(l.copy(), True, False)])))
+    H.append(Term(1, r"\Delta_\text{CDW}", np.array([Operator(k.copy(), False, True), Operator(l.copy(), False, False)])))
+
+H.sortByCoefficient()
+
+ex_l = Expression(1, np.array([ Term(1, "", SC) ]))
+ex_r = Expression(1, np.array([ Term(1, "", N_D), Term(1, "", N_U) ]))
+commuted_with_H = commute(H, ex_r)
 commuted_with_H.normalOrder()
-print(f"\\left[H, {ex_r}\\right] &= {commuted_with_H}\n")
+commuted_with_H.sortByCoefficient()
+print(f"\\begin{{align*}}\n\\left[H, {ex_r}\\right] &= {commuted_with_H}\n\\end{{align*}}\n")
 
-c = anti_commmute(ex_l, commuted_with_H)
+c = anti_commute(ex_l, commuted_with_H)
 c.normalOrder()
-print(f"\\left\\{{ {ex_l}, \\left[ H, {ex_r} \\right] \\right\\}} &= {c}")
+print(f"\\begin{{align*}}\n\\left\\{{ {ex_l}, \\left[ H, {ex_r} \\right] \\right\\}} &= {c}\n\\end{{align*}}\n")
