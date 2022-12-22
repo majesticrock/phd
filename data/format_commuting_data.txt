@@ -1,0 +1,49 @@
+Data format
+
+{
+    coefficient
+    {
+        prefactor
+        {*Wick}
+    }
+    {
+        prefactor
+        {*Wick}
+    }
+}
+{
+    coefficient
+    {
+        prefactor
+        {*Wick}
+    }
+    {
+        prefactor
+        {*Wick}
+    }
+}
+...
+
+Wick type terms as
+{expectation_value, expectation_value}
+{
+    {+/-, expectation_value,Wick}
+    or
+    expectation_value
+}
+
+
+coefficients set as 
+EPS   - 0
+CDW   - 1
+SC    - 2
+ETA^* - 3
+ETA   - 4
+
+None  - -1
+
+expectation_values as
+{type, dagger, momentum}
+
+momentum as
+{positive, add_Q}
