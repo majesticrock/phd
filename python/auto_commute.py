@@ -5,8 +5,8 @@ N_U  = np.array([Operator(Momentum("k", True, False), True,  True),   Operator(M
 N_D  = np.array([Operator(Momentum("k", False, False), False, True),   Operator(Momentum("k", False, False), False, False)])
 N_Q_U  = np.array([Operator(Momentum("k", True,  True), True,  True),   Operator(Momentum("k", True,  True), True,  False)])
 N_Q_D  = np.array([Operator(Momentum("k", False, True), False, True),   Operator(Momentum("k", False, True), False, False)])
-N_K   = Expression(1, np.array([Term(1, "", N_U), Term(1, "", N_D)]))
-N_K_Q = Expression(1, np.array([Term(1, "", N_Q_U), Term(1, "", N_Q_D)]))
+N_K   = Expression(1, np.array([Term(0.5, "", N_U),   Term(0.5, "", N_D)]))
+N_K_Q = Expression(1, np.array([Term(0.5, "", N_Q_U), Term(0.5, "", N_Q_D)]))
 
 SC     = np.array([Operator(Momentum("k", False, False), False, False), Operator(Momentum("k", True, False), True,  False)])
 SC_D   = np.array([Operator(Momentum("k", False, False), False, False), Operator(Momentum("k", True, False), True,  False)])
@@ -25,8 +25,8 @@ CDW_D   = np.array([Operator(Momentum("k", False, False), False, True), Operator
 CDW_D_D = np.array([Operator(Momentum("k", True, False), False, True), Operator(Momentum("k", True, True), False, False)])
 dagger_it(CDW_U_D)
 dagger_it(CDW_D_D)
-G_K   = Expression(1, np.array([Term(1, "", CDW_U), Term(1, "", CDW_D)]))
-G_K_D = Expression(1, np.array([Term(1, "", CDW_U_D), Term(1, "", CDW_D_D)]))
+G_K   = Expression(1, np.array([Term(0.5, "", CDW_U),   Term(0.5, "", CDW_D)]))
+G_K_D = Expression(1, np.array([Term(0.5, "", CDW_U_D), Term(0.5, "", CDW_D_D)]))
 
 ETA   = np.array([Operator(Momentum("k", False, True), False, False), Operator(Momentum("k", True, False), True, False)])
 ETA_D = np.array([Operator(Momentum("k", False, True), False, False), Operator(Momentum("k", True, False), True, False)])
@@ -34,8 +34,8 @@ ETA_Q   = np.array([Operator(Momentum("k", False, False), False, False), Operato
 ETA_Q_D = np.array([Operator(Momentum("k", False, False), False, False), Operator(Momentum("k", True, True), True, False)])
 dagger_it(ETA_D)
 dagger_it(ETA_Q_D)
-ETA_K   = Expression(1, np.array([Term(1, "", ETA), Term(1, "", ETA_Q)]))
-ETA_K_D = Expression(1, np.array([Term(1, "", ETA_D), Term(1, "", ETA_Q_D)]))
+ETA_K   = Expression(1, np.array([Term(0.5, "", ETA),   Term(0.5, "", ETA_Q)]))
+ETA_K_D = Expression(1, np.array([Term(0.5, "", ETA_D), Term(0.5, "", ETA_Q_D)]))
 
 H = Expression(1, np.array([], dtype=Term))
 for k in [Momentum("k", True, False), Momentum("k", True, True), Momentum("k", False, False), Momentum("k", False, True)]:
@@ -72,7 +72,7 @@ for i in range(0, basis.size):
         c.normalOrder()
         buffer = c.as_data()
         if buffer != "":
-            N += f"[\n{buffer}\n]\n"
+            N += f"[ # {{ {ex_l}, {ex_r} }}\n{buffer}\n]\n"
         #print(f"\\begin{{align*}}\n\\left\\{{ {ex_l}, {ex_r} \\right\\}} &= {c.as_expectation_values()}\n\\end{{align*}}\n")
 
         d = anti_commute(ex_l, commuted_with_H)
@@ -80,7 +80,7 @@ for i in range(0, basis.size):
         d.sortByCoefficient()
         buffer = d.as_data()
         if buffer != "":
-            M += f"[\n{buffer}\n]\n"
+            M += f"[ # {{ {ex_l}, [ H, {ex_r} ]}}\n{buffer}\n]\n"
 
 with open("data/commuting_N.txt", "w") as f:
     f.write(N[:-1])

@@ -6,8 +6,6 @@ namespace Hubbard {
 	class BasicHubbardModel : public Model
 	{
 	protected:
-		double delta_sc, delta_cdw, delta_eta;
-
 		double unperturbed_energy(double k_x, double k_y) const override;
 		virtual void fillMatrix(double k_x, double k_y) override;
 		virtual inline void setParameters(double cdw, double sc, double eta) {

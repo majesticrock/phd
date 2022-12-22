@@ -120,7 +120,7 @@ class Operator:
 
 @dataclass
 class Term:
-    prefactor: int
+    prefactor: float
     coefficient: str
     operators: np.ndarray
 
@@ -430,12 +430,12 @@ class Expression:
         for i, t in enumerate(self.terms):
             to_add = ""
             if (i==0):
-                to_add += f"{{\n\t{t.coeff_as_data()}\n"
+                to_add += f"{{\n\t{t.coeff_as_data()}"
             elif(t.coefficient != self.terms[i - 1].coefficient):
-                to_add += f"\n}}\n{{\n\t{t.coeff_as_data()}\n"
+                to_add += f"\n}}\n{{\n\t{t.coeff_as_data()}"
             buffer = t.wick_as_data()
             if(buffer != ""):
-                to_add += f"\t{{\n\t\t{t.prefactor}\n\t\t{buffer}\n\t}}"
+                to_add += f"\n\t{{\n\t\t{t.prefactor}\n\t\t{buffer}\n\t}}"
                 ret += to_add
         ret += "\n}"
         if(ret == "\n}"):
