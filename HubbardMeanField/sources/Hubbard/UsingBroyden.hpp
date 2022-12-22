@@ -6,7 +6,6 @@ namespace Hubbard {
 	class UsingBroyden : public Model
 	{
 	protected:
-		double delta_sc, delta_cdw, delta_eta;
 		double V;
 
 		double unperturbed_energy(double k_x, double k_y) const override;
