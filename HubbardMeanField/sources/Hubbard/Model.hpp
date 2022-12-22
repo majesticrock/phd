@@ -5,6 +5,7 @@ namespace Hubbard {
 	class Model
 	{
 	protected:
+		double delta_sc, delta_cdw, delta_eta;
 		Eigen::MatrixXd hamilton;
 		double temperature;
 		double U;
@@ -20,6 +21,8 @@ namespace Hubbard {
 
 		virtual double unperturbed_energy(double k_x, double k_y) const = 0;
 		virtual void fillMatrix(double k_x, double k_y) = 0;
+		std::pair<int, int> parseExpectationValue(std::string& str);
+		void parseCommutatorData();
 	public:
 		class ModelParameters {
 		private:
