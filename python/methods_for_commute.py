@@ -1,21 +1,24 @@
 from dataclasses import dataclass
-from copy import deepcopy
 import numpy as np
 
-def str_duo(l, r):
+def str_duo(l, r, as_data=False):
     if(l.daggered and not r.daggered):
         if(l.spin == r.spin):
             if(l.momentum.value == r.momentum.value and l.momentum.positive == r.momentum.positive):
                 if(l.momentum.add_Q == r.momentum.add_Q):
                     ret = f"n_{{{l.momentum}{l.spin_as_string()}}}"
+                    if(as_data):
+                        ret = f"{{n{l.spin_as_string(True)},0,{l.momentum.as_data()}}}"
                 else:
                     if(l.momentum.add_Q):
                         ret = f"g_{{{r.momentum}{l.spin_as_string()}}}^\\dagger"
+                        if(as_data):
+                            ret = f"{{g{l.spin_as_string(True)},1,{r.momentum.as_data()}}}"
                     else:
                         ret = f"g_{{{l.momentum}{l.spin_as_string()}}}"
-                    
+                        if(as_data):
+                            ret = f"{{g{l.spin_as_string(True)},0,{l.momentum.as_data()}}}"         
                 return ret
-    
     else:
         if(l.spin != r.spin):
             if(l.momentum.value == r.momentum.value and l.momentum.positive != r.momentum.positive):
@@ -23,9 +26,14 @@ def str_duo(l, r):
                     if(r.spin):
                         if(l.momentum.add_Q == r.momentum.add_Q):
                             ret = f"f_{{{r.momentum}}}"
+                            if(as_data):
+                                ret = f"{{f,0,{r.momentum.as_data()}}}"
                         else:
                             ret = f"\\eta_{{{r.momentum}}}"
-                    else:
+                            if(as_data):
+                                ret = f"{{eta,0,{r.momentum.as_data()}}}"
+                    else: # Should not come up anymore
+                        print("MEH")
                         if(l.momentum.add_Q == r.momentum.add_Q):
                             ret = f"(- f_{{{l.momentum}}})"
                         else:
@@ -34,14 +42,20 @@ def str_duo(l, r):
                     if(not r.spin):
                         if(l.momentum.add_Q == r.momentum.add_Q):
                             ret = f"f_{{{l.momentum}}}"
+                            if(as_data):
+                                ret = f"{{f,1,{l.momentum.as_data()}}}"
                         else:
                             ret = f"\\eta_{{{l.momentum}}}"
-                    else:
+                            if(as_data):
+                                ret = f"{{eta,1,{l.momentum.as_data()}}}"
+                    else: # Should not come up anymore
+                        print("MEH")
                         if(l.momentum.add_Q == r.momentum.add_Q):
                             ret = f"(- f_{{{r.momentum}}})"
                         else:
                             ret = f"(- \\eta_{{{r.momentum}}})"
-                    ret += "^\\dagger"
+                    if(not as_data):
+                        ret += "^\\dagger"
                 return ret
     
     return f"{l} {r}"
@@ -64,6 +78,9 @@ class Momentum:
                 ret += "-"
             ret += "Q"
         return ret
+
+    def as_data(self) -> str:
+        return f"{1 if self.positive else 0},{1 if self.add_Q else 0}"
 
     def additional_Q(self):
         self.add_Q = not self.add_Q
@@ -96,10 +113,10 @@ class Operator:
         self.momentum.positive = not self.momentum.positive
         self.daggered = not self.daggered
 
-    def spin_as_string(self):
-        if(self.spin):
-            return "\\uparrow"
-        return "\\downarrow"
+    def spin_as_string(self, as_data=False):
+        if(as_data):
+            return "1" if self.spin else "0"
+        return "\\uparrow" if self.spin else "\\downarrow"
 
 @dataclass
 class Term:
@@ -140,7 +157,7 @@ class Term:
             ret += f"{o} "
         return ret
 
-    def to_string_no_coefficient(self):
+    def to_string_no_coefficient(self) -> str:
         ret = ""
         if(self.prefactor < 0):
             ret = "- "
@@ -153,6 +170,116 @@ class Term:
             return ret
         for o in self.operators:
             ret += f"{o} "
+        return ret
+
+    def to_string_no_prefactor(self) -> str:
+        ret = ""
+        if(self.isIdentity()):
+            return ret + "\\mathbb{1}"
+        if(self.operators.size == 2):
+            ret += str_duo(self.operators[0], self.operators[1])
+            return ret
+        for o in self.operators:
+            ret += f"{o} "
+        return 
+
+    def wick(self) -> str:
+        ret = ""
+        if(self.operators.size == 2):
+            ret += rf"\langle {self.to_string_no_prefactor()} \rangle"
+        else:
+            did_something = False
+            ret = r"\Big( "
+            for i in range(1, self.operators.size):
+                # conservation of spin and momentum
+                y = Term(1, "", np.array([self.operators[0], self.operators[i]]))
+                if(self.operators[0].daggered == self.operators[i].daggered and self.operators[0].spin != self.operators[i].spin and self.operators[0].momentum.positive != self.operators[i].momentum.positive):
+                    x = Term(1, "", np.array([], dtype=Operator))
+                    for j in range(1, self.operators.size):
+                        if(j != i):
+                            x.append(self.operators[j])
+                    if(i % 2 == 0):
+                        ret += " - "
+                    else:
+                        ret += " + "
+                    ret += rf"\langle {y} \rangle"
+                    ret += x.wick()
+                    did_something = True
+                elif(self.operators[0].daggered != self.operators[i].daggered and self.operators[0].spin == self.operators[i].spin and self.operators[0].momentum.positive == self.operators[i].momentum.positive):
+                    x = Term(1, "", np.array([], dtype=Operator))
+                    for j in range(1, self.operators.size):
+                        if(j != i):
+                            x.append(self.operators[j])
+                    if(i % 2 == 0):
+                        ret += " - "
+                    else:
+                        ret += " + "
+                    ret += rf"\langle {y} \rangle"
+                    ret += x.wick()
+                    did_something = True
+            
+            if(not did_something):
+                ret = ""
+            else: 
+                ret += r" \Big)"
+        return ret
+
+    def coeff_as_data(self) -> str:
+        if(self.coefficient == r"\epsilon_k"):
+            return "0"
+        if(self.coefficient == r"\Delta_\text{CDW}"):
+            return "1"
+        if(self.coefficient == r"\Delta_\text{SC}"):
+            return "2"
+        if(self.coefficient == r"\Delta_\eta^*"):
+            return "3"
+        if(self.coefficient == r"\Delta_\eta"):
+            return "4"
+        if(self.coefficient == ""):
+            return "-1"
+
+    def wick_as_data(self) -> str:
+        ret = ""
+        if(self.operators.size == 2):
+            return str_duo(self.operators[0], self.operators[1], True)
+        else:
+            did_something = False
+            for i in range(1, self.operators.size):
+                if(i > 1 and ret != ""):
+                    if(ret[-1] == "}"):
+                        ret += ","
+                y = Term(1, "", np.array([self.operators[0], self.operators[i]]))
+                # conservation of spin and momentum
+                if(self.operators[0].daggered == self.operators[i].daggered and self.operators[0].spin != self.operators[i].spin and self.operators[0].momentum.positive != self.operators[i].momentum.positive):
+                    x = Term(1, "", np.array([], dtype=Operator))
+                    for j in range(1, self.operators.size):
+                        if(j != i):
+                            x.append(self.operators[j])
+                    if(i % 2 == 0):
+                        ret += "{-,"
+                    else:
+                        ret += "{+,"
+                    ret += str_duo(y.operators[0], y.operators[1], True)
+                    ret += ","
+                    ret += x.wick_as_data()
+                    ret += "}"
+                    did_something = True
+                elif(self.operators[0].daggered != self.operators[i].daggered and self.operators[0].spin == self.operators[i].spin and self.operators[0].momentum.positive == self.operators[i].momentum.positive):
+                    x = Term(1, "", np.array([], dtype=Operator))
+                    for j in range(1, self.operators.size):
+                        if(j != i):
+                            x.append(self.operators[j])
+                    if(i % 2 == 0):
+                        ret += "{-,"
+                    else:
+                        ret += "{+,"
+                    ret += str_duo(y.operators[0], y.operators[1], True)
+                    ret += ","
+                    ret += x.wick_as_data()
+                    ret += "}"
+                    did_something = True
+            if(did_something and ret[-1] == ","):
+                ret = ret[:len(ret) - 1]
         return ret
 
 @dataclass
@@ -198,7 +325,6 @@ class Expression:
                 j += 1
             i += 1
 
-
     def sortTerms(self):
         for t in self.terms:
             for i in range(0, t.operators.size):
@@ -232,6 +358,7 @@ class Expression:
 
     def normalOrder(self):
         t = 0
+        increment_t = True
         while t < self.terms.size:
             n = self.terms[t].operators.size
             while(n > 1):
@@ -239,8 +366,8 @@ class Expression:
                 for i in range(1, self.terms[t].operators.size):
                     if(self.terms[t].operators[i - 1] == self.terms[t].operators[i]):
                         self.terms = np.delete(self.terms, t)
-                        t -= 1
-                        n = 0
+                        increment_t = False
+                        new_n = 0
                         break
                     if(not self.terms[t].operators[i - 1].daggered and self.terms[t].operators[i].daggered):
                         new_n = i
@@ -249,7 +376,10 @@ class Expression:
                         if(self.terms[t].operators[i].momentum == self.terms[t].operators[i - 1].momentum and self.terms[t].operators[i].spin == self.terms[t].operators[i - 1].spin):
                             self.append([ Term(-self.terms[t].prefactor, self.terms[t].coefficient, np.delete(self.terms[t].operators, [i - 1, i])) ])
                 n = new_n
-            t += 1
+            if(increment_t):
+                t += 1
+            else:
+                increment_t = True
 
         self.sortTerms()
 
@@ -278,20 +408,39 @@ class Expression:
     def as_expectation_values(self) -> str:
         ret = ""
         for i, t in enumerate(self.terms):
+            to_add = ""
             if(i > 0):
-                ret += "\\\\\n&"
+                to_add += "\\\\\n&"
             if(t.prefactor >= 0):
-                ret += "+ "
+                to_add += "+ "
             else:
-                ret += "- "
+                to_add += "- "
             if(abs(t.prefactor) != 1):
-                ret += f"{abs(t.prefactor)} "
+                to_add += f"{abs(t.prefactor)} "
             if(t.coefficient != ""):
-                ret += f"{t.coefficient} \\cdot "
-            ret += t.wick()
+                to_add += f"{t.coefficient} \\cdot "
+            buffer = t.wick()
+            if(buffer != ""):
+                ret += to_add + buffer
 
         return ret
-            
+    
+    def as_data(self):
+        ret = ""
+        for i, t in enumerate(self.terms):
+            to_add = ""
+            if (i==0):
+                to_add += f"{{\n\t{t.coeff_as_data()}\n"
+            elif(t.coefficient != self.terms[i - 1].coefficient):
+                to_add += f"\n}}\n{{\n\t{t.coeff_as_data()}\n"
+            buffer = t.wick_as_data()
+            if(buffer != ""):
+                to_add += f"\t{{\n\t\t{t.prefactor}\n\t\t{buffer}\n\t}}"
+                ret += to_add
+        ret += "\n}"
+        if(ret == "\n}"):
+            return ""
+        return ret
 
 def sync_eps(momentum: Momentum, base=1):
     if(momentum.add_Q):
