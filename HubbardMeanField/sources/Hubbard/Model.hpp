@@ -1,10 +1,39 @@
 #pragma once
 #include <Eigen/Dense>
+#include <memory>
 
 namespace Hubbard {
+	struct Term {
+		double prefactor = 1;
+		std::vector<std::pair<int, int>> matrix_indizes;
+		std::vector<std::shared_ptr<Term>> next_terms;
+
+		double computeValue(const Eigen::MatrixXd& expectation_values) const {
+			double value = 0;
+			double buf = 0;
+			for (int i = 0; i < matrix_indizes.size(); i++)
+			{
+				buf = expectation_values(matrix_indizes[i].first, matrix_indizes[i].second);
+				if (i < next_terms.size()) {
+					buf *= next_terms[i]->computeValue(expectation_values);
+				}
+				value += buf;
+			}
+			return prefactor * value;
+		};
+	};
+
+	std::ostream& operator<<(std::ostream& os, const Term& t);
+
 	class Model
 	{
+	private:
+		std::pair<int, int> parseExpectationValue(std::string& str);
+		void parseWick(std::shared_ptr<Term> lastOne, std::string& line);
 	protected:
+		typedef std::pair<double, std::vector<std::shared_ptr<Term>>> coeff_term;
+		std::vector<std::vector<coeff_term>> expressions_M, expressions_N;
+
 		double delta_sc, delta_cdw, delta_eta;
 		Eigen::MatrixXd hamilton;
 		double temperature;
@@ -21,8 +50,8 @@ namespace Hubbard {
 
 		virtual double unperturbed_energy(double k_x, double k_y) const = 0;
 		virtual void fillMatrix(double k_x, double k_y) = 0;
-		std::pair<int, int> parseExpectationValue(std::string& str);
-		void parseCommutatorData();
+
+		
 	public:
 		class ModelParameters {
 		private:
@@ -57,5 +86,7 @@ namespace Hubbard {
 		// i.e. 0 means k_y does not vary at all while 1 means k_x and k_y vary at the same rate
 		// which results in a 45° angle in the first BZ
 		void getEnergies(std::vector<std::vector<double>>& reciever, double direction);
+		void parseCommutatorData();
+		void computeCollectiveModes(std::vector<std::vector<double>>& reciever, double direction);
 	};
 }
