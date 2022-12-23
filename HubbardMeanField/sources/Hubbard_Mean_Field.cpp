@@ -17,7 +17,7 @@
 
 int Hubbard::Constants::K_DISCRETIZATION = 100;
 
-std::ostream& operator<<(std::ostream& os, Hubbard::Model::ModelParameters& mp) {
+std::ostream& operator<<(std::ostream& os, const Hubbard::Model::ModelParameters& mp) {
 	os << mp.temperature << "\t" << mp.U << "\t" << mp.V;
 	return os;
 }
@@ -42,16 +42,18 @@ int main(int argc, char** argv)
 
 //#define _DO_TEST
 #ifdef _DO_TEST
-	
-	Hubbard::Model::ModelParameters mP(0, -0.8752, 0, 0, 0, "", "");
+
+	Hubbard::Model::ModelParameters mP(0, -1, 0.5, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 
 	std::chrono::steady_clock::time_point test_b = std::chrono::steady_clock::now();
 	model.compute(true).print();
 	std::chrono::steady_clock::time_point test_e = std::chrono::steady_clock::now();
 	std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(test_e - test_b).count() << "[ms]" << std::endl;
-
-	std::cout << std::endl;
+	
+	std::cout << "\n\n";
+	model.parseCommutatorData();
+	std::cout << "\n\n" << std::endl;
 	Hubbard::UsingBroyden model2(mP);
 
 	test_b = std::chrono::steady_clock::now();
