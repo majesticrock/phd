@@ -97,7 +97,7 @@ namespace Hubbard {
 				delta_eta = 0;
 			}
 			x0(0) = 0.5 * (delta_cdw + x0(0));
-			x0(1) = 0.5 * (delta_sc  + x0(1));
+			x0(1) = 0.5 * (delta_sc + x0(1));
 			x0(2) = 0.5 * (delta_eta + x0(2));
 		}
 

@@ -65,58 +65,71 @@ namespace Hubbard {
 		return std::pair<int, int>(-1, -1);
 	}
 
+	void Hubbard::Model::parseWick(std::shared_ptr<Term> lastOne, std::string& line)
+	{
+		if (line[0] == '+' || line[0] == '-') {
+			int pre = (line[0] == '+') ? 1 : -1;
+			line.erase(0, 3);
+			lastOne->matrix_indizes.push_back(this->parseExpectationValue(line));
+			//line.erase(0, line.find('{') + 1);
+
+			lastOne->next_terms.push_back(std::make_shared<Term>(Term()));
+			lastOne->next_terms.back()->prefactor = pre;
+			line.erase(0, line.find('{') + 1);
+			parseWick(lastOne->next_terms.back(), line);
+			line.erase(0, line.find('}') + 1);
+
+			while (line[0] == ',') {
+				pre = (line[2] == '+') ? 1 : -1;
+				line.erase(0, 5);
+				lastOne->matrix_indizes.push_back(this->parseExpectationValue(line));
+				lastOne->next_terms.push_back(std::make_shared<Term>(Term()));
+				lastOne->next_terms.back()->prefactor = pre;
+
+				line.erase(0, line.find('{') + 1);
+				parseWick(lastOne->next_terms.back(), line);
+				line.erase(0, line.find('}') + 1);
+			}
+		}
+		else {
+			lastOne->matrix_indizes.push_back(this->parseExpectationValue(line));
+			line.erase(0, line.find('}') + 1);
+		}
+	}
+
 	void Model::parseCommutatorData()
 	{
-		struct Term {
-			double prefactor = 0;
-			std::pair<int, int> matrix_indizes;
-			Term* next_term = nullptr;
+		std::shared_ptr<Term> last_term;
 
-			double computeValue(const Eigen::MatrixXd& expectation_values) const {
-				double value = prefactor * expectation_values(matrix_indizes.first, matrix_indizes.second);
-				if (next_term != nullptr) {
-					value += next_term->computeValue(expectation_values);
-				}
-				return value;
-			};
-		};
-		typedef std::pair<double, std::vector<Term>> coeff_term;
-		std::vector<std::vector<coeff_term>> expressions;
-
-		std::ifstream n_file("../data/commuting_N.txt");
 		std::string line;
-		while (std::getline(n_file, line)) {
+		std::ifstream m_file("../data/commuting_M.txt");
+		while (std::getline(m_file, line)) {
 			if (line[0] == ']') continue;
 			else if (line[0] == '[') {
 				// We get an entirely new expression
-				expressions.push_back(std::vector<coeff_term>());
+				expressions_M.push_back(std::vector<coeff_term>());
 			}
 			else if (line[0] == '}') continue;
 			else if (line[0] == '{') {
 				// We get a new coefficient within the old expression
-				expressions.back().push_back(coeff_term());
+				expressions_M.back().push_back(coeff_term());
 			}
 			else if (line[0] == '\t') {
 				if (line[1] == '}') continue;
 				else if (line[1] == '{') {
 					// We get a new Wick-type term
-					expressions.back().back().second.push_back(Term());
+					expressions_M.back().back().second.push_back(std::make_shared<Term>(Term()));
+					last_term = expressions_M.back().back().second.back();
 				}
 				else if (line[1] == '\t') {
 					if (line[2] == '{') {
-						// Parse Wick
+						// Parse Wick ?While?
 						line.erase(0, 3);
-						if (line[0] == '+') {
-						}
-						else if (line[0] == '-') {
-						}
-						else {
-							expressions.back().back().second.back().matrix_indizes = this->parseExpectationValue(line);
-						}
+						this->parseWick(last_term, line);
 					}
 					else {
 						// Parse prefactor
-						expressions.back().back().second.back().prefactor = std::stod(line.erase(0, 2));
+						last_term->prefactor = std::stod(line.erase(0, 2));
 					}
 				}
 				else {
@@ -124,27 +137,118 @@ namespace Hubbard {
 					int coeff = std::stoi(line.erase(0, 1));
 					switch (coeff) {
 					case -1:
-						expressions.back().back().first = 1;
+						expressions_M.back().back().first = 1;
 						break;
 					case 0: // epsilon is k-dependend, hence we need further checks down the line
-						expressions.back().back().first = -128;
+						expressions_M.back().back().first = -128;
 						break;
 					case 1:
-						expressions.back().back().first = this->delta_cdw;
+						expressions_M.back().back().first = this->delta_cdw;
 						break;
 					case 2:
-						expressions.back().back().first = this->delta_sc;
+						expressions_M.back().back().first = this->delta_sc;
 						break;
 					case 3: // complex conjugate, but it's 0 for now anyways
-						expressions.back().back().first = this->delta_eta;
+						expressions_M.back().back().first = this->delta_eta;
 						break;
 					case 4:
-						expressions.back().back().first = this->delta_eta;
+						expressions_M.back().back().first = this->delta_eta;
 						break;
 					}
 				}
 			}
 		}
+
+		std::ifstream n_file("../data/commuting_N.txt");
+		while (std::getline(n_file, line)) {
+			if (line[0] == ']') continue;
+			else if (line[0] == '[') {
+				// We get an entirely new expression
+				expressions_N.push_back(std::vector<coeff_term>());
+			}
+			else if (line[0] == '}') continue;
+			else if (line[0] == '{') {
+				// We get a new coefficient within the old expression
+				expressions_N.back().push_back(coeff_term());
+			}
+			else if (line[0] == '\t') {
+				if (line[1] == '}') continue;
+				else if (line[1] == '{') {
+					// We get a new Wick-type term
+					expressions_N.back().back().second.push_back(std::make_shared<Term>(Term()));
+					last_term = expressions_N.back().back().second.back();
+				}
+				else if (line[1] == '\t') {
+					if (line[2] == '{') {
+						// Parse Wick ?While?
+						line.erase(0, 3);
+						this->parseWick(last_term, line);
+					}
+					else {
+						// Parse prefactor
+						last_term->prefactor = std::stod(line.erase(0, 2));
+					}
+				}
+				else {
+					// Parse coefficient
+					int coeff = std::stoi(line.erase(0, 1));
+					switch (coeff) {
+					case -1:
+						expressions_N.back().back().first = 1;
+						break;
+					case 0: // epsilon is k-dependend, hence we need further checks down the line
+						expressions_N.back().back().first = -128;
+						break;
+					case 1:
+						expressions_N.back().back().first = this->delta_cdw;
+						break;
+					case 2:
+						expressions_N.back().back().first = this->delta_sc;
+						break;
+					case 3: // complex conjugate, but it's 0 for now anyways
+						expressions_N.back().back().first = this->delta_eta;
+						break;
+					case 4:
+						expressions_N.back().back().first = this->delta_eta;
+						break;
+					}
+	}
+			}
+		}
+
+#ifdef _DO_TEST
+		for (const auto& a : expressions_M) {
+			std::cout << "1: \n";
+			for (const auto& b : a) {
+				std::cout << "\n" << b.first << " * { ";
+				for (const auto& c : b.second) {
+					std::cout << "\n" << *c;
+				}
+				std::cout << " }";
+			}
+			std::cout << std::endl;
+	}
+
+		Eigen::Matrix4d ev;
+		ev <<
+			1, 2, 3, 4,
+			2, 1, 4, 3,
+			3, 4, 1, 2,
+			4, 3, 2, 1;
+
+		for (const auto& a : expressions_M) {
+			double val = 0;
+			for (const auto& b : a) {
+				double buf = 0;
+				for (const auto& c : b.second) {
+					buf += c->computeValue(ev);
+					std::cout << "buf: " << buf << std::endl;
+				}
+				val += b.first * buf;
+			}
+			std::cout << "\n" << val << std::endl;
+		}
+#endif // _DO_TEST
 	}
 
 	Model::Model(double _temperature, double _U)
@@ -175,6 +279,19 @@ namespace Hubbard {
 			solver.compute(hamilton, false);
 			reciever.push_back(std::vector<double>(solver.eigenvalues().data(), solver.eigenvalues().data() + solver.eigenvalues().size()));
 		}
+	}
+
+	void Model::computeCollectiveModes(std::vector<std::vector<double>>& reciever, double direction)
+	{
+		parseCommutatorData();
+
+		reciever.reserve(2 * Constants::K_DISCRETIZATION);
+		/* TODO:
+		* Implement generalized solver
+		* Implement filling of N and M matrices
+		* Implement what to do with epsilon
+		*/
+
 	}
 
 	Model::ModelParameters::ModelParameters(double _temperature, double _U, double _V, double _global_step, double _second_step,
@@ -246,5 +363,19 @@ namespace Hubbard {
 	void Model::data_set::print() const {
 		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta
 			<< "\t" << sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta) << std::endl;
+	}
+
+	std::ostream& operator<<(std::ostream& os, const Term& t)
+	{
+		os << t.prefactor << " * [ ";
+		for (int i = 0; i < t.matrix_indizes.size(); i++)
+		{
+			os << "(" << t.matrix_indizes[i].first << "," << t.matrix_indizes[i].second << ") ";
+			if (i < t.next_terms.size()) {
+				os << "* " << *(t.next_terms[i]);
+			}
+		}
+		os << " ] ";
+		return os;
 	}
 }
