@@ -185,6 +185,8 @@ class Term:
 
     def wick(self) -> str:
         ret = ""
+        if(self.isIdentity()):
+            return r"\langle \mathbb{1} \rangle"
         if(self.operators.size == 2):
             ret += rf"\langle {self.to_string_no_prefactor()} \rangle"
         else:
@@ -240,6 +242,8 @@ class Term:
 
     def wick_as_data(self) -> str:
         ret = ""
+        if(self.isIdentity()):
+            return "Identity"
         if(self.operators.size == 2):
             return str_duo(self.operators[0], self.operators[1], True)
         else:
@@ -281,6 +285,11 @@ class Term:
             if(did_something and ret[-1] == ","):
                 ret = ret[:len(ret) - 1]
         return ret
+
+    def hermitianConjugate(self):
+        self.operators = np.flip(self.operators)
+        for i in range(0, self.operators.size):
+            self.operators[i].daggered = not self.operators[i].daggered
 
 @dataclass
 class Expression:
@@ -441,6 +450,10 @@ class Expression:
         if(ret == "\n}"):
             return ""
         return ret
+
+    def hermitianConjugate(self):
+        for i in range(self.terms.size):
+            self.terms[i].hermitianConjugate()
 
 def sync_eps(momentum: Momentum, base=1):
     if(momentum.add_Q):

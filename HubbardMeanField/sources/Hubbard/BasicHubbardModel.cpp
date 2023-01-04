@@ -13,7 +13,7 @@ namespace Hubbard {
 		return -2 * (cos(k_x) + cos(k_y));
 	}
 
-	void BasicHubbardModel::fillMatrix(double k_x, double k_y)
+	void BasicHubbardModel::fillHamiltonian(double k_x, double k_y)
 	{
 		hamilton.fill(0);
 
@@ -43,7 +43,7 @@ namespace Hubbard {
 		this->hamilton = MatrixXd::Zero(4, 4);
 	}
 
-	Hubbard::Model::data_set BasicHubbardModel::compute(const bool print/*=false*/)
+	Hubbard::Model::data_set BasicHubbardModel::computePhases(const bool print/*=false*/)
 	{
 		MatrixXd rho = MatrixXd::Zero(4, 4);
 		Eigen::SelfAdjointEigenSolver<MatrixXd> solver;
@@ -66,7 +66,7 @@ namespace Hubbard {
 			{
 				for (int l = -Constants::K_DISCRETIZATION; l < Constants::K_DISCRETIZATION; l++)
 				{
-					fillMatrix((k * M_PI) / Constants::K_DISCRETIZATION, (l * M_PI) / Constants::K_DISCRETIZATION);
+					fillHamiltonian((k * M_PI) / Constants::K_DISCRETIZATION, (l * M_PI) / Constants::K_DISCRETIZATION);
 					solver.compute(hamilton);
 					rho.fill(0);
 

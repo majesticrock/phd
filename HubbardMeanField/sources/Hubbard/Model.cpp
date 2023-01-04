@@ -123,9 +123,12 @@ namespace Hubbard {
 				}
 				else if (line[1] == '\t') {
 					if (line[2] == '{') {
-						// Parse Wick ?While?
+						// Parse Wick
 						line.erase(0, 3);
 						this->parseWick(last_term, line);
+					}
+					else if (line[2] == 'I') {
+						last_term->matrix_indizes.push_back(std::make_pair<int, int>(-1, -1));
 					}
 					else {
 						// Parse prefactor
@@ -180,9 +183,12 @@ namespace Hubbard {
 				}
 				else if (line[1] == '\t') {
 					if (line[2] == '{') {
-						// Parse Wick ?While?
+						// Parse Wick
 						line.erase(0, 3);
 						this->parseWick(last_term, line);
+					}
+					else if (line[2] == 'I') {
+						last_term->matrix_indizes.push_back(std::make_pair<int, int>(-1, -1));
 					}
 					else {
 						// Parse prefactor
@@ -212,7 +218,7 @@ namespace Hubbard {
 						expressions_N.back().back().first = this->delta_eta;
 						break;
 					}
-	}
+				}
 			}
 		}
 
@@ -227,7 +233,7 @@ namespace Hubbard {
 				std::cout << " }";
 			}
 			std::cout << std::endl;
-	}
+		}
 
 		Eigen::Matrix4d ev;
 		ev <<
@@ -275,7 +281,7 @@ namespace Hubbard {
 		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
 		{
 			k_val = k * M_PI / Constants::K_DISCRETIZATION;
-			fillMatrix(k_val, direction * k_val);
+			fillHamiltonian(cos(M_PI * direction) * k_val, sin(M_PI * direction) * k_val);
 			solver.compute(hamilton, false);
 			reciever.push_back(std::vector<double>(solver.eigenvalues().data(), solver.eigenvalues().data() + solver.eigenvalues().size()));
 		}
@@ -284,14 +290,114 @@ namespace Hubbard {
 	void Model::computeCollectiveModes(std::vector<std::vector<double>>& reciever, double direction)
 	{
 		parseCommutatorData();
-
 		reciever.reserve(2 * Constants::K_DISCRETIZATION);
-		/* TODO:
-		* Implement generalized solver
-		* Implement filling of N and M matrices
-		* Implement what to do with epsilon
-		*/
+		const int BASIS_SIZE = 10;
 
+		Eigen::MatrixXd M = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
+		Eigen::MatrixXd N = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
+		Eigen::Matrix4d rho = Eigen::Matrix4d::Zero();
+
+		auto fill_matrices = [&](double kx, double ky) {
+			int i = 0;
+			int j = 0;
+			for (int n = 0; n < expressions_M.size(); n++)
+			{
+				double value = 0;
+				for (const auto& b : expressions_M[n]) {
+					double buffer = 0;
+					for (const auto& c : b.second) {
+						buffer += c->computeValue(rho);
+					}
+					if (b.first != -128) {
+						value += b.first * buffer;
+					}
+					else {
+						value += unperturbed_energy(kx, ky) * buffer;
+					}
+				}
+				if (abs(value) < 1e-12) {
+					value = 0;
+				}
+				M(i, j) = value;
+				M(j, i) = value;
+
+				value = 0;
+				for (const auto& b : expressions_N[n]) {
+					double buffer = 0;
+					for (const auto& c : b.second) {
+						buffer += c->computeValue(rho);
+					}
+					if (b.first != -128) {
+						value += b.first * buffer;
+					}
+					else {
+						value += unperturbed_energy(kx, ky) * buffer;
+					}
+				}
+				if (abs(value) < 1e-12) {
+					value = 0;
+				}
+				N(i, j) = value;
+				N(j, i) = value;
+
+				if (++j >= BASIS_SIZE) j = ++i;
+			}
+		};
+
+		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
+		Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> gen_solver;
+		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
+		{
+			double k_x = cos(M_PI * direction) * k * M_PI / Constants::K_DISCRETIZATION;
+			double k_y = sin(M_PI * direction) * k * M_PI / Constants::K_DISCRETIZATION;
+			fillHamiltonian(k_x, k_y);
+			solver.compute(hamilton);
+			rho.fill(0);
+			for (int i = 0; i < 4; i++)
+			{
+				rho(i, i) = fermi_dirac(solver.eigenvalues()(i));
+			}
+			rho = solver.eigenvectors() * rho * (solver.eigenvectors().transpose());
+			fill_matrices(k_x, k_y);
+
+#ifdef _DO_TEST
+			if (k == -Constants::K_DISCRETIZATION) {
+				const int TERM_N = 54;
+				for (const auto& b : expressions_N[TERM_N]) {
+					std::cout << "\n" << b.first << " * { ";
+					for (const auto& c : b.second) {
+						std::cout << "\n" << *c;
+					}
+					std::cout << " }";
+				}
+				std::cout << std::endl << std::endl;
+
+				std::cout << N << std::endl << std::endl;
+
+				double value = 0;
+				for (const auto& a : expressions_N[TERM_N]) {
+					for (const auto& b : a.second) {
+						value += b->computeValue(rho);
+					}
+				}
+				std::cout << value << std::endl << std::endl;
+				std::cout << rho << std::endl << std::endl;
+			}
+#endif // _DO_TEST
+
+			solver.compute(N, false);
+			for (int i = 0; i < solver.eigenvalues().size(); i++)
+			{
+				N += 1e-10 * Eigen::MatrixXd::Identity(N.rows(), N.cols());
+				if (solver.eigenvalues()(i) < -1e-12) {
+					std::cerr << "k=(" << k_x / M_PI << "," << k_y / M_PI << ")   N is not positive!\n" << N << std::endl << std::endl;
+					break;
+				}
+			}
+			gen_solver.compute(M, N, false);
+			reciever.push_back(std::vector<double>(gen_solver.eigenvalues().data(), gen_solver.eigenvalues().data() + gen_solver.eigenvalues().size()));
+			//std::sort(reciever.back().begin(), reciever.back().end());
+		}
 	}
 
 	Model::ModelParameters::ModelParameters(double _temperature, double _U, double _V, double _global_step, double _second_step,
@@ -349,16 +455,7 @@ namespace Hubbard {
 	}
 	void Model::ModelParameters::printGlobal() const
 	{
-		std::cout << global_iterator_type << " = ";
-		if (global_iterator_type == "T") {
-			std::cout << temperature;
-		}
-		else if (global_iterator_type == "U") {
-			std::cout << U;
-		}
-		else if (global_iterator_type == "V") {
-			std::cout << V;
-		}
+		std::cout << global_iterator_type << " = " << getGlobal();
 	}
 	void Model::data_set::print() const {
 		std::cout << delta_cdw << "\t" << delta_sc << "\t" << delta_eta
