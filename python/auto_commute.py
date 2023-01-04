@@ -15,8 +15,8 @@ SC_Q_D = np.array([Operator(Momentum("k", False, True),  False, False), Operator
 dagger_it(SC_D)
 dagger_it(SC_Q_D)
 F_K     = Expression(1, np.array([Term(1, "", SC    )]))
-F_K_Q   = Expression(1, np.array([Term(1, "", SC_D  )]))
-F_K_D   = Expression(1, np.array([Term(1, "", SC_Q  )]))
+F_K_D   = Expression(1, np.array([Term(1, "", SC_D  )]))
+F_K_Q   = Expression(1, np.array([Term(1, "", SC_Q  )]))
 F_K_Q_D = Expression(1, np.array([Term(1, "", SC_Q_D)]))
 
 CDW_U   = np.array([Operator(Momentum("k", True, False), True,  True), Operator(Momentum("k", True, True), True,  False)])
@@ -68,19 +68,19 @@ for i in range(0, basis.size):
     for j in range(i, basis.size):
         ex_r = deepcopy(basis[i])
         ex_l = deepcopy(basis[j])
+        ex_l.hermitianConjugate()
         c = anti_commute(ex_l, ex_r)
         c.normalOrder()
         buffer = c.as_data()
-        if buffer != "":
-            N += f"[ # {{ {ex_l}, {ex_r} }}\n{buffer}\n]\n"
+        #if buffer != "":
+        N += f"[ # {{ {ex_l}, {ex_r} }}\n{buffer}\n]\n"
         #print(f"\\begin{{align*}}\n\\left\\{{ {ex_l}, {ex_r} \\right\\}} &= {c.as_expectation_values()}\n\\end{{align*}}\n")
 
         d = anti_commute(ex_l, commuted_with_H)
         d.normalOrder()
         d.sortByCoefficient()
         buffer = d.as_data()
-        if buffer != "":
-            M += f"[ # {{ {ex_l}, [ H, {ex_r} ]}}\n{buffer}\n]\n"
+        M += f"[ # {{ {ex_l}, [ H, {ex_r} ]}}\n{buffer}\n]\n"
 
 with open("data/commuting_N.txt", "w") as f:
     f.write(N[:-1])
