@@ -14,7 +14,7 @@ namespace Hubbard {
 		return -2 * (cos(k_x) + cos(k_y));
 	}
 
-	void UsingBroyden::fillMatrix(double k_x, double k_y)
+	void UsingBroyden::fillHamiltonian(double k_x, double k_y)
 	{
 		hamilton.fill(0);
 
@@ -50,7 +50,7 @@ namespace Hubbard {
 		this->hamilton = MatrixXd::Zero(4, 4);
 	}
 
-	Model::data_set UsingBroyden::compute(const bool print/*=false*/)
+	Model::data_set UsingBroyden::computePhases(const bool print/*=false*/)
 	{
 		MatrixXd rho = MatrixXd::Zero(4, 4);
 		Eigen::SelfAdjointEigenSolver<MatrixXd> solver;
@@ -64,10 +64,9 @@ namespace Hubbard {
 			{
 				for (int l = -Constants::K_DISCRETIZATION; l < Constants::K_DISCRETIZATION; l++)
 				{
-					fillMatrix(((k + l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION, ((k - l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION);
+					fillHamiltonian(((k + l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION, ((k - l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION);
 					solver.compute(hamilton);
 					rho.fill(0);
-
 					for (int i = 0; i < 4; i++)
 					{
 						rho(i, i) = fermi_dirac(solver.eigenvalues()(i));

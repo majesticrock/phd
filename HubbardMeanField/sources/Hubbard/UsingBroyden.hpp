@@ -9,7 +9,7 @@ namespace Hubbard {
 		double V;
 
 		double unperturbed_energy(double k_x, double k_y) const override;
-		virtual void fillMatrix(double k_x, double k_y) override;
+		virtual void fillHamiltonian(double k_x, double k_y) override;
 		virtual inline void setParameters(Eigen::VectorXd& F) {
 			F(0) *= (this->U - this->V) / (8 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 			F(1) *= (this->U + this->V) / (8 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
@@ -21,6 +21,6 @@ namespace Hubbard {
 	public:
 		UsingBroyden(ModelParameters& _params);
 
-		data_set compute(const bool print = false);
+		data_set computePhases(const bool print = false) override;
 	};
 }

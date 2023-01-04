@@ -7,7 +7,7 @@ namespace Hubbard {
 	{
 	protected:
 		double unperturbed_energy(double k_x, double k_y) const override;
-		virtual void fillMatrix(double k_x, double k_y) override;
+		virtual void fillHamiltonian(double k_x, double k_y) override;
 		virtual inline void setParameters(double cdw, double sc, double eta) {
 			this->delta_cdw = cdw * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 			this->delta_sc = sc * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
@@ -16,6 +16,6 @@ namespace Hubbard {
 	public:
 		BasicHubbardModel(ModelParameters& _params);
 
-		data_set compute(const bool print = false);
+		data_set computePhases(const bool print = false) override;
 	};
 }

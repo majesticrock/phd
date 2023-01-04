@@ -13,11 +13,16 @@ namespace Hubbard {
 			double buf = 0;
 			for (int i = 0; i < matrix_indizes.size(); i++)
 			{
-				buf = expectation_values(matrix_indizes[i].first, matrix_indizes[i].second);
-				if (i < next_terms.size()) {
-					buf *= next_terms[i]->computeValue(expectation_values);
+				if (matrix_indizes[i].first < 0) {
+					value += 1;
 				}
-				value += buf;
+				else {
+					buf = expectation_values(matrix_indizes[i].first, matrix_indizes[i].second);
+					if (i < next_terms.size()) {
+						buf *= next_terms[i]->computeValue(expectation_values);
+					}
+					value += buf;
+				}
 			}
 			return prefactor * value;
 		};
@@ -49,7 +54,7 @@ namespace Hubbard {
 		};
 
 		virtual double unperturbed_energy(double k_x, double k_y) const = 0;
-		virtual void fillMatrix(double k_x, double k_y) = 0;
+		virtual void fillHamiltonian(double k_x, double k_y) = 0;
 
 		
 	public:
@@ -72,6 +77,18 @@ namespace Hubbard {
 			void setSecondIterator(int it_num);
 			void incrementGlobalIterator();
 			void incrementSecondIterator();
+			inline double getGlobal() const {
+				if (global_iterator_type == "T") {
+					return temperature;
+				}
+				else if (global_iterator_type == "U") {
+					return U;
+				}
+				else if (global_iterator_type == "V") {
+					return V;
+				}
+				return -128;
+			};
 			void printGlobal() const;
 		};
 		struct data_set {
@@ -82,10 +99,9 @@ namespace Hubbard {
 		Model(double _temperature, double _U);
 		Model(ModelParameters& _params);
 		// reciever is the vector the resulting data will be stored in
-		// direction gives how strongly k_y is varied compared to x
-		// i.e. 0 means k_y does not vary at all while 1 means k_x and k_y vary at the same rate
-		// which results in a 45° angle in the first BZ
+		// direction gives the angle between the k-path and the k_x axis in multiples of M_PI
 		void getEnergies(std::vector<std::vector<double>>& reciever, double direction);
+		virtual data_set computePhases(const bool print = false) = 0;
 		void parseCommutatorData();
 		void computeCollectiveModes(std::vector<std::vector<double>>& reciever, double direction);
 	};
