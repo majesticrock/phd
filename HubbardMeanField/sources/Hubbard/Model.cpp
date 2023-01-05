@@ -221,40 +221,6 @@ namespace Hubbard {
 				}
 			}
 		}
-
-#ifdef _DO_TEST
-		for (const auto& a : expressions_M) {
-			std::cout << "1: \n";
-			for (const auto& b : a) {
-				std::cout << "\n" << b.first << " * { ";
-				for (const auto& c : b.second) {
-					std::cout << "\n" << *c;
-				}
-				std::cout << " }";
-			}
-			std::cout << std::endl;
-		}
-
-		Eigen::Matrix4d ev;
-		ev <<
-			1, 2, 3, 4,
-			2, 1, 4, 3,
-			3, 4, 1, 2,
-			4, 3, 2, 1;
-
-		for (const auto& a : expressions_M) {
-			double val = 0;
-			for (const auto& b : a) {
-				double buf = 0;
-				for (const auto& c : b.second) {
-					buf += c->computeValue(ev);
-					std::cout << "buf: " << buf << std::endl;
-				}
-				val += b.first * buf;
-			}
-			std::cout << "\n" << val << std::endl;
-		}
-#endif // _DO_TEST
 	}
 
 	Model::Model(double _temperature, double _U)
@@ -359,31 +325,6 @@ namespace Hubbard {
 			}
 			rho = solver.eigenvectors() * rho * (solver.eigenvectors().transpose());
 			fill_matrices(k_x, k_y);
-
-#ifdef _DO_TEST
-			if (k == -Constants::K_DISCRETIZATION) {
-				const int TERM_N = 54;
-				for (const auto& b : expressions_N[TERM_N]) {
-					std::cout << "\n" << b.first << " * { ";
-					for (const auto& c : b.second) {
-						std::cout << "\n" << *c;
-					}
-					std::cout << " }";
-				}
-				std::cout << std::endl << std::endl;
-
-				std::cout << N << std::endl << std::endl;
-
-				double value = 0;
-				for (const auto& a : expressions_N[TERM_N]) {
-					for (const auto& b : a.second) {
-						value += b->computeValue(rho);
-					}
-				}
-				std::cout << value << std::endl << std::endl;
-				std::cout << rho << std::endl << std::endl;
-			}
-#endif // _DO_TEST
 
 			solver.compute(N, false);
 			for (int i = 0; i < solver.eigenvalues().size(); i++)
