@@ -4,7 +4,7 @@ from matplotlib import colors
 import matplotlib as mpl
 
 eps = 1e-5
-data_folder = "data/V-2_big/"
+data_folder = "data/T0.5/"
 CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
 SC =  abs(np.loadtxt(data_folder + "sc.txt"))
 ETA = abs(np.loadtxt(data_folder + "eta.txt"))

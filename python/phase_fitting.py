@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from scipy.optimize import curve_fit
 
-data_folder = "data/V-2_big/"
+data_folder = "data/T0.5/"
 
 CDW = (np.loadtxt(data_folder + "cdw.txt")).transpose()
 SC =  (np.loadtxt(data_folder + "sc.txt")).transpose()

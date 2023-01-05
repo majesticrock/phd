@@ -44,11 +44,11 @@ int main(int argc, char** argv)
 	//#define _DO_TEST
 #ifdef _DO_TEST
 
-	Hubbard::Model::ModelParameters mP(0, -1, 0.5, 0, 0, "", "");
+	Hubbard::Model::ModelParameters mP(0, -0.8752, 0, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 
 	std::chrono::steady_clock::time_point test_b = std::chrono::steady_clock::now();
-	model.compute(true).print();
+	model.computePhases(true).print();
 	std::chrono::steady_clock::time_point test_e = std::chrono::steady_clock::now();
 	std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(test_e - test_b).count() << "[ms]" << std::endl;
 
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 	Hubbard::UsingBroyden model2(mP);
 
 	test_b = std::chrono::steady_clock::now();
-	model2.compute(true).print();
+	model2.computePhases(true).print();
 	test_e = std::chrono::steady_clock::now();
 	std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(test_e - test_b).count() << "[ms]" << std::endl;
 
@@ -175,7 +175,6 @@ int main(int argc, char** argv)
 		std::vector<std::vector<data_vector>> oneParticleEnergies(FIRST_IT_STEPS);
 		std::vector<double> param(FIRST_IT_STEPS);
 
-#pragma omp parallel for
 		for (int T = 0; T < FIRST_IT_STEPS; T++)
 		{
 			std::unique_ptr<Hubbard::Model> model;
@@ -188,8 +187,8 @@ int main(int argc, char** argv)
 			model->computePhases();
 			model->computeCollectiveModes(reciever[T], 0);
 			model->getEnergies(oneParticleEnergies[T], 0);
-			modelParameters.incrementGlobalIterator();
 			param[T] = modelParameters.getGlobal();
+			modelParameters.incrementGlobalIterator();
 		}
 
 		if (rank == 0) {
