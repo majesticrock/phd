@@ -38,6 +38,10 @@ int main(int argc, char** argv)
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &numberOfRanks);
 
+	if (rank == 0) {
+		std::cout << "Using parameter file " << argv[1] << std::endl;
+	}
+
 	Utility::InputFileReader input(argv[1]);
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
