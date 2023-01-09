@@ -4,8 +4,8 @@
 ## or look up the slurm documentation under https://slurm.schedmed.com/sbatch.html
 
 ## Mandatory:
-#SBATCH --job-name=V_z
-#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_V_zoom.txt    ## File for stdout & stderr
+#SBATCH --job-name=T_fin
+#SBATCH --output=/home/althueser/phd/HubbardMeanField/output_T_fin.txt    ## File for stdout & stderr
 #SBATCH --time=24:00:00         ## maximum runtime; hours:minutes:seconds
 #SBATCH --partition=long       ## choose queue
 
@@ -31,7 +31,7 @@ cd /home/althueser/phd/HubbardMeanField/        ## go to working directory
 date
 echo "--- START ---"
 
-mpirun ./build/main params/params_V_zoom.config            ## execute binary using mpirun on the allocated computation resource; the number of cores is $
+mpirun ./build/main params/params_T_finite.config            ## execute binary using mpirun on the allocated computation resource; the number of cores is $
 
 echo "--- END ---"
 date
