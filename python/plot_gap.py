@@ -52,4 +52,6 @@ cbar.set_ticklabels(np.round(T[0::8], 4))
 ax.set_xlabel(r"$" + labels[0] + "/t$")
 ax.set_ylabel(r"$\Delta_{tot}$")
 
+import os
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()

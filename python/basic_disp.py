@@ -18,4 +18,7 @@ ax = fig.gca(projection='3d')
 surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
 plt.tight_layout()
+
+import os
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()

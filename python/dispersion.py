@@ -11,4 +11,7 @@ for i in range(0, len(M)):
 plt.ylabel(r"$\epsilon / t$")
 plt.xlabel(r"$k / \pi$")
 plt.tight_layout()
+
+import os
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()
