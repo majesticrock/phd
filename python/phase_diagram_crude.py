@@ -61,4 +61,7 @@ ax.legend(handles=legend_elements, loc='upper right')
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
+
+import os
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()

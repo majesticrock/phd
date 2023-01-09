@@ -96,4 +96,7 @@ plt.fill_between(U, fitted_cdw, 0, alpha=0.4, label="CDW")
 plt.xlabel("$" + labels[0] + " / t$")
 plt.ylabel("$T / t$")
 plt.legend(loc="upper center")
+
+import os
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()
