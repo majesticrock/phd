@@ -1,0 +1,14 @@
+font.size : 13
+font.family : serif
+font.serif : Latin Modern Math
+
+axes.xmargin : 0
+
+xtick.direction : in
+ytick.direction : in
+xtick.top : True
+ytick.right : True
+xtick.minor.visible : True
+ytick.minor.visible : True
+
+pgf.rcfonts : False
