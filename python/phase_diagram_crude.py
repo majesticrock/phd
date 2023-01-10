@@ -2,9 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import matplotlib as mpl
+import sys
 
-eps = 1e-5
-data_folder = "data/T0.5/"
+eps = 1e-7
+if(len(sys.argv) > 1):
+    data_folder = "data/" + sys.argv[1] + "/"
+else:
+    data_folder = "data/U-2/"
+    
 CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
 SC =  abs(np.loadtxt(data_folder + "sc.txt"))
 ETA = abs(np.loadtxt(data_folder + "eta.txt"))
@@ -50,7 +55,7 @@ fig, ax = plt.subplots()
 mpl.rcParams["hatch.linewidth"] = 2.5
 cset1 = ax.contourf(X, Y-0.5*(T[1]-T[0]), SC, 1, cmap=cmap1, hatches=[None, None])
 cset2 = ax.contourf(X, Y-0.5*(T[1]-T[0]), CDW, 1, cmap=cmap2, alpha=0.4)
-cset3 = ax.contourf(X, Y-0.5*(T[1]-T[0]), ETA, 1, cmap=cmap2, alpha=0)
+cset3 = ax.contourf(X, Y-0.5*(T[1]-T[0]), ETA, 1, cmap=cmap2, alpha=0.1)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch
