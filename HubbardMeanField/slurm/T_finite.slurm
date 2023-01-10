@@ -7,13 +7,13 @@
 #SBATCH --job-name=T_fin
 #SBATCH --output=/home/althueser/phd/HubbardMeanField/output_T_fin.txt    ## File for stdout & stderr
 #SBATCH --time=12:00:00         ## maximum runtime; hours:minutes:seconds
-#SBATCH --partition=medium       ## choose queue
+#SBATCH --partition=med       ## choose queue
 
 #SBATCH --ntasks=80             ## sets number of total mpi processes
 #SBATCH --tasks-per-node=10    ## mpi processes spawned per node
 #SBATCH --cpus-per-task=4       ## logical cores used per mpi process: should be 1, except if you want to combine OpenMP with$
 
-#SBATCH --mem=4gb               ## sets maximum allowed memory per node
+#SBATCH --mem=1gb               ## sets maximum allowed memory per node
 ##SBATCH --mem-per-cpu=100mb    ## sets maximum allowed memory per mpi process
 
 #SBATCH --mail-user=joshua.althueser@tu-dortmund.de     ## replace mail by personal mail address
