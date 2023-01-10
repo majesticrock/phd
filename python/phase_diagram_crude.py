@@ -4,11 +4,11 @@ from matplotlib import colors
 import matplotlib as mpl
 import sys
 
-eps = 1e-7
+eps = 1e-5
 if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
 else:
-    data_folder = "data/U-2/"
+    data_folder = "data/V-2/"
     
 CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
 SC =  abs(np.loadtxt(data_folder + "sc.txt"))
@@ -46,6 +46,7 @@ for i in range(0, T_SIZE):
         else:
             ETA[i][j] = 0
 
+
 X, Y = np.meshgrid(U, T)
 cmap1 = colors.ListedColormap(['white', 'C0'])
 cmap2 = colors.ListedColormap(['white', 'C1'])
@@ -53,9 +54,9 @@ cmap2 = colors.ListedColormap(['white', 'C1'])
 fig, ax = plt.subplots()
 
 mpl.rcParams["hatch.linewidth"] = 2.5
-cset1 = ax.contourf(X, Y-0.5*(T[1]-T[0]), SC, 1, cmap=cmap1, hatches=[None, None])
-cset2 = ax.contourf(X, Y-0.5*(T[1]-T[0]), CDW, 1, cmap=cmap2, alpha=0.4)
-cset3 = ax.contourf(X, Y-0.5*(T[1]-T[0]), ETA, 1, cmap=cmap2, alpha=0.1)
+cset1 = ax.contourf(X, Y, SC, 1, cmap=cmap1, hatches=[None, None])
+cset2 = ax.contourf(X, Y, CDW, 1, cmap=cmap2, alpha=0.4)
+cset3 = ax.contourf(X, Y, ETA, 1, cmap=cmap2, alpha=0.1)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch

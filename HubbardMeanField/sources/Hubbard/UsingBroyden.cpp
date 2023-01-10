@@ -21,11 +21,11 @@ namespace Hubbard {
 		Eigen::Vector4d cos_sin;
 		cos_sin << cos(k_x), cos(k_y), sin(k_x), sin(k_y);
 		hamilton(0, 1) = delta_cdw;
-		hamilton(0, 2) = delta_sc + V * old_sc.dot(cos_sin);
-		hamilton(0, 3) = delta_eta - V * old_eta.dot(cos_sin);
+		hamilton(0, 2) = delta_sc;//+ V * old_sc.dot(cos_sin);
+		hamilton(0, 3) = delta_eta;// - V * old_eta.dot(cos_sin);
 
-		hamilton(1, 2) = delta_eta + V * old_eta.dot(cos_sin);
-		hamilton(1, 3) = delta_sc - V * old_sc.dot(cos_sin);
+		hamilton(1, 2) = delta_eta;// + V * old_eta.dot(cos_sin);
+		hamilton(1, 3) = delta_sc;// -V * old_sc.dot(cos_sin);
 		hamilton(2, 3) = -delta_cdw;
 
 		Eigen::MatrixXd buffer = hamilton.transpose();
@@ -51,8 +51,8 @@ namespace Hubbard {
 		this->delta_eta = 0;
 
 		this->hamilton = MatrixXd::Zero(4, 4);
-		this->old_eta = Eigen::Vector4d::Zero();
-		this->old_sc = Eigen::Vector4d::Zero();
+		this->old_eta << 0.1, 0.1, 0.1, 0.1;
+		this->old_sc << 0.1, 0.1, 0.1, 0.1;
 	}
 
 	Model::data_set UsingBroyden::computePhases(const bool print/*=false*/)
@@ -74,7 +74,7 @@ namespace Hubbard {
 				{
 					double k_x = ((k + l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION;
 					double k_y = ((k - l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION;
-					fillHamiltonian(((k + l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION, ((k - l) * (0.5 * M_PI)) / Constants::K_DISCRETIZATION);
+					fillHamiltonian(k_x, k_y);
 					solver.compute(hamilton);
 					rho.fill(0);
 					for (int i = 0; i < 4; i++)
@@ -85,20 +85,20 @@ namespace Hubbard {
 					F(0) += (rho(1, 0) - rho(2, 3));
 					F(1) += (rho(0, 2) + rho(1, 3));
 					F(2) += (rho(0, 3) + rho(1, 2));
-					//std::cout << rho(0, 2) << "     " << rho(1, 3) << std::endl;
-					new_sc(0) += cos(k_x) * (rho(0,2) - rho(1,3));
-					new_sc(1) += cos(k_y) * (rho(0,2) - rho(1,3));
-					new_sc(2) += sin(k_x) * (rho(0,2) - rho(1,3));
-					new_sc(3) += sin(k_y) * (rho(0,2) - rho(1,3));
 
-					new_eta(0) += cos(k_x) * (rho(0,3) - rho(1,2));
-					new_eta(1) += cos(k_y) * (rho(0,3) - rho(1,2));
-					new_eta(2) += sin(k_x) * (rho(0,3) - rho(1,2));
-					new_eta(3) += sin(k_y) * (rho(0,3) - rho(1,2));
+					//new_sc(0) += cos(k_x) * (rho(0, 2) - rho(1, 3));
+					//new_sc(1) += cos(k_y) * (rho(0, 2) - rho(1, 3));
+					//new_sc(2) += sin(k_x) * (rho(0, 2) - rho(1, 3));
+					//new_sc(3) += sin(k_y) * (rho(0, 2) - rho(1, 3));
+					//
+					//new_eta(0) += cos(k_x) * (rho(0, 3) - rho(1, 2));
+					//new_eta(1) += cos(k_y) * (rho(0, 3) - rho(1, 2));
+					//new_eta(2) += sin(k_x) * (rho(0, 3) - rho(1, 2));
+					//new_eta(3) += sin(k_y) * (rho(0, 3) - rho(1, 2));
 				}
 			}
-			old_sc = new_sc / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
-			old_eta = new_eta / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
+			//old_sc = new_sc / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
+			//old_eta = new_eta / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
 			setParameters(F);
 			F -= x;
 		};
@@ -117,9 +117,9 @@ namespace Hubbard {
 			if (abs(x0(2) + delta_eta) < 1e-10) {
 				delta_eta = 0;
 			}
-			x0(0) = 0.5 * (delta_cdw + x0(0));
-			x0(1) = 0.5 * (delta_sc + x0(1));
-			x0(2) = 0.5 * (delta_eta + x0(2));
+			x0(0) = delta_cdw;
+			x0(1) = delta_sc ;
+			x0(2) = delta_eta;
 		}
 
 		if (!Utility::Roots::Broyden::compute(func, x0)) {
@@ -128,8 +128,8 @@ namespace Hubbard {
 			delta_sc = 0;
 			delta_eta = 0;
 		}
-		data_set ret = { this->delta_cdw, this->delta_sc + old_sc.sum(), this->delta_eta + old_eta.sum()};
-		std::cout << old_sc.sum() << std::endl;
+		data_set ret = { this->delta_cdw, this->delta_sc, this->delta_eta };
+
 		if (print) {
 			func(x0, f0);
 			std::cout << "x0 = (";
