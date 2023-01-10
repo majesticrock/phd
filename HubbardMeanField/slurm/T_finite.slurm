@@ -6,8 +6,8 @@
 ## Mandatory:
 #SBATCH --job-name=T_fin
 #SBATCH --output=/home/althueser/phd/HubbardMeanField/output_T_fin.txt    ## File for stdout & stderr
-#SBATCH --time=24:00:00         ## maximum runtime; hours:minutes:seconds
-#SBATCH --partition=long       ## choose queue
+#SBATCH --time=12:00:00         ## maximum runtime; hours:minutes:seconds
+#SBATCH --partition=medium       ## choose queue
 
 #SBATCH --ntasks=80             ## sets number of total mpi processes
 #SBATCH --tasks-per-node=10    ## mpi processes spawned per node
