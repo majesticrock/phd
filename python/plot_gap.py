@@ -2,8 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
+import sys
 
-data_folder = "data/V-2_big/"
+if(len(sys.argv) > 1):
+    data_folder = "data/" + sys.argv[1] + "/"
+else:
+    data_folder = "data/U-2/"
 x_axis_is_first = False
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
