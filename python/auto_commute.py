@@ -69,14 +69,14 @@ for i in range(0, basis.size):
         ex_r = deepcopy(basis[i])
         ex_l = deepcopy(basis[j])
         ex_l.hermitianConjugate()
-        c = anti_commute(ex_l, ex_r)
+        c = commute(ex_l, ex_r)
         c.normalOrder()
         buffer = c.as_data()
         #if buffer != "":
         N += f"[ # {{ {ex_l}, {ex_r} }}\n{buffer}\n]\n"
         #print(f"\\begin{{align*}}\n\\left\\{{ {ex_l}, {ex_r} \\right\\}} &= {c.as_expectation_values()}\n\\end{{align*}}\n")
 
-        d = anti_commute(ex_l, commuted_with_H)
+        d = commute(ex_l, commuted_with_H)
         d.normalOrder()
         d.sortByCoefficient()
         buffer = d.as_data()
