@@ -22,11 +22,10 @@ for i in range(0, len(M)):
 #
 def e0(x, y):
     return 2*(np.cos(np.pi*x) + np.cos(np.pi*y))
-plt.plot(k_lin, 4*e0(k_lin, 0), "k:")
+#plt.plot(k_lin, 4*e0(k_lin, 0), "k:")
 
 plt.xlabel(r"$k/\pi$")
 plt.ylabel(r"$\epsilon / t$")
-plt.ylim(0, 18)
 plt.tight_layout()
 
 import os
