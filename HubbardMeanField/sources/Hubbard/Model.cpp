@@ -326,16 +326,24 @@ namespace Hubbard {
 			rho = solver.eigenvectors() * rho * (solver.eigenvectors().transpose());
 			fill_matrices(k_x, k_y);
 
+			Eigen::MatrixXd b = M;
+			M = N;
+			N = b;
+			
+			N += 1e-10 * Eigen::MatrixXd::Identity(N.rows(), N.cols());
 			solver.compute(N, false);
 			for (int i = 0; i < solver.eigenvalues().size(); i++)
 			{
-				N += 1e-10 * Eigen::MatrixXd::Identity(N.rows(), N.cols());
 				if (solver.eigenvalues()(i) < -1e-12) {
 					std::cerr << "k=(" << k_x / M_PI << "," << k_y / M_PI << ")   N is not positive!\n" << N << std::endl << std::endl;
 					break;
 				}
 			}
-			gen_solver.compute(M, N, false);
+			gen_solver.compute(M, N);
+			if(k==-20){
+				std::cout << M << "\n\n" << N << "\n\n" << N.inverse()*M << std::endl << std::endl;
+				std::cout << gen_solver.eigenvalues() << "\n\n" << gen_solver.eigenvectors() << std::endl;
+			}
 			reciever.push_back(std::vector<double>(gen_solver.eigenvalues().data(), gen_solver.eigenvalues().data() + gen_solver.eigenvalues().size()));
 			//std::sort(reciever.back().begin(), reciever.back().end());
 		}
