@@ -7,8 +7,11 @@ import sys
 eps = 1e-5
 if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
+    name = sys.argv[1]
 else:
-    data_folder = "data/V-2/"
+    data_folder = "data/T0.1/"
+    name = "T0.1"
+
     
 CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
 SC =  abs(np.loadtxt(data_folder + "sc.txt"))
@@ -69,5 +72,7 @@ plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
+if not os.path.exists("python/build"):
+    os.makedirs("python/build")
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}_{name}.svg")
 plt.show()

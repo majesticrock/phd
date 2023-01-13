@@ -6,8 +6,10 @@ import sys
 
 if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
+    name = sys.argv[1]
 else:
-    data_folder = "data/U-2/"
+    data_folder = "data/T0.1/"
+    name = "T0.1"
 x_axis_is_first = False
 
 CDW = (np.loadtxt(data_folder + "cdw.txt"))
@@ -42,7 +44,7 @@ if(not x_axis_is_first):
 length = len(U)
 colors = cm.gist_rainbow(np.linspace(0, 1, length))
 my_cmap = ListedColormap(colors[:,:-1])
-fig, ax = plt.subplots(1, 1, figsize=(9,6), constrained_layout=True)
+fig, ax = plt.subplots(1, 1, constrained_layout=True)
 sm = plt.cm.ScalarMappable(cmap=my_cmap, norm=plt.Normalize(vmin=T[0], vmax=T[length - 1]))
 
 
@@ -50,12 +52,15 @@ for i in range(0, length, 1):
     ax.plot(U, data[i], c=colors[i])
 
 cbar = fig.colorbar(sm, ax=ax, label='$' + labels[1] + '/t$')
-cbar.set_ticks(np.round(T[0::8], 4))
-cbar.set_ticklabels(np.round(T[0::8], 4))
+cbar_ticks = np.round(np.linspace(T[0], T[-1] - (T[0] - T[1]), 11), 4)
+cbar.set_ticks(cbar_ticks)
+cbar.set_ticklabels(cbar_ticks)
 
 ax.set_xlabel(r"$" + labels[0] + "/t$")
 ax.set_ylabel(r"$\Delta_{tot}$")
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
+if not os.path.exists("python/build"):
+    os.makedirs("python/build")
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}_{name}.svg")
 plt.show()
