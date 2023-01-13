@@ -1,13 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-M = np.loadtxt(f"data/T0.5/U_modes/-10.00.txt").transpose()
-E = np.loadtxt(f"data/T0.5/U_modes/-10.00_one_particle.txt").transpose()
+M = np.loadtxt(f"data/T0.5/U_modes/-100.00.txt").transpose()
+E = np.loadtxt(f"data/T0.5/U_modes/-100.00_one_particle.txt").transpose()
 k_lin = np.linspace(-1, 1, len(M[0]), endpoint=False)
 for i in range(0, len(M)):
     plt.plot(k_lin, M[i], label=i)
 for i in range(0, len(E)):
     plt.plot(k_lin, 2*E[i], "--")
+
 
 #x = np.append(k_lin, 2 + k_lin)
 #y = np.append(M[6], M[6])
@@ -23,7 +24,6 @@ for i in range(0, len(E)):
 #def e0(x, y):
 #    return 2*(np.cos(np.pi*x) + np.cos(np.pi*y))
 #plt.plot(x, 4*e0(x, 0))
-
 plt.xlabel(r"$k/\pi$")
 plt.ylabel(r"$\epsilon / t$")
 plt.tight_layout()
