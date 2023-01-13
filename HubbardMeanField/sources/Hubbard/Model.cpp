@@ -331,16 +331,17 @@ namespace Hubbard {
 			N = b;
 			
 			N += 1e-10 * Eigen::MatrixXd::Identity(N.rows(), N.cols());
+			//M += 1e-10 * Eigen::MatrixXd::Identity(N.rows(), N.cols());
 			solver.compute(N, false);
 			for (int i = 0; i < solver.eigenvalues().size(); i++)
 			{
-				if (solver.eigenvalues()(i) < -1e-12) {
+				if (solver.eigenvalues()(i) < 0) {
 					std::cerr << "k=(" << k_x / M_PI << "," << k_y / M_PI << ")   N is not positive!\n" << N << std::endl << std::endl;
 					break;
 				}
 			}
 			gen_solver.compute(M, N);
-			if(k==-20){
+			if(k==-Constants::K_DISCRETIZATION){
 				std::cout << M << "\n\n" << N << "\n\n" << N.inverse()*M << std::endl << std::endl;
 				std::cout << gen_solver.eigenvalues() << "\n\n" << gen_solver.eigenvectors() << std::endl;
 			}
