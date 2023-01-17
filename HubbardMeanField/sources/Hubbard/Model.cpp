@@ -257,7 +257,7 @@ namespace Hubbard {
 	{
 		parseCommutatorData();
 		reciever.reserve(2 * Constants::K_DISCRETIZATION);
-		const int BASIS_SIZE = 10;
+		const int BASIS_SIZE = 16;
 
 		Eigen::MatrixXd M = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
 		Eigen::MatrixXd N = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
@@ -312,6 +312,7 @@ namespace Hubbard {
 
 		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
 		Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> gen_solver;
+		Eigen::EigenSolver<Eigen::MatrixXd> solver_2;
 		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
 		{
 			double k_x = cos(M_PI * direction) * k * M_PI / Constants::K_DISCRETIZATION;
@@ -326,26 +327,39 @@ namespace Hubbard {
 			rho = solver.eigenvectors() * rho * (solver.eigenvectors().transpose());
 			fill_matrices(k_x, k_y);
 
-			Eigen::MatrixXd b = M;
-			M = N;
-			N = b;
+			//Eigen::MatrixXd b = M;
+			//M = N;
+			//N = b;
 			
+			Eigen::CompleteOrthogonalDecomposition<Eigen::MatrixXd> COD(N);
+			Eigen::MatrixXd c = COD.pseudoInverse() * M;
+
 			N += 1e-10 * Eigen::MatrixXd::Identity(N.rows(), N.cols());
 			//M += 1e-10 * Eigen::MatrixXd::Identity(N.rows(), N.cols());
 			solver.compute(N, false);
 			for (int i = 0; i < solver.eigenvalues().size(); i++)
 			{
 				if (solver.eigenvalues()(i) < 0) {
-					std::cerr << "k=(" << k_x / M_PI << "," << k_y / M_PI << ")   N is not positive!\n" << N << std::endl << std::endl;
+					//std::cerr << "k=(" << k_x / M_PI << "," << k_y / M_PI << ")   N is not positive!\n" << N << std::endl << std::endl;
 					break;
 				}
 			}
 			gen_solver.compute(M, N);
-			if(k==-Constants::K_DISCRETIZATION){
-				std::cout << M << "\n\n" << N << "\n\n" << N.inverse()*M << std::endl << std::endl;
+			solver_2.compute(c);
+			
+			if(k==-Constants::K_DISCRETIZATION + 100 ){
+				std::cout << hamilton << std::endl << std::endl;
+				std::cout << "##############################\n\n";
+				std::cout << M << "\n\n" << N << "\n\n" << c << std::endl << std::endl;
 				std::cout << gen_solver.eigenvalues() << "\n\n" << gen_solver.eigenvectors() << std::endl;
 			}
-			reciever.push_back(std::vector<double>(gen_solver.eigenvalues().data(), gen_solver.eigenvalues().data() + gen_solver.eigenvalues().size()));
+			//reciever.push_back(std::vector<double>(gen_solver.eigenvalues().data(), gen_solver.eigenvalues().data() + gen_solver.eigenvalues().size()));
+			Eigen::VectorXd ev = solver_2.eigenvalues().real();
+			if (solver_2.eigenvalues().imag().squaredNorm() > 1e-12) {
+				std::cout << solver_2.eigenvalues() << std::endl;
+			}
+			reciever.push_back(std::vector<double>(ev.data(), ev.data() + ev.size()));
+
 			//std::sort(reciever.back().begin(), reciever.back().end());
 		}
 	}
