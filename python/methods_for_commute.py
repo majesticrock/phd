@@ -482,3 +482,10 @@ def commute(l: Expression, r: Expression):
             commuted.append([ Term(-lt.prefactor * rt.prefactor, lt.coefficient + rt.coefficient, np.append(rt.operators, lt.operators)) ])
 
     return commuted
+
+def product(l: Expression, r: Expression):
+    commuted = Expression(l.global_prefactor * r.global_prefactor, np.array([], dtype=Term))
+    for lt in l.terms:
+        for rt in r.terms:
+            commuted.append([ Term(lt.prefactor * rt.prefactor, lt.coefficient + rt.coefficient, np.append(lt.operators, rt.operators)) ])
+    return commuted
