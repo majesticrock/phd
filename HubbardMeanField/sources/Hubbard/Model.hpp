@@ -56,7 +56,6 @@ namespace Hubbard {
 		virtual double unperturbed_energy(double k_x, double k_y) const = 0;
 		virtual void fillHamiltonian(double k_x, double k_y) = 0;
 
-		
 	public:
 		class ModelParameters {
 		private:
@@ -104,5 +103,8 @@ namespace Hubbard {
 		virtual data_set computePhases(const bool print = false) = 0;
 		void parseCommutatorData();
 		void computeCollectiveModes(std::vector<std::vector<double>>& reciever, double direction);
+		// version 2 use the non mean field hamilton for the commutation,
+		// but the mean field system to obtain the expectation values
+		void computeCollectiveModes_v2(std::vector<std::vector<double>>& reciever, double direction);
 	};
 }

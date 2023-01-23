@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 
+using Eigen::MatrixXd;
+
 namespace Hubbard {
 	std::pair<int, int> Hubbard::Model::parseExpectationValue(std::string& str)
 	{
@@ -330,7 +332,7 @@ namespace Hubbard {
 			//Eigen::MatrixXd b = M;
 			//M = N;
 			//N = b;
-			
+
 			Eigen::CompleteOrthogonalDecomposition<Eigen::MatrixXd> COD(N);
 			Eigen::MatrixXd c = COD.pseudoInverse() * M;
 
@@ -346,8 +348,8 @@ namespace Hubbard {
 			}
 			gen_solver.compute(M, N);
 			solver_2.compute(c);
-			
-			if(k==-Constants::K_DISCRETIZATION + 100 ){
+
+			if (k == -Constants::K_DISCRETIZATION + 100) {
 				std::cout << hamilton << std::endl << std::endl;
 				std::cout << "##############################\n\n";
 				std::cout << M << "\n\n" << N << "\n\n" << c << std::endl << std::endl;
@@ -361,6 +363,99 @@ namespace Hubbard {
 			reciever.push_back(std::vector<double>(ev.data(), ev.data() + ev.size()));
 
 			//std::sort(reciever.back().begin(), reciever.back().end());
+		}
+	}
+
+	void Model::computeCollectiveModes_v2(std::vector<std::vector<double>>& reciever, double direction)
+	{
+		// First off we need to compute every possible expectation value
+		// We use the mean field system's symmetries
+		// i.e. there are only the standard SC, CDW, Eta and N operators non-zero
+		// spin symmetry and conservation of momentum up to addition of Q holds
+		MatrixXd rho = MatrixXd::Zero(4, 4);
+		Eigen::SelfAdjointEigenSolver<MatrixXd> solver;
+		/*
+		* 0 - number operator
+		* 1 - cdw
+		* 2 - sc
+		* 3 - eta
+		*/
+		std::vector<MatrixXd> expecs(4, MatrixXd::Zero(2 * Constants::K_DISCRETIZATION, 2 * Constants::K_DISCRETIZATION));
+		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
+		{
+			for (int l = -Constants::K_DISCRETIZATION; l < Constants::K_DISCRETIZATION; l++)
+			{
+				fillHamiltonian((k * M_PI) / Constants::K_DISCRETIZATION, (l * M_PI) / Constants::K_DISCRETIZATION);
+				solver.compute(hamilton);
+				rho.fill(0);
+
+				for (int i = 0; i < 4; i++)
+				{
+					rho(i, i) = fermi_dirac(solver.eigenvalues()(i));
+				}
+				rho = solver.eigenvectors() * rho * (solver.eigenvectors().transpose());
+				for (int idx = 0; idx < 4; idx++)
+				{
+					expecs[idx](k + Constants::K_DISCRETIZATION, l + Constants::K_DISCRETIZATION) = rho(idx, 0);
+				}
+			}
+		}
+		int BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
+		// Quartic expecs - contracted using Wick's theorem (exact on MF level)
+		std::vector<MatrixXd> quartic(14, MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
+
+		// Computes the respective x or y component from a given input index
+		auto x = [&](int idx) -> int {
+			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto y = [&](int idx) -> int {
+			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto equal_up_to_Q = [&](const std::pair<int, int>& l, const std::pair<int, int>& r) -> int {
+			if (l == r) return 0;
+
+			if (l.first == r.first + Constants::K_DISCRETIZATION || l.first == r.first - Constants::K_DISCRETIZATION) {
+				if (l.second == r.second + Constants::K_DISCRETIZATION || l.second == r.second - Constants::K_DISCRETIZATION) {
+					return 1;
+				}
+			}
+			return -1;
+		};
+		auto fill_pair = [&](const std::pair<std::vector<int>, std::vector<int>>& k) -> std::pair<int, int> {
+			if (k.first.size() != k.second.size()) {
+				std::cerr << "Both vectors have to be of the same size!" << std::endl;
+				throw;
+			}
+			std::pair<int, int> ret;
+			for (int i = 0; i < k.first.size(); i++)
+			{
+				ret.first += k.second[i] * x(k.first[i]);
+				ret.second += k.second[i] * y(k.first[i]);
+			}
+		};
+
+		for (int k = 0; k < BASIS_SIZE; k++)
+		{
+			for (int l = 0; l < BASIS_SIZE; l++)
+			{
+				for (int p = 0; p < BASIS_SIZE; p++)
+				{
+					std::pair<int, int> left, right;
+					int offset;
+
+					// 1
+					left  = fill_pair({ { p }, { 1 } });
+					right = fill_pair({ { l }, { -1 } });
+					offset = equal_up_to_Q(left, right);
+
+					if (offset < 0) continue;
+					// if both daggered, 2 = sc, 3 = eta
+					quartic[0](k, l) += expecs[2 + offset](right.first, right.second) /* TODO: multiply by second term */;
+
+					// if only first daggered, 0 = n, 1 = cdw
+					quartic[0](k, l) += expecs[offset](left.first, left.second) /* TODO: multiply by second term */;
+				}
+			}
 		}
 	}
 
