@@ -45,9 +45,7 @@ int main(int argc, char** argv)
 	Utility::InputFileReader input(argv[1]);
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
-	//#define _DO_TEST
 #ifdef _DO_TEST
-
 	Hubbard::Model::ModelParameters mP(0.01, -2.8752, -1, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 
