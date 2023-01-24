@@ -421,40 +421,30 @@ namespace Hubbard {
 			}
 			return -1;
 		};
-		auto fill_pair = [&](const std::pair<std::vector<int>, std::vector<int>>& k) -> std::pair<int, int> {
-			if (k.first.size() != k.second.size()) {
-				std::cerr << "Both vectors have to be of the same size!" << std::endl;
-				throw;
-			}
-			std::pair<int, int> ret;
-			for (int i = 0; i < k.first.size(); i++)
-			{
-				ret.first += k.second[i] * x(k.first[i]);
-				ret.second += k.second[i] * y(k.first[i]);
-			}
+
+		// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
+		auto sc_type = [&](const std::pair<int, int>& left, const std::pair<int, int>& right) -> double {
+			int offset = equal_up_to_Q(left, right);
+			if (offset < 0) return 0;
+			return expecs[2 + offset](right.first, right.second);
+		};
+		// Returns a c^+ c type term, i.e. the CDW order parameter or the number operator
+		auto cdw_type = [&](const std::pair<int, int>& left, const std::pair<int, int>& right) -> double {
+			int offset = equal_up_to_Q(left, right);
+			if (offset < 0) return 0;
+			return expecs[offset](right.first, right.second);
 		};
 
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
+			std::pair<int, int> pair_k = { x(k), y(k) };
 			for (int l = 0; l < BASIS_SIZE; l++)
 			{
-				for (int p = 0; p < BASIS_SIZE; p++)
-				{
-					std::pair<int, int> left, right;
-					int offset;
+				std::pair<int, int> pair_l = { x(l), y(l) };
+				std::pair<int, int> pair_p = { 0, 0 };
 
-					// 1
-					left  = fill_pair({ { p }, { 1 } });
-					right = fill_pair({ { l }, { -1 } });
-					offset = equal_up_to_Q(left, right);
-
-					if (offset < 0) continue;
-					// if both daggered, 2 = sc, 3 = eta
-					quartic[0](k, l) += expecs[2 + offset](right.first, right.second) /* TODO: multiply by second term */;
-
-					// if only first daggered, 0 = n, 1 = cdw
-					quartic[0](k, l) += expecs[offset](left.first, left.second) /* TODO: multiply by second term */;
-				}
+				std::pair<int, int> left, right, left2, right2;
+				quartic[0](k, l) += sc_type(left, right) * sc_type(left2, right2);
 			}
 		}
 	}
