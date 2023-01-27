@@ -1,4 +1,8 @@
 #define _USE_MATH_DEFINES
+#define _NUM(momentum) (expecs[0](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
+#define _CDW(momentum) (expecs[1](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
+#define _SC(momentum) (expecs[2](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
+#define _ETA(momentum) (expecs[3](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
 
 #include "UsingBroyden.hpp"
 #include <cmath>
@@ -35,6 +39,111 @@ namespace Hubbard {
 		hamilton(1, 1) = -eps;
 		hamilton(2, 2) = -eps;
 		hamilton(3, 3) = eps;
+	}
+
+	void UsingBroyden::compute_quartics()
+	{
+		Model::compute_quartics();
+
+		Eigen::Vector2i vec_k, vec_l, vec_Q;
+		vec_Q = { Constants::K_DISCRETIZATION, Constants::K_DISCRETIZATION };
+
+		// Computes the respective x or y component from a given input index
+		auto x = [&](int idx) -> int {
+			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto y = [&](int idx) -> int {
+			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto equal_up_to_Q = [&](const Eigen::Vector2i& l, const Eigen::Vector2i& r) -> int {
+			if (l == r) return 0;
+
+			if (l(0) == r(0) + Constants::K_DISCRETIZATION || l(0) == r(0) - Constants::K_DISCRETIZATION) {
+				if (l(1) == r(1) + Constants::K_DISCRETIZATION || l(1) == r(1) - Constants::K_DISCRETIZATION) {
+					return 1;
+				}
+			}
+			return -1;
+		};// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
+		auto sc_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
+			int offset = equal_up_to_Q(left, right);
+			if (offset < 0) return 0;
+			right += vec_Q;
+			while (right(0) < 0 || right(1) < 0) {
+				right += 2 * vec_Q;
+			}
+			right(0) %= (2 * Constants::K_DISCRETIZATION);
+			right(1) %= (2 * Constants::K_DISCRETIZATION);
+			return expecs[2 + offset](right(0), right(1));
+		};
+		// Returns a c^+ c type term, i.e. the CDW order parameter or the number operator
+		auto cdw_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
+			int offset = equal_up_to_Q(left, right);
+			if (offset < 0) return 0;
+			left += vec_Q;
+			while (left(0) < 0 || left(1) < 0) {
+				left += 2 * vec_Q;
+			}
+			left(0) %= (2 * Constants::K_DISCRETIZATION);
+			left(1) %= (2 * Constants::K_DISCRETIZATION);
+			return expecs[offset](left(0), left(1));
+		};
+
+		auto f = [&](int kx, int ky) -> double {
+			return (V / BASIS_SIZE) * 2 * (cos((M_PI * kx) / Constants::K_DISCRETIZATION) + cos((M_PI * ky) / Constants::K_DISCRETIZATION));
+		};
+
+		quartic.push_back(Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
+		quartic.push_back(Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
+
+		for (int k = 0; k < BASIS_SIZE; k++)
+		{
+			double buffer[4] = { 0,0,0,0 };
+			for (int l = 0; l < BASIS_SIZE; l++)
+			{
+				vec_l = { x(l), y(l) };
+				buffer[0] += f(vec_l(0), vec_l(1)) * sc_type(-vec_k - vec_l, vec_k + vec_l);
+				buffer[1] += f(vec_l(0), vec_l(1)) * sc_type(-vec_k - vec_l, vec_k + vec_l + vec_Q);
+				buffer[2] += f(vec_l(0), vec_l(1)) * cdw_type(-vec_k - vec_l, -vec_k - vec_l);
+				buffer[3] += f(vec_l(0), vec_l(1)) * cdw_type(-vec_k - vec_l, -vec_k - vec_l + vec_Q);
+
+				// number 6 -> 1a
+				quartic[6](k, l) += sc_type(vec_l, -vec_l) * sc_type(-vec_k, vec_k);
+				quartic[6](k, l) -= sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k, vec_k - vec_Q);
+				quartic[6](k, l) += f(x(k) - x(l), y(k) - y(l)) * cdw_type(vec_l, vec_l) * cdw_type(-vec_k, -vec_k);
+				quartic[6](k, l) += f(x(k) - x(l) + vec_Q(0), y(k) - y(l) + vec_Q(1)) * cdw_type(vec_l, vec_l - vec_Q) * cdw_type(-vec_k - vec_Q, -vec_k);
+			}
+			quartic[5](k, k) += sc_type(vec_k, -vec_k) * buffer[0];
+			quartic[5](k, k) += sc_type(vec_k + vec_Q, -vec_k) * buffer[1];
+			quartic[5](k, k) -= cdw_type(-vec_k, -vec_k) * buffer[2];
+			quartic[5](k, k) -= cdw_type(-vec_k + vec_Q, -vec_k) * buffer[3];
+			quartic[5](k, k) += 2 * cdw_type(-vec_k, -vec_k) * sum_of_all[0]; // cos(0) = 1
+			quartic[5](k, k) -= 2 * cdw_type(-vec_k + vec_Q, -vec_k) * sum_of_all[1]; // minus because cos(pi) = -1
+		}
+	}
+
+	void UsingBroyden::fill_M_N()
+	{
+		Model::fill_M_N();
+		int BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
+		auto x = [&](int idx) -> int {
+			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto y = [&](int idx) -> int {
+			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto f = [&](int kx, int ky) -> double {
+			return (V / BASIS_SIZE) * 2 * (cos((M_PI * kx) / Constants::K_DISCRETIZATION) + cos((M_PI * ky) / Constants::K_DISCRETIZATION));
+		};
+
+		for (int k = 0; k < BASIS_SIZE; k++)
+		{
+			M(k, k) += 1;
+			for (int l = 0; l < BASIS_SIZE; l++)
+			{
+				M(l, k) += 2 * f(x(l) - x(k), y(l) - y(k)) * (1 - 2 * (_NUM(l) + _NUM(k) - quartic[0](l, k)));
+			}
+		}
 	}
 
 	UsingBroyden::UsingBroyden(ModelParameters& _params)
@@ -118,7 +227,7 @@ namespace Hubbard {
 				delta_eta = 0;
 			}
 			x0(0) = delta_cdw;
-			x0(1) = delta_sc ;
+			x0(1) = delta_sc;
 			x0(2) = delta_eta;
 		}
 

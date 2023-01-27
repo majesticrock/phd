@@ -1,11 +1,10 @@
 #define _USE_MATH_DEFINES
+#define _NUM(momentum) (expecs[0](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
 
 #include "Model.hpp"
 #include "Constants.hpp"
 #include <iostream>
 #include <fstream>
-
-using Eigen::MatrixXd;
 
 namespace Hubbard {
 	std::pair<int, int> Hubbard::Model::parseExpectationValue(std::string& str)
@@ -96,6 +95,128 @@ namespace Hubbard {
 		else {
 			lastOne->matrix_indizes.push_back(this->parseExpectationValue(line));
 			line.erase(0, line.find('}') + 1);
+		}
+	}
+
+	void Model::compute_quartics()
+	{
+		Eigen::Vector2i vec_k, vec_l, vec_Q;
+		vec_Q = { Constants::K_DISCRETIZATION, Constants::K_DISCRETIZATION };
+
+		// Computes the respective x or y component from a given input index
+		auto x = [&](int idx) -> int {
+			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto y = [&](int idx) -> int {
+			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto equal_up_to_Q = [&](const Eigen::Vector2i& l, const Eigen::Vector2i& r) -> int {
+			if (l == r) return 0;
+
+			if (l(0) == r(0) + Constants::K_DISCRETIZATION || l(0) == r(0) - Constants::K_DISCRETIZATION) {
+				if (l(1) == r(1) + Constants::K_DISCRETIZATION || l(1) == r(1) - Constants::K_DISCRETIZATION) {
+					return 1;
+				}
+			}
+			return -1;
+		};
+
+		// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
+		auto sc_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
+			int offset = equal_up_to_Q(left, right);
+			if (offset < 0) return 0;
+			right += vec_Q;
+			while (right(0) < 0 || right(1) < 0) {
+				right += 2 * vec_Q;
+			}
+			right(0) %= (2 * Constants::K_DISCRETIZATION);
+			right(1) %= (2 * Constants::K_DISCRETIZATION);
+			return expecs[2 + offset](right(0), right(1));
+		};
+		// Returns a c^+ c type term, i.e. the CDW order parameter or the number operator
+		auto cdw_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
+			int offset = equal_up_to_Q(left, right);
+			if (offset < 0) return 0;
+			left += vec_Q;
+			while (left(0) < 0 || left(1) < 0) {
+				left += 2 * vec_Q;
+			}
+			left(0) %= (2 * Constants::K_DISCRETIZATION);
+			left(1) %= (2 * Constants::K_DISCRETIZATION);
+			return expecs[offset](left(0), left(1));
+		};
+
+		for (int k = 0; k < BASIS_SIZE; k++)
+		{
+			vec_k = { x(k), y(k) };
+			for (int l = 0; l < BASIS_SIZE; l++)
+			{
+				vec_l = { x(l), y(l) };
+				quartic[0](k, l) += sc_type(vec_l, -vec_l) * sc_type(-vec_k, vec_k);
+				quartic[0](k, l) += sc_type(vec_l + vec_Q, -vec_l) * sc_type(-vec_k, vec_k + vec_Q);
+				quartic[0](k, l) -= cdw_type(-vec_k, -vec_k) * cdw_type(-vec_l, -vec_l);
+				quartic[0](k, l) -= cdw_type(-vec_k + vec_Q, -vec_k) * cdw_type(-vec_l, -vec_l + vec_Q);
+				if (k == l) { // Factor 2 because of the spin sum
+					quartic[0](k, l) += 2 * sum_of_all[0] * cdw_type(-vec_l, -vec_k);
+				}
+				else if (vec_k == vec_l + vec_Q || vec_k == vec_l - vec_Q) {
+					quartic[0](k, l) += 2 * sum_of_all[1] * cdw_type(-vec_l, -vec_k);;
+				}
+
+				quartic[1](k, l) += sc_type(vec_l, -vec_l) * sc_type(-vec_k, vec_k);
+				quartic[1](k, l) += sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k, vec_k - vec_Q);
+				quartic[1](k, l) += cdw_type(vec_l, vec_l) * cdw_type(-vec_k, -vec_k);
+				quartic[1](k, l) += cdw_type(vec_l, vec_l - vec_Q) * cdw_type(-vec_k - vec_Q, -vec_k);
+
+				quartic[2](k, l) += sc_type(vec_l, -vec_l) * sc_type(-vec_k, vec_k);
+				quartic[2](k, l) += sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k - vec_Q, vec_k);
+				if (k == l) {
+					quartic[2](k, l) += sum_of_all[0] * cdw_type(vec_k, vec_k);
+				}
+				else if (vec_k == vec_l + vec_Q || vec_k == vec_l - vec_Q) {
+					quartic[2](k, l) += sum_of_all[1] * cdw_type(vec_k, vec_k);
+				}
+
+				quartic[3](k, l) += cdw_type(-vec_k, -vec_k) * cdw_type(-vec_l, -vec_l);
+				quartic[3](k, l) += cdw_type(-vec_k - vec_Q, -vec_k) * cdw_type(-vec_l, -vec_l - vec_Q);
+				if (k == l) {
+					quartic[3](k, l) -= sum_of_all[0] * cdw_type(vec_k, vec_k);
+				}
+				else if (vec_k == vec_l + vec_Q || vec_k == vec_l - vec_Q) {
+					quartic[3](k, l) -= sum_of_all[1] * cdw_type(vec_k, vec_k);
+				}
+			}
+			// the formulas include delta_kl, hence we dont need to recompute the same term for each l
+			quartic[4](k, k) += sc_type(vec_k, -vec_k) * sum_of_all[2];
+			quartic[4](k, k) += sc_type(vec_k, -vec_k + vec_Q) * sum_of_all[3];
+			quartic[4](k, k) += cdw_type(vec_k, vec_k) * sum_of_all[0];
+			quartic[4](k, k) += cdw_type(vec_k + vec_Q, vec_k) * sum_of_all[1];
+		}
+	}
+
+	void Model::fill_M_N()
+	{
+		auto x = [&](int idx) -> int {
+			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		auto y = [&](int idx) -> int {
+			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
+		};
+		M = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
+		N = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
+
+		for (int k = 0; k < BASIS_SIZE; k++)
+		{
+			N(k, k) = -(1 - 2 * _NUM(k));
+
+			M(k, k) = 2 * unperturbed_energy((M_PI * x(k)) / Constants::K_DISCRETIZATION,
+				(M_PI * y(k)) / Constants::K_DISCRETIZATION) * (1 - 2 * _NUM(k));
+			M(k, k) += (U / BASIS_SIZE) * (2 * sum_of_all[0] - quartic[4](k, k));
+
+			for (int l = 0; l < BASIS_SIZE; l++)
+			{
+				M(l, k) += (U / BASIS_SIZE) * (1 - 2 * (_NUM(l) + _NUM(k) - quartic[1](l, k) - quartic[3](l, k)));
+			}
 		}
 	}
 
@@ -259,10 +380,10 @@ namespace Hubbard {
 	{
 		parseCommutatorData();
 		reciever.reserve(2 * Constants::K_DISCRETIZATION);
-		const int BASIS_SIZE = 16;
+		const int BASIS_SIZE_LOCAL = 16;
 
-		Eigen::MatrixXd M = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
-		Eigen::MatrixXd N = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
+		Eigen::MatrixXd M = Eigen::MatrixXd::Zero(BASIS_SIZE_LOCAL, BASIS_SIZE_LOCAL);
+		Eigen::MatrixXd N = Eigen::MatrixXd::Zero(BASIS_SIZE_LOCAL, BASIS_SIZE_LOCAL);
 		Eigen::Matrix4d rho = Eigen::Matrix4d::Zero();
 
 		auto fill_matrices = [&](double kx, double ky) {
@@ -308,7 +429,7 @@ namespace Hubbard {
 				N(i, j) = value;
 				N(j, i) = value;
 
-				if (++j >= BASIS_SIZE) j = ++i;
+				if (++j >= BASIS_SIZE_LOCAL) j = ++i;
 			}
 		};
 
@@ -372,15 +493,12 @@ namespace Hubbard {
 		// We use the mean field system's symmetries
 		// i.e. there are only the standard SC, CDW, Eta and N operators non-zero
 		// spin symmetry and conservation of momentum up to addition of Q holds
-		MatrixXd rho = MatrixXd::Zero(4, 4);
-		Eigen::SelfAdjointEigenSolver<MatrixXd> solver;
-		/*
-		* 0 - number operator
-		* 1 - cdw
-		* 2 - sc
-		* 3 - eta
-		*/
-		std::vector<MatrixXd> expecs(4, MatrixXd::Zero(2 * Constants::K_DISCRETIZATION, 2 * Constants::K_DISCRETIZATION));
+		Eigen::MatrixXd rho = Eigen::MatrixXd::Zero(4, 4);
+		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
+
+		expecs = std::vector<Eigen::MatrixXd>(4, Eigen::MatrixXd::Zero(2 * Constants::K_DISCRETIZATION, 2 * Constants::K_DISCRETIZATION));
+		quartic = std::vector<Eigen::MatrixXd>(6, Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
+
 		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
 		{
 			for (int l = -Constants::K_DISCRETIZATION; l < Constants::K_DISCRETIZATION; l++)
@@ -397,56 +515,13 @@ namespace Hubbard {
 				for (int idx = 0; idx < 4; idx++)
 				{
 					expecs[idx](k + Constants::K_DISCRETIZATION, l + Constants::K_DISCRETIZATION) = rho(idx, 0);
+					sum_of_all[idx] += rho(idx, 0);
 				}
 			}
 		}
-		int BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
-		// Quartic expecs - contracted using Wick's theorem (exact on MF level)
-		std::vector<MatrixXd> quartic(14, MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
 
-		// Computes the respective x or y component from a given input index
-		auto x = [&](int idx) -> int {
-			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto y = [&](int idx) -> int {
-			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto equal_up_to_Q = [&](const std::pair<int, int>& l, const std::pair<int, int>& r) -> int {
-			if (l == r) return 0;
-
-			if (l.first == r.first + Constants::K_DISCRETIZATION || l.first == r.first - Constants::K_DISCRETIZATION) {
-				if (l.second == r.second + Constants::K_DISCRETIZATION || l.second == r.second - Constants::K_DISCRETIZATION) {
-					return 1;
-				}
-			}
-			return -1;
-		};
-
-		// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
-		auto sc_type = [&](const std::pair<int, int>& left, const std::pair<int, int>& right) -> double {
-			int offset = equal_up_to_Q(left, right);
-			if (offset < 0) return 0;
-			return expecs[2 + offset](right.first, right.second);
-		};
-		// Returns a c^+ c type term, i.e. the CDW order parameter or the number operator
-		auto cdw_type = [&](const std::pair<int, int>& left, const std::pair<int, int>& right) -> double {
-			int offset = equal_up_to_Q(left, right);
-			if (offset < 0) return 0;
-			return expecs[offset](right.first, right.second);
-		};
-
-		for (int k = 0; k < BASIS_SIZE; k++)
-		{
-			std::pair<int, int> pair_k = { x(k), y(k) };
-			for (int l = 0; l < BASIS_SIZE; l++)
-			{
-				std::pair<int, int> pair_l = { x(l), y(l) };
-				std::pair<int, int> pair_p = { 0, 0 };
-
-				std::pair<int, int> left, right, left2, right2;
-				quartic[0](k, l) += sc_type(left, right) * sc_type(left2, right2);
-			}
-		}
+		compute_quartics();
+		fill_M_N();
 	}
 
 	Model::ModelParameters::ModelParameters(double _temperature, double _U, double _V, double _global_step, double _second_step,
