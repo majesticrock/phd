@@ -36,6 +36,7 @@ namespace Hubbard {
 		std::pair<int, int> parseExpectationValue(std::string& str);
 		void parseWick(std::shared_ptr<Term> lastOne, std::string& line);
 	protected:
+		int BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
 		typedef std::pair<double, std::vector<std::shared_ptr<Term>>> coeff_term;
 		std::vector<std::vector<coeff_term>> expressions_M, expressions_N;
 
@@ -43,6 +44,20 @@ namespace Hubbard {
 		Eigen::MatrixXd hamilton;
 		double temperature;
 		double U;
+
+		/*
+		* 0 - number operator
+		* 1 - cdw
+		* 2 - sc
+		* 3 - eta
+		*/
+		std::vector<Eigen::MatrixXd> expecs;
+		double sum_of_all[4] = { 0, 0, 0, 0 };
+		// Quartic expecs - contracted using Wick's theorem (exact on MF level)
+		std::vector<Eigen::MatrixXd> quartic;
+
+		Eigen::MatrixXd M;
+		Eigen::MatrixXd N;
 
 		inline double fermi_dirac(double energy) {
 			if (temperature > 1e-7) {
@@ -56,6 +71,8 @@ namespace Hubbard {
 		virtual double unperturbed_energy(double k_x, double k_y) const = 0;
 		virtual void fillHamiltonian(double k_x, double k_y) = 0;
 
+		virtual void compute_quartics();
+		virtual void fill_M_N();
 	public:
 		class ModelParameters {
 		private:
