@@ -65,27 +65,32 @@ namespace Hubbard {
 			}
 			return -1;
 		};// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
-		auto sc_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
-			int offset = equal_up_to_Q(left, right);
-			if (offset < 0) return 0;
-			right += vec_Q;
-			while (right(0) < 0 || right(1) < 0) {
-				right += 2 * vec_Q;
+		auto clean_factor_2pi = [&](Eigen::Vector2i& toClean) {
+			// + Q is required for the modulo operation later
+			// as well as referencing, which works on indizes from 0 to [2pi] and not from [-pi] to [pi]
+			toClean += vec_Q;
+			while (toClean(0) < 0 || toClean(1) < 0) {
+				toClean += 2 * vec_Q;
 			}
-			right(0) %= (2 * Constants::K_DISCRETIZATION);
-			right(1) %= (2 * Constants::K_DISCRETIZATION);
+			toClean(0) %= (2 * Constants::K_DISCRETIZATION);
+			toClean(1) %= (2 * Constants::K_DISCRETIZATION);
+		};
+		// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
+		auto sc_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
+			clean_factor_2pi(left);
+			clean_factor_2pi(right);
+
+			int offset = equal_up_to_Q(left, -right);
+			if (offset < 0) return 0;
 			return expecs[2 + offset](right(0), right(1));
 		};
 		// Returns a c^+ c type term, i.e. the CDW order parameter or the number operator
 		auto cdw_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
+			clean_factor_2pi(left);
+			clean_factor_2pi(right);
+
 			int offset = equal_up_to_Q(left, right);
 			if (offset < 0) return 0;
-			left += vec_Q;
-			while (left(0) < 0 || left(1) < 0) {
-				left += 2 * vec_Q;
-			}
-			left(0) %= (2 * Constants::K_DISCRETIZATION);
-			left(1) %= (2 * Constants::K_DISCRETIZATION);
 			return expecs[offset](left(0), left(1));
 		};
 
@@ -99,6 +104,7 @@ namespace Hubbard {
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
 			double buffer[4] = { 0,0,0,0 };
+			vec_k = { x(k), y(k) };
 			for (int l = 0; l < BASIS_SIZE; l++)
 			{
 				vec_l = { x(l), y(l) };
@@ -117,15 +123,15 @@ namespace Hubbard {
 			quartic[5](k, k) += sc_type(vec_k + vec_Q, -vec_k) * buffer[1];
 			quartic[5](k, k) -= cdw_type(-vec_k, -vec_k) * buffer[2];
 			quartic[5](k, k) -= cdw_type(-vec_k + vec_Q, -vec_k) * buffer[3];
-			quartic[5](k, k) += 2 * cdw_type(-vec_k, -vec_k) * sum_of_all[0]; // cos(0) = 1
-			quartic[5](k, k) -= 2 * cdw_type(-vec_k + vec_Q, -vec_k) * sum_of_all[1]; // minus because cos(pi) = -1
+			quartic[5](k, k) += 2 * f(0, 0) * cdw_type(-vec_k, -vec_k) * sum_of_all[0];
+			quartic[5](k, k) += 2 * f(vec_Q(0), vec_Q(1)) * cdw_type(-vec_k + vec_Q, -vec_k) * sum_of_all[1];
 		}
 	}
 
 	void UsingBroyden::fill_M_N()
 	{
 		Model::fill_M_N();
-		int BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
+		Eigen::MatrixXd buffer = M;
 		auto x = [&](int idx) -> int {
 			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
 		};
@@ -138,10 +144,26 @@ namespace Hubbard {
 
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
-			M(k, k) += 1;
+			M(k, k) += 4 * (f(0, 0) * _NUM(k) + quartic[5](k, k));
 			for (int l = 0; l < BASIS_SIZE; l++)
 			{
+				// k,k is on purpose; delta_kl * f(k+p) * n_{p sigma}
+				M(k, k) -= 2 * f(x(k) + x(l), y(k) + y(l)) * _NUM(l);
+
 				M(l, k) += 2 * f(x(l) - x(k), y(l) - y(k)) * (1 - 2 * (_NUM(l) + _NUM(k) - quartic[0](l, k)));
+				//M(l, k) += 4 * (quartic[2](l, k) + quartic[6](l, k));
+			}
+		}
+		Eigen::MatrixXd test = M - buffer;
+		for (size_t i = 0; i < test.rows(); i++)
+		{
+			for (size_t j = i; j < test.cols(); j++)
+			{
+				if (abs(test(i, j)) > 1e-8) {
+					std::cout << test(i, j) << "\t\t" << i << "\t" << j << std::endl;
+
+					std::cout << "\t" << V << "\t" << quartic[5](i, j) << "\t" << quartic[2](i, j) << "\t" << quartic[6](i, j) << std::endl;
+				}
 			}
 		}
 	}

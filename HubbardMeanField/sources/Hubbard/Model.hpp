@@ -36,7 +36,7 @@ namespace Hubbard {
 		std::pair<int, int> parseExpectationValue(std::string& str);
 		void parseWick(std::shared_ptr<Term> lastOne, std::string& line);
 	protected:
-		int BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
+		int BASIS_SIZE;
 		typedef std::pair<double, std::vector<std::shared_ptr<Term>>> coeff_term;
 		std::vector<std::vector<coeff_term>> expressions_M, expressions_N;
 
@@ -122,6 +122,6 @@ namespace Hubbard {
 		void computeCollectiveModes(std::vector<std::vector<double>>& reciever, double direction);
 		// version 2 use the non mean field hamilton for the commutation,
 		// but the mean field system to obtain the expectation values
-		void computeCollectiveModes_v2(std::vector<std::vector<double>>& reciever, double direction);
+		void computeCollectiveModes_v2(std::vector<std::vector<double>>& reciever);
 	};
 }
