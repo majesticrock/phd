@@ -1,7 +1,9 @@
 #define _USE_MATH_DEFINES
 
 #include <omp.h>
+#ifdef NDEBUG
 #include <mpi.h>
+#endif
 
 #include <string>
 #include <iostream>
@@ -25,11 +27,11 @@ std::ostream& operator<<(std::ostream& os, const Hubbard::Model::ModelParameters
 
 int main(int argc, char** argv)
 {
+#ifdef NDEBUG
 	if (argc < 2) {
 		std::cerr << "Invalid number of arguments: Use mpirun -n <threads> <path_to_executable> <configfile>" << std::endl;
 		return -1;
 	}
-
 	// First call MPI_Init
 	MPI_Init(&argc, &argv);
 
@@ -37,11 +39,15 @@ int main(int argc, char** argv)
 	int rank, numberOfRanks;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &numberOfRanks);
+	
+#else
+	int rank = 0;
+	int numberOfRanks = 1;
+#endif
 
 	if (rank == 0) {
 		std::cout << "Using parameter file " << argv[1] << std::endl;
 	}
-
 	Utility::InputFileReader input(argv[1]);
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
@@ -143,11 +149,12 @@ int main(int argc, char** argv)
 			recieve_cdw.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
 			recieve_sc.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
 			recieve_eta.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
-		}
+	}
+#ifdef NDEBUG
 		MPI_Gather(data_cdw.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_cdw.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 		MPI_Gather(data_sc.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_sc.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 		MPI_Gather(data_eta.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_eta.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
+#endif
 		if (rank == 0) {
 			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 			std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
@@ -166,7 +173,7 @@ int main(int argc, char** argv)
 			Utility::saveData(recieve_sc, SECOND_IT_STEPS, "../data/" + output_folder + "sc.txt", comments);
 			Utility::saveData(recieve_eta, SECOND_IT_STEPS, "../data/" + output_folder + "eta.txt", comments);
 		}
-	}
+}
 	else if (input.getString("compute_what") == "modes") {
 		Hubbard::Model::ModelParameters modelParameters(model_params[0], model_params[1], model_params[2],
 			(FIRST_IT_MAX - FIRST_IT_MIN) / FIRST_IT_STEPS, 0,
@@ -187,7 +194,7 @@ int main(int argc, char** argv)
 				model = std::make_unique<Hubbard::HubbardCDW>(Hubbard::HubbardCDW(modelParameters));
 			}
 			model->computePhases();
-			model->computeCollectiveModes(reciever[T], 0);
+			model->computeCollectiveModes_v2(reciever[T]);
 			model->getEnergies(oneParticleEnergies[T], 0);
 			param[T] = modelParameters.getGlobal();
 			modelParameters.incrementGlobalIterator();
@@ -213,6 +220,9 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-
+#ifdef NDEBUG
 	return MPI_Finalize();
+#else
+	return 0;
+#endif
 }
