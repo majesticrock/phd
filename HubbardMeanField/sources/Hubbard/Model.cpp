@@ -2,7 +2,6 @@
 #define _NUM(momentum) (expecs[0](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
 
 #include "Model.hpp"
-#include "Constants.hpp"
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -104,53 +103,6 @@ namespace Hubbard {
 		Eigen::Vector2i vec_k, vec_l;
 		const Eigen::Vector2i vec_Q = { Constants::K_DISCRETIZATION, Constants::K_DISCRETIZATION };
 
-		// Computes the respective x or y component from a given input index
-		auto x = [&](int idx) -> int {
-			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto y = [&](int idx) -> int {
-			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto equal_up_to_Q = [&](const Eigen::Vector2i& l, const Eigen::Vector2i& r) -> int {
-			if (l == r) return 0;
-
-			if (l(0) == r(0) + Constants::K_DISCRETIZATION || l(0) == r(0) - Constants::K_DISCRETIZATION) {
-				if (l(1) == r(1) + Constants::K_DISCRETIZATION || l(1) == r(1) - Constants::K_DISCRETIZATION) {
-					return 1;
-				}
-			}
-			return -1;
-		};
-
-		auto clean_factor_2pi = [&](Eigen::Vector2i& toClean) {
-			// + Q is required for the modulo operation later
-			// as well as referencing, which works on indizes from 0 to [2pi] and not from [-pi] to [pi]
-			toClean += vec_Q;
-			while (toClean(0) < 0 || toClean(1) < 0) {
-				toClean += 2 * vec_Q;
-			}
-			toClean(0) %= (2 * Constants::K_DISCRETIZATION);
-			toClean(1) %= (2 * Constants::K_DISCRETIZATION);
-		};
-		// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
-		auto sc_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
-			clean_factor_2pi(left);
-			clean_factor_2pi(right);
-
-			int offset = equal_up_to_Q(left, -right);
-			if (offset < 0) return 0;
-			return expecs[2 + offset](right(0), right(1));
-		};
-		// Returns a c^+ c type term, i.e. the CDW order parameter or the number operator
-		auto cdw_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
-			clean_factor_2pi(left);
-			clean_factor_2pi(right);
-
-			int offset = equal_up_to_Q(left, right);
-			if (offset < 0) return 0;		
-			return expecs[offset](left(0), left(1));
-		};
-
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
 			vec_k = { x(k), y(k) };
@@ -173,40 +125,44 @@ namespace Hubbard {
 				quartic[1](k, l) += cdw_type(vec_l, vec_l) * cdw_type(-vec_k, -vec_k);
 				quartic[1](k, l) += cdw_type(vec_l, vec_l - vec_Q) * cdw_type(-vec_k - vec_Q, -vec_k);
 
-				quartic[2](k, l) += sc_type(vec_l, -vec_l) * sc_type(-vec_k, vec_k);
-				quartic[2](k, l) += sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k - vec_Q, vec_k);
-				if (k == l) {
-					quartic[2](k, l) += sum_of_all[0] * cdw_type(vec_k, vec_k);
-				}
-				else if (vec_k == vec_l + vec_Q || vec_k == vec_l - vec_Q) {
-					quartic[2](k, l) += sum_of_all[1] * cdw_type(vec_k, vec_k);
-				}
+				
 
 				quartic[3](k, l) += cdw_type(-vec_k, -vec_k) * cdw_type(-vec_l, -vec_l);
 				quartic[3](k, l) += cdw_type(-vec_k - vec_Q, -vec_k) * cdw_type(-vec_l, -vec_l - vec_Q);
 				if (k == l) {
-					quartic[3](k, l) -= sum_of_all[0] * cdw_type(vec_k, vec_k);
+					quartic[3](k, l) -= sum_of_all[0] * cdw_type(vec_l, vec_k);
 				}
 				else if (vec_k == vec_l + vec_Q || vec_k == vec_l - vec_Q) {
-					quartic[3](k, l) -= sum_of_all[1] * cdw_type(vec_k, vec_k);
+					quartic[3](k, l) -= sum_of_all[1] * cdw_type(vec_l, vec_k);
 				}
 			}
 			// the formulas include delta_kl, hence we dont need to recompute the same term for each l
-			quartic[4](k, k) += sc_type(vec_k, -vec_k) * sum_of_all[2];
-			quartic[4](k, k) += sc_type(vec_k, -vec_k + vec_Q) * sum_of_all[3];
-			quartic[4](k, k) += cdw_type(vec_k, vec_k) * sum_of_all[0];
-			quartic[4](k, k) += cdw_type(vec_k + vec_Q, vec_k) * sum_of_all[1];
+			quartic[2](k, k) += sc_type(vec_k, -vec_k) * sum_of_all[2];
+			quartic[2](k, k) += sc_type(vec_k, -vec_k + vec_Q) * sum_of_all[3];
+			quartic[2](k, k) += cdw_type(vec_k, vec_k) * sum_of_all[0];
+			quartic[2](k, k) += cdw_type(vec_k + vec_Q, vec_k) * sum_of_all[1];
 		}
+
+		//for(int c = 0; c < 4; c++) {
+		//	Eigen::MatrixXd test = quartic[c] - quartic[c].transpose();
+		//	for (size_t i = 0; i < test.rows(); i++)
+		//	{
+		//		vec_k = {x(i), y(i)};
+		//		for (size_t j = i; j < test.cols(); j++)
+		//		{
+		//			vec_l = {x(j), y(j)};
+		//			if (abs(test(i, j)) > 1e-8) {
+		//				std::cout << c << "\t" << test(i, j) << "\t\t" << i << "\t" << j << std::endl;
+		//				
+		//				break;
+		//			}
+		//		}
+		//	}
+		//}
 	}
 
 	void Model::fill_M_N()
 	{
-		auto x = [&](int idx) -> int {
-			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto y = [&](int idx) -> int {
-			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
 		M = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
 		N = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
 
@@ -217,7 +173,7 @@ namespace Hubbard {
 			M(k, k) += 2 * unperturbed_energy((M_PI * x(k)) / Constants::K_DISCRETIZATION, (M_PI * y(k)) / Constants::K_DISCRETIZATION)
 				* (1 - 2 * _NUM(k));
 
-			M(k, k) += (U / BASIS_SIZE) * (2 * sum_of_all[0] - quartic[4](k, k));
+			M(k, k) += (U / BASIS_SIZE) * (2 * sum_of_all[0] - quartic[2](k, k));
 
 			for (int l = 0; l < BASIS_SIZE; l++)
 			{
@@ -508,7 +464,7 @@ namespace Hubbard {
 		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
 
 		expecs = std::vector<Eigen::MatrixXd>(4, Eigen::MatrixXd::Zero(2 * Constants::K_DISCRETIZATION, 2 * Constants::K_DISCRETIZATION));
-		quartic = std::vector<Eigen::MatrixXd>(6, Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
+		quartic = std::vector<Eigen::MatrixXd>(4, Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
 
 		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
 		{
@@ -550,15 +506,17 @@ namespace Hubbard {
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 		begin = std::chrono::steady_clock::now();
 
-		const Eigen::MatrixXd test = M - M.transpose();
+		const Eigen::MatrixXd test = M;
 		for (size_t i = 0; i < test.rows(); i++)
 		{
-			for (size_t j = i; j < test.cols(); j++)
+			for (size_t j = i + 1; j < test.cols(); j++)
 			{
 				if (abs(test(i, j)) > 1e-8) {
 					std::cout << test(i, j) << "\t\t" << i << "\t" << j << std::endl;
 				}
 			}
+
+			
 		}
 
 		Eigen::EigenSolver<Eigen::MatrixXd> gen_solver;
