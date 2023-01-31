@@ -48,56 +48,11 @@ namespace Hubbard {
 		Eigen::Vector2i vec_k, vec_l, vec_Q;
 		vec_Q = { Constants::K_DISCRETIZATION, Constants::K_DISCRETIZATION };
 
-		// Computes the respective x or y component from a given input index
-		auto x = [&](int idx) -> int {
-			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto y = [&](int idx) -> int {
-			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto equal_up_to_Q = [&](const Eigen::Vector2i& l, const Eigen::Vector2i& r) -> int {
-			if (l == r) return 0;
-
-			if (l(0) == r(0) + Constants::K_DISCRETIZATION || l(0) == r(0) - Constants::K_DISCRETIZATION) {
-				if (l(1) == r(1) + Constants::K_DISCRETIZATION || l(1) == r(1) - Constants::K_DISCRETIZATION) {
-					return 1;
-				}
-			}
-			return -1;
-		};// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
-		auto clean_factor_2pi = [&](Eigen::Vector2i& toClean) {
-			// + Q is required for the modulo operation later
-			// as well as referencing, which works on indizes from 0 to [2pi] and not from [-pi] to [pi]
-			toClean += vec_Q;
-			while (toClean(0) < 0 || toClean(1) < 0) {
-				toClean += 2 * vec_Q;
-			}
-			toClean(0) %= (2 * Constants::K_DISCRETIZATION);
-			toClean(1) %= (2 * Constants::K_DISCRETIZATION);
-		};
-		// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
-		auto sc_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
-			clean_factor_2pi(left);
-			clean_factor_2pi(right);
-
-			int offset = equal_up_to_Q(left, -right);
-			if (offset < 0) return 0;
-			return expecs[2 + offset](right(0), right(1));
-		};
-		// Returns a c^+ c type term, i.e. the CDW order parameter or the number operator
-		auto cdw_type = [&](Eigen::Vector2i left, Eigen::Vector2i right) -> double {
-			clean_factor_2pi(left);
-			clean_factor_2pi(right);
-
-			int offset = equal_up_to_Q(left, right);
-			if (offset < 0) return 0;
-			return expecs[offset](left(0), left(1));
-		};
-
 		auto f = [&](int kx, int ky) -> double {
 			return (V / BASIS_SIZE) * 2 * (cos((M_PI * kx) / Constants::K_DISCRETIZATION) + cos((M_PI * ky) / Constants::K_DISCRETIZATION));
 		};
 
+		quartic.push_back(Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
 		quartic.push_back(Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
 		quartic.push_back(Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
 
@@ -118,6 +73,16 @@ namespace Hubbard {
 				quartic[6](k, l) -= sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k, vec_k - vec_Q);
 				quartic[6](k, l) += f(x(k) - x(l), y(k) - y(l)) * cdw_type(vec_l, vec_l) * cdw_type(-vec_k, -vec_k);
 				quartic[6](k, l) += f(x(k) - x(l) + vec_Q(0), y(k) - y(l) + vec_Q(1)) * cdw_type(vec_l, vec_l - vec_Q) * cdw_type(-vec_k - vec_Q, -vec_k);
+
+
+				quartic[4](k, l) += sc_type(vec_l, -vec_l) * sc_type(-vec_k, vec_k);
+				quartic[4](k, l) += sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k - vec_Q, vec_k);
+				if (k == l) {
+					quartic[4](k, l) += sum_of_all[0] * cdw_type(vec_k, vec_k);
+				}
+				else if (vec_k == vec_l + vec_Q || vec_k == vec_l - vec_Q) {
+					quartic[4](k, l) += sum_of_all[1] * cdw_type(vec_k, vec_k);
+				}
 			}
 			quartic[5](k, k) += sc_type(vec_k, -vec_k) * buffer[0];
 			quartic[5](k, k) += sc_type(vec_k + vec_Q, -vec_k) * buffer[1];
@@ -132,12 +97,7 @@ namespace Hubbard {
 	{
 		Model::fill_M_N();
 		Eigen::MatrixXd buffer = M;
-		auto x = [&](int idx) -> int {
-			return idx / (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
-		auto y = [&](int idx) -> int {
-			return idx % (2 * Constants::K_DISCRETIZATION) - Constants::K_DISCRETIZATION;
-		};
+		
 		auto f = [&](int kx, int ky) -> double {
 			return (V / BASIS_SIZE) * 2 * (cos((M_PI * kx) / Constants::K_DISCRETIZATION) + cos((M_PI * ky) / Constants::K_DISCRETIZATION));
 		};
@@ -151,9 +111,11 @@ namespace Hubbard {
 				M(k, k) -= 2 * f(x(k) + x(l), y(k) + y(l)) * _NUM(l);
 
 				M(l, k) += 2 * f(x(l) - x(k), y(l) - y(k)) * (1 - 2 * (_NUM(l) + _NUM(k) - quartic[0](l, k)));
-				//M(l, k) += 4 * (quartic[2](l, k) + quartic[6](l, k));
+				//M(l, k) += 4 * (quartic[4](l, k) + quartic[6](l, k));
 			}
 		}
+
+		////////////////
 		Eigen::MatrixXd test = M - buffer;
 		for (size_t i = 0; i < test.rows(); i++)
 		{
