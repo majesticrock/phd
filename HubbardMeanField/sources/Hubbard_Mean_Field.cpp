@@ -175,6 +175,7 @@ int main(int argc, char** argv)
 		}
 }
 	else if (input.getString("compute_what") == "modes") {
+		omp_set_num_threads(8);
 		Hubbard::Model::ModelParameters modelParameters(model_params[0], model_params[1], model_params[2],
 			(FIRST_IT_MAX - FIRST_IT_MIN) / FIRST_IT_STEPS, 0,
 			input.getString("global_iterator_type"), input.getString("second_iterator_type"));

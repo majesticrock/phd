@@ -1,16 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-M = np.loadtxt(f"data/T0.1/U_modes/-3.00.txt").transpose()
-M = 1 / M[abs(M) > 1e-10]
+M = np.loadtxt(f"data/T0.1/U_modes/0.00.txt").transpose()
+M = 1 / M[abs(M) > 1e-6]
 
-sigma = 0.0005
+sigma = 0.01
 def gauss(x, mu):
     return np.exp((-(x - mu)**2) / (2*sigma))
 
-off = abs(M[0] - M[int(len(M) / 10)])
-lims = [min(M), max(M)] 
-lims = [-15, 20]
+lims = [min(M) - 1, max(M) + 1]
+#lims = [-450, 450]
 size = 20000
 x_lin = np.linspace(lims[0], lims[1], size)
 
@@ -21,6 +20,6 @@ for i in range(0, len(M)):
 plt.plot(x_lin, data)
 #plt.plot(M, "x")
 
-plt.xlim(lims[0], lims[1])
+#plt.xlim(lims[0], lims[1])
 plt.xlabel("$\\epsilon /t$")
 plt.show()
