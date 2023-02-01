@@ -1,5 +1,6 @@
 #pragma once
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <memory>
 #include "Constants.hpp"
 
@@ -58,7 +59,7 @@ namespace Hubbard {
 		std::vector<Eigen::MatrixXd> quartic;
 
 		Eigen::MatrixXd M;
-		Eigen::MatrixXd N;
+		Eigen::SparseMatrix<double> N;
 
 		// Computes the respective x or y component from a given input index
 		inline int x(int idx) const {
@@ -175,5 +176,9 @@ namespace Hubbard {
 		// version 2 use the non mean field hamilton for the commutation,
 		// but the mean field system to obtain the expectation values
 		void computeCollectiveModes_v2(std::vector<std::vector<double>>& reciever);
+		// Returns the total gap value sqrt(sc^2 + cdw^2 + eta^2)
+		inline double getTotalGapValue() const {
+			return sqrt(delta_cdw*delta_cdw + delta_sc*delta_sc + delta_eta*delta_eta);
+		};
 	};
 }

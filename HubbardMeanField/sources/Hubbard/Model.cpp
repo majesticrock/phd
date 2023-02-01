@@ -33,15 +33,13 @@ namespace Hubbard {
 				quartic[1](k, l) += cdw_type(vec_l, vec_l) * cdw_type(-vec_k, -vec_k);
 				quartic[1](k, l) += cdw_type(vec_l, vec_l - vec_Q) * cdw_type(-vec_k - vec_Q, -vec_k);
 
-				
-
 				quartic[3](k, l) += cdw_type(-vec_k, -vec_k) * cdw_type(-vec_l, -vec_l);
 				quartic[3](k, l) += cdw_type(-vec_k - vec_Q, -vec_k) * cdw_type(-vec_l, -vec_l - vec_Q);
 				if (k == l) {
-					quartic[3](k, l) -= sum_of_all[0] * cdw_type(vec_l, vec_k);
+					quartic[3](k, l) -= sum_of_all[0] * cdw_type(-vec_l, -vec_k);
 				}
 				else if (vec_k == vec_l + vec_Q || vec_k == vec_l - vec_Q) {
-					quartic[3](k, l) -= sum_of_all[1] * cdw_type(vec_l, vec_k);
+					quartic[3](k, l) -= sum_of_all[1] * cdw_type(-vec_l, -vec_k);
 				}
 			}
 			// the formulas include delta_kl, hence we dont need to recompute the same term for each l
@@ -50,44 +48,29 @@ namespace Hubbard {
 			quartic[2](k, k) += cdw_type(vec_k, vec_k) * sum_of_all[0];
 			quartic[2](k, k) += cdw_type(vec_k + vec_Q, vec_k) * sum_of_all[1];
 		}
-
-		//for(int c = 0; c < 4; c++) {
-		//	Eigen::MatrixXd test = quartic[c] - quartic[c].transpose();
-		//	for (size_t i = 0; i < test.rows(); i++)
-		//	{
-		//		vec_k = {x(i), y(i)};
-		//		for (size_t j = i; j < test.cols(); j++)
-		//		{
-		//			vec_l = {x(j), y(j)};
-		//			if (abs(test(i, j)) > 1e-8) {
-		//				std::cout << c << "\t" << test(i, j) << "\t\t" << i << "\t" << j << std::endl;
-		//				
-		//				break;
-		//			}
-		//		}
-		//	}
-		//}
 	}
 
 	void Model::fill_M_N()
 	{
 		M = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
-		N = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
+		N = Eigen::SparseMatrix<double>(BASIS_SIZE, BASIS_SIZE);
+		N.reserve(Eigen::VectorXi::Constant(BASIS_SIZE, 1)); // 1 = Estimatie of non-zero elements per column (1 as N is diagonal for now)
 
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
-			N(k, k) = -(1 - 2 * _NUM(k));
+			N.coeffRef(k, k) = -(1 - 2 * _NUM(k));
 
 			M(k, k) += 2 * unperturbed_energy((M_PI * x(k)) / Constants::K_DISCRETIZATION, (M_PI * y(k)) / Constants::K_DISCRETIZATION)
 				* (1 - 2 * _NUM(k));
 
-			M(k, k) += (U / BASIS_SIZE) * (2 * sum_of_all[0] - quartic[2](k, k));
+			M(k, k) += (2 * U / BASIS_SIZE) * (sum_of_all[0] - quartic[2](k, k));
 
 			for (int l = 0; l < BASIS_SIZE; l++)
 			{
 				M(l, k) += (U / BASIS_SIZE) * (1 - 2 * (_NUM(l) + _NUM(k) - quartic[1](l, k) - quartic[3](l, k)));
 			}
 		}
+		N.makeCompressed();
 	}
 
 	Model::Model(double _temperature, double _U)
@@ -177,17 +160,19 @@ namespace Hubbard {
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 		begin = std::chrono::steady_clock::now();
 
-		const Eigen::MatrixXd test = M;
+		const Eigen::MatrixXd test = M - M.transpose();
 		for (size_t i = 0; i < test.rows(); i++)
 		{
 			for (size_t j = i + 1; j < test.cols(); j++)
 			{
 				if (abs(test(i, j)) > 1e-8) {
-					std::cout << test(i, j) << "\t\t" << i << "\t" << j << std::endl;
+					std::cout << "Not hermitian: " << test(i, j) << "\t\t" << i << "\t" << j << std::endl;
 				}
 			}
 
-			
+			if(abs(M(i,i)) < 1e-8){
+				M(i,i) = 1e-8;
+			}
 		}
 
 		Eigen::EigenSolver<Eigen::MatrixXd> gen_solver;
@@ -205,7 +190,7 @@ namespace Hubbard {
 			}
 		}
 
-		std::sort(reciever.back().begin(), reciever.back().end());
+		//std::sort(reciever.back().begin(), reciever.back().end());
 
 		end = std::chrono::steady_clock::now();
 		std::cout << "Time for solving M and N: "

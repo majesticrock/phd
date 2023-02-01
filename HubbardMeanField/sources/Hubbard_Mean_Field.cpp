@@ -183,6 +183,7 @@ int main(int argc, char** argv)
 		std::vector<std::vector<data_vector>> reciever(FIRST_IT_STEPS);
 		std::vector<std::vector<data_vector>> oneParticleEnergies(FIRST_IT_STEPS);
 		std::vector<double> param(FIRST_IT_STEPS);
+		std::vector<double> totalGapValues(FIRST_IT_STEPS);
 
 		for (int T = 0; T < FIRST_IT_STEPS; T++)
 		{
@@ -194,6 +195,7 @@ int main(int argc, char** argv)
 				model = std::make_unique<Hubbard::HubbardCDW>(Hubbard::HubbardCDW(modelParameters));
 			}
 			model->computePhases();
+			totalGapValues[T] = model->getTotalGapValue();
 			model->computeCollectiveModes_v2(reciever[T]);
 			model->getEnergies(oneParticleEnergies[T], 0);
 			param[T] = modelParameters.getGlobal();
@@ -215,12 +217,15 @@ int main(int argc, char** argv)
 			{
 				std::stringstream stream;
 				stream << std::fixed << std::setprecision(2) << param[i];
+				comments.push_back("Total Gap=" + std::to_string(totalGapValues[i]));
 				Utility::saveData(reciever[i], "../data/" + output_folder + stream.str() + ".txt", comments);
+				comments.pop_back();
 				Utility::saveData(oneParticleEnergies[i], "../data/" + output_folder + stream.str() + "_one_particle.txt", comments);
 			}
 		}
 	}
 #ifdef NDEBUG
+std::cout << "test" << std::endl;
 	return MPI_Finalize();
 #else
 	return 0;
