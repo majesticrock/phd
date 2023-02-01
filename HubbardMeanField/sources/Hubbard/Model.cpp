@@ -4,15 +4,17 @@
 #include "Model.hpp"
 #include <iostream>
 #include <chrono>
+#include <omp.h>
 
 namespace Hubbard {
 	void Model::compute_quartics()
 	{
-		Eigen::Vector2i vec_k, vec_l;
 		const Eigen::Vector2i vec_Q = { Constants::K_DISCRETIZATION, Constants::K_DISCRETIZATION };
 
+#pragma omp parallel for
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
+			Eigen::Vector2i vec_k, vec_l;
 			vec_k = { x(k), y(k) };
 			for (int l = 0; l < BASIS_SIZE; l++)
 			{
@@ -175,20 +177,20 @@ namespace Hubbard {
 			}
 		}
 
-		Eigen::EigenSolver<Eigen::MatrixXd> gen_solver;
-		Eigen::MatrixXd toSolve = M.inverse() * N;
+		Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> gen_solver;
+		//Eigen::MatrixXd toSolve = M.inverse() * N;
 
-		gen_solver.compute(toSolve, false);
+		gen_solver.compute(N, M, false);
 		reciever.resize(1);
-		Eigen::VectorXd ev = gen_solver.eigenvalues().real();
+		Eigen::VectorXd ev = gen_solver.eigenvalues();//.real();
 		reciever[0] = std::vector<double>(ev.data(), ev.data() + ev.size());
 
-		for (size_t i = 0; i < ev.size(); i++)
-		{
-			if (abs(gen_solver.eigenvalues()(i).imag()) > 1e-6) {
-				std::cout << gen_solver.eigenvalues()(i) << std::endl;
-			}
-		}
+		//for (size_t i = 0; i < ev.size(); i++)
+		//{
+		//	if (abs(gen_solver.eigenvalues()(i).imag()) > 1e-6) {
+		//		std::cout << gen_solver.eigenvalues()(i) << std::endl;
+		//	}
+		//}
 
 		//std::sort(reciever.back().begin(), reciever.back().end());
 
