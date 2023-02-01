@@ -12,7 +12,7 @@ WARNINGS = -Wall -Wno-sign-compare
 
 OPT = -march=native -O3
 
-HBBRD_SRCS=Model.cpp BasicHubbardModel.cpp HubbardCDW.cpp UsingBroyden.cpp
+HBBRD_SRCS=Model.cpp ModelModesV1.cpp BasicHubbardModel.cpp HubbardCDW.cpp UsingBroyden.cpp
 UTIL_SRCS=InputFileReader.cpp OutputWriter.cpp Roots_Broyden.cpp
 
 PART_SRCS=
