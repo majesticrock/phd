@@ -13,7 +13,6 @@ namespace Hubbard {
 	protected:
 		double V;
 
-		double unperturbed_energy(double k_x, double k_y) const override;
 		virtual void fillHamiltonian(double k_x, double k_y) override;
 		virtual inline void setParameters(Eigen::VectorXd& F) {
 			F(0) *= (this->U - this->V) / (8 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);

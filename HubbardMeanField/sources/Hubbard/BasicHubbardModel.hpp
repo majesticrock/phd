@@ -6,7 +6,6 @@ namespace Hubbard {
 	class BasicHubbardModel : public Model
 	{
 	protected:
-		double unperturbed_energy(double k_x, double k_y) const override;
 		virtual void fillHamiltonian(double k_x, double k_y) override;
 		virtual inline void setParameters(double cdw, double sc, double eta) {
 			this->delta_cdw = cdw * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);

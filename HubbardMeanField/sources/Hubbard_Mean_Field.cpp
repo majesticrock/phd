@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 	int rank, numberOfRanks;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &numberOfRanks);
-	
+
 #else
 	int rank = 0;
 	int numberOfRanks = 1;
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
 			recieve_cdw.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
 			recieve_sc.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
 			recieve_eta.resize(GLOBAL_IT_STEPS * SECOND_IT_STEPS);
-	}
+		}
 #ifdef NDEBUG
 		MPI_Gather(data_cdw.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_cdw.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 		MPI_Gather(data_sc.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, recieve_sc.data(), FIRST_IT_STEPS * SECOND_IT_STEPS, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -173,7 +173,7 @@ int main(int argc, char** argv)
 			Utility::saveData(recieve_sc, SECOND_IT_STEPS, "../data/" + output_folder + "sc.txt", comments);
 			Utility::saveData(recieve_eta, SECOND_IT_STEPS, "../data/" + output_folder + "eta.txt", comments);
 		}
-}
+	}
 	else if (input.getString("compute_what") == "modes") {
 		omp_set_num_threads(8);
 		Hubbard::Model::ModelParameters modelParameters(model_params[0], model_params[1], model_params[2],
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
 			model->computePhases();
 			totalGapValues[T] = model->getTotalGapValue();
 			model->computeCollectiveModes_v2(reciever[T]);
-			model->getEnergies(oneParticleEnergies[T], 0);
+			model->getAllEnergies(oneParticleEnergies[T]);
 			param[T] = modelParameters.getGlobal();
 			modelParameters.incrementGlobalIterator();
 		}
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 		}
 	}
 #ifdef NDEBUG
-std::cout << "test" << std::endl;
+	std::cout << "test" << std::endl;
 	return MPI_Finalize();
 #else
 	return 0;
