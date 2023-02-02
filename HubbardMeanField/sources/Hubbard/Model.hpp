@@ -47,6 +47,9 @@ namespace Hubbard {
 		double temperature;
 		double U;
 
+		double chemical_potential;
+		// Assumes that the bilinear expectation values have been computed beforehand
+		virtual void computeChemicalPotential();
 		/*
 		* 0 - number operator
 		* 1 - cdw
@@ -58,8 +61,7 @@ namespace Hubbard {
 		// Quartic expecs - contracted using Wick's theorem (exact on MF level)
 		std::vector<Eigen::MatrixXd> quartic;
 
-		Eigen::MatrixXd M;
-		Eigen::SparseMatrix<double> N;
+		Eigen::MatrixXd M, N;
 
 		// Computes the respective x or y component from a given input index
 		inline int x(int idx) const {
@@ -84,9 +86,10 @@ namespace Hubbard {
 			for (int i = 0; i < 2; i++)
 			{
 				toClean(i) += Constants::K_DISCRETIZATION;
-				if(toClean(i) < 0){
+				if (toClean(i) < 0) {
 					toClean(i) = ((2 * Constants::K_DISCRETIZATION) - abs(toClean(i) % (2 * Constants::K_DISCRETIZATION))) % (2 * Constants::K_DISCRETIZATION);
-				} else {
+				}
+				else {
 					toClean(i) = (toClean(i) % (2 * Constants::K_DISCRETIZATION)) % (2 * Constants::K_DISCRETIZATION);
 				}
 			}
@@ -107,10 +110,9 @@ namespace Hubbard {
 			clean_factor_2pi(right);
 
 			int offset = equal_up_to_Q(left, right);
-			if (offset < 0) return 0;		
+			if (offset < 0) return 0;
 			return expecs[offset](left(0), left(1));
 		};
-
 
 		inline double fermi_dirac(double energy) const {
 			if (temperature > 1e-7) {
@@ -120,8 +122,9 @@ namespace Hubbard {
 				return ((energy > 0) ? 0 : 1);
 			}
 		};
-
-		virtual double unperturbed_energy(double k_x, double k_y) const = 0;
+		virtual inline double unperturbed_energy(double k_x, double k_y) const {
+			return -2 * (cos(k_x) + cos(k_y));
+		};
 		virtual void fillHamiltonian(double k_x, double k_y) = 0;
 
 		virtual void compute_quartics();
@@ -170,6 +173,8 @@ namespace Hubbard {
 		// reciever is the vector the resulting data will be stored in
 		// direction gives the angle between the k-path and the k_x axis in multiples of M_PI
 		void getEnergies(std::vector<std::vector<double>>& reciever, double direction);
+		// saves all one particle energies to reciever
+		void getAllEnergies(std::vector<std::vector<double>>& reciever);
 		virtual data_set computePhases(const bool print = false) = 0;
 		void parseCommutatorData();
 		void computeCollectiveModes(std::vector<std::vector<double>>& reciever, double direction);
@@ -178,7 +183,7 @@ namespace Hubbard {
 		void computeCollectiveModes_v2(std::vector<std::vector<double>>& reciever);
 		// Returns the total gap value sqrt(sc^2 + cdw^2 + eta^2)
 		inline double getTotalGapValue() const {
-			return sqrt(delta_cdw*delta_cdw + delta_sc*delta_sc + delta_eta*delta_eta);
+			return sqrt(delta_cdw * delta_cdw + delta_sc * delta_sc + delta_eta * delta_eta);
 		};
 	};
 }

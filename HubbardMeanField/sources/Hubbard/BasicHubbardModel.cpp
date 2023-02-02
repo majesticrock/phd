@@ -8,11 +8,6 @@
 using Eigen::MatrixXd;
 
 namespace Hubbard {
-	double BasicHubbardModel::unperturbed_energy(double k_x, double k_y) const
-	{
-		return -2 * (cos(k_x) + cos(k_y));
-	}
-
 	void BasicHubbardModel::fillHamiltonian(double k_x, double k_y)
 	{
 		hamilton.fill(0);

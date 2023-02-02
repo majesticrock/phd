@@ -3,7 +3,7 @@
 #include <fstream>
 
 namespace Hubbard {
-    std::pair<int, int> Hubbard::Model::parseExpectationValue(std::string& str)
+	std::pair<int, int> Hubbard::Model::parseExpectationValue(std::string& str)
 	{
 		if (str[0] == 'n') {
 			if (str[7] == '0') {
