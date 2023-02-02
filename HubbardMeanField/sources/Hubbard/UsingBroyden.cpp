@@ -13,17 +13,12 @@
 using Eigen::MatrixXd;
 
 namespace Hubbard {
-	double UsingBroyden::unperturbed_energy(double k_x, double k_y) const
-	{
-		return -2 * (cos(k_x) + cos(k_y));
-	}
-
 	void UsingBroyden::fillHamiltonian(double k_x, double k_y)
 	{
 		hamilton.fill(0);
 
-		Eigen::Vector4d cos_sin;
-		cos_sin << cos(k_x), cos(k_y), sin(k_x), sin(k_y);
+		//Eigen::Vector4d cos_sin;
+		//cos_sin << cos(k_x), cos(k_y), sin(k_x), sin(k_y);
 		hamilton(0, 1) = delta_cdw;
 		hamilton(0, 2) = delta_sc;//+ V * old_sc.dot(cos_sin);
 		hamilton(0, 3) = delta_eta;// - V * old_eta.dot(cos_sin);
@@ -45,7 +40,6 @@ namespace Hubbard {
 	{
 		Model::compute_quartics();
 		const Eigen::Vector2i vec_Q = { Constants::K_DISCRETIZATION, Constants::K_DISCRETIZATION };
-
 		auto f = [&](int kx, int ky) -> double {
 			return (V / BASIS_SIZE) * 2 * (cos((M_PI * kx) / Constants::K_DISCRETIZATION) + cos((M_PI * ky) / Constants::K_DISCRETIZATION));
 		};
@@ -55,13 +49,13 @@ namespace Hubbard {
 		quartic.push_back(Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE));
 
 		// compute the two new terms
-		double sum_of_all_F[2] = {0, 0};
+		double sum_of_all_F[2] = { 0, 0 };
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
 			sum_of_all_F[0] += f(x(k), y(k)) * _NUM(k);
 			sum_of_all_F[1] += f(x(k), y(k)) * _CDW(k);
 		}
-		
+
 #pragma omp parallel for
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
@@ -81,7 +75,6 @@ namespace Hubbard {
 				quartic[6](k, l) += f(vec_Q(0), vec_Q(1)) * sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k, vec_k - vec_Q);
 				quartic[6](k, l) += f(x(k) - x(l), y(k) - y(l)) * cdw_type(vec_l, vec_l) * cdw_type(-vec_k, -vec_k);
 				quartic[6](k, l) += f(x(k) - x(l) + vec_Q(0), y(k) - y(l) + vec_Q(1)) * cdw_type(vec_l, vec_l - vec_Q) * cdw_type(-vec_k - vec_Q, -vec_k);
-
 
 				quartic[4](k, l) += f(0, 0) * sc_type(vec_l, -vec_l) * sc_type(-vec_k, vec_k);
 				quartic[4](k, l) += f(vec_Q(0), vec_Q(1)) * sc_type(vec_l, -vec_l - vec_Q) * sc_type(-vec_k - vec_Q, vec_k);
@@ -103,7 +96,8 @@ namespace Hubbard {
 
 	void UsingBroyden::fill_M_N()
 	{
-		Model::fill_M_N();	
+		Model::fill_M_N();
+
 		auto f = [&](int kx, int ky) -> double {
 			return (V / BASIS_SIZE) * 2 * (cos((M_PI * kx) / Constants::K_DISCRETIZATION) + cos((M_PI * ky) / Constants::K_DISCRETIZATION));
 		};

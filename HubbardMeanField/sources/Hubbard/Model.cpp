@@ -1,12 +1,22 @@
 #define _USE_MATH_DEFINES
 #define _NUM(momentum) (expecs[0](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
+#define _CDW(momentum) (expecs[1](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
+#define _SC(momentum) (expecs[2](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
+#define _ETA(momentum) (expecs[3](x(momentum) + Constants::K_DISCRETIZATION, y(momentum) + Constants::K_DISCRETIZATION))
 
 #include "Model.hpp"
 #include <iostream>
+#include <iomanip>
 #include <chrono>
 #include <omp.h>
+#include "../Utility/Resolvent.hpp"
 
 namespace Hubbard {
+	void Model::computeChemicalPotential()
+	{
+		chemical_potential = U / 2;
+	}
+
 	void Model::compute_quartics()
 	{
 		const Eigen::Vector2i vec_Q = { Constants::K_DISCRETIZATION, Constants::K_DISCRETIZATION };
@@ -55,15 +65,14 @@ namespace Hubbard {
 	void Model::fill_M_N()
 	{
 		M = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
-		N = Eigen::SparseMatrix<double>(BASIS_SIZE, BASIS_SIZE);
-		N.reserve(Eigen::VectorXi::Constant(BASIS_SIZE, 1)); // 1 = Estimatie of non-zero elements per column (1 as N is diagonal for now)
+		N = Eigen::MatrixXd::Zero(BASIS_SIZE, BASIS_SIZE);
 
 		for (int k = 0; k < BASIS_SIZE; k++)
 		{
-			N.coeffRef(k, k) = -(1 - 2 * _NUM(k));
+			N(k, k) = -(1 - 2 * _NUM(k));
 
-			M(k, k) += 2 * unperturbed_energy((M_PI * x(k)) / Constants::K_DISCRETIZATION, (M_PI * y(k)) / Constants::K_DISCRETIZATION)
-				* (1 - 2 * _NUM(k));
+			M(k, k) += 2 * (unperturbed_energy((M_PI * x(k)) / Constants::K_DISCRETIZATION, (M_PI * y(k)) / Constants::K_DISCRETIZATION) 
+				- chemical_potential ) * (1 - 2 * _NUM(k));
 
 			M(k, k) += (2 * U / BASIS_SIZE) * (sum_of_all[0] - quartic[2](k, k));
 
@@ -72,12 +81,12 @@ namespace Hubbard {
 				M(l, k) += (U / BASIS_SIZE) * (1 - 2 * (_NUM(l) + _NUM(k) - quartic[1](l, k) - quartic[3](l, k)));
 			}
 		}
-		N.makeCompressed();
 	}
 
 	Model::Model(double _temperature, double _U)
 		: temperature(_temperature), U(_U)
 	{
+		this->chemical_potential = 0;
 		this->BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
 		this->delta_cdw = 0.1;
 		this->delta_sc = 0.1;
@@ -87,24 +96,11 @@ namespace Hubbard {
 	Model::Model(ModelParameters& _params)
 		: temperature(_params.temperature), U(_params.U)
 	{
+		this->chemical_potential = 0;
 		this->BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
 		this->delta_cdw = 0.1;
 		this->delta_sc = 0.1;
 		this->delta_eta = 0.001;
-	}
-
-	void Model::getEnergies(std::vector<std::vector<double>>& reciever, double direction)
-	{
-		reciever.reserve(2 * Constants::K_DISCRETIZATION);
-		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
-		double k_val = 0;
-		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
-		{
-			k_val = k * M_PI / Constants::K_DISCRETIZATION;
-			fillHamiltonian(cos(M_PI * direction) * k_val, sin(M_PI * direction) * k_val);
-			solver.compute(hamilton, false);
-			reciever.push_back(std::vector<double>(solver.eigenvalues().data(), solver.eigenvalues().data() + solver.eigenvalues().size()));
-		}
 	}
 
 	void Model::computeCollectiveModes_v2(std::vector<std::vector<double>>& reciever)
@@ -129,7 +125,6 @@ namespace Hubbard {
 				fillHamiltonian((k * M_PI) / Constants::K_DISCRETIZATION, (l * M_PI) / Constants::K_DISCRETIZATION);
 				solver.compute(hamilton);
 				rho.fill(0);
-
 				for (int i = 0; i < 4; i++)
 				{
 					rho(i, i) = fermi_dirac(solver.eigenvalues()(i));
@@ -142,9 +137,11 @@ namespace Hubbard {
 				}
 			}
 		}
+		std::cout << sum_of_all[0] / BASIS_SIZE << std::endl;
+		computeChemicalPotential();
 
 		end = std::chrono::steady_clock::now();
-		std::cout << "Time for expectation values: " 
+		std::cout << "Time for expectation values: "
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 		begin = std::chrono::steady_clock::now();
 
@@ -172,8 +169,11 @@ namespace Hubbard {
 				}
 			}
 
-			if(abs(M(i,i)) < 1e-8){
-				M(i,i) = 1e-8;
+			if (abs(M(i, i)) < 1e-42) {
+				M(i, i) = 1e-42;
+			}
+			if (abs(N(i, i)) < 1e-21) {
+				N(i, i) = 1e-21;
 			}
 		}
 
@@ -185,18 +185,73 @@ namespace Hubbard {
 		Eigen::VectorXd ev = gen_solver.eigenvalues();//.real();
 		reciever[0] = std::vector<double>(ev.data(), ev.data() + ev.size());
 
-		//for (size_t i = 0; i < ev.size(); i++)
-		//{
-		//	if (abs(gen_solver.eigenvalues()(i).imag()) > 1e-6) {
-		//		std::cout << gen_solver.eigenvalues()(i) << std::endl;
-		//	}
-		//}
-
-		//std::sort(reciever.back().begin(), reciever.back().end());
+		std::sort(reciever.back().begin(), reciever.back().end());
 
 		end = std::chrono::steady_clock::now();
 		std::cout << "Time for solving M and N: "
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+
+		solver.compute(M, false);
+		for (size_t i = 0; i < solver.eigenvalues().size(); i++)
+		{
+			if (solver.eigenvalues()(i) < 0) {
+				std::cerr << i << ": M is not positive!    " << solver.eigenvalues()(i) << std::endl;
+			}
+		}
+
+		begin = std::chrono::steady_clock::now();
+		Eigen::VectorXd startingState = Eigen::VectorXd::Ones(BASIS_SIZE);
+		startingState.normalize();
+		Utility::Resolvent R(startingState);
+
+		Eigen::MatrixXd inverse_solve = M.inverse() * N;
+		R.compute(inverse_solve, M, BASIS_SIZE);
+		R.writeDataToFile("../data/resolvent.txt");
+
+		end = std::chrono::steady_clock::now();
+		std::cout << "Time for resolvent: "
+			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+	}
+
+	void Model::getEnergies(std::vector<std::vector<double>>& reciever, double direction)
+	{
+		reciever.reserve(2 * Constants::K_DISCRETIZATION);
+		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
+		double k_val = 0;
+		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
+		{
+			k_val = k * M_PI / Constants::K_DISCRETIZATION;
+			fillHamiltonian(cos(M_PI * direction) * k_val, sin(M_PI * direction) * k_val);
+			solver.compute(hamilton, false);
+			reciever.push_back(std::vector<double>(solver.eigenvalues().data(), solver.eigenvalues().data() + solver.eigenvalues().size()));
+		}
+	}
+
+	void Model::getAllEnergies(std::vector<std::vector<double>>& reciever)
+	{
+		reciever.resize(2 * Constants::K_DISCRETIZATION, std::vector<double>(2 * Constants::K_DISCRETIZATION));
+		Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver;
+		double k_val = 0;
+		double l_val = 0;
+		for (int k = -Constants::K_DISCRETIZATION; k < Constants::K_DISCRETIZATION; k++)
+		{
+			k_val = k * M_PI / Constants::K_DISCRETIZATION;
+			for (int l = 0; l < Constants::K_DISCRETIZATION; l++)
+			{
+				l_val = l * M_PI / Constants::K_DISCRETIZATION;
+				fillHamiltonian(k_val, l_val);
+				solver.compute(hamilton, false);
+				reciever[k + Constants::K_DISCRETIZATION][l] = solver.eigenvalues()(0);
+
+				for (int i = 1; i < 4; i++)
+				{
+					if (abs(solver.eigenvalues()(0) - solver.eigenvalues()(i)) > 1e-8) {
+						reciever[(k + Constants::K_DISCRETIZATION) % (2 * Constants::K_DISCRETIZATION)][l + Constants::K_DISCRETIZATION] = solver.eigenvalues()(i);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	Model::ModelParameters::ModelParameters(double _temperature, double _U, double _V, double _global_step, double _second_step,
