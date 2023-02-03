@@ -90,15 +90,16 @@ namespace Utility {
 			}
 			if (oldEigenValue != 0.0) {
 				if (abs(newEigenValue - oldEigenValue) / abs(oldEigenValue) < errorMargin) {
-					//goOn = false;
+					goOn = false;
 				}
 			}
 			oldEigenValue = newEigenValue;
 		}
+		std::cout << oldEigenValue << std::endl;
 		for (long i = 0; i < deltas.size(); i++)
 		{
 			res.a_i.push_back(deltas[i]);
-			res.b_i.push_back(gammas[i + 1]);
+			res.b_i.push_back(gammas[i + 1]*gammas[i + 1]);
 		}
 		this->data.push_back(res);
 	}
