@@ -96,11 +96,10 @@ namespace Hubbard {
 		};
 		// Returns a c^+ c^+ (cc) type term, i.e. the SC or the eta order parameter
 		inline double sc_type(Eigen::Vector2i left, Eigen::Vector2i right) const {
-			right = -right;
 			clean_factor_2pi(left);
 			clean_factor_2pi(right);
 
-			int offset = equal_up_to_Q(left, right);
+			int offset = equal_up_to_Q(-left, right);
 			if (offset < 0) return 0;
 			return expecs[2 + offset](right(0), right(1));
 		};
@@ -119,6 +118,9 @@ namespace Hubbard {
 				return (1. / (1 + exp(energy / temperature)));
 			}
 			else {
+				if(abs(energy) < 1e-12){
+					return 0.5;
+				}
 				return ((energy > 0) ? 0 : 1);
 			}
 		};

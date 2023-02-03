@@ -168,15 +168,12 @@ namespace Hubbard {
 					std::cout << "Not hermitian: " << test(i, j) << "\t\t" << i << "\t" << j << std::endl;
 				}
 			}
-
-			if (abs(M(i, i)) < 1e-42) {
-				M(i, i) = 1e-42;
-			}
-			if (abs(N(i, i)) < 1e-21) {
-				N(i, i) = 1e-21;
+			if(abs(N(i,i)) < 1e-8){
+				N(i,i) = 0;
 			}
 		}
-
+		M += 5e-15 * Eigen::MatrixXd::Identity(BASIS_SIZE, BASIS_SIZE);
+		//N += 1e-6 * Eigen::MatrixXd::Identity(BASIS_SIZE, BASIS_SIZE);
 		Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> gen_solver;
 		//Eigen::MatrixXd toSolve = M.inverse() * N;
 
