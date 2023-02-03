@@ -95,7 +95,6 @@ namespace Utility {
 			}
 			oldEigenValue = newEigenValue;
 		}
-		std::cout << oldEigenValue << std::endl;
 		for (long i = 0; i < deltas.size(); i++)
 		{
 			res.a_i.push_back(deltas[i]);

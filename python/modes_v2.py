@@ -32,6 +32,7 @@ plt.plot(x_lin, M, "x", label="Two Particle")
 plt.plot(x_lin, N, "o", mfc="none", label="One Particle")
 
 #plt.xlim(lims[0], lims[1])
-plt.ylim(-20, 20)
+#plt.ylim(-20, 20)
 plt.xlabel("$\\epsilon /t$")
+plt.legend()
 plt.show()
