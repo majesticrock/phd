@@ -8,9 +8,9 @@ namespace Hubbard {
 	protected:
 		virtual void fillHamiltonian(double k_x, double k_y) override;
 		virtual inline void setParameters(double cdw, double sc, double eta) {
-			this->delta_cdw = cdw * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
-			this->delta_sc = sc * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
-			this->delta_eta = eta * this->U / (4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION);
+			this->delta_cdw = cdw * this->U / BASIS_SIZE;
+			this->delta_sc = sc * this->U / BASIS_SIZE;
+			this->delta_eta = eta * this->U / BASIS_SIZE;
 		};
 	public:
 		BasicHubbardModel(ModelParameters& _params);

@@ -52,11 +52,11 @@ int main(int argc, char** argv)
 	Hubbard::Constants::K_DISCRETIZATION = input.getInt("k_discretization");
 
 #ifdef _DO_TEST
-	Hubbard::Model::ModelParameters mP(0.01, -2.8752, -1, 0, 0, "", "");
+	Hubbard::Model::ModelParameters mP(0.1, -2, 0, 0, 0, "", "");
 	Hubbard::HubbardCDW model(mP);
 
 	std::chrono::steady_clock::time_point test_b = std::chrono::steady_clock::now();
-	//model.computePhases(true).print();
+	model.computePhases(true).print();
 	std::chrono::steady_clock::time_point test_e = std::chrono::steady_clock::now();
 	std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(test_e - test_b).count() << "[ms]" << std::endl;
 
@@ -75,7 +75,6 @@ int main(int argc, char** argv)
 	Utility::saveData(energies, "../data/energies.txt");
 	return MPI_Finalize();
 #endif // _DO_TEST
-
 	// Setup the parameters T, U, V
 	std::vector<double> model_params = input.getDoubleList("model_parameters");
 
@@ -226,7 +225,6 @@ int main(int argc, char** argv)
 		}
 	}
 #ifdef NDEBUG
-	std::cout << "test" << std::endl;
 	return MPI_Finalize();
 #else
 	return 0;
