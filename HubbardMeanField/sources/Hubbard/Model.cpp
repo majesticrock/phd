@@ -172,14 +172,21 @@ namespace Hubbard {
 				N(i,i) = 0;
 			}
 		}
-		M += 5e-15 * Eigen::MatrixXd::Identity(BASIS_SIZE, BASIS_SIZE);
+		M += 1e-13 * Eigen::MatrixXd::Identity(BASIS_SIZE, BASIS_SIZE);
 		//N += 1e-6 * Eigen::MatrixXd::Identity(BASIS_SIZE, BASIS_SIZE);
-		Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> gen_solver;
-		//Eigen::MatrixXd toSolve = M.inverse() * N;
+		Eigen::EigenSolver<Eigen::MatrixXd> gen_solver;
+		Eigen::MatrixXd inverse_M = M.completeOrthogonalDecomposition().pseudoInverse();
+		Eigen::MatrixXd inverse_N = N.completeOrthogonalDecomposition().pseudoInverse();
 
-		gen_solver.compute(N, M, false);
+		gen_solver.compute(inverse_N * M, false);
+		for (size_t i = 0; i < gen_solver.eigenvalues().size(); i++)
+		{
+			if (abs(gen_solver.eigenvalues()(i).imag()) > 1e-8) {
+				std::cerr << "Complex eigenvalue! " << gen_solver.eigenvalues()(i) << std::endl;
+			}
+		}
 		reciever.resize(1);
-		Eigen::VectorXd ev = gen_solver.eigenvalues();//.real();
+		Eigen::VectorXd ev = gen_solver.eigenvalues().real();
 		reciever[0] = std::vector<double>(ev.data(), ev.data() + ev.size());
 
 		std::sort(reciever.back().begin(), reciever.back().end());
@@ -188,14 +195,17 @@ namespace Hubbard {
 		std::cout << "Time for solving M and N: "
 			<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 
-		solver.compute(M, false);
+		solver.compute(M);
 		for (size_t i = 0; i < solver.eigenvalues().size(); i++)
 		{
 			if (solver.eigenvalues()(i) < 0) {
 				std::cerr << i << ": M is not positive!    " << solver.eigenvalues()(i) << std::endl;
 			}
+			//if (abs(solver.eigenvalues()(i)) < 1e-5) {
+			//	std::cout << solver.eigenvalues()(i) << "\n" << solver.eigenvalues().col(i) << std::endl << std::endl;
+			//}
 		}
-
+		return;
 		begin = std::chrono::steady_clock::now();
 		Eigen::VectorXd startingState = Eigen::VectorXd::Ones(BASIS_SIZE);
 		startingState.normalize();
