@@ -9,8 +9,8 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    data_folder = "data/T0.1/"
     name = "T0.1"
+    data_folder = f"data/{name}/"
 
     
 CDW = abs(np.loadtxt(data_folder + "cdw.txt"))

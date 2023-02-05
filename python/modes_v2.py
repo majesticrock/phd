@@ -11,7 +11,7 @@ N = np.loadtxt(f"data/T0.1/U_modes/{nameU}_one_particle.txt").transpose().flatte
 M.sort()
 N.sort()
 
-sigma = 0.01
+sigma = 0.05
 def gauss(x, mu):
     return np.exp((-(x - mu)**2) / (2*sigma)) / np.sqrt(2*np.pi*sigma)
 
@@ -29,7 +29,7 @@ data *= 16
 
 plt.plot(x_lin, data, label="DoS")
 plt.plot(x_lin, M, "x", label="Two Particle")
-plt.plot(x_lin, N, "o", mfc="none", label="One Particle")
+#plt.plot(x_lin, N, "o", mfc="none", label="One Particle")
 
 #plt.xlim(lims[0], lims[1])
 #plt.ylim(-20, 20)

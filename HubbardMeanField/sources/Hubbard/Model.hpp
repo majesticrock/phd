@@ -48,8 +48,15 @@ namespace Hubbard {
 		double U;
 
 		double chemical_potential;
-		// Assumes that the bilinear expectation values have been computed beforehand
+		// Might not be necessary, depends on the V dependence
 		virtual void computeChemicalPotential();
+
+		// maps an index; [0, N_K) -> [-pi, pi)
+		template <typename T>
+		inline double index_to_k_vector(const T index) const {
+			return (((2 * index * M_PI) / Constants::K_DISCRETIZATION) - M_PI);
+		};
+
 		/*
 		* 0 - number operator
 		* 1 - cdw
@@ -118,7 +125,7 @@ namespace Hubbard {
 				return (1. / (1 + exp(energy / temperature)));
 			}
 			else {
-				if(abs(energy) < 1e-12){
+				if (abs(energy) < 1e-12) {
 					return 0.5;
 				}
 				return ((energy > 0) ? 0 : 1);
