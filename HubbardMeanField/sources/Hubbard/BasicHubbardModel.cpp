@@ -50,7 +50,6 @@ namespace Hubbard {
 		double error_sc = 100, error_sc_osc = 100;
 		double error_eta = 100, error_eta_osc = 100;
 		const int MAX_STEPS = 10000;
-
 		for (size_t i = 0; i < MAX_STEPS && error > EPSILON; i++)
 		{
 			sc = 0;

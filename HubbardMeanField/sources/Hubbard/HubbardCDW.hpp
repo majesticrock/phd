@@ -8,9 +8,9 @@ namespace Hubbard {
 		double V;
 
 		virtual inline void setParameters(double cdw, double sc, double eta) override {
-			this->delta_cdw = ((this->U - this->V) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * cdw;
-			this->delta_sc = ((this->U) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * sc;
-			this->delta_eta = ((this->U) / (4. * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION)) * eta;
+			this->delta_cdw = ((this->U - this->V) / BASIS_SIZE) * cdw;
+			this->delta_sc = ((this->U) / BASIS_SIZE) * sc;
+			this->delta_eta = ((this->U) / BASIS_SIZE) * eta;
 		};
 
 	public:

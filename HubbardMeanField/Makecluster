@@ -4,7 +4,7 @@ CXX = mpicxx
 # the compilation of the eigen library (I cant fix them anyways)
 INCLUDEFLAGS = -isystem ~/usr/local/include
 
-CXXFLAGS = -g $(WARNINGS) -std=c++17 $(OPT) -fopenmp
+CXXFLAGS = -g $(WARNINGS) -std=c++17 $(OPT) -fopenmp -DNDEBUG
 
 LDLIBS = $(LINALG_FLAG)
 

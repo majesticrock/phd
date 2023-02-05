@@ -87,7 +87,7 @@ namespace Hubbard {
 		: temperature(_temperature), U(_U)
 	{
 		this->chemical_potential = 0;
-		this->BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
+		this->BASIS_SIZE = 4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION;
 		this->delta_cdw = 0.1;
 		this->delta_sc = 0.1;
 		this->delta_eta = 0.001;
@@ -97,7 +97,7 @@ namespace Hubbard {
 		: temperature(_params.temperature), U(_params.U)
 	{
 		this->chemical_potential = 0;
-		this->BASIS_SIZE = (2 * Constants::K_DISCRETIZATION) * (2 * Constants::K_DISCRETIZATION);
+		this->BASIS_SIZE = 4 * Constants::K_DISCRETIZATION * Constants::K_DISCRETIZATION;
 		this->delta_cdw = 0.1;
 		this->delta_sc = 0.1;
 		this->delta_eta = 0.001;
