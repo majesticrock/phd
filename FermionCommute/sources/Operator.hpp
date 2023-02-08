@@ -3,13 +3,17 @@
 #include <string>
 #include <iostream>
 
+typedef std::vector<std::pair<int, char>> momentum_pairs ;
 struct Momentum{
-        // total momentum is then:    sum_i pair_i.first * pair_i.second
-        std::vector<std::pair<int, char>> momentum_list;
-        bool add_Q;
+    // total momentum is then:    sum_i pair_i.first * pair_i.second
+    momentum_pairs momentum_list;
+    bool add_Q;
 
-        void addInPlace(const Momentum& rhs);
-    };
+    Momentum() : momentum_list(), add_Q(false) {};
+    explicit Momentum(const char value, bool Q=false) : momentum_list(1, std::make_pair(1, value)), add_Q(Q) {};
+    Momentum(momentum_pairs& _momenta, bool Q) : momentum_list(_momenta), add_Q(Q){};
+    void addInPlace(const Momentum& rhs);
+};
 
 struct Operator{
     Momentum momentum;
@@ -20,9 +24,40 @@ struct Operator{
     Operator(const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered)
         : momentum(_momentum), indizes(_indizes), isDaggered(_isDaggered){};
     Operator(char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered)
-        : indizes(_indizes), isDaggered(_isDaggered){
-            this->momentum = {std::make_pair<int, char>(1, _momentum), add_Q };
-        };
+        : momentum(_momentum, add_Q), indizes(_indizes), isDaggered(_isDaggered){};
+};
+
+std::ostream& operator<<(std::ostream& os, const Momentum& momentum){
+    if(momentum.momentum_list.empty()){
+        os << "0";
+        return os;
+    }
+    for (momentum_pairs::const_iterator it = momentum.momentum_list.begin(); it != momentum.momentum_list.end(); ++it)
+    {
+        if(it != momentum.momentum_list.begin() && it->first > 0){
+            os << " +";
+        } else if(it->first == -1){
+            os << " -";
+        }
+        else if(abs(it->first) != 1){
+            os << it->first;
+        }
+        os << it->second;
+    }
+    
+    return os;
+};
+
+std::ostream& operator<<(std::ostream& os, const Operator& op){
+    os << "c_{ " << op.momentum << ", ";
+    for(const auto& index : op.indizes){
+        os << index << " ";
+    }
+    os << "}";
+    if(op.isDaggered){ 
+        os << "^\\dagger ";
+    }
+    return os;
 };
 
 inline bool operator==(const Momentum& lhs, const Momentum& rhs){
@@ -35,12 +70,16 @@ inline bool operator==(const Momentum& lhs, const Momentum& rhs){
         for (size_t j = 0; j < rhs.momentum_list.size(); j++)
         {
             if(lhs.momentum_list[i] == rhs.momentum_list[j]){
-                foundOne == true;
+                foundOne = true;
             }
         }
         if(!foundOne) return false;
     }
     return true;
+}
+
+inline bool operator!=(const Momentum& lhs, const Momentum& rhs){
+    return !(lhs == rhs);
 }
 
 inline bool operator==(const Operator& lhs, const Operator& rhs){
@@ -59,4 +98,8 @@ inline bool operator==(const Operator& lhs, const Operator& rhs){
         }
     }
     return (lhs.momentum == rhs.momentum);
+}
+
+inline bool operator!=(const Operator& lhs, const Operator& rhs){
+    return !(lhs == rhs);
 }
