@@ -11,12 +11,30 @@ struct Coefficient{
     std::vector<std::string> indizes;
     bool isDaggered;
 
-    Coefficient(std::string name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered)
+    Coefficient() : name(""), momentum(), indizes(), isDaggered(false) {};
+    Coefficient(std::string _name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered)
         : name(_name), momentum(_momentum), indizes(_indizes), isDaggered(_isDaggered){};
-    Coefficient(std::string name, char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered)
-        : name(_name), indizes(_indizes), isDaggered(_isDaggered){
-        this->momentum = {std::make_pair<int, char>(1, _momentum), add_Q };
-     };
+    Coefficient(std::string _name, char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered)
+        : name(_name), momentum(_momentum, add_Q), indizes(_indizes), isDaggered(_isDaggered){ };
+};
+
+std::ostream& operator<<(std::ostream& os, const Coefficient& coeff){
+    os << coeff.name;
+    if(!coeff.indizes.empty()){
+        os << "_{ ";
+        for(const auto& index : coeff.indizes){
+            os << index << " ";
+        }
+        os << "}";
+    }
+    if(coeff.isDaggered){
+        os << "^*";
+    }
+    if(!coeff.momentum.momentum_list.empty()){
+        os << " ( " << coeff.momentum << " )";
+    }
+
+    return os;
 };
 
 class Term{
@@ -26,6 +44,9 @@ private:
     std::vector<char> sum_momenta;
     std::vector<std::string> sum_indizes;
     std::vector<Operator> operators;
+    // symbolises the Kronecker delta
+    std::vector<std::pair<Momentum, Momentum>> delta_momentum;
+    std::vector<std::pair<std::string, std::string>> delta_index;
 
 public:
     Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators=std::vector<Operator>())
@@ -44,5 +65,6 @@ public:
         return this->operators.empty();
     }
 
+    void print() const;
     friend void normalOrder(std::vector<Term>& terms);
 };
