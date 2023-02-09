@@ -18,6 +18,20 @@ struct Coefficient {
 		: name(_name), momentum(_momentum, add_Q), indizes(_indizes), isDaggered(_isDaggered) { };
 };
 
+inline bool operator==(const Coefficient& lhs, const Coefficient& rhs) {
+	if (lhs.name != rhs.name) return false;
+	if (lhs.momentum != rhs.momentum) return false;
+	if (lhs.isDaggered != rhs.isDaggered) return false;
+	for (size_t i = 0; i < lhs.indizes.size(); i++)
+	{
+		if (lhs.indizes[i] != rhs.indizes[i]) return false;
+	}
+	return true;
+}
+inline bool operator!=(const Coefficient& lhs, const Coefficient& rhs) {
+	return !(lhs == rhs);
+}
+
 class Term {
 private:
 	Coefficient coefficient;
@@ -55,8 +69,31 @@ public:
 
 	void setDeltas();
 	void sort();
+	// Checks for equality of everything except of multiplicity
 	inline bool isEqual(const Term& other) const {
-		
+		if (this->coefficient != other.coefficient) return false;
+		if (this->sum_indizes.size() != other.sum_indizes.size()) return false;
+		if (this->sum_momenta.size() != other.sum_momenta.size()) return false;
+		for (size_t i = 0; i < sum_indizes.size(); i++)
+		{
+			if (this->sum_indizes[i] != other.sum_indizes[i]) return false;
+		}
+		for (size_t i = 0; i < sum_momenta.size(); i++)
+		{
+			if (this->sum_momenta[i] != other.sum_momenta[i]) return false;
+		}
+
+		if (this->delta_index.size() != other.delta_index.size()) return false;
+		if (this->delta_momentum.size() != other.delta_momentum.size()) return false;
+		for (size_t i = 0; i < delta_index.size(); i++)
+		{
+			if (this->delta_index[i] != other.delta_index[i]) return false;
+		}
+		for (size_t i = 0; i < delta_momentum.size(); i++)
+		{
+			if (this->delta_momentum[i] != other.delta_momentum[i]) return false;
+		}
+
 		if (this->operators.size() != other.operators.size()) return false;
 		for (size_t i = 0; i < this->operators.size(); i++)
 		{
@@ -64,6 +101,8 @@ public:
 		}
 		return true;
 	};
+
+	std::string toStringWithoutPrefactor() const;
 
 	friend void normalOrder(std::vector<Term>& terms);
 	friend void commutator(std::vector<Term>& reciever, const Term& left, const Term& right);

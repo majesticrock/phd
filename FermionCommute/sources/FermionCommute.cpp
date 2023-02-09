@@ -31,7 +31,8 @@ int main(int argc, char** argv) {
 	commutator(terms, left, right);
 	cleanUp(terms);
 
-	std::cout << "\\begin{align*}\n" << "[" << left << ", " << right << "] =" << terms << "\\end{align*}" << std::endl;
+	std::cout << "\\begin{align*}\n" << "[" << left.toStringWithoutPrefactor() << ", " << right.toStringWithoutPrefactor() << "] =" 
+		<< terms << "\\end{align*}" << std::endl;
 
 	return 0;
 }
