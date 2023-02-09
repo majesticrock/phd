@@ -18,6 +18,7 @@ SRCS=$(PART_SRCS) FermionCommute.cpp
 OBJS=$(addprefix build/, $(subst .cpp,.o,$(SRCS)))
 
 all: build build/main 
+	./build/main
 
 build/main: $(OBJS) | build
 	$(CXX) $(INCLUDEFLAGS) -o build/main $(OBJS) $(CXXFLAGS) $(LDLIBS)
@@ -27,12 +28,8 @@ build/%.o: sources/%.cpp
 
 build:
 	mkdir -p build
-	mkdir -p build/Hubbard
-	mkdir -p build/Utility
 
 clean:
 	rm -f $(OBJS)
 	rm -f main
 	rm -rf build
-
-	
