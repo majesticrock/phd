@@ -66,7 +66,7 @@ inline Momentum operator-(Momentum lhs, const Momentum& rhs) {
 inline bool operator==(const Momentum& lhs, const Momentum& rhs) {
 	if (lhs.add_Q != rhs.add_Q) return false;
 	if (lhs.momentum_list.size() != rhs.momentum_list.size()) return false;
-	bool foundOne = false;
+	bool foundOne = true;
 	for (size_t i = 0; i < lhs.momentum_list.size(); i++)
 	{
 		foundOne = false;

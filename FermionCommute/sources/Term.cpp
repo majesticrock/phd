@@ -1,6 +1,7 @@
 #define append_vector(a, b) a.insert(a.end(), b.begin(), b.end())
 #include "Term.hpp"
 #include <cmath>
+#include <sstream>
 
 void Term::print() const {
 	std::cout << *this << std::endl;
@@ -125,6 +126,41 @@ void Term::sort()
 			}
 		}
 	}
+}
+
+std::string Term::toStringWithoutPrefactor() const
+{
+	std::ostringstream os;
+	if (!this->sum_indizes.empty()) {
+		os << "\\sum_{ ";
+		for (const auto& index : this->sum_indizes) {
+			os << index << " ";
+		}
+		os << "}";
+	}
+	if (!this->sum_momenta.empty()) {
+		os << "\\sum_{ ";
+		for (const auto& momentum : this->sum_momenta) {
+			os << momentum << " ";
+		}
+		os << "}";
+	}
+	os << this->coefficient << " ";
+	for (const auto& delta : this->delta_momentum) {
+		os << "\\delta_{" << delta.first << ", " << delta.second << "} ";
+	}
+	for (const auto& delta : this->delta_index) {
+		os << "\\delta_{" << delta.first << ", " << delta.second << "} ";
+	}
+
+	if (this->isIdentity()) {
+		os << " \\mathbb{1} ";
+		return os.str();
+	}
+	for (const auto& op : this->operators) {
+		os << op << " ";
+	}
+	return os.str();
 }
 
 void normalOrder(std::vector<Term>& terms) {
@@ -301,6 +337,7 @@ void cleanUp(std::vector<Term>& terms)
 		term.sort();
 	}
 
+	// remove duplicates
 	for (size_t i = 0; i < terms.size(); i++)
 	{
 	cleanUp_outerLoop:
@@ -312,6 +349,17 @@ void cleanUp(std::vector<Term>& terms)
 				terms.erase(terms.begin() + j);
 				goto cleanUp_outerLoop;
 			}
+		}
+	}
+
+	// removes any terms that have a 0 prefactor
+	for (auto it = terms.begin(); it != terms.end();)
+	{
+		if (it->multiplicity == 0) {
+			it = terms.erase(it);
+		}
+		else {
+			++it;
 		}
 	}
 }

@@ -63,11 +63,11 @@ void Momentum::addInPlace(const Momentum& rhs)
 
 void Momentum::replaceOccurances(const char replaceWhat, const Momentum& replaceWith)
 {
-	for (auto it = this->momentum_list.begin(); it != this->momentum_list.end(); ++it) {
-		if (it->second == replaceWhat) {
+	for (size_t i = 0; i < momentum_list.size(); ++i) {
+		if (momentum_list[i].second == replaceWhat) {
 			auto buffer = replaceWith;
-			buffer.multiplyMomentum(it->first);
-			it = this->momentum_list.erase(it);
+			buffer.multiplyMomentum(momentum_list[i].first);
+			this->momentum_list.erase(momentum_list.begin() + i);
 
 			this->addInPlace(buffer);
 		}
