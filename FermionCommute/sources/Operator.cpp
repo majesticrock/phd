@@ -4,57 +4,47 @@
 Momentum& Momentum::operator+=(const Momentum& rhs)
 {
 	this->add_Q = (rhs.add_Q != this->add_Q);
-	append_vector(this->momentum_list, rhs.momentum_list);
-
-	std::vector<std::pair<int, char>>::iterator it = momentum_list.begin();
-	std::vector<std::pair<int, char>>::iterator jt = momentum_list.begin();
-	while (it != momentum_list.end()) {
-		jt = it + 1;
-		while (jt != momentum_list.end()) {
-			if (it->second == jt->second) {
-				it->first += jt->first;
-				jt = this->momentum_list.erase(jt);
-			}
-			else {
-				++jt;
+	bool foundOne = false;
+	for (size_t i = 0; i < rhs.momentum_list.size(); i++)
+	{
+		foundOne = false;
+		for (size_t j = 0; j < this->momentum_list.size(); j++)
+		{
+			if(rhs.momentum_list[i].second == this->momentum_list[j].second){
+				foundOne = true;
+				this->momentum_list[j].first += rhs.momentum_list[i].first;
 			}
 		}
-		if (it != momentum_list.end()) {
-			++it;
+		if(!foundOne){
+			this->momentum_list.push_back(rhs.momentum_list[i]);
 		}
 	}
+	
 	return *this;
 }
 
 Momentum& Momentum::operator-=(const Momentum& rhs)
 {
 	this->add_Q = (rhs.add_Q != this->add_Q);
-	const size_t old_size = this->momentum_list.size();
-	append_vector(this->momentum_list, rhs.momentum_list);
-
-	for (size_t i = old_size; i < this->momentum_list.size(); i++)
+	bool foundOne = false;
+	for (size_t i = 0; i < rhs.momentum_list.size(); i++)
 	{
-		this->momentum_list[i].first *= -1;
-	}
-	std::vector<std::pair<int, char>>::iterator it = momentum_list.begin();
-	std::vector<std::pair<int, char>>::iterator jt = momentum_list.begin();
-	while (it != momentum_list.end()) {
-		jt = it + 1;
-		while (jt != momentum_list.end()) {
-			if (it->second == jt->second) {
-				it->first += jt->first;
-				jt = this->momentum_list.erase(jt);
-			}
-			else {
-				++jt;
+		foundOne = false;
+		for (size_t j = 0; j < this->momentum_list.size(); j++)
+		{
+			if(rhs.momentum_list[i].second == this->momentum_list[j].second){
+				foundOne = true;
+				this->momentum_list[j].first -= rhs.momentum_list[i].first;
 			}
 		}
-		if (it != momentum_list.end()) {
-			++it;
+		if(!foundOne){
+			this->momentum_list.push_back(std::make_pair(-rhs.momentum_list[i].first, rhs.momentum_list[i].second));
 		}
 	}
+	
 	return *this;
 }
+
 
 void Momentum::addInPlace(const Momentum& rhs)
 {
@@ -69,7 +59,7 @@ void Momentum::replaceOccurances(const char replaceWhat, const Momentum& replace
 			buffer.multiplyMomentum(momentum_list[i].first);
 			this->momentum_list.erase(momentum_list.begin() + i);
 
-			this->addInPlace(buffer);
+			(*this) +=buffer;
 		}
 	}
 }
