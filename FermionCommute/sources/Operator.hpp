@@ -14,7 +14,7 @@ struct Momentum {
 
 	Momentum() : momentum_list(), add_Q(false) {};
 	explicit Momentum(const char value, int plus_minus = 1, bool Q = false) : momentum_list(1, std::make_pair(plus_minus, value)), add_Q(Q) {};
-	Momentum(const momentum_pairs& _momenta, bool Q) : momentum_list(_momenta), add_Q(Q) {};
+	explicit Momentum(const momentum_pairs& _momenta, bool Q=false) : momentum_list(_momenta), add_Q(Q) {};
 
 	Momentum& operator+=(const Momentum& rhs);
 	Momentum& operator-=(const Momentum& rhs);
@@ -46,8 +46,14 @@ struct Operator {
 
 	Operator(const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered)
 		: momentum(_momentum), indizes(_indizes), isDaggered(_isDaggered) {};
+	Operator(const Momentum& _momentum, const std::string& index, bool _isDaggered)
+		: momentum(_momentum), indizes(1, index), isDaggered(_isDaggered) {};
+	Operator(const momentum_pairs& _momentum, const std::string& index, bool _isDaggered)
+		: momentum(_momentum), indizes(1, index), isDaggered(_isDaggered) {};
 	Operator(char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered)
 		: momentum(_momentum, add_Q), indizes(_indizes), isDaggered(_isDaggered) {};
+	Operator(char _momentum, int sign, bool add_Q, const std::string& index, bool _isDaggered)
+		: momentum(_momentum, sign, add_Q), indizes(1, index), isDaggered(_isDaggered) {};
 };
 
 std::ostream& operator<<(std::ostream& os, const Momentum& momentum);

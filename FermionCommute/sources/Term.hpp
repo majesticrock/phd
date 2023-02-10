@@ -10,12 +10,24 @@ struct Coefficient {
 	// Contains all indizes, standard: first index = spin, all others arbitrary, e.g. orbitals, bands etc
 	std::vector<std::string> indizes;
 	bool isDaggered;
+	// if Coeff(k) = Coeff(-k)
+	bool translationalInvariance=true;
 
 	Coefficient() : name(""), momentum(), indizes(), isDaggered(false) {};
-	Coefficient(std::string _name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered)
+
+	explicit Coefficient(std::string _name) : name(_name), momentum(), indizes(), isDaggered(false) {};
+
+	Coefficient(std::string _name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered=false)
 		: name(_name), momentum(_momentum), indizes(_indizes), isDaggered(_isDaggered) {};
-	Coefficient(std::string _name, char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered)
+
+	Coefficient(std::string _name, char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered=false)
 		: name(_name), momentum(_momentum, add_Q), indizes(_indizes), isDaggered(_isDaggered) { };
+
+	Coefficient(std::string _name, const Momentum& _momentum, bool _isDaggered=false)
+		: name(_name), momentum(_momentum), indizes(), isDaggered(_isDaggered) {};
+
+	Coefficient(std::string _name, char _momentum, bool add_Q=false, bool _isDaggered=false)
+		: name(_name), momentum(_momentum, 1, add_Q), indizes(), isDaggered(_isDaggered) { };
 };
 
 inline bool operator==(const Coefficient& lhs, const Coefficient& rhs) {
@@ -34,29 +46,41 @@ inline bool operator!=(const Coefficient& lhs, const Coefficient& rhs) {
 
 class Term {
 private:
-	Coefficient coefficient;
+	std::vector<Coefficient> coefficients;
 	std::vector<char> sum_momenta;
 	std::vector<std::string> sum_indizes;
 	std::vector<Operator> operators;
 	// symbolises the Kronecker delta
-	std::vector<std::pair<Momentum, Momentum>> delta_momentum;
-	std::vector<std::pair<std::string, std::string>> delta_index;
+	std::vector<std::pair<Momentum, Momentum>> delta_momenta;
+	std::vector<std::pair<std::string, std::string>> delta_indizes;
 
 public:
 	int multiplicity;
 	Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators = std::vector<Operator>())
-		: coefficient(_coefficient), sum_momenta(_sum_momenta), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {};
+		: coefficients(1, _coefficient), sum_momenta(_sum_momenta), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {};
 
 	Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta, const std::vector<Operator>& _operators = std::vector<Operator>())
-		: coefficient(_coefficient), sum_momenta(_sum_momenta), operators(_operators), multiplicity(_multiplicity) {};
+		: coefficients(1, _coefficient), sum_momenta(_sum_momenta), operators(_operators), multiplicity(_multiplicity) {};
 
 	Term(int _multiplicity, Coefficient _coefficient, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators = std::vector<Operator>())
-		: coefficient(_coefficient), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {};
+		: coefficients(1, _coefficient), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {};
 
 	Term(int _multiplicity, Coefficient _coefficient, const std::vector<Operator>& _operators = std::vector<Operator>())
-		: coefficient(_coefficient), operators(_operators), multiplicity(_multiplicity) {};
+		: coefficients(1, _coefficient), operators(_operators), multiplicity(_multiplicity) {};
 
-	Term() : coefficient(), operators(), multiplicity(0) {};
+	Term(int _multiplicity, const std::vector<char>& _sum_momenta, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators = std::vector<Operator>())
+		: coefficients(), sum_momenta(_sum_momenta), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {};
+
+	Term(int _multiplicity, const std::vector<char>& _sum_momenta, const std::vector<Operator>& _operators = std::vector<Operator>())
+		: coefficients(), sum_momenta(_sum_momenta), operators(_operators), multiplicity(_multiplicity) {};
+
+	Term(int _multiplicity, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators = std::vector<Operator>())
+		: coefficients(), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {};
+
+	explicit Term(int _multiplicity, const std::vector<Operator>& _operators = std::vector<Operator>())
+		: coefficients(), operators(_operators), multiplicity(_multiplicity) {};
+
+	Term() : coefficients(), operators(), multiplicity(0) {};
 
 	inline bool isIdentity() const {
 		return this->operators.empty();
@@ -68,10 +92,16 @@ public:
 	}
 
 	void setDeltas();
+	void computeSums();
+	void discardZeroMomenta();
 	void sort();
 	// Checks for equality of everything except of multiplicity
 	inline bool isEqual(const Term& other) const {
-		if (this->coefficient != other.coefficient) return false;
+		if(this->coefficients.size() != other.coefficients.size()) return false;
+		for (size_t i = 0; i < coefficients.size(); i++)
+		{
+			if (this->coefficients[i] != other.coefficients[i]) return false;
+		}
 		if (this->sum_indizes.size() != other.sum_indizes.size()) return false;
 		if (this->sum_momenta.size() != other.sum_momenta.size()) return false;
 		for (size_t i = 0; i < sum_indizes.size(); i++)
@@ -83,15 +113,15 @@ public:
 			if (this->sum_momenta[i] != other.sum_momenta[i]) return false;
 		}
 
-		if (this->delta_index.size() != other.delta_index.size()) return false;
-		if (this->delta_momentum.size() != other.delta_momentum.size()) return false;
-		for (size_t i = 0; i < delta_index.size(); i++)
+		if (this->delta_indizes.size() != other.delta_indizes.size()) return false;
+		if (this->delta_momenta.size() != other.delta_momenta.size()) return false;
+		for (size_t i = 0; i < delta_indizes.size(); i++)
 		{
-			if (this->delta_index[i] != other.delta_index[i]) return false;
+			if (this->delta_indizes[i] != other.delta_indizes[i]) return false;
 		}
-		for (size_t i = 0; i < delta_momentum.size(); i++)
+		for (size_t i = 0; i < delta_momenta.size(); i++)
 		{
-			if (this->delta_momentum[i] != other.delta_momentum[i]) return false;
+			if (this->delta_momenta[i] != other.delta_momenta[i]) return false;
 		}
 
 		if (this->operators.size() != other.operators.size()) return false;
@@ -106,8 +136,16 @@ public:
 
 	friend void normalOrder(std::vector<Term>& terms);
 	friend void commutator(std::vector<Term>& reciever, const Term& left, const Term& right);
-	friend void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, const std::vector<Term>& right);
 	friend std::ostream& operator<<(std::ostream& os, const Term& term);
+};
+void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, const std::vector<Term>& right);
+inline void commutator(std::vector<Term>& reciever, const Term& left, const std::vector<Term>& right){
+	const std::vector<Term> buffer = { left };
+	commutator(reciever, buffer, right);
+};
+inline void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, const Term& right){
+	const std::vector<Term> buffer = { right };
+	commutator(reciever, left, buffer);
 };
 
 inline bool operator==(const Term& lhs, const Term& rhs) {
@@ -118,6 +156,7 @@ inline bool operator!=(const Term& lhs, const Term& rhs) {
 };
 
 std::ostream& operator<<(std::ostream& os, const Coefficient& coeff);
+std::ostream& operator<<(std::ostream& os, const std::vector<Coefficient>& coeffs);
 std::ostream& operator<<(std::ostream& os, const std::vector<Term>& terms);
 
 void cleanUp(std::vector<Term>& terms);
