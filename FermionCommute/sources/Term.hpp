@@ -11,22 +11,22 @@ struct Coefficient {
 	std::vector<std::string> indizes;
 	bool isDaggered;
 	// if Coeff(k) = Coeff(-k)
-	bool translationalInvariance=true;
+	bool translationalInvariance = true;
 
 	Coefficient() : name(""), momentum(), indizes(), isDaggered(false) {};
 
 	explicit Coefficient(std::string _name) : name(_name), momentum(), indizes(), isDaggered(false) {};
 
-	Coefficient(std::string _name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered=false)
+	Coefficient(std::string _name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered = false)
 		: name(_name), momentum(_momentum), indizes(_indizes), isDaggered(_isDaggered) {};
 
-	Coefficient(std::string _name, char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered=false)
+	Coefficient(std::string _name, char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered = false)
 		: name(_name), momentum(_momentum, add_Q), indizes(_indizes), isDaggered(_isDaggered) { };
 
-	Coefficient(std::string _name, const Momentum& _momentum, bool _isDaggered=false)
+	Coefficient(std::string _name, const Momentum& _momentum, bool _isDaggered = false)
 		: name(_name), momentum(_momentum), indizes(), isDaggered(_isDaggered) {};
 
-	Coefficient(std::string _name, char _momentum, bool add_Q=false, bool _isDaggered=false)
+	Coefficient(std::string _name, char _momentum, bool add_Q = false, bool _isDaggered = false)
 		: name(_name), momentum(_momentum, 1, add_Q), indizes(), isDaggered(_isDaggered) { };
 };
 
@@ -97,7 +97,7 @@ public:
 	void sort();
 	// Checks for equality of everything except of multiplicity
 	inline bool isEqual(const Term& other) const {
-		if(this->coefficients.size() != other.coefficients.size()) return false;
+		if (this->coefficients.size() != other.coefficients.size()) return false;
 		for (size_t i = 0; i < coefficients.size(); i++)
 		{
 			if (this->coefficients[i] != other.coefficients[i]) return false;
@@ -139,11 +139,11 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Term& term);
 };
 void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, const std::vector<Term>& right);
-inline void commutator(std::vector<Term>& reciever, const Term& left, const std::vector<Term>& right){
+inline void commutator(std::vector<Term>& reciever, const Term& left, const std::vector<Term>& right) {
 	const std::vector<Term> buffer = { left };
 	commutator(reciever, buffer, right);
 };
-inline void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, const Term& right){
+inline void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, const Term& right) {
 	const std::vector<Term> buffer = { right };
 	commutator(reciever, left, buffer);
 };

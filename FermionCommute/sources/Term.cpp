@@ -40,21 +40,21 @@ void Term::setDeltas()
 				}
 			}
 			if (!foundCandidate) index = 0;
-			
+
 			if (delta.second.momentum_list[index].first > 0) {
 				delta.second.flipMomentum();
 			}
 			delta.first.momentum_list.push_back(delta.second.momentum_list[index]);
 			delta.first.flipMomentum();
-			if(abs(delta.first.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << delta.first << std::endl;
+			if (abs(delta.first.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << delta.first << std::endl;
 			delta.second.momentum_list.erase(delta.second.momentum_list.begin() + index);
 		}
 
-		if(abs(delta.first.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << delta.first << std::endl;
+		if (abs(delta.first.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << delta.first << std::endl;
 		for (auto& op : operators) {
 			op.momentum.replaceOccurances(delta.first.momentum_list[0].second, delta.second);
 		}
-		for(auto& coeff : coefficients){
+		for (auto& coeff : coefficients) {
 			coeff.momentum.replaceOccurances(delta.first.momentum_list[0].second, delta.second);
 		}
 	}
@@ -103,21 +103,21 @@ void Term::setDeltas()
 	}
 }
 
-void Term::computeSums(){
-	auto changeAllIndizes = [&](const std::string& replaceWhat, const std::string& replaceWith){
-		for(auto& op : operators){
+void Term::computeSums() {
+	auto changeAllIndizes = [&](const std::string& replaceWhat, const std::string& replaceWith) {
+		for (auto& op : operators) {
 			for (auto it = op.indizes.begin(); it != op.indizes.end(); ++it)
 			{
-				if(*it == replaceWhat){
-					*it == replaceWith;
+				if (*it == replaceWhat) {
+					*it = replaceWith;
 				}
 			}
 		}
-		for(auto& coeff : coefficients){
+		for (auto& coeff : coefficients) {
 			for (auto it = coeff.indizes.begin(); it != coeff.indizes.end(); ++it)
 			{
-				if(*it == replaceWhat){
-					*it == replaceWith;
+				if (*it == replaceWhat) {
+					*it = replaceWith;
 				}
 			}
 		}
@@ -129,12 +129,13 @@ void Term::computeSums(){
 
 		for (size_t j = 0; j < delta_indizes.size(); j++)
 		{
-			if(delta_indizes[j].first == sum_indizes[i]){
+			if (delta_indizes[j].first == sum_indizes[i]) {
 				changeAllIndizes(sum_indizes[i], delta_indizes[j].second);
 				sum_indizes.erase(sum_indizes.begin() + i);
 				delta_indizes.erase(delta_indizes.begin() + j);
 				goto computeSums_index_loop;
-			} else if(delta_indizes[j].second == sum_indizes[i]) {
+			}
+			else if (delta_indizes[j].second == sum_indizes[i]) {
 				changeAllIndizes(sum_indizes[i], delta_indizes[j].first);
 				sum_indizes.erase(sum_indizes.begin() + i);
 				delta_indizes.erase(delta_indizes.begin() + j);
@@ -142,12 +143,12 @@ void Term::computeSums(){
 			}
 		}
 	}
-	
-	auto changeAllMomenta = [&](const char replaceWhat, const Momentum& replaceWith){
-		for(auto& op : operators){
+
+	auto changeAllMomenta = [&](const char replaceWhat, const Momentum& replaceWith) {
+		for (auto& op : operators) {
 			op.momentum.replaceOccurances(replaceWhat, replaceWith);
 		}
-		for(auto& coeff : coefficients){
+		for (auto& coeff : coefficients) {
 			coeff.momentum.replaceOccurances(replaceWhat, replaceWith);
 		}
 	};
@@ -158,23 +159,24 @@ void Term::computeSums(){
 
 		for (size_t j = 0; j < delta_momenta.size(); j++)
 		{
-			if(delta_momenta[j].first.momentum_list[0].second == sum_momenta[i]){
+			if (delta_momenta[j].first.momentum_list[0].second == sum_momenta[i]) {
 				changeAllMomenta(sum_momenta[i], delta_momenta[j].second);
-				if(abs(delta_momenta[j].first.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << delta_momenta[j].first << std::endl;
+				if (abs(delta_momenta[j].first.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << delta_momenta[j].first << std::endl;
 
 				sum_momenta.erase(sum_momenta.begin() + i);
 				delta_momenta.erase(delta_momenta.begin() + j);
 				goto computeSums_momentum_loop;
-			} else {
+			}
+			else {
 				int index = delta_momenta[j].second.isUsed(sum_momenta[i]);
-				if(index < 0) continue;
-				
+				if (index < 0) continue;
+
 				Momentum buffer(delta_momenta[j].second.momentum_list[index].second, delta_momenta[j].second.momentum_list[index].first);
-				if(abs(buffer.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << buffer << std::endl;
+				if (abs(buffer.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << buffer << std::endl;
 				delta_momenta[j].second.momentum_list.erase(delta_momenta[j].second.momentum_list.begin() + index);
 				delta_momenta[j].second -= delta_momenta[j].first;
 
-				if(buffer.momentum_list[0].first > 0){
+				if (buffer.momentum_list[0].first > 0) {
 					delta_momenta[j].second.flipMomentum();
 				}
 				changeAllMomenta(sum_momenta[i], delta_momenta[j].second);
@@ -187,21 +189,23 @@ void Term::computeSums(){
 	}
 }
 
-void Term::discardZeroMomenta(){
-	for(auto& op : operators){
-		for (auto it = op.momentum.momentum_list.begin(); it != op.momentum.momentum_list.end();){
-			if(it->first == 0){
+void Term::discardZeroMomenta() {
+	for (auto& op : operators) {
+		for (auto it = op.momentum.momentum_list.begin(); it != op.momentum.momentum_list.end();) {
+			if (it->first == 0) {
 				it = op.momentum.momentum_list.erase(it);
-			}else{
+			}
+			else {
 				++it;
 			}
 		}
 	}
-	for(auto& coeff : coefficients){
-		for (auto it = coeff.momentum.momentum_list.begin(); it != coeff.momentum.momentum_list.end();){
-			if(it->first == 0){
+	for (auto& coeff : coefficients) {
+		for (auto it = coeff.momentum.momentum_list.begin(); it != coeff.momentum.momentum_list.end();) {
+			if (it->first == 0) {
 				it = coeff.momentum.momentum_list.erase(it);
-			}else{
+			}
+			else {
 				++it;
 			}
 		}
@@ -210,9 +214,9 @@ void Term::discardZeroMomenta(){
 
 void Term::sort()
 {
-	for(auto& coeff : coefficients){
-		if(coeff.translationalInvariance && coeff.momentum.momentum_list.size() > 0){
-			if(coeff.momentum.momentum_list[0].first < 0){
+	for (auto& coeff : coefficients) {
+		if (coeff.translationalInvariance && coeff.momentum.momentum_list.size() > 0) {
+			if (coeff.momentum.momentum_list[0].first < 0) {
 				coeff.momentum.flipMomentum();
 			}
 		}
@@ -227,7 +231,8 @@ void Term::sort()
 					if (operators[j].indizes[0] == UP && operators[i].indizes[0] != UP) {
 						std::swap(operators[i], operators[j]);
 						if (abs(i - j) % 2 != 0) flipSign();
-					} else if(operators[i].indizes[0] == DOWN && operators[j].indizes[0] != DOWN){
+					}
+					else if (operators[i].indizes[0] == DOWN && operators[j].indizes[0] != DOWN) {
 						std::swap(operators[i], operators[j]);
 						if (abs(i - j) % 2 != 0) flipSign();
 					}
@@ -237,7 +242,8 @@ void Term::sort()
 					if (operators[j].indizes[0] == DOWN && operators[i].indizes[0] != DOWN) {
 						std::swap(operators[i], operators[j]);
 						if (abs(i - j) % 2 != 0) flipSign();
-					} else if(operators[i].indizes[0] == UP && operators[j].indizes[0] != UP){
+					}
+					else if (operators[i].indizes[0] == UP && operators[j].indizes[0] != UP) {
 						std::swap(operators[i], operators[j]);
 						if (abs(i - j) % 2 != 0) flipSign();
 					}
@@ -252,7 +258,7 @@ void Term::sort()
 			if (operators[i].isDaggered != operators[j].isDaggered) continue;
 			if (operators[i].indizes[0] != operators[j].indizes[0]) continue;
 
-			if(operators[i].momentum.momentum_list[0].second > operators[j].momentum.momentum_list[0].second){
+			if (operators[i].momentum.momentum_list[0].second > operators[j].momentum.momentum_list[0].second) {
 				std::swap(operators[i], operators[j]);
 				if (abs(i - j) % 2 != 0) flipSign();
 			}
@@ -373,13 +379,13 @@ void commutator(std::vector<Term>& reciever, const Term& left, const Term& right
 	reciever[1].multiplicity *= left.multiplicity;
 	append_vector(reciever[1].operators, left.operators);
 	reciever[1].flipSign();
-	
+
 	fill_reciever(coefficients);
 	fill_reciever(sum_momenta);
 	fill_reciever(sum_indizes);
 	fill_reciever(delta_momenta);
 	fill_reciever(delta_indizes);
-	
+
 	normalOrder(reciever);
 }
 
@@ -417,7 +423,7 @@ std::ostream& operator<<(std::ostream& os, const Coefficient& coeff)
 	return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const std::vector<Coefficient>& coeffs){
+std::ostream& operator<<(std::ostream& os, const std::vector<Coefficient>& coeffs) {
 	for (std::vector<Coefficient>::const_iterator it = coeffs.begin(); it != coeffs.end(); ++it)
 	{
 		os << (*it) << " ";
@@ -481,6 +487,8 @@ void cleanUp(std::vector<Term>& terms)
 	for (auto& term : terms) {
 		term.setDeltas();
 		term.computeSums();
+		term.discardZeroMomenta();
+		term.setDeltas();
 		term.discardZeroMomenta();
 		term.sort();
 	}
