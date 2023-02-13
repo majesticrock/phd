@@ -10,16 +10,16 @@ Momentum& Momentum::operator+=(const Momentum& rhs)
 		foundOne = false;
 		for (size_t j = 0; j < this->momentum_list.size(); j++)
 		{
-			if(rhs.momentum_list[i].second == this->momentum_list[j].second){
+			if (rhs.momentum_list[i].second == this->momentum_list[j].second) {
 				foundOne = true;
 				this->momentum_list[j].first += rhs.momentum_list[i].first;
 			}
 		}
-		if(!foundOne){
+		if (!foundOne) {
 			this->momentum_list.push_back(rhs.momentum_list[i]);
 		}
 	}
-	
+
 	return *this;
 }
 
@@ -32,19 +32,18 @@ Momentum& Momentum::operator-=(const Momentum& rhs)
 		foundOne = false;
 		for (size_t j = 0; j < this->momentum_list.size(); j++)
 		{
-			if(rhs.momentum_list[i].second == this->momentum_list[j].second){
+			if (rhs.momentum_list[i].second == this->momentum_list[j].second) {
 				foundOne = true;
 				this->momentum_list[j].first -= rhs.momentum_list[i].first;
 			}
 		}
-		if(!foundOne){
+		if (!foundOne) {
 			this->momentum_list.push_back(std::make_pair(-rhs.momentum_list[i].first, rhs.momentum_list[i].second));
 		}
 	}
-	
+
 	return *this;
 }
-
 
 void Momentum::addInPlace(const Momentum& rhs)
 {
@@ -59,7 +58,7 @@ void Momentum::replaceOccurances(const char replaceWhat, const Momentum& replace
 			buffer.multiplyMomentum(momentum_list[i].first);
 			this->momentum_list.erase(momentum_list.begin() + i);
 
-			(*this) +=buffer;
+			(*this) += buffer;
 		}
 	}
 }

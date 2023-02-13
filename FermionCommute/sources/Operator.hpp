@@ -14,7 +14,7 @@ struct Momentum {
 
 	Momentum() : momentum_list(), add_Q(false) {};
 	explicit Momentum(const char value, int plus_minus = 1, bool Q = false) : momentum_list(1, std::make_pair(plus_minus, value)), add_Q(Q) {};
-	explicit Momentum(const momentum_pairs& _momenta, bool Q=false) : momentum_list(_momenta), add_Q(Q) {};
+	explicit Momentum(const momentum_pairs& _momenta, bool Q = false) : momentum_list(_momenta), add_Q(Q) {};
 
 	Momentum& operator+=(const Momentum& rhs);
 	Momentum& operator-=(const Momentum& rhs);
@@ -81,8 +81,8 @@ inline bool operator==(const Momentum& lhs, const Momentum& rhs) {
 			if (lhs.momentum_list[i] == rhs.momentum_list[j])
 				foundOne = true;
 		}
+		if (!foundOne) return false;
 	}
-	if (!foundOne) return false;
 	return true;
 }
 
