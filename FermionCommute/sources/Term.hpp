@@ -3,7 +3,33 @@
 #include "Coefficient.hpp"
 #include "WickTerm.hpp"
 
-class WickTerm;
+typedef std::pair<Momentum, Momentum> pair_of_momenta;
+
+inline bool pair_equal_allow_permutation(const std::pair<std::string, std::string>& left, const std::pair<std::string, std::string>& right) {
+	if (left.first == right.first && left.second == right.second) return true;
+	if (left.first == right.second && left.second == right.first) return true;
+	return false;
+};
+inline bool pair_equal_allow_permutation(std::pair<Momentum, Momentum> left, std::pair<Momentum, Momentum> right) {
+	if (left.first.add_Q) {
+		left.first.add_Q = false;
+		left.second.add_Q = !(left.second.add_Q);
+	}
+	if (right.first.add_Q) {
+		right.first.add_Q = false;
+		right.second.add_Q = !(right.second.add_Q);
+	}
+	if (left.first == right.first && left.second == right.second) return true;
+
+	if (right.second.add_Q) {
+		right.second.add_Q = false;
+		right.first.add_Q = !(right.first.add_Q);
+	}
+	if (left.first == right.second && left.second == right.first) return true;
+	return false;
+};
+
+struct WickTerm;
 
 class Term {
 private:
@@ -12,10 +38,10 @@ private:
 	std::vector<std::string> sum_indizes;
 	std::vector<Operator> operators;
 	// symbolises the Kronecker delta
-	std::vector<std::pair<Momentum, Momentum>> delta_momenta;
+	std::vector<pair_of_momenta> delta_momenta;
 	std::vector<std::pair<std::string, std::string>> delta_indizes;
 
-	friend class WickTerm;
+	friend struct WickTerm;
 public:
 	int multiplicity;
 	Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta,
