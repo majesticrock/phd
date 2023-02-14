@@ -2,10 +2,8 @@
 
 Momentum::Momentum()
 	: momentum_list(), add_Q(false) {}
-
 Momentum::Momentum(const char value, int plus_minus, bool Q)
 	: momentum_list(1, std::make_pair(plus_minus, value)), add_Q(Q) {}
-
 Momentum::Momentum(const momentum_pairs& _momenta, bool Q)
 	: momentum_list(_momenta), add_Q(Q) {}
 
@@ -30,7 +28,6 @@ Momentum& Momentum::operator+=(const Momentum& rhs)
 
 	return *this;
 }
-
 Momentum& Momentum::operator-=(const Momentum& rhs)
 {
 	this->add_Q = (rhs.add_Q != this->add_Q);
@@ -52,7 +49,6 @@ Momentum& Momentum::operator-=(const Momentum& rhs)
 
 	return *this;
 }
-
 void Momentum::addInPlace(const Momentum& rhs)
 {
 	(*this) += rhs;
@@ -75,6 +71,9 @@ std::ostream& operator<<(std::ostream& os, const Momentum& momentum)
 {
 	if (momentum.momentum_list.empty()) {
 		os << "0";
+		if (momentum.add_Q) {
+			os << " + Q";
+		}
 		return os;
 	}
 	for (momentum_pairs::const_iterator it = momentum.momentum_list.begin(); it != momentum.momentum_list.end(); ++it)
@@ -90,6 +89,8 @@ std::ostream& operator<<(std::ostream& os, const Momentum& momentum)
 		}
 		os << it->second;
 	}
-
+	if (momentum.add_Q) {
+		os << " + Q";
+	}
 	return os;
 }

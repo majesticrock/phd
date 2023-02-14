@@ -13,7 +13,7 @@ WickTerm::WickTerm(const Term* base)
 
 bool WickTerm::swapToWickOperators(std::vector<WickTerm>& reciever)
 {
-	this->operators.resize(temporary_operators.size() / 2);
+	this->operators.reserve(temporary_operators.size() / 2);
 	WickTerm this_copy = *this;
 
 	auto setDeltas = [&](const Operator& left, const Operator& right, bool sc_type) {
@@ -162,6 +162,5 @@ WickOperator::WickOperator(const std::string& _type, const Momentum& _momentum, 
 	: type(_type), momentum(_momentum), indizes(_indizes) {}
 WickOperator::WickOperator(const std::string& _type, const Momentum& _momentum, const std::string& _index)
 	: type(_type), momentum(_momentum), indizes(1, _index) {}
-
 WickOperator::WickOperator()
 	: type(""), momentum(), indizes() {}

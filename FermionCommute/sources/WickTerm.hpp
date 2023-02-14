@@ -33,7 +33,8 @@ struct WickTerm
 		return this->operators.empty();
 	}
 	inline bool handled() const {
-		return (!(this->operators.empty()) || this->temporary_operators.empty());
+		if (this->temporary_operators.empty()) return true;
+		return !(this->operators.empty());
 	}
 	bool swapToWickOperators(std::vector<WickTerm>& reciever);
 };
