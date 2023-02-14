@@ -6,28 +6,20 @@
 
 Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
 	: coefficients(1, _coefficient), sum_momenta(_sum_momenta), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta, const std::vector<Operator>& _operators)
 	: coefficients(1, _coefficient), sum_momenta(_sum_momenta), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
 	: coefficients(1, _coefficient), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<Operator>& _operators)
 	: coefficients(1, _coefficient), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term(int _multiplicity, const std::vector<char>& _sum_momenta, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
 	: coefficients(), sum_momenta(_sum_momenta), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term(int _multiplicity, const std::vector<char>& _sum_momenta, const std::vector<Operator>& _operators)
 	: coefficients(), sum_momenta(_sum_momenta), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term(int _multiplicity, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
 	: coefficients(), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term(int _multiplicity, const std::vector<Operator>& _operators)
 	: coefficients(), operators(_operators), multiplicity(_multiplicity) {}
-
 Term::Term()
 	: coefficients(), operators(), multiplicity(0) {}
 
@@ -557,29 +549,37 @@ void Term::wick(std::vector<WickTerm>& reciever) const
 	if (this->isIdentity()) {
 		reciever.push_back(WickTerm(this));
 	}
-	for (size_t i = 1; i < operators.size(); i++)
-	{
-		WickTerm buffer(this);
-		buffer.multiplicity *= (-(i % 2));
-		buffer.temporary_operators.reserve(buffer.temporary_operators.size() + 2);
-		buffer.temporary_operators.push_back(operators[0]);
-		buffer.temporary_operators.push_back(operators[i]);
+	else {
+		for (size_t i = 1; i < operators.size(); i++)
+		{
+			WickTerm buffer(this);
+			if ((i % 2) == 0) {
+				buffer.multiplicity *= -1;
+			}
+			buffer.temporary_operators.reserve(buffer.temporary_operators.size() + 2);
+			buffer.temporary_operators.push_back(operators[0]);
+			buffer.temporary_operators.push_back(operators[i]);
 
-		if (this->operators.size() > 2) {
-			std::vector<Operator> copy_these_operators = this->operators;
-			copy_these_operators.erase(copy_these_operators.begin() + i);
-			copy_these_operators.erase(copy_these_operators.begin());
+			if (this->operators.size() > 2) {
+				std::vector<Operator> copy_these_operators = this->operators;
+				copy_these_operators.erase(copy_these_operators.begin() + i);
+				copy_these_operators.erase(copy_these_operators.begin());
 
-			buffer.temporary_operators.push_back(copy_these_operators[0]);
-			buffer.temporary_operators.push_back(copy_these_operators[1]);
+				buffer.temporary_operators.reserve(buffer.temporary_operators.size() + 2);
+				buffer.temporary_operators.push_back(copy_these_operators[0]);
+				buffer.temporary_operators.push_back(copy_these_operators[1]);
+			}
+
+			reciever.push_back(buffer);
 		}
-
-		reciever.push_back(buffer);
 	}
-
+	
 	for (size_t i = 0; i < reciever.size();)
 	{
-		if (reciever[i].handled()) continue;
+		if (reciever[i].handled()) {
+			++i;
+			continue;
+		}
 		if (!(reciever[i].swapToWickOperators(reciever))) {
 			reciever.erase(reciever.begin() + i);
 		}
