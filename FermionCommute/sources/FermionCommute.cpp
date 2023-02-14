@@ -39,5 +39,15 @@ int main(int argc, char** argv) {
 	std::cout << "\\begin{align*}\n\t[" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] = "
 		<< terms << "\\end{align*}" << std::endl;
 
+	std::cout << "\n #################### \n";
+
+	std::vector<WickTerm> wicks;
+	for (const auto& term : terms) {
+		term.wick(wicks);
+	}
+
+	std::cout << "\\begin{align*}\n\t\\langle[" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] \\rangle = "
+		<< wicks << "\\end{align*}" << std::endl;
+
 	return 0;
 }

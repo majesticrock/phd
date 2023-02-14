@@ -4,6 +4,33 @@
 #include <cmath>
 #include <sstream>
 
+Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
+	: coefficients(1, _coefficient), sum_momenta(_sum_momenta), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<char>& _sum_momenta, const std::vector<Operator>& _operators)
+	: coefficients(1, _coefficient), sum_momenta(_sum_momenta), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
+	: coefficients(1, _coefficient), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term(int _multiplicity, Coefficient _coefficient, const std::vector<Operator>& _operators)
+	: coefficients(1, _coefficient), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term(int _multiplicity, const std::vector<char>& _sum_momenta, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
+	: coefficients(), sum_momenta(_sum_momenta), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term(int _multiplicity, const std::vector<char>& _sum_momenta, const std::vector<Operator>& _operators)
+	: coefficients(), sum_momenta(_sum_momenta), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term(int _multiplicity, const std::vector<std::string>& _sum_indizes, const std::vector<Operator>& _operators)
+	: coefficients(), sum_indizes(_sum_indizes), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term(int _multiplicity, const std::vector<Operator>& _operators)
+	: coefficients(), operators(_operators), multiplicity(_multiplicity) {}
+
+Term::Term()
+	: coefficients(), operators(), multiplicity(0) {}
+
 void Term::print() const {
 	std::cout << *this << std::endl;
 }
@@ -266,6 +293,38 @@ void Term::sort()
 	}
 }
 
+void Term::renameSums()
+{
+	const char name_list[3] = { 'q', 'p', 'r' };
+	const char buffer_list[3] = { 'x', 'y', 'z' };
+	for (size_t i = 0; i < sum_momenta.size(); i++)
+	{
+		if (i >= 3) {
+			std::cerr << "More than 3 momenta, time to implement this..." << std::endl;
+			break;
+		}
+		if (sum_momenta[i] == name_list[i]) continue;
+
+		for (auto& op : operators) {
+			op.momentum.replaceOccurances(sum_momenta[i], Momentum(buffer_list[i]));
+		}
+		for (auto& coeff : coefficients) {
+			coeff.momentum.replaceOccurances(sum_momenta[i], Momentum(buffer_list[i]));
+		}
+		sum_momenta[i] = name_list[i];
+	}
+
+	for (size_t i = 0; i < sum_momenta.size(); i++)
+	{
+		for (auto& op : operators) {
+			op.momentum.replaceOccurances(buffer_list[i], Momentum(name_list[i]));
+		}
+		for (auto& coeff : coefficients) {
+			coeff.momentum.replaceOccurances(buffer_list[i], Momentum(name_list[i]));
+		}
+	}
+}
+
 std::string Term::toStringWithoutPrefactor() const
 {
 	std::ostringstream os;
@@ -388,7 +447,6 @@ void commutator(std::vector<Term>& reciever, const Term& left, const Term& right
 
 	normalOrder(reciever);
 }
-
 void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, const std::vector<Term>& right)
 {
 	reciever.reserve(2 * left.size() * right.size());
@@ -402,33 +460,6 @@ void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, cons
 			append_vector(reciever, reciever_buffer);
 		}
 	}
-}
-
-std::ostream& operator<<(std::ostream& os, const Coefficient& coeff)
-{
-	os << coeff.name;
-	if (!coeff.indizes.empty()) {
-		os << "_{ ";
-		for (const auto& index : coeff.indizes) {
-			os << index << " ";
-		}
-		os << "}";
-	}
-	if (coeff.isDaggered) {
-		os << "^*";
-	}
-	if (!coeff.momentum.momentum_list.empty()) {
-		os << " ( " << coeff.momentum << " )";
-	}
-	return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const std::vector<Coefficient>& coeffs) {
-	for (std::vector<Coefficient>::const_iterator it = coeffs.begin(); it != coeffs.end(); ++it)
-	{
-		os << (*it) << " ";
-	}
-	return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Term& term)
@@ -468,7 +499,6 @@ std::ostream& operator<<(std::ostream& os, const Term& term)
 	}
 	return os;
 }
-
 std::ostream& operator<<(std::ostream& os, const std::vector<Term>& terms)
 {
 	for (std::vector<Term>::const_iterator it = terms.begin(); it != terms.end(); ++it)
@@ -490,6 +520,7 @@ void cleanUp(std::vector<Term>& terms)
 		term.discardZeroMomenta();
 		term.setDeltas();
 		term.discardZeroMomenta();
+		term.renameSums();
 		term.sort();
 	}
 
@@ -516,6 +547,44 @@ void cleanUp(std::vector<Term>& terms)
 		}
 		else {
 			++it;
+		}
+	}
+}
+
+void Term::wick(std::vector<WickTerm>& reciever) const
+{
+	if (this->operators.size() > 4) std::cerr << "Wick for n>4 not yet implemented!" << std::endl;
+	if (this->isIdentity()) {
+		reciever.push_back(WickTerm(this));
+	}
+	for (size_t i = 1; i < operators.size(); i++)
+	{
+		WickTerm buffer(this);
+		buffer.multiplicity *= (-(i % 2));
+		buffer.temporary_operators.reserve(buffer.temporary_operators.size() + 2);
+		buffer.temporary_operators.push_back(operators[0]);
+		buffer.temporary_operators.push_back(operators[i]);
+
+		if (this->operators.size() > 2) {
+			std::vector<Operator> copy_these_operators = this->operators;
+			copy_these_operators.erase(copy_these_operators.begin() + i);
+			copy_these_operators.erase(copy_these_operators.begin());
+
+			buffer.temporary_operators.push_back(copy_these_operators[0]);
+			buffer.temporary_operators.push_back(copy_these_operators[1]);
+		}
+
+		reciever.push_back(buffer);
+	}
+
+	for (size_t i = 0; i < reciever.size();)
+	{
+		if (reciever[i].handled()) continue;
+		if (!(reciever[i].swapToWickOperators(reciever))) {
+			reciever.erase(reciever.begin() + i);
+		}
+		else {
+			++i;
 		}
 	}
 }
