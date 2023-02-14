@@ -484,6 +484,20 @@ void cleanWicks(std::vector<WickTerm>& terms)
 		it->sort();
 		++it;
 	}
+
+	// remove duplicates
+	TODO!
+
+	// removes any terms that have a 0 prefactor
+	for (auto it = terms.begin(); it != terms.end();)
+	{
+		if (it->multiplicity == 0) {
+			it = terms.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
 }
 
 std::ostream& operator<<(std::ostream& os, const WickOperator& op)
