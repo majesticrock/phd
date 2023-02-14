@@ -1,6 +1,7 @@
 #pragma once
 #include "Term.hpp"
 
+typedef std::pair<Momentum, Momentum> pair_of_momenta;
 struct WickOperator {
 	std::string type;
 	Momentum momentum;
@@ -22,7 +23,7 @@ struct WickTerm
 	std::vector<WickOperator> operators;
 
 	// symbolises the Kronecker delta
-	std::vector<std::pair<Momentum, Momentum>> delta_momenta;
+	std::vector<pair_of_momenta> delta_momenta;
 	std::vector<std::pair<std::string, std::string>> delta_indizes;
 
 	std::vector<Operator> temporary_operators;
@@ -37,7 +38,14 @@ struct WickTerm
 		return !(this->operators.empty());
 	}
 	bool swapToWickOperators(std::vector<WickTerm>& reciever);
+	bool setDeltas();
+	void computeSums();
+	void discardZeroMomenta();
+	void renameSums();
+	void sort();
 };
+
+void cleanWicks(std::vector<WickTerm>& terms);
 
 std::ostream& operator<<(std::ostream& os, const WickOperator& op);
 std::ostream& operator<<(std::ostream& os, const std::vector<WickOperator>& ops);

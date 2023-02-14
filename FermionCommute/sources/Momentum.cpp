@@ -56,6 +56,11 @@ void Momentum::addInPlace(const Momentum& rhs)
 
 void Momentum::replaceOccurances(const char replaceWhat, const Momentum& replaceWith)
 {
+	for (const auto& x : replaceWith.momentum_list) {
+		if (x.second == replaceWhat) {
+			std::cerr << "You are trying to replace a momentum with itself. This has undefined behaviour!" << std::endl;
+		}
+	}
 	for (size_t i = 0; i < momentum_list.size(); ++i) {
 		if (momentum_list[i].second == replaceWhat) {
 			auto buffer = replaceWith;
