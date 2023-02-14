@@ -29,9 +29,34 @@ struct Momentum {
 		}
 		return -1;
 	};
+	inline bool differsOnlyInQ(Momentum rhs) const {
+		if (rhs.add_Q == this->add_Q) return false;
+		rhs.add_Q = this->add_Q;
+		if (*this != rhs) return false;
+		return true;
+	};
 
 	void addInPlace(const Momentum& rhs);
 	void replaceOccurances(const char replaceWhat, const Momentum& replaceWith);
+	inline bool operator==(const Momentum& rhs) const {
+		if (this->add_Q != rhs.add_Q) return false;
+		if (this->momentum_list.size() != rhs.momentum_list.size()) return false;
+		bool foundOne = true;
+		for (size_t i = 0; i < this->momentum_list.size(); i++)
+		{
+			foundOne = false;
+			for (size_t j = 0; j < rhs.momentum_list.size(); j++)
+			{
+				if (this->momentum_list[i] == rhs.momentum_list[j])
+					foundOne = true;
+			}
+			if (!foundOne) return false;
+		}
+		return true;
+	};
+	inline bool operator!=(const Momentum& rhs) const {
+		return !(*this == rhs);
+	};
 };
 
 inline Momentum operator+(Momentum lhs, const Momentum& rhs) {
@@ -41,25 +66,6 @@ inline Momentum operator+(Momentum lhs, const Momentum& rhs) {
 inline Momentum operator-(Momentum lhs, const Momentum& rhs) {
 	lhs -= rhs;
 	return lhs;
-}
-inline bool operator==(const Momentum& lhs, const Momentum& rhs) {
-	if (lhs.add_Q != rhs.add_Q) return false;
-	if (lhs.momentum_list.size() != rhs.momentum_list.size()) return false;
-	bool foundOne = true;
-	for (size_t i = 0; i < lhs.momentum_list.size(); i++)
-	{
-		foundOne = false;
-		for (size_t j = 0; j < rhs.momentum_list.size(); j++)
-		{
-			if (lhs.momentum_list[i] == rhs.momentum_list[j])
-				foundOne = true;
-		}
-		if (!foundOne) return false;
-	}
-	return true;
-}
-inline bool operator!=(const Momentum& lhs, const Momentum& rhs) {
-	return !(lhs == rhs);
 }
 
 std::ostream& operator<<(std::ostream& os, const Momentum& momentum);

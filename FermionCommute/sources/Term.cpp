@@ -102,7 +102,7 @@ void Term::setDeltas()
 
 		for (size_t j = i + 1; j < delta_momenta.size(); j++)
 		{
-			if (delta_momenta[i] == delta_momenta[j]) {
+			if (pair_equal_allow_permutation(delta_momenta[i], delta_momenta[j])) {
 				delta_momenta.erase(delta_momenta.begin() + j);
 				goto setDeltas_outerLoop_momentum;
 			}
@@ -114,7 +114,7 @@ void Term::setDeltas()
 
 		for (size_t j = i + 1; j < delta_indizes.size(); j++)
 		{
-			if (delta_indizes[i] == delta_indizes[j]) {
+			if (pair_equal_allow_permutation(delta_indizes[i], delta_indizes[j])) {
 				delta_indizes.erase(delta_indizes.begin() + j);
 				goto setDeltas_outerLoop_index;
 			}
@@ -573,7 +573,7 @@ void Term::wick(std::vector<WickTerm>& reciever) const
 			reciever.push_back(buffer);
 		}
 	}
-	
+
 	for (size_t i = 0; i < reciever.size();)
 	{
 		if (reciever[i].handled()) {
