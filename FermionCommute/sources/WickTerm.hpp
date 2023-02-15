@@ -4,11 +4,12 @@
 typedef std::pair<Momentum, Momentum> pair_of_momenta;
 struct WickOperator {
 	std::string type;
+	bool isDaggered;
 	Momentum momentum;
 	std::vector<std::string> indizes;
 
-	WickOperator(const std::string& _type, const Momentum& _momentum, const std::vector<std::string>& _indizes = std::vector<std::string>());
-	WickOperator(const std::string& _type, const Momentum& _momentum, const std::string& _index);
+	WickOperator(const std::string& _type, const bool _isDaggered, const Momentum& _momentum, const std::vector<std::string>& _indizes = std::vector<std::string>());
+	WickOperator(const std::string& _type, const bool _isDaggered, const Momentum& _momentum, const std::string& _index);
 	WickOperator();
 };
 
@@ -47,6 +48,7 @@ struct WickTerm
 
 inline bool operator==(const WickOperator& lhs, const WickOperator& rhs) {
 	if (lhs.type != rhs.type) return false;
+	if (lhs.isDaggered != rhs.isDaggered) return false;
 	if (lhs.momentum != rhs.momentum) return false;
 	if (lhs.indizes.size() != rhs.indizes.size()) return false;
 	for (size_t i = 0; i < lhs.indizes.size(); i++)

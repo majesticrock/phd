@@ -21,7 +21,7 @@ bool WickTerm::swapToWickOperators(std::vector<WickTerm>& reciever)
 		Momentum copy_momentum = left.momentum;
 		if (sc_type) copy_momentum.flipMomentum();
 
-		for (size_t j = 1; j < left.indizes.size(); j++)
+		for (int j = 1; j < left.indizes.size(); j++)
 		{
 			this->delta_indizes.push_back(std::make_pair(left.indizes[j], right.indizes[j]));
 			this_copy.delta_indizes.push_back(this->delta_indizes.back());
@@ -32,7 +32,7 @@ bool WickTerm::swapToWickOperators(std::vector<WickTerm>& reciever)
 		this_copy.delta_momenta.push_back(std::make_pair(copy_momentum, right.momentum));
 	};
 
-	for (size_t i = 0; i < temporary_operators.size(); i += 2)
+	for (int i = 0; i < temporary_operators.size(); i += 2)
 	{
 		if (LEFT.isDaggered == RIGHT.isDaggered) {
 			if (L_SPIN == R_SPIN) return false;
@@ -48,7 +48,7 @@ bool WickTerm::swapToWickOperators(std::vector<WickTerm>& reciever)
 				// Due to the dagger we need to swap left and right
 				setDeltas(RIGHT, LEFT, true);
 
-				this->operators.push_back(WickOperator("f", LEFT.momentum));
+				this->operators.push_back(WickOperator("f", true, LEFT.momentum));
 				if (LEFT.indizes.size() > 1) {
 					this->operators.back().indizes = std::vector<std::string>(LEFT.indizes.begin() + 1, LEFT.indizes.end());
 				}
@@ -66,7 +66,7 @@ bool WickTerm::swapToWickOperators(std::vector<WickTerm>& reciever)
 				this_copy.delta_indizes.push_back(this->delta_indizes.back());
 				setDeltas(LEFT, RIGHT, true);
 
-				this->operators.push_back(WickOperator("f", RIGHT.momentum));
+				this->operators.push_back(WickOperator("f", false, RIGHT.momentum));
 				if (RIGHT.indizes.size() > 1) {
 					this->operators.back().indizes = std::vector<std::string>(RIGHT.indizes.begin() + 1, RIGHT.indizes.end());
 				}
@@ -84,9 +84,13 @@ bool WickTerm::swapToWickOperators(std::vector<WickTerm>& reciever)
 			// Left and right are swapped due to the definition of g
 			setDeltas(RIGHT, LEFT, false);
 
-			this->operators.push_back(WickOperator("n", LEFT.momentum, LEFT.indizes));
+			this->operators.push_back(WickOperator("n", false, LEFT.momentum, LEFT.indizes));
 			this_copy.operators.push_back(this->operators.back());
 			this_copy.operators.back().type = "g";
+			if(this_copy.operators.back().momentum.add_Q){
+				this_copy.operators.back().momentum.add_Q = false;
+				this_copy.operators.back().isDaggered = true;
+			}
 		}
 	}
 	reciever.push_back(this_copy);
@@ -115,10 +119,6 @@ bool WickTerm::setDeltas()
 			delta.second.momentum_list[index].first = remainder;
 			it = delta.first.momentum_list.erase(it);
 		}
-		if (delta.first.add_Q == delta.second.add_Q) {
-			delta.first.add_Q = false;
-			delta.second.add_Q = false;
-		}
 		if (delta.first.momentum_list.size() == 0) {
 			if (delta.second.momentum_list.size() == 0) continue;
 			std::swap(delta.first, delta.second);
@@ -133,6 +133,7 @@ bool WickTerm::setDeltas()
 		}
 		if (delta.first.momentum_list.size() > 1 && delta.second.momentum_list.size() == 0) {
 			delta.second.momentum_list.push_back(delta.first.momentum_list[1]);
+			delta.second.flipMomentum();
 			delta.first.momentum_list.erase(delta.first.momentum_list.begin() + 1);
 		}
 	}
@@ -195,7 +196,7 @@ bool WickTerm::setDeltas()
 		}
 		for (auto& coeff : coefficients) {
 			coeff.momentum.replaceOccurances(delta.first.momentum_list[0].second, delta.second);
-		}
+		}	
 	}
 	for (auto& delta : delta_indizes) {
 		for (auto& op : operators) {
@@ -216,15 +217,14 @@ bool WickTerm::setDeltas()
 	}
 
 	// Remove delta^2
-	for (size_t i = 0; i < delta_momenta.size(); i++)
+	for (int i = 0; i < delta_momenta.size(); i++)
 	{
-	setDeltas_outerLoop_momentum:
-
-		for (size_t j = i + 1; j < delta_momenta.size(); j++)
+		for (int j = i + 1; j < delta_momenta.size(); j++)
 		{
 			if (pair_equal_allow_permutation(delta_momenta[i], delta_momenta[j])) {
 				delta_momenta.erase(delta_momenta.begin() + j);
-				goto setDeltas_outerLoop_momentum;
+				--i;
+				break;
 			}
 
 			auto delta_buffer = delta_momenta[j];
@@ -232,19 +232,19 @@ bool WickTerm::setDeltas()
 			delta_buffer.second.flipMomentum();
 			if (pair_equal_allow_permutation(delta_momenta[i], delta_buffer)) {
 				delta_momenta.erase(delta_momenta.begin() + j);
-				goto setDeltas_outerLoop_momentum;
+				--i;
+				break;
 			}
 		}
 	}
-	for (size_t i = 0; i < delta_indizes.size(); i++)
+	for (int i = 0; i < delta_indizes.size(); i++)
 	{
-	setDeltas_outerLoop_index:
-
-		for (size_t j = i + 1; j < delta_indizes.size(); j++)
+		for (int j = i + 1; j < delta_indizes.size(); j++)
 		{
 			if (pair_equal_allow_permutation(delta_indizes[i], delta_indizes[j])) {
 				delta_indizes.erase(delta_indizes.begin() + j);
-				goto setDeltas_outerLoop_index;
+				--i;
+				break;
 			}
 		}
 	}
@@ -281,7 +281,7 @@ bool WickTerm::setDeltas()
 
 void WickTerm::computeSums()
 {
-	auto changeAllIndizes = [&](const std::string& replaceWhat, const std::string& replaceWith) {
+	auto changeAllIndizes = [&](const std::string replaceWhat, const std::string replaceWith) {
 		for (auto& op : operators) {
 			for (auto it = op.indizes.begin(); it != op.indizes.end(); ++it)
 			{
@@ -298,43 +298,54 @@ void WickTerm::computeSums()
 				}
 			}
 		}
+		for(auto& delta : delta_indizes){
+			if(delta.first == replaceWhat){
+				delta.first = replaceWith;
+			}
+			if(delta.second == replaceWhat){
+				delta.second = replaceWith;
+			}
+		}
 	};
 
-	for (size_t i = 0; i < sum_indizes.size(); i++)
+	for (int i = 0; i < sum_indizes.size(); i++)
 	{
-	computeSums_index_loop:
-
-		for (size_t j = 0; j < delta_indizes.size(); j++)
+		for (int j = 0; j < delta_indizes.size(); j++)
 		{
 			if (delta_indizes[j].first == sum_indizes[i]) {
 				changeAllIndizes(sum_indizes[i], delta_indizes[j].second);
 				sum_indizes.erase(sum_indizes.begin() + i);
 				delta_indizes.erase(delta_indizes.begin() + j);
-				goto computeSums_index_loop;
+				--i;
+				break;
 			}
 			else if (delta_indizes[j].second == sum_indizes[i]) {
 				changeAllIndizes(sum_indizes[i], delta_indizes[j].first);
 				sum_indizes.erase(sum_indizes.begin() + i);
 				delta_indizes.erase(delta_indizes.begin() + j);
-				goto computeSums_index_loop;
+				--i;
+				break;
 			}
 		}
 	}
 
-	auto changeAllMomenta = [&](const char replaceWhat, const Momentum& replaceWith) {
+	auto changeAllMomenta = [&](const char replaceWhat, const Momentum replaceWith) {
 		for (auto& op : operators) {
 			op.momentum.replaceOccurances(replaceWhat, replaceWith);
 		}
 		for (auto& coeff : coefficients) {
 			coeff.momentum.replaceOccurances(replaceWhat, replaceWith);
 		}
+		for(auto it = delta_momenta.begin(); it != delta_momenta.end();){
+			it->first.replaceOccurances(replaceWhat, replaceWith);
+			it->second.replaceOccurances(replaceWhat, replaceWith);
+			++it;
+		}
 	};
 
-	for (size_t i = 0; i < sum_momenta.size(); i++)
+	for (int i = 0; i < sum_momenta.size(); i++)
 	{
-	computeSums_momentum_loop:
-
-		for (size_t j = 0; j < delta_momenta.size(); j++)
+		for (int j = 0; j < delta_momenta.size(); j++)
 		{
 			if (delta_momenta[j].first.momentum_list[0].second == sum_momenta[i]) {
 				changeAllMomenta(sum_momenta[i], delta_momenta[j].second);
@@ -342,7 +353,8 @@ void WickTerm::computeSums()
 
 				sum_momenta.erase(sum_momenta.begin() + i);
 				delta_momenta.erase(delta_momenta.begin() + j);
-				goto computeSums_momentum_loop;
+				--i;
+				break;
 			}
 			else {
 				int index = delta_momenta[j].second.isUsed(sum_momenta[i]);
@@ -352,7 +364,7 @@ void WickTerm::computeSums()
 				if (abs(buffer.momentum_list[0].first) != 1) std::cerr << "Not yet implemented! " << buffer << std::endl;
 				delta_momenta[j].second.momentum_list.erase(delta_momenta[j].second.momentum_list.begin() + index);
 				delta_momenta[j].second -= delta_momenta[j].first;
-
+				
 				if (buffer.momentum_list[0].first > 0) {
 					delta_momenta[j].second.flipMomentum();
 				}
@@ -360,7 +372,8 @@ void WickTerm::computeSums()
 
 				sum_momenta.erase(sum_momenta.begin() + i);
 				delta_momenta.erase(delta_momenta.begin() + j);
-				goto computeSums_momentum_loop;
+				--i;
+				break;
 			}
 		}
 	}
@@ -394,7 +407,7 @@ void WickTerm::renameSums()
 {
 	const char name_list[3] = { 'q', 'p', 'r' };
 	const char buffer_list[3] = { 'x', 'y', 'z' };
-	for (size_t i = 0; i < sum_momenta.size(); i++)
+	for (int i = 0; i < sum_momenta.size(); i++)
 	{
 		if (i >= 3) {
 			std::cerr << "More than 3 momenta, time to implement this..." << std::endl;
@@ -411,7 +424,7 @@ void WickTerm::renameSums()
 		sum_momenta[i] = name_list[i];
 	}
 
-	for (size_t i = 0; i < sum_momenta.size(); i++)
+	for (int i = 0; i < sum_momenta.size(); i++)
 	{
 		for (auto& op : operators) {
 			op.momentum.replaceOccurances(buffer_list[i], Momentum(name_list[i]));
@@ -454,12 +467,37 @@ void WickTerm::sort()
 	sort_map["f"] = 2;
 	sort_map["\\eta"] = 3;
 
-	for (size_t i = 0; i < operators.size(); i++)
+	for(auto& op : operators){
+		if(op.type == "g" && op.momentum.add_Q){
+			op.momentum.add_Q = false;
+			op.isDaggered = !(op.isDaggered);
+		}
+	}
+
+	for (int i = 0; i < operators.size(); i++)
 	{
-		for (size_t j = i + 1; j < operators.size(); j++)
+		for (int j = i + 1; j < operators.size(); j++)
 		{
 			if (sort_map.find(operators[i].type)->second > sort_map.find(operators[j].type)->second) {
 				std::swap(operators[i], operators[j]);
+			}
+		}
+	}
+
+	for(auto& delta : delta_momenta){
+		if(delta.first.momentum_list.size() == 1 && delta.second.momentum_list.size() == 1){
+			// This comparison is well defined because we save the momentum as char i.e. byte
+			// which is easily comparable
+			if(delta.first.momentum_list[0].second > delta.second.momentum_list[0].second){
+				std::swap(delta.first, delta.second);
+				if(delta.first.momentum_list[0].first < 0){
+					delta.first.flipMomentum();
+					delta.second.flipMomentum();
+				}
+				if(delta.first.add_Q){
+					delta.first.add_Q = false;
+					delta.second.add_Q = !(delta.second.add_Q);
+				}
 			}
 		}
 	}
@@ -467,15 +505,14 @@ void WickTerm::sort()
 
 void cleanWicks(std::vector<WickTerm>& terms)
 {
-	std::cout << 1 << std::endl;
-	for (auto it = terms.begin(); it != terms.end();) {
+	for (std::vector<WickTerm>::iterator it = terms.begin(); it != terms.end();) {
+		//std::cout << count++ << " of " << terms.size() << ":&\t" << *it << "\\\\" << std::endl;
 		if (!(it->setDeltas())) {
 			it = terms.erase(it);
 			continue;
 		}
 		it->discardZeroMomenta();
 		it->computeSums();
-
 		if (!(it->setDeltas())) {
 			it = terms.erase(it);
 			continue;
@@ -485,17 +522,16 @@ void cleanWicks(std::vector<WickTerm>& terms)
 		it->sort();
 		++it;
 	}
-	std::cout << 2 << std::endl;
 	// remove duplicates
-	for (size_t i = 0; i < terms.size(); i++)
+	for (int i = 0; i < terms.size(); i++)
 	{
-	wick_clean_outerLoop:
-		for (size_t j = i + 1; j < terms.size(); j++)
+		for (int j = i + 1; j < terms.size(); j++)
 		{
 			if (terms[i] == terms[j]) {
 				terms[i].multiplicity += terms[j].multiplicity;
 				terms.erase(terms.begin() + j);
-				goto wick_clean_outerLoop;
+				--i;
+				break;
 			}
 		}
 	}
@@ -517,7 +553,11 @@ std::ostream& operator<<(std::ostream& os, const WickOperator& op)
 	for (const auto& index : op.indizes) {
 		os << index << " ";
 	}
-	os << "} \\rangle";
+	os << "}";
+	if(op.isDaggered){
+		os << "^\\dagger";
+	}
+	os << " \\rangle";
 	return os;
 }
 std::ostream& operator<<(std::ostream& os, const std::vector<WickOperator>& ops)
@@ -577,9 +617,9 @@ std::ostream& operator<<(std::ostream& os, const std::vector<WickTerm>& terms)
 	return os;
 }
 
-WickOperator::WickOperator(const std::string& _type, const Momentum& _momentum, const std::vector<std::string>& _indizes)
-	: type(_type), momentum(_momentum), indizes(_indizes) {}
-WickOperator::WickOperator(const std::string& _type, const Momentum& _momentum, const std::string& _index)
-	: type(_type), momentum(_momentum), indizes(1, _index) {}
+WickOperator::WickOperator(const std::string& _type, const bool _isDaggered, const Momentum& _momentum, const std::vector<std::string>& _indizes)
+	: type(_type), isDaggered(_isDaggered), momentum(_momentum), indizes(_indizes) {}
+WickOperator::WickOperator(const std::string& _type, const bool _isDaggered, const Momentum& _momentum, const std::string& _index)
+	: type(_type), isDaggered(_isDaggered), momentum(_momentum), indizes(1, _index) {}
 WickOperator::WickOperator()
-	: type(""), momentum(), indizes() {}
+	: type(""), isDaggered(false), momentum(), indizes() {}
