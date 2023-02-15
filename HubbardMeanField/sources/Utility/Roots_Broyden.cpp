@@ -11,13 +11,15 @@ namespace Utility {
 				J_new /= (delta_x.dot(J_old * delta_F));
 				J_new += J_old;
 			}
-			bool compute(std::function<void(const Eigen::VectorXd&, Eigen::VectorXd&)>& func, Eigen::VectorXd& x0)
+			bool compute(std::function<void(const Eigen::VectorXd&, Eigen::VectorXd&)>& func, Eigen::VectorXd& x0, const int MAX_ITER/*=200*/)
 			{
 				size_t DIM = x0.rows();
+				// You may play around with EPS_X and EPS_F to your desire
+				// EPS_X is the minimum distance between x_i and x_i+1 
+				// EPS_F is the minimum f(x)
 				constexpr double EPS_F = std::numeric_limits<double>::denorm_min();
 				constexpr double EPS_X = 1e-12;
 				double diff_x = 100, diff_F = 100;
-				const int MAX_ITER = 200;
 				int iter_num = 0;
 
 				Eigen::VectorXd F_old = Eigen::VectorXd::Zero(DIM),
@@ -41,7 +43,7 @@ namespace Utility {
 					J_old = J_new;
 					estimate_jacobian(J_new, J_old, delta_x, delta_F);
 				}
-				//std::cout << delta_x.norm() << "   " << iter_num << std::endl;
+				// This method returns true if convergence is achieved, in this case if |F(x_final)| < 1e-10
 				return (F_new.norm() < 1e-10);
 			}
 		}
