@@ -59,7 +59,45 @@ inline bool operator!=(const WickOperator& lhs, const WickOperator& rhs) {
 	return !(lhs == rhs);
 };
 inline bool operator==(const WickTerm& lhs, const WickTerm& rhs) {
+	if (lhs.coefficients.size() != rhs.coefficients.size()) return false;
+	for (size_t i = 0; i < lhs.coefficients.size(); i++)
+	{
+		if (lhs.coefficients[i] != rhs.coefficients[i]) return false;
+	}
+	if (lhs.sum_indizes.size() != rhs.sum_indizes.size()) return false;
+	if (lhs.sum_momenta.size() != rhs.sum_momenta.size()) return false;
+	for (size_t i = 0; i < lhs.sum_indizes.size(); i++)
+	{
+		if (lhs.sum_indizes[i] != rhs.sum_indizes[i]) return false;
+	}
+	for (size_t i = 0; i < lhs.sum_momenta.size(); i++)
+	{
+		if (lhs.sum_momenta[i] != rhs.sum_momenta[i]) return false;
+	}
 
+	if (lhs.delta_indizes.size() != rhs.delta_indizes.size()) return false;
+	if (lhs.delta_momenta.size() != rhs.delta_momenta.size()) return false;
+	for (size_t i = 0; i < lhs.delta_indizes.size(); i++)
+	{
+		if (lhs.delta_indizes[i] != rhs.delta_indizes[i]) return false;
+	}
+	for (size_t i = 0; i < lhs.delta_momenta.size(); i++)
+	{
+		if (lhs.delta_momenta[i] != rhs.delta_momenta[i]) return false;
+	}
+
+	if (lhs.operators.size() != rhs.operators.size()) return false;
+
+	// The Wick "operators" are actually just numbers
+	// therefore I might be interested to implement permutations as well...
+	for (size_t i = 0; i < lhs.operators.size(); i++)
+	{
+		if (lhs.operators[i] != rhs.operators[i]) return false;
+	}
+	return true;
+};
+inline bool operator!=(const WickTerm& lhs, const WickTerm& rhs) {
+	return !(lhs == rhs);
 };
 
 void cleanWicks(std::vector<WickTerm>& terms);
