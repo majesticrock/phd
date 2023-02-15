@@ -45,6 +45,23 @@ struct WickTerm
 	void sort();
 };
 
+inline bool operator==(const WickOperator& lhs, const WickOperator& rhs) {
+	if (lhs.type != rhs.type) return false;
+	if (lhs.momentum != rhs.momentum) return false;
+	if (lhs.indizes.size() != rhs.indizes.size()) return false;
+	for (size_t i = 0; i < lhs.indizes.size(); i++)
+	{
+		if (lhs.indizes[i] != rhs.indizes[i]) return false;
+	}
+	return true;
+};
+inline bool operator!=(const WickOperator& lhs, const WickOperator& rhs) {
+	return !(lhs == rhs);
+};
+inline bool operator==(const WickTerm& lhs, const WickTerm& rhs) {
+
+};
+
 void cleanWicks(std::vector<WickTerm>& terms);
 
 std::ostream& operator<<(std::ostream& os, const WickOperator& op);
