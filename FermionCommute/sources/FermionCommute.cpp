@@ -31,17 +31,18 @@ int main(int argc, char** argv) {
 	commutator(commute_with_H, H, right);
 	cleanUp(commute_with_H);
 
-	//std::cout << "\\begin{align*}\n\t[ H, " << right.toStringWithoutPrefactor() << "] = " << commute_with_H << "\\end{align*}" << std::endl;
+	std::cout << "\\begin{align*}\n\t[ H, " << right.toStringWithoutPrefactor() << "] = " << commute_with_H << "\\end{align*}" << std::endl;
 
 	commutator(terms, left, commute_with_H);
 	cleanUp(terms);
-
-	//std::cout << "\\begin{align*}\n\t[" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] = " << terms << "\\end{align*}" << std::endl;
+	int tester = 4;
+	std::cout << "\\begin{align*}\n\t[" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] = " << terms << "\\end{align*}" << std::endl;
 
 	std::vector<WickTerm> wicks;
 	for (const auto& term : terms) {
 		term.wick(wicks);
 	}
+	//terms[tester].wick(wicks);
 	cleanWicks(wicks);
 
 	std::cout << "\\begin{align*}\n\t\\langle [" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] \\rangle = "

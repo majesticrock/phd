@@ -19,6 +19,10 @@ Momentum& Momentum::operator+=(const Momentum& rhs)
 			if (rhs.momentum_list[i].second == this->momentum_list[j].second) {
 				foundOne = true;
 				this->momentum_list[j].first += rhs.momentum_list[i].first;
+				if(this->momentum_list[j].first == 0){
+					this->momentum_list.erase(this->momentum_list.begin() + j);
+				}
+				break;
 			}
 		}
 		if (!foundOne) {
@@ -40,6 +44,10 @@ Momentum& Momentum::operator-=(const Momentum& rhs)
 			if (rhs.momentum_list[i].second == this->momentum_list[j].second) {
 				foundOne = true;
 				this->momentum_list[j].first -= rhs.momentum_list[i].first;
+				if(this->momentum_list[j].first == 0){
+					this->momentum_list.erase(this->momentum_list.begin() + j);
+				}
+				break;
 			}
 		}
 		if (!foundOne) {

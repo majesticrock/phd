@@ -96,27 +96,25 @@ void Term::setDeltas()
 	}
 
 	// Remove delta^2
-	for (size_t i = 0; i < delta_momenta.size(); i++)
+	for (int i = 0; i < delta_momenta.size(); i++)
 	{
-	setDeltas_outerLoop_momentum:
-
-		for (size_t j = i + 1; j < delta_momenta.size(); j++)
+		for (int j = i + 1; j < delta_momenta.size(); j++)
 		{
 			if (pair_equal_allow_permutation(delta_momenta[i], delta_momenta[j])) {
 				delta_momenta.erase(delta_momenta.begin() + j);
-				goto setDeltas_outerLoop_momentum;
+				--i;
+				break;
 			}
 		}
 	}
-	for (size_t i = 0; i < delta_indizes.size(); i++)
+	for (int i = 0; i < delta_indizes.size(); i++)
 	{
-	setDeltas_outerLoop_index:
-
-		for (size_t j = i + 1; j < delta_indizes.size(); j++)
+		for (int j = i + 1; j < delta_indizes.size(); j++)
 		{
 			if (pair_equal_allow_permutation(delta_indizes[i], delta_indizes[j])) {
 				delta_indizes.erase(delta_indizes.begin() + j);
-				goto setDeltas_outerLoop_index;
+				--i;
+				break;
 			}
 		}
 	}
@@ -142,23 +140,23 @@ void Term::computeSums() {
 		}
 	};
 
-	for (size_t i = 0; i < sum_indizes.size(); i++)
+	for (int i = 0; i < sum_indizes.size(); i++)
 	{
-	computeSums_index_loop:
-
-		for (size_t j = 0; j < delta_indizes.size(); j++)
+		for (int j = 0; j < delta_indizes.size(); j++)
 		{
 			if (delta_indizes[j].first == sum_indizes[i]) {
 				changeAllIndizes(sum_indizes[i], delta_indizes[j].second);
 				sum_indizes.erase(sum_indizes.begin() + i);
 				delta_indizes.erase(delta_indizes.begin() + j);
-				goto computeSums_index_loop;
+				--i;
+				break;
 			}
 			else if (delta_indizes[j].second == sum_indizes[i]) {
 				changeAllIndizes(sum_indizes[i], delta_indizes[j].first);
 				sum_indizes.erase(sum_indizes.begin() + i);
 				delta_indizes.erase(delta_indizes.begin() + j);
-				goto computeSums_index_loop;
+				--i;
+				break;
 			}
 		}
 	}
@@ -172,11 +170,9 @@ void Term::computeSums() {
 		}
 	};
 
-	for (size_t i = 0; i < sum_momenta.size(); i++)
+	for (int i = 0; i < sum_momenta.size(); i++)
 	{
-	computeSums_momentum_loop:
-
-		for (size_t j = 0; j < delta_momenta.size(); j++)
+		for (int j = 0; j < delta_momenta.size(); j++)
 		{
 			if (delta_momenta[j].first.momentum_list[0].second == sum_momenta[i]) {
 				changeAllMomenta(sum_momenta[i], delta_momenta[j].second);
@@ -184,7 +180,8 @@ void Term::computeSums() {
 
 				sum_momenta.erase(sum_momenta.begin() + i);
 				delta_momenta.erase(delta_momenta.begin() + j);
-				goto computeSums_momentum_loop;
+				--i;
+				break;
 			}
 			else {
 				int index = delta_momenta[j].second.isUsed(sum_momenta[i]);
@@ -202,7 +199,8 @@ void Term::computeSums() {
 
 				sum_momenta.erase(sum_momenta.begin() + i);
 				delta_momenta.erase(delta_momenta.begin() + j);
-				goto computeSums_momentum_loop;
+				--i;
+				break;
 			}
 		}
 	}
@@ -289,7 +287,7 @@ void Term::renameSums()
 {
 	const char name_list[3] = { 'q', 'p', 'r' };
 	const char buffer_list[3] = { 'x', 'y', 'z' };
-	for (size_t i = 0; i < sum_momenta.size(); i++)
+	for (int i = 0; i < sum_momenta.size(); i++)
 	{
 		if (i >= 3) {
 			std::cerr << "More than 3 momenta, time to implement this..." << std::endl;
@@ -306,7 +304,7 @@ void Term::renameSums()
 		sum_momenta[i] = name_list[i];
 	}
 
-	for (size_t i = 0; i < sum_momenta.size(); i++)
+	for (int i = 0; i < sum_momenta.size(); i++)
 	{
 		for (auto& op : operators) {
 			op.momentum.replaceOccurances(buffer_list[i], Momentum(name_list[i]));
@@ -353,13 +351,14 @@ std::string Term::toStringWithoutPrefactor() const
 }
 
 void normalOrder(std::vector<Term>& terms) {
-	for (size_t t = 0; t < terms.size();) {
+	for (int t = 0; t < terms.size();) {
 	normalOder_outerLoop:
-		size_t n = terms[t].operators.size();
-		size_t new_n;
+	if(t >= terms.size()) break;
+		int n = terms[t].operators.size();
+		int new_n;
 		while (n > 1) {
 			new_n = 0;
-			for (size_t i = 1; i < terms[t].operators.size(); i++)
+			for (int i = 1; i < terms[t].operators.size(); i++)
 			{
 				if (!(terms[t].operators[i - 1].isDaggered) && (terms[t].operators[i].isDaggered)) {
 					bool other_deltas = false;
@@ -387,7 +386,7 @@ void normalOrder(std::vector<Term>& terms) {
 						new_term.delta_indizes.push_back(
 							std::make_pair(new_term.operators[i - 1].indizes[0], new_term.operators[i].indizes[0]));
 					}
-					for (size_t c = 1; c < new_term.operators[i - 1].indizes.size(); c++)
+					for (int c = 1; c < new_term.operators[i - 1].indizes.size(); c++)
 					{
 						// if the indizes are not the same we emplace a delta
 						// otherwise no action is required
@@ -444,9 +443,9 @@ void commutator(std::vector<Term>& reciever, const std::vector<Term>& left, cons
 	reciever.reserve(2 * left.size() * right.size());
 	std::vector<Term> reciever_buffer(2);
 
-	for (size_t i = 0; i < left.size(); i++)
+	for (int i = 0; i < left.size(); i++)
 	{
-		for (size_t j = 0; j < right.size(); j++)
+		for (int j = 0; j < right.size(); j++)
 		{
 			commutator(reciever_buffer, left[i], right[j]);
 			append_vector(reciever, reciever_buffer);
@@ -517,16 +516,15 @@ void cleanUp(std::vector<Term>& terms)
 	}
 
 	// remove duplicates
-	for (size_t i = 0; i < terms.size(); i++)
+	for (int i = 0; i < terms.size(); i++)
 	{
-	cleanUp_outerLoop:
-
-		for (size_t j = i + 1; j < terms.size(); j++)
+		for (int j = i + 1; j < terms.size(); j++)
 		{
 			if (terms[i] == terms[j]) {
 				terms[i].multiplicity += terms[j].multiplicity;
 				terms.erase(terms.begin() + j);
-				goto cleanUp_outerLoop;
+				--i;
+				break;
 			}
 		}
 	}
@@ -550,7 +548,7 @@ void Term::wick(std::vector<WickTerm>& reciever) const
 		reciever.push_back(WickTerm(this));
 	}
 	else {
-		for (size_t i = 1; i < operators.size(); i++)
+		for (int i = 1; i < operators.size(); i++)
 		{
 			WickTerm buffer(this);
 			if ((i % 2) == 0) {
@@ -574,7 +572,7 @@ void Term::wick(std::vector<WickTerm>& reciever) const
 		}
 	}
 
-	for (size_t i = 0; i < reciever.size();)
+	for (int i = 0; i < reciever.size();)
 	{
 		if (reciever[i].handled()) {
 			++i;
