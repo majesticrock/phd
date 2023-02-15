@@ -467,6 +467,7 @@ void WickTerm::sort()
 
 void cleanWicks(std::vector<WickTerm>& terms)
 {
+	std::cout << 1 << std::endl;
 	for (auto it = terms.begin(); it != terms.end();) {
 		if (!(it->setDeltas())) {
 			it = terms.erase(it);
@@ -484,10 +485,20 @@ void cleanWicks(std::vector<WickTerm>& terms)
 		it->sort();
 		++it;
 	}
-
+	std::cout << 2 << std::endl;
 	// remove duplicates
-	TODO!
-
+	for (size_t i = 0; i < terms.size(); i++)
+	{
+	wick_clean_outerLoop:
+		for (size_t j = i + 1; j < terms.size(); j++)
+		{
+			if (terms[i] == terms[j]) {
+				terms[i].multiplicity += terms[j].multiplicity;
+				terms.erase(terms.begin() + j);
+				goto wick_clean_outerLoop;
+			}
+		}
+	}
 	// removes any terms that have a 0 prefactor
 	for (auto it = terms.begin(); it != terms.end();)
 	{
