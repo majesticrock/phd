@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
+#include <string>
 #include <iostream>
+
+#include "Serializer.hpp"
 
 typedef std::vector<std::pair<int, char>> momentum_pairs;
 struct Momentum {
