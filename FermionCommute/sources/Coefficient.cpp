@@ -28,18 +28,13 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Coefficient>& coeff
 
 Coefficient::Coefficient()
 	: name(""), momentum(), indizes(), isDaggered(false) {}
-
 Coefficient::Coefficient(std::string _name)
 	: name(_name), momentum(), indizes(), isDaggered(false) {}
-
 Coefficient::Coefficient(std::string _name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered)
 	: name(_name), momentum(_momentum), indizes(_indizes), isDaggered(_isDaggered) {}
-
 Coefficient::Coefficient(std::string _name, char _momentum, bool add_Q, const std::vector<std::string>& _indizes, bool _isDaggered)
 	: name(_name), momentum(_momentum, add_Q), indizes(_indizes), isDaggered(_isDaggered) { }
-
 Coefficient::Coefficient(std::string _name, const Momentum& _momentum, bool _isDaggered)
 	: name(_name), momentum(_momentum), indizes(), isDaggered(_isDaggered) {}
-
 Coefficient::Coefficient(std::string _name, char _momentum, bool add_Q, bool _isDaggered)
 	: name(_name), momentum(_momentum, 1, add_Q), indizes(), isDaggered(_isDaggered) { }
