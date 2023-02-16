@@ -30,19 +30,27 @@ int main(int argc, char** argv) {
 	std::vector<Term> commute_with_H, terms;
 	commutator(commute_with_H, H, right);
 	cleanUp(commute_with_H);
-
-	std::cout << "\\begin{align*}\n\t[ H, " << right.toStringWithoutPrefactor() << "] = " << commute_with_H << "\\end{align*}" << std::endl;
-
 	commutator(terms, left, commute_with_H);
 	cleanUp(terms);
-	int tester = 4;
-	std::cout << "\\begin{align*}\n\t[" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] = " << terms << "\\end{align*}" << std::endl;
+	int tester = -1;
+	std::cout << "\\begin{align*}\n\t[" << left.toStringWithoutPrefactor()
+		<< ", [ H, " << right.toStringWithoutPrefactor() << "] ] = " << std::endl;
+	if (tester < 0) {
+		std::cout << terms << "\\end{align*}" << std::endl;
+	}
+	else {
+		std::cout << terms[tester] << "\\end{align*}" << std::endl;
+	}
 
 	std::vector<WickTerm> wicks;
-	for (const auto& term : terms) {
-		term.wick(wicks);
+	if (tester < 0) {
+		for (const auto& term : terms) {
+			term.wick(wicks);
+		}
 	}
-	//terms[tester].wick(wicks);
+	else {
+		terms[tester].wick(wicks);
+	}
 	cleanWicks(wicks);
 
 	std::cout << "\\begin{align*}\n\t\\langle [" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] \\rangle = "
