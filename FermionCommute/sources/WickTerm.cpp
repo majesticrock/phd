@@ -12,6 +12,12 @@ WickTerm::WickTerm(const Term* base)
 {
 }
 
+WickTerm::WickTerm()
+	: multiplicity(0), coefficients(), sum_momenta(), sum_indizes(),
+	operators(), delta_momenta(), delta_indizes(), temporary_operators()
+{
+}
+
 bool WickTerm::swapToWickOperators(std::vector<WickTerm>& reciever)
 {
 	this->operators.reserve(temporary_operators.size() / 2);
@@ -480,6 +486,10 @@ void WickTerm::sort()
 		{
 			if (sort_map.find(operators[i].type)->second > sort_map.find(operators[j].type)->second) {
 				std::swap(operators[i], operators[j]);
+			} else if(operators[i].type == operators[j].type){
+				if(operators[i].momentum.momentum_list[0].second > operators[j].momentum.momentum_list[0].second){
+					std::swap(operators[i], operators[j]);
+				}
 			}
 		}
 	}
@@ -677,3 +687,68 @@ WickOperator::WickOperator(const std::string& _type, const bool _isDaggered, con
 	: type(_type), isDaggered(_isDaggered), momentum(_momentum), indizes(1, _index) {}
 WickOperator::WickOperator()
 	: type(""), isDaggered(false), momentum(), indizes() {}
+
+
+std::string serialize_wick_term(const WickTerm& term) {
+    std::string str;
+    str += std::to_string(term.multiplicity) + '\t';
+    for (const auto& coeff : term.coefficients) {
+        str += coeff.name + ',';
+        str += std::to_string(coeff.momentum.momentum_list.size()) + ':';
+        for (const auto& pair : coeff.momentum.momentum_list) {
+            str += std::to_string(pair.first) + ',' + pair.second + ';';
+        }
+        str.pop_back(); // remove the last semicolon
+        str += '\t';
+    }
+    for (const auto& m : term.sum_momenta) {
+        str += m;
+    }
+    str += '\t';
+    for (const auto& idx : term.sum_indizes) {
+        str += idx + ',';
+    }
+    str.pop_back(); // remove the last comma
+    str += '\t';
+    for (const auto& op : term.operators) {
+        str += op.type + ',';
+        str += std::to_string(op.momentum.momentum_list.size()) + ':';
+        for (const auto& pair : op.momentum.momentum_list) {
+            str += std::to_string(pair.first) + ',' + pair.second + ';';
+        }
+        str.pop_back(); // remove the last semicolon
+        str += ',';
+        for (const auto& idx : op.indizes) {
+            str += idx + ';';
+        }
+        str.pop_back(); // remove the last semicolon
+        str += ';';
+    }
+    str.pop_back(); // remove the last semicolon
+    str += '\t';
+    for (const auto& pair : term.delta_momenta) {
+        str += '(';
+        str += std::to_string(pair.first.momentum_list.size()) + ':';
+        for (const auto& p : pair.first.momentum_list) {
+            str += std::to_string(p.first) + ',' + p.second + ';';
+        }
+        str.pop_back(); // remove the last semicolon
+        str += ',';
+        str += std::to_string(pair.second.momentum_list.size()) + ':';
+        for (const auto& p : pair.second.momentum_list) {
+            str += std::to_string(p.first) + ',' + p.second + ';';
+        }
+        str.pop_back(); // remove the last semicolon
+        str += ')';
+        str += ';';
+    }
+    str.pop_back(); // remove the last semicolon
+    str += '\t';
+    for (const auto& pair : term.delta_indizes) {
+        str += '(' + pair.first + ',' + pair.second + ')';
+        str += ';';
+    }
+    str.pop_back(); // remove the last semicolon
+    str += '\n';
+    return str;
+}

@@ -1,4 +1,5 @@
 #include "Term.hpp"
+#include <fstream>
 
 int main(int argc, char** argv) {
 	Operator c_k('k', 1, false, UP, false);
@@ -33,8 +34,7 @@ int main(int argc, char** argv) {
 	commutator(terms, left, commute_with_H);
 	cleanUp(terms);
 	int tester = -1;
-	std::cout << "\\begin{align*}\n\t[" << left.toStringWithoutPrefactor()
-		<< ", [ H, " << right.toStringWithoutPrefactor() << "] ] = " << std::endl;
+	std::cout << "\\begin{align*}\n\t[" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] = " << std::endl;
 	if (tester < 0) {
 		std::cout << terms << "\\end{align*}" << std::endl;
 	}
@@ -52,9 +52,9 @@ int main(int argc, char** argv) {
 		terms[tester].wick(wicks);
 	}
 	cleanWicks(wicks);
+	std::cout << "\\begin{align*}\n\t\\langle [" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] \\rangle = " << wicks << "\\end{align*}" << std::endl;
 
-	std::cout << "\\begin{align*}\n\t\\langle [" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] \\rangle = "
-		<< wicks << "\\end{align*}" << std::endl;
+	std::cout << serialize_wick_term(wicks[0]) << std::endl;
 
 	return 0;
 }
