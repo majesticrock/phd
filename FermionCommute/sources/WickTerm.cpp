@@ -503,6 +503,36 @@ void WickTerm::sort()
 	}
 }
 
+void WickTerm::applySpinSymmetry()
+{
+	// Expectation values for spin up and down are the same
+	for (auto& op : operators) {
+		if (op.indizes.size() > 0) {
+			op.indizes[0] = UP;
+		}
+	}
+}
+
+void WickTerm::applyTranslationalSymmetry()
+{
+	// Expectation values for k and -k are the same
+	for (auto& op : operators) {
+		if (op.momentum.momentum_list[0].first < 0) {
+			op.momentum.flipMomentum();
+		}
+	}
+}
+
+void WickTerm::applyPhaseSymmetry()
+{
+	// g^+ = g and f^+ = f
+	for (auto& op : operators) {
+		if (op.type == "f" || op.type == "g") {
+			op.isDaggered = false;
+		}
+	}
+}
+
 void cleanWicks(std::vector<WickTerm>& terms)
 {
 	for (std::vector<WickTerm>::iterator it = terms.begin(); it != terms.end();) {
@@ -520,6 +550,10 @@ void cleanWicks(std::vector<WickTerm>& terms)
 		it->discardZeroMomenta();
 		it->renameSums();
 		it->sort();
+		
+		it->applyPhaseSymmetry();
+		it->applySpinSymmetry();
+		it->applyTranslationalSymmetry();
 		++it;
 	}
 	// remove duplicates
@@ -543,6 +577,26 @@ void cleanWicks(std::vector<WickTerm>& terms)
 		}
 		else {
 			++it;
+		}
+	}
+
+	for (size_t i = 0; i < terms.size(); i++)
+	{
+		for (size_t j = i + 1; j < terms.size(); j++)
+		{
+			if (terms[i].delta_momenta.size() == 0 && terms[j].delta_momenta.size() > 0) {
+				std::swap(terms[i], terms[j]);
+			}
+			if (terms[i].delta_momenta.size() > 0 && terms[j].delta_momenta.size() > 0) {
+				if (terms[i].delta_momenta.size() > terms[j].delta_momenta.size()) {
+					std::swap(terms[i], terms[j]);
+				}
+				else if (terms[i].delta_momenta.size() == terms[j].delta_momenta.size()) {
+					if (terms[i].delta_momenta[0].second.add_Q && !(terms[j].delta_momenta[0].second.add_Q)) {
+						std::swap(terms[i], terms[j]);
+					}
+				}
+			}
 		}
 	}
 }
