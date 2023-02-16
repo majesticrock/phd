@@ -30,6 +30,7 @@ struct WickTerm
 	std::vector<Operator> temporary_operators;
 
 	explicit WickTerm(const Term* base);
+	WickTerm();
 
 	inline bool isIdentity() const {
 		return this->operators.empty();
@@ -111,3 +112,6 @@ std::ostream& operator<<(std::ostream& os, const WickOperator& op);
 std::ostream& operator<<(std::ostream& os, const std::vector<WickOperator>& ops);
 std::ostream& operator<<(std::ostream& os, const WickTerm& term);
 std::ostream& operator<<(std::ostream& os, const std::vector<WickTerm>& terms);
+
+std::string serialize_wick_term(const WickTerm& term);
+void deserialize_wick_term(WickTerm& term, const std::string& str);
