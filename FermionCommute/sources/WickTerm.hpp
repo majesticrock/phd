@@ -44,6 +44,9 @@ struct WickTerm
 	void discardZeroMomenta();
 	void renameSums();
 	void sort();
+	void applySpinSymmetry();
+	void applyTranslationalSymmetry();
+	void applyPhaseSymmetry();
 };
 
 inline bool operator==(const WickOperator& lhs, const WickOperator& rhs) {
