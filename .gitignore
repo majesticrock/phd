@@ -1,15 +1,17 @@
 *.pdf
-*/.vs/
+.vs/
 *.sln
 *.txt
 *.vcxproj
 *.vcxproj.*
 .vscode/
 x64/
-*/Debug/
-*/Release/
-*/build/
+Debug/
+Release/
+build/
 *.csv
+
+cpp/HubbardMeanField/sources/SymbolicOperators
 
 *.aux
 *.blg
