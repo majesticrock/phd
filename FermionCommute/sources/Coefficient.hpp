@@ -12,6 +12,15 @@ struct Coefficient {
 	// if Coeff(k) = Coeff(-k)
 	bool translationalInvariance = true;
 
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version) {
+		ar& name;
+		ar& momentum;
+		ar& indizes;
+		ar& isDaggered;
+		ar& translationalInvariance;
+	}
+
 	Coefficient();
 	explicit Coefficient(std::string _name);
 	Coefficient(std::string _name, const Momentum& _momentum, const std::vector<std::string>& _indizes, bool _isDaggered = false);
@@ -24,11 +33,7 @@ inline bool operator==(const Coefficient& lhs, const Coefficient& rhs) {
 	if (lhs.name != rhs.name) return false;
 	if (lhs.momentum != rhs.momentum) return false;
 	if (lhs.isDaggered != rhs.isDaggered) return false;
-	for (size_t i = 0; i < lhs.indizes.size(); i++)
-	{
-		if (lhs.indizes[i] != rhs.indizes[i]) return false;
-	}
-	return true;
+	return (lhs.indizes == rhs.indizes);
 }
 inline bool operator!=(const Coefficient& lhs, const Coefficient& rhs) {
 	return !(lhs == rhs);

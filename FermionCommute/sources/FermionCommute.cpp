@@ -1,5 +1,6 @@
 #include "Term.hpp"
 #include <fstream>
+#include <sstream>
 
 int main(int argc, char** argv) {
 	Operator c_k('k', 1, false, UP, false);
@@ -54,7 +55,20 @@ int main(int argc, char** argv) {
 	cleanWicks(wicks);
 	std::cout << "\\begin{align*}\n\t\\langle [" << left.toStringWithoutPrefactor() << ", [ H, " << right.toStringWithoutPrefactor() << "] ] \\rangle = " << wicks << "\\end{align*}" << std::endl;
 
-	std::cout << serialize_wick_term(wicks[0]) << std::endl;
+	// serialization
+	// create an output file stream and a text archive to serialize the vector
+	std::ofstream ofs("wick_terms.txt");
+	boost::archive::text_oarchive oa(ofs);
+	oa << wicks;
+	ofs.close();
 
+	/* Example of how to to read the output
+	// create an input file stream and a text archive to deserialize the vector
+	std::ifstream ifs("wick_terms.txt");
+	boost::archive::text_iarchive ia(ifs);
+	std::vector<WickTerm> deserialized_terms;
+	ia >> deserialized_terms;
+	ifs.close();
+	*/
 	return 0;
 }
