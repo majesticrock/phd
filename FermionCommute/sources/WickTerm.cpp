@@ -1,6 +1,5 @@
 #include "WickTerm.hpp"
 
-
 #define LEFT temporary_operators[i]
 #define RIGHT temporary_operators[i + 1]
 #define L_SPIN temporary_operators[i].indizes[0]

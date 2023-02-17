@@ -8,6 +8,14 @@ struct WickOperator {
 	Momentum momentum;
 	std::vector<std::string> indizes;
 
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version) {
+		ar& type;
+		ar& isDaggered;
+		ar& momentum;
+		ar& indizes;
+	}
+
 	WickOperator(const std::string& _type, const bool _isDaggered, const Momentum& _momentum, const std::vector<std::string>& _indizes = std::vector<std::string>());
 	WickOperator(const std::string& _type, const bool _isDaggered, const Momentum& _momentum, const std::string& _index);
 	WickOperator();
@@ -26,6 +34,17 @@ struct WickTerm
 	// symbolises the Kronecker delta
 	std::vector<pair_of_momenta> delta_momenta;
 	std::vector<std::pair<std::string, std::string>> delta_indizes;
+
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version) {
+		ar& multiplicity;
+		ar& coefficients;
+		ar& sum_momenta;
+		ar& sum_indizes;
+		ar& operators;
+		ar& delta_momenta;
+		ar& delta_indizes;
+	}
 
 	std::vector<Operator> temporary_operators;
 
@@ -54,46 +73,20 @@ inline bool operator==(const WickOperator& lhs, const WickOperator& rhs) {
 	if (lhs.type != rhs.type) return false;
 	if (lhs.isDaggered != rhs.isDaggered) return false;
 	if (lhs.momentum != rhs.momentum) return false;
-	if (lhs.indizes.size() != rhs.indizes.size()) return false;
-	for (size_t i = 0; i < lhs.indizes.size(); i++)
-	{
-		if (lhs.indizes[i] != rhs.indizes[i]) return false;
-	}
-	return true;
+	return (lhs.indizes == rhs.indizes);
 };
 inline bool operator!=(const WickOperator& lhs, const WickOperator& rhs) {
 	return !(lhs == rhs);
 };
 inline bool operator==(const WickTerm& lhs, const WickTerm& rhs) {
-	if (lhs.coefficients.size() != rhs.coefficients.size()) return false;
-	for (size_t i = 0; i < lhs.coefficients.size(); i++)
-	{
-		if (lhs.coefficients[i] != rhs.coefficients[i]) return false;
-	}
-	if (lhs.sum_indizes.size() != rhs.sum_indizes.size()) return false;
-	if (lhs.sum_momenta.size() != rhs.sum_momenta.size()) return false;
-	for (size_t i = 0; i < lhs.sum_indizes.size(); i++)
-	{
-		if (lhs.sum_indizes[i] != rhs.sum_indizes[i]) return false;
-	}
-	for (size_t i = 0; i < lhs.sum_momenta.size(); i++)
-	{
-		if (lhs.sum_momenta[i] != rhs.sum_momenta[i]) return false;
-	}
+	if (lhs.coefficients != rhs.coefficients) return false;
+	if (lhs.sum_indizes != rhs.sum_indizes) return false;
+	if (lhs.sum_momenta != rhs.sum_momenta) return false;
 
-	if (lhs.delta_indizes.size() != rhs.delta_indizes.size()) return false;
-	if (lhs.delta_momenta.size() != rhs.delta_momenta.size()) return false;
-	for (size_t i = 0; i < lhs.delta_indizes.size(); i++)
-	{
-		if (lhs.delta_indizes[i] != rhs.delta_indizes[i]) return false;
-	}
-	for (size_t i = 0; i < lhs.delta_momenta.size(); i++)
-	{
-		if (lhs.delta_momenta[i] != rhs.delta_momenta[i]) return false;
-	}
+	if (lhs.delta_indizes != rhs.delta_indizes) return false;
+	if (lhs.delta_momenta != rhs.delta_momenta) return false;
 
 	if (lhs.operators.size() != rhs.operators.size()) return false;
-
 	// The Wick "operators" are actually just numbers
 	// therefore I might be interested to implement permutations as well...
 	for (size_t i = 0; i < lhs.operators.size(); i++)
