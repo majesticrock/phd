@@ -6,13 +6,13 @@ INCLUDEFLAGS = -isystem ~/usr/local/include
 
 CXXFLAGS = -g $(WARNINGS) -std=c++17 $(OPT) -fopenmp -DNDEBUG
 
-LDLIBS = $(LINALG_FLAG)
+LDLIBS = ~/usr/local/include/boost_lib/libboost_serialization.a
 
 WARNINGS = -Wall -Wno-sign-compare
 
 OPT = -march=native -O3
 
-PART_SRCS=Momentum.cpp Coefficient.cpp Operator.cpp Term.cpp WickTerm.cpp
+PART_SRCS=Momentum.cpp Coefficient.cpp Operator.cpp Term.cpp WickTerm.cpp WickCleaner.cpp
 SRCS=$(PART_SRCS) FermionCommute.cpp
 
 OBJS=$(addprefix build/, $(subst .cpp,.o,$(SRCS)))

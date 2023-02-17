@@ -353,7 +353,7 @@ std::string Term::toStringWithoutPrefactor() const
 void normalOrder(std::vector<Term>& terms) {
 	for (int t = 0; t < terms.size();) {
 	normalOder_outerLoop:
-	if(t >= terms.size()) break;
+		if (t >= terms.size()) break;
 		int n = terms[t].operators.size();
 		int new_n;
 		while (n > 1) {
