@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-nameU = "0.00"
+nameU = "-3.00"
 
 M = np.loadtxt(f"data/T0.1/U_modes/{nameU}.txt").transpose()
 #M = 1 / M
