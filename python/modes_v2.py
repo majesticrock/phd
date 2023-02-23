@@ -9,6 +9,11 @@ M = np.loadtxt(f"data/T0.1/U_modes/{nameU}.txt").transpose()
 N = np.loadtxt(f"data/T0.1/U_modes/{nameU}_one_particle.txt").transpose().flatten()
 
 M.sort()
+for i in range(0,len(M)):
+    if(abs(M[i]) < 1e-10):
+        M[i] = 1e15
+    
+M = 1/M
 N.sort()
 
 sigma = 0.03
