@@ -12,7 +12,7 @@ N = np.loadtxt(f"data/T0.1/U_modes/{nameU}_one_particle.txt").transpose().flatte
 #for i in range(0,len(M)):
 #    if(abs(M[i]) < 1e-10):
 #        M[i] = 1e15
-M = M[abs(M) > 1e-5]
+M = M[abs(M) > 1e-2]
    
 M = 1/M
 M.sort()
