@@ -21,9 +21,6 @@ ax.plot(k[100:],  k[:100], np.zeros(100), color="black", zorder=20000, linewidth
 ax.plot(k[:100],  k[100:], np.zeros(100), color="black", zorder=20000, linewidth=2)
 ax.plot(-k[:100], k[100:], np.zeros(100), color="black", zorder=20000, linewidth=2)
 
-
-
-
 ax.set_xlabel("$k_x / \\pi$")
 ax.set_ylabel("$k_y / \\pi$")
 ax.set_zlabel("$\epsilon / t$")
