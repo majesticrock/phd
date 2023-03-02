@@ -1,0 +1,18 @@
+# Contains the deviations from the hermiticity given by the epsilon-g formula;
+# Computed at T=0 and U=-2;
+# System size ; deviation
+
+2;1.42335
+4;0.49569
+10;0.0249039
+20;0.000832094
+30;5.62E-06
+40;7.04E-08
+50;1.60E-09
+60;6.50E-12
+70;1.49E-13
+80;1.25E-12
+90;9.12E-13
+100;7.39E-13
+110;1.25E-12
+120;1.64E-12

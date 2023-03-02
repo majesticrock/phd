@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 nameU = "-2.00"
+folder = "T0"
 
-M = np.loadtxt(f"data/T0.1/U_modes/{nameU}.txt").transpose()
+M = np.loadtxt(f"data/{folder}/U_modes/{nameU}.txt").transpose()
 #M = 1 / M
 
-N = np.loadtxt(f"data/T0.1/U_modes/{nameU}_one_particle.txt").transpose().flatten()
+N = np.loadtxt(f"data/{folder}/U_modes/{nameU}_one_particle.txt").transpose().flatten()
 
 
 #for i in range(0,len(M)):
