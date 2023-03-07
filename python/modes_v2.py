@@ -37,7 +37,7 @@ data *= 16
 
 plt.plot(x_lin, data, label="DoS")
 plt.plot(M, np.linspace(min(data), max(data), len(M)), "x", label="Spectrum")
-plt.plot(2*N, np.linspace(min(data), max(data), len(N)), "o", mfc="none", label="One Particle")
+plt.plot(2*N, np.linspace(min(data), max(data), len(N)), "o", mfc="none", label="2x One Particle")
 
 #plt.xlim(lims[0], lims[1])
 #plt.ylim(-20, 20)
