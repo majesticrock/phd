@@ -10,6 +10,8 @@ Debug/
 Release/
 build/
 *.csv
+stdout*
+stderr*
 
 cpp/HubbardMeanField/sources/SymbolicOperators
 
