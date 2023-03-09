@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 nameU = "-2.00"
-folder = "T0.1"
+folder = "T0"
 
 M = np.loadtxt(f"data/{folder}/U_modes/{nameU}.txt").transpose()
 #M = 1 / M
