@@ -7,11 +7,14 @@ file = "data/resolvent.txt"
 
 M = np.loadtxt(file)
 A = M[0]
+A = A[:len(A)-1]
 B = M[1]
+print(len(A))
+print(len(B))
 
 w_vals = 20000
-w_lin = np.linspace(-20, 20, w_vals, dtype=complex)
-w_lin += 1e-1j
+w_lin = np.linspace(-30, 30, w_vals, dtype=complex)
+w_lin += 1e-3j
 off = 1
 
 B_min = B[len(B) - off]
@@ -31,24 +34,18 @@ def r(w):
             ret[i] = (1/(w[i]*B_min)) * ( w[i]**2 + B_min - B_max - np.sqrt(root, dtype=complex) )
     return ret
 
-def denominator(w):
-    G = 1. - w * A[len(A) - off] - w * B[len(B) - off] #* r( 1/w )
-    for j in range(len(A) - off - 1, -1, -1):
-        G = 1. - w * A[j] - w**2 * B[j + 1] / G
-    return G
-
 def dos(w):
-    G = 1. - w * A[len(A) - off] - w * B[len(B) - off] * r( 1/w.real )
+    G = w - A[len(A) - off] - B[len(B) - off] * r( w )
     for j in range(len(A) - off - 1, -1, -1):
-        G = 1. - w * A[j] - w**2 * B[j + 1] / G
-    return -B[0] / G
+        G = w - A[j] - B[j + 1] / G
+    return -B[0] / (w*G)
     
 fig, ax = plt.subplots()
-#ax.plot(w_lin.real, -dos(w_lin).imag, label="Imag")
-#ax.plot(w_lin.real, -r(1/w_lin.real).imag, label="$r(\\omega)$")
+ax.plot(w_lin.real, -dos( 1 / w_lin ).imag, label="Imag")
+ax.plot(w_lin.real,   -r( 1 / w_lin.real ).imag, label="$r(\\omega)$")
 #ax.plot(w_lin.real, dos(w_lin).real, "x", label="Real")
-ax.plot(A, 'x', label="$a_i$")
-ax.plot(B, 'o', label="$b_i$")
+#ax.plot(A, 'x', label="$a_i$")
+#ax.plot(B, 'o', label="$b_i$")
 #ax.set_ylim(-10, 10)
 
 ax.legend()
