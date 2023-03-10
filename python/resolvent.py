@@ -3,11 +3,14 @@ import matplotlib.pyplot as plt
 
 # Calculates the resolvent in 1/w
 
-file = "data/resolvent.txt"
+nameU = "-2.00"
+folder = "T0"
+
+file = f"data/{folder}/U_modes/{nameU}_resolvent.txt"
+
 
 M = np.loadtxt(file)
 A = M[0]
-A = A[:len(A)-1]
 B = M[1]
 print(len(A))
 print(len(B))
