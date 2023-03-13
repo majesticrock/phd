@@ -5,8 +5,6 @@ nameU = "-2.00"
 folder = "T0"
 
 M = np.loadtxt(f"data/{folder}/U_modes/{nameU}.txt").transpose()
-#M = 1 / M
-
 N = np.loadtxt(f"data/{folder}/U_modes/{nameU}_one_particle.txt").transpose().flatten()
 
 
@@ -14,7 +12,6 @@ N = np.loadtxt(f"data/{folder}/U_modes/{nameU}_one_particle.txt").transpose().fl
 #    if(abs(M[i]) < 1e-10):
 #        M[i] = 1e15
 M = M[abs(M) > 1e-2]
-   
 M = 1/M
 M.sort()
 N.sort()
@@ -31,7 +28,6 @@ x_lin = np.linspace(lims[0], lims[1], size)
 data = np.zeros(size)
 for i in range(0, len(M)):
     data += gauss(x_lin, M[i])
-
 data /= max(data)
 data *= 16
 

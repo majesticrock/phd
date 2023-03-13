@@ -10,20 +10,21 @@ file = f"data/{folder}/U_modes/{nameU}_resolvent.txt"
 
 
 M = np.loadtxt(file)
-A = M[0]
-B = M[1]
-print(len(A))
+A = M[0][:50]
+B = M[1][:50]
 print(len(B))
 
 w_vals = 20000
-w_lin = np.linspace(-30, 30, w_vals, dtype=complex)
-w_lin += 1e-3j
+w_lin = np.linspace(-10, 10, w_vals, dtype=complex)
+w_lin += 1e-2j
 off = 1
 
-B_min = B[len(B) - off]
-B_max = B[len(B) - off - 1]
+one_particle = 1 / np.abs(np.loadtxt(f"data/{folder}/U_modes/{nameU}_one_particle.txt").flatten())
 
-roots = [np.sqrt((np.sqrt(B_min) - np.sqrt(B_max))**2), np.sqrt((np.sqrt(B_min) + np.sqrt(B_max))**2)]
+B_min = 1/16 * ( np.min(one_particle) + np.max(one_particle))**2 #B[len(B) - off]
+B_max = 1/16 * ( np.min(one_particle) - np.max(one_particle))**2 #B[len(B) - off - 1]
+roots = np.array([np.sqrt((np.sqrt(B_min) - np.sqrt(B_max))**2), np.sqrt((np.sqrt(B_min) + np.sqrt(B_max))**2)])
+print(B_min, B_max, B[len(B)-2:])
 
 def r(w):
     ret = np.zeros(len(w), dtype=complex)
@@ -38,10 +39,10 @@ def r(w):
     return ret
 
 def dos(w):
-    G = w - A[len(A) - off] - B[len(B) - off] * r( w )
+    G = w - A[len(A) - off] - B[len(B) - off] #* r( w )
     for j in range(len(A) - off - 1, -1, -1):
         G = w - A[j] - B[j + 1] / G
-    return -B[0] / (w*G)
+    return -w * B[0] / G
     
 fig, ax = plt.subplots()
 ax.plot(w_lin.real, -dos( 1 / w_lin ).imag, label="Imag")
