@@ -6,7 +6,7 @@ folder = "T0"
 
 UPPER_LIM = 0.02
 
-sub_folders = [16, 18, 20, 24, 30, 36, 40, 46, 50, 60]
+sub_folders = [12, 18, 20, 24, 30, 36, 40, 46, 50, 60]
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 x_lin = np.linspace(0, UPPER_LIM, 1000)
