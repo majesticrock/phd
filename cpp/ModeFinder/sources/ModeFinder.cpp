@@ -9,7 +9,7 @@
 
 #include "../../HubbardMeanField/sources/Utility/OutputWriter.hpp"
 
-const double CUT_OFF = 1e-5;
+const double CUT_OFF = 2e-6;
 
 void loadData(const std::string& filename, std::vector<double>& reciever) {
 	std::string line;
@@ -34,7 +34,7 @@ int main()
 {
 	const std::string filepath = "../../data/T0/U_modes/";
 	const std::string filename = "-2.00";
-	const std::string systems[] = { "10/" , "20/", "30/", "40/", "50/", "60/" };
+	const std::string systems[] = { "10/", "12/", "14/", "16/", "18/", "20/", "24/", "30/", "36/", "40/", "46/", "50/", "60/" };
 
 	std::chrono::time_point begin = std::chrono::steady_clock::now();
 	std::chrono::time_point end = std::chrono::steady_clock::now();
