@@ -9,7 +9,7 @@
 
 #include "../../HubbardMeanField/sources/Utility/OutputWriter.hpp"
 
-const double CUT_OFF = 1e-8;
+const double CUT_OFF = 1e-6;
 
 void loadData(const std::string& filename, std::vector<double>& reciever) {
 	std::string line;
@@ -65,6 +65,8 @@ int main()
 			double val_right = std::abs( (*it) - 1. / eps );
 			special_modes.push_back((std::abs(val_left) > std::abs(val_right)) ? val_right : val_left);
 		}
+
+		std::sort(special_modes.begin(), special_modes.end());
 
 		end = std::chrono::steady_clock::now();
 		std::cout << "Time: "
