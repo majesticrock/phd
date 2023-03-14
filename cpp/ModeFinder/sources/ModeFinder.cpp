@@ -56,7 +56,6 @@ int main()
 			if (std::abs(eps) < 1e-2) continue;
 			auto it = sum_of_two_particles.lower_bound(1. / eps);
 			double val_left = std::abs( (*it) - 1. / eps );
-			std::cout << val_left << std::endl;
 			if (std::abs(val_left) < CUT_OFF) continue;
 
 			if (++it == sum_of_two_particles.end()) {
