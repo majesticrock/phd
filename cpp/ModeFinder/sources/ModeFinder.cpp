@@ -9,7 +9,7 @@
 
 #include "../../HubbardMeanField/sources/Utility/OutputWriter.hpp"
 
-const double CUT_OFF = 2e-6;
+const double CUT_OFF = 1e-5;
 
 void loadData(const std::string& filename, std::vector<double>& reciever) {
 	std::string line;
@@ -23,7 +23,6 @@ void loadData(const std::string& filename, std::vector<double>& reciever) {
 		std::string data_point;
 		while (std::getline(iss, data_point, ' ')) {
 			double val = std::stod(data_point);
-			if (val > 1e2) continue;
 			reciever.emplace_back(std::stod(data_point));
 		}
 	}
@@ -55,7 +54,7 @@ int main()
 
 		std::vector<double> special_modes;
 		for (const double& eps : two_particle_data) {
-			// == means it was NOT found
+			if (abs(eps) < 1e-2) continue;
 			auto it = sum_of_two_particles.lower_bound(1. / eps);
 			double val_left = (*it) - 1. / eps;
 			if (abs(val_left) < CUT_OFF) continue;
