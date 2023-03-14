@@ -16,7 +16,8 @@ SRCS=$(addprefix Utility/, $(UTIL_SRCS)) ModeFinder.cpp
 
 OBJS=$(addprefix build/, $(subst .cpp,.o,$(SRCS)))
 
-all: build build/main 
+all: build build/main
+	./build/main
 
 build/main: $(OBJS) | build
 	$(CXX) $(INCLUDEFLAGS) -o build/main $(OBJS) $(CXXFLAGS) $(LDLIBS)
