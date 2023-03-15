@@ -10,11 +10,11 @@ file = f"data/{folder}/U_modes/{nameU}_resolvent.txt"
 
 
 M = np.loadtxt(file)
-A = M[0][:50]
-B = M[1][:50]
+A = M[0]
+B = M[1]
 print(len(B))
 
-w_vals = 20000
+w_vals = 10000
 w_lin = np.linspace(-10, 10, w_vals, dtype=complex)
 w_lin += 1e-2j
 off = 1

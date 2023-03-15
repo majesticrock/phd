@@ -6,6 +6,7 @@
 #include <sstream>
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 
 #include "../../HubbardMeanField/sources/Utility/OutputWriter.hpp"
 
