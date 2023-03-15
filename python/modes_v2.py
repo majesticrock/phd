@@ -3,7 +3,7 @@ import numpy as np
 
 nameU = "-2.00"
 folder = "T0"
-subfolder = "60/"
+subfolder = "10/"
 
 M = np.loadtxt(f"data/{folder}/U_modes/{subfolder}{nameU}.txt").transpose()
 N = np.loadtxt(f"data/{folder}/U_modes/{subfolder}{nameU}_one_particle.txt").transpose().flatten()
