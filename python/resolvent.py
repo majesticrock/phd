@@ -3,22 +3,21 @@ import matplotlib.pyplot as plt
 
 # Calculates the resolvent in 1/w
 
-nameU = "-2.00"
+nameU = "2.00"
 folder = "T0"
+subfolder = ""
 
-file = f"data/{folder}/U_modes/{nameU}_resolvent.txt"
-
+file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent.txt"
+one_particle = 1 / np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle.txt").flatten())
 
 M = np.loadtxt(file)
 A = M[0]
 B = M[1]
 
 w_vals = 10000
-w_lin = np.linspace(-10, 10, w_vals, dtype=complex)
+w_lin = np.linspace(-15, 15, w_vals, dtype=complex)
 w_lin += 1e-1j
 off = 1
-
-one_particle = 1 / np.abs(np.loadtxt(f"data/{folder}/U_modes/{nameU}_one_particle.txt").flatten())
 
 B_min = 1/16 * ( np.min(one_particle) - np.max(one_particle))**2 #
 B_max = 1/16 * ( np.min(one_particle) + np.max(one_particle))**2 #
