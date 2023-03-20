@@ -33,7 +33,7 @@ int main()
 {
 	const std::string filepath = "../../data/T0/U_modes/";
 	const std::string filename = "-2.00";
-	const std::string systems[] = { "10/" , "12/", "14/", "16/", "18/", "20/", "24/", "30/", "36/", "40/", "46/", "50/", "60/"};
+	const std::string systems[] = { "10/" , "12/", "14/", "16/", "18/", "20/", "24/", "30/", "36/", "40/", "46/", "50/", "60/" };
 
 	std::chrono::time_point begin = std::chrono::steady_clock::now();
 	std::chrono::time_point end = std::chrono::steady_clock::now();
@@ -56,14 +56,14 @@ int main()
 		for (const double& eps : two_particle_data) {
 			if (std::abs(eps) < 1e-2) continue;
 			auto it = sum_of_two_particles.lower_bound(1. / eps);
-			double val_left = std::abs( (*it) - 1. / eps );
+			double val_left = std::abs((*it) - 1. / eps);
 			if (std::abs(val_left) < CUT_OFF) continue;
 
 			if (++it == sum_of_two_particles.end()) {
 				special_modes.push_back(val_left);
 				continue;
 			}
-			double val_right = std::abs( (*it) - 1. / eps );
+			double val_right = std::abs((*it) - 1. / eps);
 			special_modes.push_back((std::abs(val_left) > std::abs(val_right)) ? val_right : val_left);
 		}
 

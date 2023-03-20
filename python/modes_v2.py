@@ -1,18 +1,18 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-nameU = "-2.00"
+nameU = "2.00"
 folder = "T0"
-subfolder = "10/"
+subfolder = ""
 
-M = np.loadtxt(f"data/{folder}/U_modes/{subfolder}{nameU}.txt").transpose()
-N = np.loadtxt(f"data/{folder}/U_modes/{subfolder}{nameU}_one_particle.txt").transpose().flatten()
+M = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt").transpose()
+N = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle.txt").transpose().flatten()
 
 
 #for i in range(0,len(M)):
 #    if(abs(M[i]) < 1e-10):
 #        M[i] = 1e15
-M = M[abs(M) > 1e-2]
+M = M[abs(M) > 5e-3]
 M = 1/M
 M.sort()
 N.sort()
