@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # Calculates the resolvent in 1/w
 
-nameU = "2.00"
+nameU = "-0.10"
 folder = "T0"
 subfolder = ""
 
@@ -35,6 +35,14 @@ def r(w):
             ret[i] = (1/(w[i]*B_min)) * ( w[i]**2 + B_min - B_max - np.sqrt(root, dtype=complex) )
     return ret
 
+def r2(w):
+    ret = w - A[-2]
+    for j in range(0, 1000):
+        for k in range(len(A) - 1, -1, len(A) - 4):
+            ret = w - A[k] - B[k] / ret
+
+    return ret
+
 def dos(w):
     G = w - A[len(A) - off] - B[len(B) - off] #* r( w )
     for j in range(len(A) - off - 1, -1, -1):
@@ -42,8 +50,9 @@ def dos(w):
     return -w * B[0] / G
     
 fig, ax = plt.subplots()
-ax.plot(w_lin.real, -dos( 1 / w_lin ).imag, "-x", markevery=0.01, label="Imag")
+ax.plot(w_lin.real, -dos( 1 / w_lin ).imag, "-", label="Imag")#, markevery=0.02
 ax.plot(w_lin.real,   -r( 1 / w_lin.real ).imag, label="$r(\\omega)$")
+#ax.plot(w_lin.real,   -r2( 1 / w_lin ).imag, label="$r_2(\\omega)$")
 #print(np.trapz(-dos( 1 / w_lin ).imag, dx=20. / w_vals))
 #ax.plot(w_lin.real, dos(w_lin).real, "x", label="Real")
 #ax.plot(A, 'x', label="$a_i$")
