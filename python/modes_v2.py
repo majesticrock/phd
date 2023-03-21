@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-nameU = "2.00"
+nameU = "-0.10"
 folder = "T0"
 subfolder = ""
 
