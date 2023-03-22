@@ -1,0 +1,10 @@
+Time for expectation values: 135[ms]
+Time for filling of M and N: 203747[ms]
+Total count of singular eigenvalues of M: 3601
+Time for checking M and N: 296480[ms]
+Time for solving M and N: 328091[ms]
+Total Lanczos iterations: 200   Point of no change at: 3
+Time for resolvent: 25529[ms]
+Total runtime = 854206[ms]
+Total Lanczos iterations: 200   Point of no change at: 3
+
