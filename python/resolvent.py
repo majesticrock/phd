@@ -15,8 +15,8 @@ A = M[0]
 B = M[1]
 
 w_vals = 10000
-w_lin = np.linspace(-15, 15, w_vals, dtype=complex)
-w_lin += 1e-1j
+w_lin = 1 / np.linspace(-15, 15, w_vals, dtype=complex)
+w_lin += 5e-2j
 off = 1
 
 B_min = 1/16 * ( np.min(one_particle) - np.max(one_particle))**2 #
@@ -47,11 +47,14 @@ def dos(w):
     G = w - A[len(A) - off] - B[len(B) - off] #* r( w )
     for j in range(len(A) - off - 1, -1, -1):
         G = w - A[j] - B[j + 1] / G
-    return -w * B[0] / G
+    return w * B[0] / G
     
 fig, ax = plt.subplots()
-ax.plot(w_lin.real, -dos( 1 / w_lin ).imag, "-", label="Imag")#, markevery=0.02
-ax.plot(w_lin.real,   -r( 1 / w_lin.real ).imag, label="$r(\\omega)$")
+ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "-", label="Imag")#, markevery=0.02
+R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
+ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Option 2")
+
+ax.plot(1 / w_lin.real,   -r( w_lin.real ).imag, label="$r(\\omega)$")
 #ax.plot(w_lin.real,   -r2( 1 / w_lin ).imag, label="$r_2(\\omega)$")
 #print(np.trapz(-dos( 1 / w_lin ).imag, dx=20. / w_vals))
 #ax.plot(w_lin.real, dos(w_lin).real, "x", label="Real")
