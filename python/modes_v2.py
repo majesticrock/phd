@@ -5,7 +5,7 @@ nameU = "-0.10"
 folder = "T0"
 subfolder = ""
 
-M = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt").transpose()
+M = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")[0]
 N = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle.txt").transpose().flatten()
 
 
