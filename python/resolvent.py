@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Calculates the resolvent in 1/w
 
 nameU = "-0.10"
-folder = "T0"
+folder = "T0.1"
 subfolder = ""
 
 file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent.txt"
@@ -15,7 +15,7 @@ A = M[0]
 B = M[1]
 
 w_vals = 10000
-w_lin = 1 / np.linspace(-15, 15, w_vals, dtype=complex)
+w_lin = 1 / np.linspace(-10, 10, w_vals, dtype=complex)
 w_lin += 5e-2j
 off = 1
 
@@ -44,7 +44,7 @@ def r2(w):
     return ret
 
 def dos(w):
-    G = w - A[len(A) - off] - B[len(B) - off] * r( w )
+    G = w - A[len(A) - off] - B[len(B) - off]# * r( w )
     for j in range(len(A) - off - 1, -1, -1):
         G = w - A[j] - B[j + 1] / G
     return w * B[0] / G
