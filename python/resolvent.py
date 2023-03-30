@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Calculates the resolvent in 1/w
 
 nameU = "-0.10"
-folder = "T0.1"
+folder = "T0"
 subfolder = ""
 
 file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent.txt"
@@ -43,25 +43,30 @@ def r2(w):
 
     return ret
 
+def dos_r(w):
+    G = w - A[len(A) - off] - B[len(B) - off] * r( w )
+    for j in range(len(A) - off - 1, -1, -1):
+        G = w - A[j] - B[j + 1] / G
+    return w * B[0] / G
+
 def dos(w):
-    G = w - A[len(A) - off] - B[len(B) - off]# * r( w )
+    G = w - A[len(A) - off] - B[len(B) - off] #* r( w )
     for j in range(len(A) - off - 1, -1, -1):
         G = w - A[j] - B[j + 1] / G
     return w * B[0] / G
     
 fig, ax = plt.subplots()
-ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "-", label="Lanczos 200")#, markevery=0.02
+ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "-", label="Lanczos 200")
+#ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "--", label="Lanczos 200, Ter")
 R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
-ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
+#ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
 ax.axvspan(-1/roots[1], -1/roots[0], alpha=.2, color="purple", label="Continuum")
 ax.axvspan(1/roots[1], 1/roots[0], alpha=.2, color="purple")
-ax.plot(1 / w_lin.real,   -r( w_lin.real ).imag, label="$r(\\omega)$")
-#ax.plot(w_lin.real,   -r2( 1 / w_lin ).imag, label="$r_2(\\omega)$")
-#print(np.trapz(-dos( 1 / w_lin ).imag, dx=20. / w_vals))
-#ax.plot(w_lin.real, dos(w_lin).real, "x", label="Real")
+ax.plot(1 / w_lin.real, dos(w_lin).real, ":", label="Real")
+
 #ax.plot(A, 'x', label="$a_i$")
 #ax.plot(B, 'o', label="$b_i$")
-#ax.set_yscale("log")
+ax.set_yscale("symlog")
 #ax.set_ylim(-10, 10)
 
 ax.legend()
