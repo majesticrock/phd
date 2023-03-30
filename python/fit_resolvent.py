@@ -15,8 +15,8 @@ A = M[0]
 B = M[1]
 
 w_vals = 10000
-w_lin = 1 / np.linspace(-10, 10, w_vals, dtype=complex)
-w_lin += 5e-2j
+w_lin = 1 / np.linspace(1e-6, 1e-1, w_vals, dtype=complex)
+w_lin += 1e-8j
 off = 1
 
 B_min = 1/16 * ( np.min(one_particle) - np.max(one_particle))**2 #
@@ -56,13 +56,26 @@ def dos(w):
     return w * B[0] / G
     
 fig, ax = plt.subplots()
-ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "-", label="Lanczos 200")
+#ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "-", label="Lanczos 200")
 #ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "--", label="Lanczos 200, Ter")
-R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
-ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
-ax.axvspan(-1/roots[1], -1/roots[0], alpha=.2, color="purple", label="Continuum")
-ax.axvspan(1/roots[1], 1/roots[0], alpha=.2, color="purple")
-ax.plot(1 / w_lin.real, dos(w_lin).real, ":", label="Real")
+#R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
+#ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
+data = -dos(w_lin).real
+ax.plot(1 / w_lin.real, data, "-", label="Real")
+
+ax.set_yscale("log")
+ax.set_xscale("log")
+
+from scipy.optimize import curve_fit
+def func(x, a, b, c):
+    return a * (x-c)**(-b)
+popt, pcov = curve_fit(func, 1 / w_lin.real, data, (0.165, 2, 1e-7))
+print(f"{popt[1]} +/- {pcov[1][1]}")
+print(popt)
+ax.plot(1 / w_lin.real, func(1 / w_lin.real, *popt), "--", label="$a ( x - c )^{-b}$")
+ax.text(3e-6, 1e5, f"$a={popt[0]}$")
+ax.text(3e-6, 1e4, f"$b={popt[1]}$")
+ax.text(3e-6, 1e3, f"$c={popt[2]}$")
 
 #ax.plot(A, 'x', label="$a_i$")
 #ax.plot(B, 'o', label="$b_i$")
