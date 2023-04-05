@@ -6,16 +6,17 @@ import matplotlib.pyplot as plt
 nameU = "-0.10"
 folder = "T0"
 subfolder = ""
+name_suffix = ""
 
-file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent.txt"
-one_particle = 1 / np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle.txt").flatten())
+file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent{name_suffix}.txt"
+one_particle = 1 / np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle{name_suffix}.txt").flatten())
 
 M = np.loadtxt(file)
 A = M[0]
 B = M[1]
 
-w_vals = 10000
-w_lin = 1 / np.linspace(1e-6, 1e-1, w_vals, dtype=complex)
+w_vals = 1000
+w_lin = 1 / np.logspace(np.log10(1e-5), np.log10(1e-1), w_vals, dtype=complex)
 w_lin += 1e-8j
 off = 1
 
@@ -61,21 +62,33 @@ fig, ax = plt.subplots()
 #R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
 #ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
 data = -dos(w_lin).real
-ax.plot(1 / w_lin.real, data, "-", label="Real")
+ax.set_xlabel(r"$\epsilon / t$")
+#ax.plot(1 / w_lin.real, data, "-", label="Real")
 
-ax.set_yscale("log")
-ax.set_xscale("log")
+#ax.set_yscale("symlog")
+#ax.set_xscale("log")
 
 from scipy.optimize import curve_fit
-def func(x, a, b, c):
-    return a * (x-c)**(-b)
-popt, pcov = curve_fit(func, 1 / w_lin.real, data, (0.165, 2, 1e-7))
-print(f"{popt[1]} +/- {pcov[1][1]}")
-print(popt)
-ax.plot(1 / w_lin.real, func(1 / w_lin.real, *popt), "--", label="$a ( x - c )^{-b}$")
-ax.text(3e-6, 1e5, f"$a={popt[0]}$")
-ax.text(3e-6, 1e4, f"$b={popt[1]}$")
-ax.text(3e-6, 1e3, f"$c={popt[2]}$")
+def func_ln(x, a, b):
+    return a * x + b
+
+for dat in data:
+    if(dat < 0):
+        print(dat)
+
+try:
+    w_log = np.log(1 / w_lin.real)
+    ax.plot(w_log, np.log(data), "-", label="Real")
+    popt, pcov = curve_fit(func_ln, w_log, np.log(data))
+    print(f"{popt[0]} +/- {pcov[0][0]}")
+    print(popt)
+    ax.plot(w_log, func_ln(w_log, *popt), "--", label=r"$a \ln( x ) + b$")
+    ax.set_xlabel(r"$\ln(\epsilon)$")
+    ax.set_ylabel(r"$\ln(G)$")
+    ax.text(-9, 7, f"$a={popt[0]}$")
+    ax.text(-9, 6, f"$b={popt[1]}$")
+except RuntimeError:
+    print("Could not estimate curve_fit")
 
 #ax.plot(A, 'x', label="$a_i$")
 #ax.plot(B, 'o', label="$b_i$")
@@ -83,7 +96,6 @@ ax.text(3e-6, 1e3, f"$c={popt[2]}$")
 #ax.set_ylim(-10, 10)
 
 ax.legend()
-ax.set_xlabel(r"$\epsilon / t$")
 fig.tight_layout()
 
 import os
