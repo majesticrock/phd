@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Calculates the resolvent in 1/w
 
 nameU = "-0.10"
-folder = "T0"
+folder = "test"
 subfolder = ""
 name_suffix = ""
 

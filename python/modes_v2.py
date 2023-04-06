@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-nameU = "0.10"
-folder = "T0"
+nameU = "-0.10"
+folder = "test"
 subfolder = ""
 
 M = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
