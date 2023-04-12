@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Calculates the resolvent in 1/w
+# Calculates the resolvent in w^2
 
 nameU = "-0.10"
 folder = "test"
@@ -9,20 +9,20 @@ subfolder = ""
 name_suffix = ""
 
 file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent{name_suffix}.txt"
-one_particle = 1 / np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle{name_suffix}.txt").flatten())
+one_particle = np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle{name_suffix}.txt").flatten())
 
 M = np.loadtxt(file)
 A = M[0]
 B = M[1]
 
 w_vals = 10000
-w_lin = 1 / np.linspace(-10, 10, w_vals, dtype=complex)
+w_lin = np.linspace(0, 10, w_vals, dtype=complex)**2
 w_lin += 3e-2j
 off = 1
 
 B_min = 1/16 * ( np.min(one_particle) - np.max(one_particle))**2 #
 B_max = 1/16 * ( np.min(one_particle) + np.max(one_particle))**2 #
-roots = np.array([np.sqrt((np.sqrt(B_min) - np.sqrt(B_max))**2), np.sqrt((np.sqrt(B_min) + np.sqrt(B_max))**2)])
+roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])
 
 def r(w):
     ret = np.zeros(len(w), dtype=complex)
@@ -57,16 +57,12 @@ def dos(w):
     return w * B[0] / G
     
 fig, ax = plt.subplots()
-ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "-", label="Lanczos 200")
+ax.plot(np.sqrt(w_lin.real), -dos( w_lin ).imag, "-", label="Lanczos 200")
 #ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "--", label="Lanczos 200, Ter")
 R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}{name_suffix}.txt")
-ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
-ax.axvspan(-1/roots[1], -1/roots[0], alpha=.2, color="purple", label="Continuum")
-ax.axvspan(1/roots[1], 1/roots[0], alpha=.2, color="purple")
+#ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
+ax.axvspan(roots[1], roots[0], alpha=.2, color="purple", label="Continuum")
 #ax.plot(1 / w_lin.real, dos(w_lin).real, ":", label="Real")
-
-step = 1 / w_lin[0].real - 1 / w_lin[1].real
-print(np.trapz(-dos( w_lin ).imag, dx=step))
 
 #ax.plot(A, 'x', label="$a_i$")
 #ax.plot(B, 'o', label="$b_i$")
