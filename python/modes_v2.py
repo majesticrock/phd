@@ -8,7 +8,7 @@ subfolder = ""
 M = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
 N = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle.txt").transpose().flatten()
 
-M = M[abs(M) > 5e-3]
+M = M[abs(M) > 5e-2]
 M = 1/M
 M.sort()
 N.sort()
