@@ -57,16 +57,9 @@ def dos(w):
     return w * B[0] / G
     
 fig, ax = plt.subplots()
-#ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "-", label="Lanczos 200")
-#ax.plot(1 / w_lin.real, -dos( w_lin ).imag, "--", label="Lanczos 200, Ter")
-#R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}.txt")
-#ax.plot(np.linspace(-10, 10, len(R)), R, "--", label="Exact")
+
 data = -dos(w_lin).real
 ax.set_xlabel(r"$\epsilon / t$")
-#ax.plot(1 / w_lin.real, data, "-", label="Real")
-
-#ax.set_yscale("symlog")
-#ax.set_xscale("log")
 
 from scipy.optimize import curve_fit
 def func_ln(x, a, b):
@@ -89,11 +82,6 @@ try:
     ax.text(-9, 6, f"$b={popt[1]}$")
 except RuntimeError:
     print("Could not estimate curve_fit")
-
-#ax.plot(A, 'x', label="$a_i$")
-#ax.plot(B, 'o', label="$b_i$")
-#ax.set_yscale("symlog")
-#ax.set_ylim(-10, 10)
 
 ax.legend()
 fig.tight_layout()

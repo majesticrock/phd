@@ -16,9 +16,9 @@ A = M[0]
 B = M[1]
 
 w_vals = 10000
-w_lin = np.linspace(0, 10, w_vals, dtype=complex)**2
-w_lin += 1e-2j
-#w_lin = w_lin**2
+w_lin = np.linspace(5e-5, 0.1, w_vals, dtype=complex)
+w_lin += 1e-8j
+w_lin = w_lin**2
 off = 1
 
 B_min = 1/16 * ( np.min(one_particle) - np.max(one_particle))**2 #
@@ -58,20 +58,31 @@ def dos(w):
     return B[0] / G
     
 fig, ax = plt.subplots()
-ax.plot(np.sqrt(w_lin.real), -dos( w_lin ).imag, "-", label="Lanczos 200")
-R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}{name_suffix}.txt")
-ax.plot(np.linspace(0, 10, len(R)), R, "--", label="Exact")
-ax.axvspan(roots[1], roots[0], alpha=.2, color="purple", label="Continuum")
-#ax.plot(np.sqrt(w_lin.real), dos(w_lin).real, ":", label="Real")
 
-#ax.plot(A, 'x', label="$a_i$")
-#ax.plot(B, 'o', label="$b_i$")
-#ax.set_yscale("log")
-#ax.set_xscale("log")
-#ax.set_ylim(-10, 10)
+data = dos(w_lin).real
+ax.set_xlabel(r"$\epsilon / t$")
+
+from scipy.optimize import curve_fit
+def func_ln(x, a, b):
+    return a * x + b
+
+try:
+    w_log = np.log(np.sqrt(w_lin.real))
+    ax.plot(w_log, np.log(data), "-", label="Real")
+    popt, pcov = curve_fit(func_ln, w_log, np.log(data))
+    print(f"{popt[0]} +/- {pcov[0][0]}")
+    print(popt)
+    ax.plot(w_log, func_ln(w_log, *popt), "--", label=r"$a \ln( x ) + b$")
+    ax.set_xlabel(r"$\ln(\epsilon)$")
+    ax.set_ylabel(r"$\ln(G)$")
+    ax.text(-9, 7, f"$a={popt[0]}$")
+    ax.text(-9, 6, f"$b={popt[1]}$")
+except RuntimeError:
+    print("Could not estimate curve_fit")
+except ValueError:
+    print("Value")
 
 ax.legend()
-ax.set_xlabel(r"$\epsilon / t$")
 fig.tight_layout()
 
 import os
