@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Calculates the resolvent in w^2
 
 nameU = "-0.10"
-folder = "T0"
+folder = "test"
 subfolder = ""
 name_suffix = ""
 
@@ -43,6 +43,7 @@ deviation_from_inf = np.zeros(len(A) - 1)
 for i in range(0, len(A) - 1):
     deviation_from_inf[i] = abs((A[i] - a_inf) / a_inf) + abs((np.sqrt(B[i + 1]) - b_inf) / b_inf)
 
+print(np.argmin(deviation_from_inf))
 off_termi = len(A) - 1 - np.argmin(deviation_from_inf)
 def dos_r(w):
     for i in range(0, len(w)):
@@ -62,7 +63,7 @@ def dos(w):
     
 fig, ax = plt.subplots()
 ax.plot(np.sqrt(w_lin.real), -dos( w_lin ).imag, "--", label="Lanczos 200")
-ax.plot(np.sqrt(w_lin.real), -dos_r( np.copy(w_lin) ).imag, "-", label="Lanczos Termi $@i=15$")
+ax.plot(np.sqrt(w_lin.real), -dos_r( np.copy(w_lin) ).imag, "-", label=f"Lanczos Termi $@i={np.argmin(deviation_from_inf)+1}$")
 ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label="Continuum")
 #ax.plot(np.sqrt(w_lin.real), -r(w_lin).imag, "--", label="Im T(w)")
 #ax.plot(np.sqrt(w_lin.real), r(w_lin).real, "--", label="Re T(w)")
