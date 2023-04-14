@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Calculates the resolvent in w^2
 
 nameU = "-0.10"
-folder = "test"
+folder = "T0"
 subfolder = ""
 name_suffix = ""
 
@@ -23,15 +23,9 @@ off = 1
 
 roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
 a_inf = (roots[0] + roots[1]) * 0.5
-b_inf = ((roots[0] - roots[1]) * 0.25)
+b_inf = ((roots[1] - roots[0]) * 0.25)
 
 def r(w):
-    w = np.asarray(w)
-    scalar_input = False
-    if w.ndim == 0:
-        w = w[None]  # Makes w 1D
-        scalar_input = True
-
     p = w - a_inf
     q = 4 * b_inf**2
     root = np.sqrt(np.real(p**2 - q), dtype=complex)
@@ -42,12 +36,19 @@ def r(w):
         else:
             return_arr[i] = (p[i] + root[i]) / (2. * b_inf**2)
 
-    if scalar_input:
-        return np.squeeze(return_arr)
     return return_arr
 
-off_termi = 100
+
+deviation_from_inf = np.zeros(len(A) - 1)
+for i in range(0, len(A) - 1):
+    deviation_from_inf[i] = abs((A[i] - a_inf) / a_inf) + abs((np.sqrt(B[i + 1]) - b_inf) / b_inf)
+
+off_termi = len(A) - 1 - np.argmin(deviation_from_inf)
 def dos_r(w):
+    for i in range(0, len(w)):
+        if(w[i].real > roots[0] and w[i].real < roots[1]):
+            w[i] = w[i].real
+
     G = w - A[len(A) - off_termi] - B[len(B) - off_termi] * r( w )
     for j in range(len(A) - off_termi - 1, -1, -1):
         G = w - A[j] - B[j + 1] / G
@@ -60,8 +61,8 @@ def dos(w):
     return B[0] / G
     
 fig, ax = plt.subplots()
-ax.plot(np.sqrt(w_lin.real), -dos( w_lin ).imag, "-", label="Lanczos 200")
-ax.plot(np.sqrt(w_lin.real), -dos_r( w_lin ).imag, "--", label="Lanczos Termi")
+ax.plot(np.sqrt(w_lin.real), -dos( w_lin ).imag, "--", label="Lanczos 200")
+ax.plot(np.sqrt(w_lin.real), -dos_r( np.copy(w_lin) ).imag, "-", label="Lanczos Termi $@i=15$")
 ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label="Continuum")
 #ax.plot(np.sqrt(w_lin.real), -r(w_lin).imag, "--", label="Im T(w)")
 #ax.plot(np.sqrt(w_lin.real), r(w_lin).real, "--", label="Re T(w)")
@@ -70,10 +71,12 @@ ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label
 #ax.plot(np.sqrt(w_lin.real), dos(w_lin).real, ":", label="Real")
 
 #print(a_inf, abs(b_inf))
-#ax.axhline(a_inf, color="k", label="$a_\\infty$")
-#ax.axhline(abs(b_inf), color="k", linestyle="--", label="$b_\\infty$")
 #ax.plot(A, 'x', label="$a_i$")
 #ax.plot(np.sqrt(B), 'o', label="$b_i$")
+#ax.axhline(a_inf, color="k", label="$a_\\infty$")
+#ax.axhline(abs(b_inf), color="k", linestyle="--", label="$b_\\infty$")
+#ax.set_ylabel("$i$")
+#ax.set_xlabel("$a_i / b_i$")
 #ax.set_yscale("log")
 #ax.set_xscale("log")
 #ax.set_ylim(-10, 10)
