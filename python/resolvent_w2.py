@@ -21,33 +21,35 @@ w_lin += 1e-2j
 #w_lin = w_lin**2
 off = 1
 
-B_min = 1/16 * ( np.min(one_particle) - np.max(one_particle))**2 #
-B_max = 1/16 * ( np.min(one_particle) + np.max(one_particle))**2 #
-roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])
+roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
+a_inf = (roots[0] + roots[1]) * 0.5
+b_inf = ((roots[0] - roots[1]) * 0.25)
 
 def r(w):
-    ret = np.zeros(len(w), dtype=complex)
+    w = np.asarray(w)
+    scalar_input = False
+    if w.ndim == 0:
+        w = w[None]  # Makes w 1D
+        scalar_input = True
+
+    p = w - a_inf
+    q = 4 * b_inf**2
+    root = np.sqrt(np.real(p**2 - q), dtype=complex)
+    return_arr = np.zeros(len(w), dtype=complex)
     for i in range(0, len(w)):
-        root = (w[i]**2 + B_min - B_max)**2 - 4*w[i]**2 * B_min
-        if(abs(w[i]) < roots[0]):
-            ret[i] = (1/(w[i]*B_min)) * ( w[i]**2 + B_min - B_max + np.sqrt(root, dtype=complex) )
-        elif(abs(w[i]) > roots[1]):
-            ret[i] = (1/(w[i]*B_min)) * ( w[i]**2 + B_min - B_max - np.sqrt(root, dtype=complex) )
+        if(w[i] > roots[0]):
+            return_arr[i] = (p[i] - root[i]) / (2. * b_inf**2)
         else:
-            ret[i] = (1/(w[i]*B_min)) * ( w[i]**2 + B_min - B_max - np.sqrt(root, dtype=complex) )
-    return ret
+            return_arr[i] = (p[i] + root[i]) / (2. * b_inf**2)
 
-def r2(w):
-    ret = w - A[-2]
-    for j in range(0, 1000):
-        for k in range(len(A) - 1, -1, len(A) - 4):
-            ret = w - A[k] - B[k] / ret
+    if scalar_input:
+        return np.squeeze(return_arr)
+    return return_arr
 
-    return ret
-
+off_termi = 100
 def dos_r(w):
-    G = w - A[len(A) - off] - B[len(B) - off] * r( w )
-    for j in range(len(A) - off - 1, -1, -1):
+    G = w - A[len(A) - off_termi] - B[len(B) - off_termi] * r( w )
+    for j in range(len(A) - off_termi - 1, -1, -1):
         G = w - A[j] - B[j + 1] / G
     return B[0] / G
 
@@ -59,13 +61,19 @@ def dos(w):
     
 fig, ax = plt.subplots()
 ax.plot(np.sqrt(w_lin.real), -dos( w_lin ).imag, "-", label="Lanczos 200")
-R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}{name_suffix}.txt")
-ax.plot(np.linspace(0, 10, len(R)), R, "--", label="Exact")
-ax.axvspan(roots[1], roots[0], alpha=.2, color="purple", label="Continuum")
+ax.plot(np.sqrt(w_lin.real), -dos_r( w_lin ).imag, "--", label="Lanczos Termi")
+ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label="Continuum")
+#ax.plot(np.sqrt(w_lin.real), -r(w_lin).imag, "--", label="Im T(w)")
+#ax.plot(np.sqrt(w_lin.real), r(w_lin).real, "--", label="Re T(w)")
+#R = np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}{name_suffix}.txt")
+#ax.plot(np.linspace(0, 10, len(R)), R, "--", label="Exact")
 #ax.plot(np.sqrt(w_lin.real), dos(w_lin).real, ":", label="Real")
 
+#print(a_inf, abs(b_inf))
+#ax.axhline(a_inf, color="k", label="$a_\\infty$")
+#ax.axhline(abs(b_inf), color="k", linestyle="--", label="$b_\\infty$")
 #ax.plot(A, 'x', label="$a_i$")
-#ax.plot(B, 'o', label="$b_i$")
+#ax.plot(np.sqrt(B), 'o', label="$b_i$")
 #ax.set_yscale("log")
 #ax.set_xscale("log")
 #ax.set_ylim(-10, 10)
