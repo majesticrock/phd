@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 
 # Calculates the resolvent in w^2
 
-nameU = "-0.10"
+nameU = -0.1
 folder = "T0"
 subfolder = ""
-name_suffix = ""
+name_suffix = "_phase_SC"
 
 file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent{name_suffix}.txt"
-one_particle = np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle{name_suffix}.txt").flatten())
+one_particle = np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle.txt").flatten())
 
 M = np.loadtxt(file)
 A = M[0]
@@ -45,14 +45,8 @@ def r2(w):
 
     return ret
 
-def dos_r(w):
-    G = w - A[len(A) - off] - B[len(B) - off] * r( w )
-    for j in range(len(A) - off - 1, -1, -1):
-        G = w - A[j] - B[j + 1] / G
-    return B[0] / G
-
 def dos(w):
-    G = w - A[len(A) - off] - B[len(B) - off] #* r( w )
+    G = w - A[len(A) - off] - B[len(B) - off] * r( w )
     for j in range(len(A) - off - 1, -1, -1):
         G = w - A[j] - B[j + 1] / G
     return B[0] / G
