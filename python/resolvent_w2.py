@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+import gzip
 # Calculates the resolvent in w^2
 
 nameU = "-2.00"
-names = np.array([0.001, 0.01, 0.1, 0.2, 0.5])
-folder = "T0"
+names = np.array([-1])#np.array([0.001, 0.01, 0.1, 0.2, 0.5])
+folder = "test"
 subfolder = ""
 name_suffix = "SC"
 fig, ax = plt.subplots()
@@ -23,11 +23,11 @@ for jdx, name in enumerate(names):
     
     #ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label="Continuum")
     for idx, type in enumerate(types):
-        file = f"data/{folder}/V_modes/{subfolder}{name}_resolvent_{type}_{name_suffix}.txt"
-
-        M = np.loadtxt(file)
-        A = M[0]
-        B = M[1]
+        file = f"data/{folder}/V_modes/{subfolder}{name}_resolvent_{type}_{name_suffix}.dat.gz"
+        with gzip.open(file, 'rt') as f_open:
+            M = np.loadtxt(f_open)
+            A = M[0]
+            B = M[1]
 
         w_vals = 20000
         w_lin = np.linspace(0, 10, w_vals, dtype=complex)**2
