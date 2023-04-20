@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import gzip
 # Calculates the resolvent in w^2
 
-nameU = "-2.00"
-names = np.array([-1])#np.array([0.001, 0.01, 0.1, 0.2, 0.5])
-folder = "test"
+names = -np.array([0.005, 0.01, 0.1, 0.2, 0.5])
+#names = np.array(["-1", "-1.2", "-1.4"])
+folder = "T0"
 subfolder = ""
 name_suffix = "SC"
 fig, ax = plt.subplots()
@@ -13,17 +13,20 @@ types = ["higgs", "phase"]
 lss = ["-", "--"]
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
-
+modes = "V"
 
 for jdx, name in enumerate(names):
-    one_particle = np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{name}_one_particle.txt").flatten())
+    file = f"data/{folder}/{modes}_modes/{subfolder}{name}_one_particle.dat.gz"
+    with gzip.open(file, 'rt') as f_open:
+        one_particle = np.abs(np.loadtxt(f_open).flatten())
+    
     roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
     a_inf = (roots[0] + roots[1]) * 0.5
     b_inf = ((roots[1] - roots[0]) * 0.25)
     
     #ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label="Continuum")
     for idx, type in enumerate(types):
-        file = f"data/{folder}/V_modes/{subfolder}{name}_resolvent_{type}_{name_suffix}.dat.gz"
+        file = f"data/{folder}/{modes}_modes/{subfolder}{name}_resolvent_{type}_{name_suffix}.dat.gz"
         with gzip.open(file, 'rt') as f_open:
             M = np.loadtxt(f_open)
             A = M[0]
@@ -64,13 +67,13 @@ for jdx, name in enumerate(names):
 
         ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[jdx],
                 linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2),
-                label=f"{type} - Termi $@i={np.argmin(deviation_from_inf)+1}$ - $V={name}$")
+                label=f"{type} - $V={name}$")
 
 
-#ax.legend()
+ax.legend()
 ax.set_xlabel(r"$\epsilon / t$")
 fig.tight_layout()
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}_U={nameU}.pdf")
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()
