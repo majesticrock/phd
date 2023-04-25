@@ -6,16 +6,15 @@ import gzip
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
-Ts = mp.array([0])
-Us = np.array([-2])
-Vs = np.array([-1])
+Ts = np.array([0.])
+Us = np.array([-0.8752])
+Vs = np.array([-0.2])
 
-folder = "T0/"
+folder = "data/test/"
 name_suffix = "SC"
 fig, ax = plt.subplots()
-types = ["higgs", "phase"]
-lss = ["-", "--"]
-
+types = ["higgs", "phase"]#
+lss = ["-", "--", "-."]
 
 for q, T in enumerate(Ts):
     for r, U in enumerate(Us):
@@ -35,15 +34,15 @@ for q, T in enumerate(Ts):
                 file = f"{folder}{name}resolvent_{type}_{name_suffix}.dat.gz"
                 with gzip.open(file, 'rt') as f_open:
                     M = np.loadtxt(f_open)
-                    A = M[0]
-                    B = M[1]
+                    A = M[0][:20]
+                    B = M[1][:20]
 
                 w_vals = 20000
                 w_lin = np.linspace(0, 10, w_vals, dtype=complex)**2
                 w_lin += 1e-3j
                 off = 1
 
-                def r(w):
+                def terminator(w):
                     p = w - a_inf
                     q = 4 * b_inf**2
                     root = np.sqrt(np.real(p**2 - q), dtype=complex)
@@ -61,21 +60,24 @@ for q, T in enumerate(Ts):
                     deviation_from_inf[i] = abs((A[i] - a_inf) / a_inf) + abs((np.sqrt(B[i + 1]) - b_inf) / b_inf)
 
                 off_termi = len(A) - 1 - np.argmin(deviation_from_inf)
+                print("Terminating at i=", np.argmin(deviation_from_inf))
                 def dos(w):
                     for i in range(0, len(w)):
                         if(w[i].real > roots[0] and w[i].real < roots[1]):
                             w[i] = w[i].real
 
-                    G = w - A[len(A) - off_termi] - B[len(B) - off_termi] * r( w )
+                    G = w - A[len(A) - off_termi] - B[len(B) - off_termi] * terminator( w )
                     for j in range(len(A) - off_termi - 1, -1, -1):
                         G = w - A[j] - B[j + 1] / G
                     return B[0] / G
 
-                ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[jdx],
-                        linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2),
-                        label=f"$V={V}$")
+                ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, #color=colors[q+r+s],
+                        linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2), label=folder)
+                        #label=f"$V={V}$")
+                #ax.plot(B, "x", label=folder)
+                #        #label=f"$V={V}$")
 
-
+ax.set_yscale("log")
 ax.legend()
 ax.set_xlabel(r"$\epsilon / t$")
 fig.tight_layout()
