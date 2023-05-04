@@ -7,8 +7,8 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-0.8752])
-Vs = np.array([-0.2])
+Us = np.array([-2.0])
+Vs = np.array([-0.1])
 
 folder = "data/test/"
 name_suffix = "SC"
@@ -34,10 +34,10 @@ for q, T in enumerate(Ts):
                 file = f"{folder}{name}resolvent_{type}_{name_suffix}.dat.gz"
                 with gzip.open(file, 'rt') as f_open:
                     M = np.loadtxt(f_open)
-                    A = M[0][:20]
-                    B = M[1][:20]
+                    A = M[0]
+                    B = M[1]
 
-                w_vals = 20000
+                w_vals = 10000
                 w_lin = np.linspace(0, 10, w_vals, dtype=complex)**2
                 w_lin += 1e-3j
                 off = 1
@@ -72,12 +72,12 @@ for q, T in enumerate(Ts):
                     return B[0] / G
 
                 ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, #color=colors[q+r+s],
-                        linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2), label=folder)
-                        #label=f"$V={V}$")
+                        linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2),
+                        label=f"$V={V}$")
                 #ax.plot(B, "x", label=folder)
                 #        #label=f"$V={V}$")
 
-ax.set_yscale("log")
+#ax.set_yscale("log")
 ax.legend()
 ax.set_xlabel(r"$\epsilon / t$")
 fig.tight_layout()
