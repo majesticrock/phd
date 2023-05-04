@@ -42,8 +42,12 @@ constexpr long particleAnnihilation(long identifier, int kx, int ky, bool spin) 
 	return -1;
 }
 
-double unperturbed_energy(double kx, double ky) {
-	return -2 * (cos(kx) + cos(ky));
+double cos_x_cos_y(int kx, int ky) {
+	return cos((M_PI * kx) / SYSTEM_SIZE) + cos((M_PI * ky) / SYSTEM_SIZE);
+}
+
+double unperturbed_energy(int kx, int ky) {
+	return -2 * cos_x_cos_y(kx, ky);
 }
 
 void printSystem(long identifier) {
@@ -111,7 +115,7 @@ int main()
 	{
 		for (int j = 0; j < 2 * SYSTEM_SIZE; j++)
 		{
-			H += (unperturbed_energy((M_PI * i) / (2 * SYSTEM_SIZE) - M_PI, (M_PI * j) / (2 * SYSTEM_SIZE) - M_PI) - mu)
+			H += (unperturbed_energy(i - 1, j - 1) - mu)
 				* (creators[2 * siteIndex(i, j) + 1] * annihilators[2 * siteIndex(i, j) + 1]
 					+ creators[2 * siteIndex(i, j)] * annihilators[2 * siteIndex(i, j)]);
 		}
@@ -136,7 +140,7 @@ int main()
 						for (int pj = 0; pj < 2 * SYSTEM_SIZE; pj++)
 						{
 							H += U * (creators[2 * siteIndex(ki, kj) + 1] * creators[2 * siteIndex(pi, pj)]
-								* annihilators[2 * siteIndex(fix_index(pi + qi), fix_index(pj + qi))] 
+								* annihilators[2 * siteIndex(fix_index(pi + qi), fix_index(pj + qi))]
 								* annihilators[2 * siteIndex(fix_index(ki - qi), fix_index(kj - qi)) + 1]);
 						}
 					}
@@ -165,13 +169,12 @@ int main()
 	std::cout << solver.eigenvectors().col(smallest).dot(
 		total_occupation * solver.eigenvectors().col(smallest)) << std::endl;
 	//std::cout << solver.eigenvectors().col(smallest) << std::endl;
+	//std::cout << solver.eigenvalues() << std::endl;
 	for (size_t i = 0; i < DIMENSION; i++)
 	{
-		
-		if (std::abs( solver.eigenvectors()(i, smallest) ) > 1e-8) {
-			std::cout << i << ":\n";
-			printSystem(i);
-
+		if (std::abs(solver.eigenvectors()(i, smallest)) > 1e-8) {
+			//std::cout << i << ":\n";
+			//printSystem(i);
 		}
 	}
 
