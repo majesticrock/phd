@@ -107,7 +107,7 @@ int main()
 	}
 
 	constexpr double U = -2.0 / (4 * SYSTEM_SIZE * SYSTEM_SIZE);
-	constexpr double V = 0 / (16 * 4 * SYSTEM_SIZE * SYSTEM_SIZE);
+	constexpr double V = 1.0 / (4 * SYSTEM_SIZE * SYSTEM_SIZE);
 	constexpr double mu = 0.5 * (U + V) * 4 * SYSTEM_SIZE * SYSTEM_SIZE;
 
 	SMatrix H(DIMENSION, DIMENSION);
@@ -149,6 +149,35 @@ int main()
 		}
 	}
 
+	for (int ki = 0; ki < 2 * SYSTEM_SIZE; ki++)
+	{
+		for (int kj = 0; kj < 2 * SYSTEM_SIZE; kj++)
+		{
+			for (int qi = 0; qi < 2 * SYSTEM_SIZE; qi++)
+			{
+				for (int qj = 0; qj < 2 * SYSTEM_SIZE; qj++)
+				{
+					for (int pi = 0; pi < 2 * SYSTEM_SIZE; pi++)
+					{
+						for (int pj = 0; pj < 2 * SYSTEM_SIZE; pj++)
+						{
+							for (int spin_l = 0; spin_l < 2; spin_l++)
+							{
+								for (int spin_r = 0; spin_r < 2; spin_r++)
+								{
+									H +=  V * cos_x_cos_y(qi - 1, qj - 1)
+										* (creators[2 * siteIndex(ki, kj) + spin_l] * creators[2 * siteIndex(pi, pj) + spin_r]
+										* annihilators[2 * siteIndex(fix_index(pi + qi), fix_index(pj + qi)) + spin_r]
+										* annihilators[2 * siteIndex(fix_index(ki - qi), fix_index(kj - qi)) + spin_l]);
+								}	
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	Eigen::SelfAdjointEigenSolver<SMatrix> solver(H);
 	int smallest = 0;
 	for (size_t i = 1; i < solver.eigenvalues().size(); i++)
@@ -157,6 +186,8 @@ int main()
 			smallest = i;
 		}
 	}
+	const Eigen::VectorXd groundstate = solver.eigenvectors().col(smallest);
+
 	SMatrix total_occupation(DIMENSION, DIMENSION);
 	for (int i = 0; i < 2 * SYSTEM_SIZE; i++)
 	{
@@ -165,18 +196,40 @@ int main()
 			total_occupation += creators[2 * siteIndex(i, j) + 1] * annihilators[2 * siteIndex(i, j) + 1];
 		}
 	}
-
-	std::cout << solver.eigenvectors().col(smallest).dot(
-		total_occupation * solver.eigenvectors().col(smallest)) << std::endl;
-	//std::cout << solver.eigenvectors().col(smallest) << std::endl;
-	//std::cout << solver.eigenvalues() << std::endl;
-	for (size_t i = 0; i < DIMENSION; i++)
+	
+	SMatrix sc_param(DIMENSION, DIMENSION);
+	for (int i = 0; i < 2 * SYSTEM_SIZE; i++)
 	{
-		if (std::abs(solver.eigenvectors()(i, smallest)) > 1e-8) {
-			//std::cout << i << ":\n";
-			//printSystem(i);
+		for (int j = 0; j < 2 * SYSTEM_SIZE; j++)
+		{
+			sc_param += creators[2 * siteIndex(i, j) + 1] * creators[2 * siteIndex(fix_index(-i), fix_index(-j))];
 		}
 	}
+
+	SMatrix cdw_param(DIMENSION, DIMENSION);
+	for (int i = 0; i < 2 * SYSTEM_SIZE; i++)
+	{
+		for (int j = 0; j < 2 * SYSTEM_SIZE; j++)
+		{
+			cdw_param += creators[2 * siteIndex(i, j) + 1] * annihilators[2 * siteIndex(fix_index(i+SYSTEM_SIZE), fix_index(j+SYSTEM_SIZE)) + 1];
+		}
+	}
+
+	for (int i = 0; i < DIMENSION; i++)
+	{
+		if(std::abs(groundstate(i)) > 1e-8){
+			printSystem(i);
+		}
+	}
+	
+
+	std::cout << "Total occupation of spin up per lattice site:  " 
+		<< groundstate.dot(total_occupation * groundstate) / 4 << std::endl;
+	std::cout << "sc_param:  " 
+		<< groundstate.dot(sc_param * groundstate) << std::endl;
+	std::cout << "cdw_param:  " 
+		<< groundstate.dot(cdw_param * groundstate) << std::endl;
+
 
 	return 0;
 }
