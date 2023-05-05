@@ -3,24 +3,30 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from matplotlib.colors import ListedColormap
 import sys
+import gzip
 
 if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    data_folder = "data/T0.1/"
-    name = "T0.1"
+    name = "T0"
+    data_folder = f"data/phases/{name}/"
+
 x_axis_is_first = False
 
-CDW = (np.loadtxt(data_folder + "cdw.txt"))
-SC =  (np.loadtxt(data_folder + "sc.txt"))
-ETA = (np.loadtxt(data_folder + "eta.txt"))
+with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
+    CDW = abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "sc.dat.gz", 'rt') as f_open:
+    SC =  abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
+    ETA = abs(np.loadtxt(f_open))
 
 labels = ["T", "U"]
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
+print(T_SIZE, U_SIZE)
 
-with open(data_folder + "cdw.txt") as fp:
+with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()
@@ -41,7 +47,7 @@ if(not x_axis_is_first):
     data = data.transpose()
     labels[0], labels[1] = labels[1], labels[0]
 
-length = len(U)
+length = len(T)
 colors = cm.gist_rainbow(np.linspace(0, 1, length))
 my_cmap = ListedColormap(colors[:,:-1])
 fig, ax = plt.subplots(1, 1, constrained_layout=True)

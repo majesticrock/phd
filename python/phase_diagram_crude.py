@@ -3,25 +3,29 @@ import matplotlib.pyplot as plt
 from matplotlib import colors
 import matplotlib as mpl
 import sys
+import gzip
 
 eps = 1e-5
 if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "U-2"
-    data_folder = f"data/{name}/"
+    name = "T0"
+    data_folder = f"data/phases/{name}/"
 
-    
-CDW = abs(np.loadtxt(data_folder + "cdw.txt"))
-SC =  abs(np.loadtxt(data_folder + "sc.txt"))
-ETA = abs(np.loadtxt(data_folder + "eta.txt"))
+
+with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
+    CDW = abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "sc.dat.gz", 'rt') as f_open:
+    SC =  abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
+    ETA = abs(np.loadtxt(f_open))
 
 labels = ["T", "U"]
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
 
-with open(data_folder + "cdw.txt") as fp:
+with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()
