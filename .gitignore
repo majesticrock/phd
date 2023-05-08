@@ -60,3 +60,4 @@ cpp/HubbardMeanField/sources/SymbolicOperators
 *.app
 python/__pycache__
 cpp/ModeFinder/sources/Utility
+cpp/HubbardMeanField/auto_generated
