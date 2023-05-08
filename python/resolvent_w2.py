@@ -7,7 +7,7 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-1.0, -1.25, -1.5, -1.75, -2.0])
+Us = np.array([-1.0, -1.25, -1.5, -1.75])
 Vs = np.array([-0.5])
 
 folder = "data/L=50/"
