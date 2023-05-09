@@ -95,6 +95,4 @@ ax.indicate_inset_zoom(axins, edgecolor="black")
 fig.tight_layout()
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.svg")
-if(plt.rcParams["backend"] != "pgf"):
-    plt.show()
+plt.savefig(f"finished_plots/build/{os.path.basename(__file__).split('.')[0]}.svg")

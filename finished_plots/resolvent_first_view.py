@@ -10,8 +10,8 @@ Ts = np.array([0.])
 Us = np.array([-2.0])
 Vs = np.array([-0.5])
 
-folder = "data/L=60/"
-name_suffix = "CDW"
+folder = "data/L=70/"
+name_suffix = "SC"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
@@ -81,14 +81,10 @@ for q, T in enumerate(Ts):
                     ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[q+r+s],
                         linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2),
                         label="Amplitude")
-                        #label=f"$V={V}$")
                 else:
                     ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[q+r+s],
                         linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2)
                         ,label="Phase")
-                        #)
-                #ax.plot(B, "x", label=folder)
-                #        #label=f"$V={V}$")
 
 ax.legend()
 ax.set_xlabel(r"$\epsilon / t$")
@@ -96,5 +92,4 @@ ax.set_ylabel(r"$A(z)$")
 fig.tight_layout()
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
-plt.show()
+plt.savefig(f"finished_plots/build/{os.path.basename(__file__).split('.')[0]}.svg")

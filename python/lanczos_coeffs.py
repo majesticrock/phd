@@ -1,0 +1,42 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import gzip
+
+T = 0.
+U = -1.0
+V = -0.1
+
+folder = "data/L=70/"
+name_suffix = "SC"
+name = f"T={T}/U={U}_V={V}/"
+type = "phase"
+
+file = f"{folder}{name}resolvent_{type}_{name_suffix}.dat.gz"
+
+file = f"{folder}{name}one_particle.dat.gz"
+with gzip.open(file, 'rt') as f_open:
+    one_particle = np.abs(np.loadtxt(f_open).flatten())
+    roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
+    a_inf = (roots[0] + roots[1]) * 0.5
+    b_inf = ((roots[1] - roots[0]) * 0.25)
+
+file = f"{folder}{name}resolvent_{type}_{name_suffix}.dat.gz"
+with gzip.open(file, 'rt') as f_open:
+    M = np.loadtxt(f_open)
+    A = M[0]
+    B = M[1]
+
+fig, ax = plt.subplots()
+ax.plot(A, 'x', label="$a_i$")
+ax.plot(np.sqrt(B), 'o', label="$b_i$")
+ax.axhline(a_inf, linestyle="-" , color="k", label="$a_\\infty$")
+ax.axhline(b_inf, linestyle="--", color="k", label="$b_\\infty$")
+ax.legend()
+ax.set_xlabel("Iterarion $i$")
+ax.set_ylabel("Lanczos coefficient")
+ax.set_ylim(13, 34)
+fig.tight_layout()
+
+import os
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
+plt.show()
