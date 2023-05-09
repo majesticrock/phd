@@ -20,7 +20,9 @@ ax.set_yscale("log")
 types = ["higgs", "phase"]#"higgs", 
 lss = ["-", "--", "-."]
 
-plot_upper_lim = 8.5
+plot_upper_lim = 9
+
+axins = ax.inset_axes([0.15, 0.04, 0.3, 0.6])
 
 for q, T in enumerate(Ts):
     for r, U in enumerate(Us):
@@ -80,8 +82,12 @@ for q, T in enumerate(Ts):
                 if(idx == 0):
                     ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[q+r+s],
                         linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2), label=f"$V={V}$")
+                    axins.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[q+r+s],
+                        linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2), label=f"$V={V}$")
                 else:
                     ax.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[q+r+s],
+                        linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2))
+                    axins.plot(np.sqrt(w_lin.real), -dos( np.copy(w_lin) ).imag, color=colors[q+r+s],
                         linestyle=lss[idx], linewidth=(plt.rcParams["lines.linewidth"]+idx*2))
 
 legend = plt.legend()
@@ -97,8 +103,15 @@ ax.add_artist(legend_extra)
 
 ax.set_xlabel(r"$\epsilon / t$")
 ax.set_ylabel(r"$A(z)$")
+
+x1, x2, y1, y2 = 0, 0.003, 10, 3500
+axins.set_xlim(x1, x2)
+axins.set_ylim(y1, y2)
+axins.set_xticklabels([])
+axins.set_yticklabels([])
+ax.indicate_inset_zoom(axins, edgecolor="black")
+
 fig.tight_layout()
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
-plt.show()
+plt.savefig(f"finished_plots/build/{os.path.basename(__file__).split('.')[0]}.svg")

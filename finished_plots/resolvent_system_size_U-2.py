@@ -7,7 +7,7 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-1.5])
+Us = np.array([-2.0])
 Vs = np.array([-0.5])
 
 folders = ["L=30", "L=40", "L=50", "L=60", "L=70"]
@@ -44,7 +44,7 @@ for folder, ls in zip(folders, lss):
                         B = M[1][:20]
 
                     w_vals = 20000
-                    w_lin = np.linspace(0, 10, w_vals, dtype=complex)**2
+                    w_lin = np.linspace(0, 9, w_vals, dtype=complex)**2
                     w_lin += 1e-3j
                     off = 1
 
@@ -84,8 +84,9 @@ for folder, ls in zip(folders, lss):
 
 
 ax.legend()
-
 ax.set_xlabel(r"$\epsilon / t$")
+ax.set_ylabel(r"$A(z)$")
+
 x1, x2, y1, y2 = 0, 0.15, 0.63, 650
 axins.set_xlim(x1, x2)
 axins.set_ylim(y1, y2)
@@ -96,6 +97,4 @@ ax.indicate_inset_zoom(axins, edgecolor="black")
 fig.tight_layout()
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.svg")
-if(plt.rcParams["backend"] != "pgf"):
-    plt.show()
+plt.savefig(f"finished_plots/build/{os.path.basename(__file__).split('.')[0]}.svg")
