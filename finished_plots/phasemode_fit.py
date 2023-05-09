@@ -106,5 +106,4 @@ ax.legend()
 fig.tight_layout()
 
 import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}_U={U}.pdf")
-plt.show()
+plt.savefig(f"finished_plots/build/{os.path.basename(__file__).split('.')[0]}_U={U}.svg")
