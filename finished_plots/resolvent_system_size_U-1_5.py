@@ -7,7 +7,7 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-2.0])
+Us = np.array([-1.5])
 Vs = np.array([-0.5])
 
 folders = ["L=30", "L=40", "L=50", "L=60", "L=70"]
@@ -30,6 +30,7 @@ for folder, ls in zip(folders, lss):
                 with gzip.open(file, 'rt') as f_open:
                     one_particle = np.abs(np.loadtxt(f_open).flatten())
 
+                print("Gap = ", np.min(one_particle))
                 roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
                 a_inf = (roots[0] + roots[1]) * 0.5
                 b_inf = ((roots[1] - roots[0]) * 0.25)
@@ -43,7 +44,7 @@ for folder, ls in zip(folders, lss):
                         B = M[1][:20]
 
                     w_vals = 20000
-                    w_lin = np.linspace(0, 10, w_vals, dtype=complex)**2
+                    w_lin = np.linspace(0, 9, w_vals, dtype=complex)**2
                     w_lin += 1e-3j
                     off = 1
 
@@ -65,7 +66,7 @@ for folder, ls in zip(folders, lss):
                         deviation_from_inf[i] = abs((A[i] - a_inf) / a_inf) + abs((np.sqrt(B[i + 1]) - b_inf) / b_inf)
 
                     off_termi = len(A) - 1 - np.argmin(deviation_from_inf)
-                    print("Terminating at i=", np.argmin(deviation_from_inf))
+                    #print("Terminating at i=", np.argmin(deviation_from_inf))
                     def dos(w):
                         for i in range(0, len(w)):
                             if(w[i].real > roots[0] and w[i].real < roots[1]):
@@ -85,7 +86,9 @@ for folder, ls in zip(folders, lss):
 ax.legend()
 
 ax.set_xlabel(r"$\epsilon / t$")
-x1, x2, y1, y2 = 0, 0.15, 0.63, 650
+ax.set_ylabel(r"$A(z)$")
+
+x1, x2, y1, y2 = 0, 0.25, 0.63, 440
 axins.set_xlim(x1, x2)
 axins.set_ylim(y1, y2)
 axins.set_xticklabels([])
