@@ -90,5 +90,5 @@ plt.ylabel(r"$" + labels[1] + "/t$")
 import os
 if not os.path.exists("python/build"):
     os.makedirs("python/build")
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}_{name}.svg")
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}_{name}.pdf")
 plt.show()
