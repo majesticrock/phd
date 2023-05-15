@@ -165,11 +165,11 @@ int main()
 							{
 								for (int spin_r = 0; spin_r < 2; spin_r++)
 								{
-									H +=  V * cos_x_cos_y(qi - 1, qj - 1)
+									H += V * cos_x_cos_y(qi - 1, qj - 1)
 										* (creators[2 * siteIndex(ki, kj) + spin_l] * creators[2 * siteIndex(pi, pj) + spin_r]
-										* annihilators[2 * siteIndex(fix_index(pi + qi), fix_index(pj + qi)) + spin_r]
-										* annihilators[2 * siteIndex(fix_index(ki - qi), fix_index(kj - qi)) + spin_l]);
-								}	
+											* annihilators[2 * siteIndex(fix_index(pi + qi), fix_index(pj + qi)) + spin_r]
+											* annihilators[2 * siteIndex(fix_index(ki - qi), fix_index(kj - qi)) + spin_l]);
+								}
 							}
 						}
 					}
@@ -196,7 +196,7 @@ int main()
 			total_occupation += creators[2 * siteIndex(i, j) + 1] * annihilators[2 * siteIndex(i, j) + 1];
 		}
 	}
-	
+
 	SMatrix sc_param(DIMENSION, DIMENSION);
 	for (int i = 0; i < 2 * SYSTEM_SIZE; i++)
 	{
@@ -211,25 +211,23 @@ int main()
 	{
 		for (int j = 0; j < 2 * SYSTEM_SIZE; j++)
 		{
-			cdw_param += creators[2 * siteIndex(i, j) + 1] * annihilators[2 * siteIndex(fix_index(i+SYSTEM_SIZE), fix_index(j+SYSTEM_SIZE)) + 1];
+			cdw_param += creators[2 * siteIndex(i, j) + 1] * annihilators[2 * siteIndex(fix_index(i + SYSTEM_SIZE), fix_index(j + SYSTEM_SIZE)) + 1];
 		}
 	}
 
 	for (int i = 0; i < DIMENSION; i++)
 	{
-		if(std::abs(groundstate(i)) > 1e-8){
+		if (std::abs(groundstate(i)) > 1e-8) {
 			printSystem(i);
 		}
 	}
-	
 
-	std::cout << "Total occupation of spin up per lattice site:  " 
+	std::cout << "Total occupation of spin up per lattice site:  "
 		<< groundstate.dot(total_occupation * groundstate) / 4 << std::endl;
-	std::cout << "sc_param:  " 
+	std::cout << "sc_param:  "
 		<< groundstate.dot(sc_param * groundstate) << std::endl;
-	std::cout << "cdw_param:  " 
+	std::cout << "cdw_param:  "
 		<< groundstate.dot(cdw_param * groundstate) << std::endl;
-
 
 	return 0;
 }
