@@ -14,18 +14,23 @@ else:
     data_folder = f"data/phases/{name}/"
 
 
-with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
-    CDW = abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "cdw_up.dat.gz", 'rt') as f_open:
+    CDW_UP = np.loadtxt(f_open)
+with gzip.open(data_folder + "cdw_down.dat.gz", 'rt') as f_open:
+    CDW_DOWN = np.loadtxt(f_open)
 with gzip.open(data_folder + "sc.dat.gz", 'rt') as f_open:
     SC =  abs(np.loadtxt(f_open))
 with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
     ETA = abs(np.loadtxt(f_open))
 
+CDW = np.abs(CDW_UP + CDW_DOWN)
+AFM = np.abs(CDW_UP - CDW_DOWN)
+
 labels = ["T", "U"]
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
 
-with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
+with gzip.open(data_folder + "cdw_up.dat.gz", 'rt') as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()
@@ -44,6 +49,10 @@ for i in range(0, T_SIZE):
             CDW[i][j] = 1
         else:
             CDW[i][j] = 0
+        if(AFM[i][j] > eps):
+            AFM[i][j] = 1
+        else:
+            AFM[i][j] = 0
         if(SC[i][j] > eps):
             SC[i][j] = 1
         else:
@@ -57,19 +66,22 @@ for i in range(0, T_SIZE):
 X, Y = np.meshgrid(U, T)
 cmap1 = colors.ListedColormap(['white', 'C0'])
 cmap2 = colors.ListedColormap(['white', 'C1'])
+cmap3 = colors.ListedColormap(['white', 'C2'])
 
 fig, ax = plt.subplots()
 
 mpl.rcParams["hatch.linewidth"] = 2.5
 cset1 = ax.contourf(X, Y, SC, 1, cmap=cmap1, hatches=[None, None])
 cset2 = ax.contourf(X, Y, CDW, 1, cmap=cmap2, alpha=0.4)
+cset3 = ax.contourf(X, Y, AFM, 1, cmap=cmap3, alpha=0.4)
 cset3 = ax.contourf(X, Y, ETA, 1, cmap=cmap2, alpha=0.1)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch
 
-legend_elements = [Patch(facecolor='C0', label=r'$\Delta_{SC}$'),
-            Patch(facecolor='C1', label=r'$\Delta_{CDW}$')]
+legend_elements = [Patch(facecolor='C0', label=r'SC'),
+            Patch(facecolor='C1', label=r'CDW'),
+            Patch(facecolor='C2', label=r'AFM')]
 ax.legend(handles=legend_elements, loc='upper right')
 
 plt.xlabel(r"$" + labels[0] + "/t$")
