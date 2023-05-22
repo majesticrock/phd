@@ -20,11 +20,18 @@ with gzip.open(data_folder + "cdw_down.dat.gz", 'rt') as f_open:
     CDW_DOWN = np.loadtxt(f_open)
 with gzip.open(data_folder + "sc.dat.gz", 'rt') as f_open:
     SC =  abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "xi_sc_x.dat.gz", 'rt') as f_open:
+    XI_SC_X = np.loadtxt(f_open)
+with gzip.open(data_folder + "xi_sc_y.dat.gz", 'rt') as f_open:
+    XI_SC_Y = np.loadtxt(f_open)
 with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
     ETA = abs(np.loadtxt(f_open))
 
 CDW = np.abs(CDW_UP + CDW_DOWN)
 AFM = np.abs(CDW_UP - CDW_DOWN)
+
+S_EXTENDED = np.abs(XI_SC_X + XI_SC_Y)
+D_X2_Y2 = np.abs(XI_SC_X - XI_SC_Y)
 
 labels = ["T", "U"]
 T_SIZE = len(CDW)
@@ -49,14 +56,27 @@ for i in range(0, T_SIZE):
             CDW[i][j] = 1
         else:
             CDW[i][j] = 0
+
         if(AFM[i][j] > eps):
             AFM[i][j] = 1
         else:
             AFM[i][j] = 0
+
         if(SC[i][j] > eps):
             SC[i][j] = 1
         else:
             SC[i][j] = 0
+
+        if(D_X2_Y2[i][j] > eps):
+            D_X2_Y2[i][j] = 1
+        else:
+            D_X2_Y2[i][j] = 0
+
+        if(S_EXTENDED[i][j] > eps):
+            S_EXTENDED[i][j] = 1
+        else:
+            S_EXTENDED[i][j] = 0
+
         if(ETA[i][j] > eps):
             ETA[i][j] = 1
         else:
@@ -64,24 +84,29 @@ for i in range(0, T_SIZE):
 
 
 X, Y = np.meshgrid(U, T)
-cmap1 = colors.ListedColormap(['white', 'C0'])
-cmap2 = colors.ListedColormap(['white', 'C1'])
-cmap3 = colors.ListedColormap(['white', 'C2'])
+cmap0 = colors.ListedColormap(['white', 'C0'])
+cmap1 = colors.ListedColormap(['white', 'C1'])
+cmap2 = colors.ListedColormap(['white', 'C2'])
+cmap3 = colors.ListedColormap(['white', 'C3'])
+cmap4 = colors.ListedColormap(['white', 'C4'])
 
 fig, ax = plt.subplots()
 
 mpl.rcParams["hatch.linewidth"] = 2.5
-cset1 = ax.contourf(X, Y, SC, 1, cmap=cmap1, hatches=[None, None])
-cset2 = ax.contourf(X, Y, CDW, 1, cmap=cmap2, alpha=0.4)
-cset3 = ax.contourf(X, Y, AFM, 1, cmap=cmap3, alpha=0.4)
-cset3 = ax.contourf(X, Y, ETA, 1, cmap=cmap2, alpha=0.1)
+cset0 = ax.contourf(X, Y, SC, 1, cmap=cmap0, hatches=[None, None])
+cset1 = ax.contourf(X, Y, CDW, 1, cmap=cmap1, alpha=0.4)
+cset2 = ax.contourf(X, Y, AFM, 1, cmap=cmap2, alpha=0.4)
+cset3 = ax.contourf(X, Y, D_X2_Y2, 1, cmap=cmap3, alpha=0.4)
+cset4 = ax.contourf(X, Y, S_EXTENDED, 1, cmap=cmap4, alpha=0.4)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch
 
-legend_elements = [Patch(facecolor='C0', label=r'SC'),
+legend_elements = [Patch(facecolor='C0', label=r'$s$-wave'),
             Patch(facecolor='C1', label=r'CDW'),
-            Patch(facecolor='C2', label=r'AFM')]
+            Patch(facecolor='C2', label=r'AFM'),
+            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$-wave'),
+            Patch(facecolor='C4', label=r'$\tilde{s}$-wave')]
 ax.legend(handles=legend_elements, loc='upper right')
 
 plt.xlabel(r"$" + labels[0] + "/t$")
