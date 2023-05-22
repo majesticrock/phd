@@ -107,7 +107,7 @@ legend_elements = [Patch(facecolor='C0', label=r'$s$-wave'),
             Patch(facecolor='C2', label=r'AFM'),
             Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$-wave'),
             Patch(facecolor='C4', label=r'$\tilde{s}$-wave')]
-ax.legend(handles=legend_elements, loc='upper right')
+ax.legend(handles=legend_elements, loc='upper left')
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
