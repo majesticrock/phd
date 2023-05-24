@@ -14,30 +14,25 @@ else:
     data_folder = f"data/phases/{name}/"
 
 
-with gzip.open(data_folder + "cdw_up.dat.gz", 'rt') as f_open:
-    CDW_UP = np.loadtxt(f_open)
-with gzip.open(data_folder + "cdw_down.dat.gz", 'rt') as f_open:
-    CDW_DOWN = np.loadtxt(f_open)
+with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
+    CDW = np.loadtxt(f_open)
+with gzip.open(data_folder + "afm.dat.gz", 'rt') as f_open:
+    AFM = np.loadtxt(f_open)
 with gzip.open(data_folder + "sc.dat.gz", 'rt') as f_open:
     SC =  abs(np.loadtxt(f_open))
-with gzip.open(data_folder + "xi_sc_x.dat.gz", 'rt') as f_open:
-    XI_SC_X = np.loadtxt(f_open)
-with gzip.open(data_folder + "xi_sc_y.dat.gz", 'rt') as f_open:
-    XI_SC_Y = np.loadtxt(f_open)
+with gzip.open(data_folder + "gamma_sc.dat.gz", 'rt') as f_open:
+    GAMMA_SC = abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "xi_sc.dat.gz", 'rt') as f_open:
+    XI_SC = abs(np.loadtxt(f_open))
 with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
     ETA = abs(np.loadtxt(f_open))
 
-CDW = np.abs(CDW_UP + CDW_DOWN)
-AFM = np.abs(CDW_UP - CDW_DOWN)
-
-S_EXTENDED = np.abs(XI_SC_X + XI_SC_Y)
-D_X2_Y2 = np.abs(XI_SC_X - XI_SC_Y)
 
 labels = ["T", "U"]
 T_SIZE = len(CDW)
 U_SIZE = len(CDW[0])
 
-with gzip.open(data_folder + "cdw_up.dat.gz", 'rt') as fp:
+with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()
@@ -67,15 +62,15 @@ for i in range(0, T_SIZE):
         else:
             SC[i][j] = 0
 
-        if(D_X2_Y2[i][j] > eps):
-            D_X2_Y2[i][j] = 1
+        if(GAMMA_SC[i][j] > eps):
+            GAMMA_SC[i][j] = 1
         else:
-            D_X2_Y2[i][j] = 0
+            GAMMA_SC[i][j] = 0
 
-        if(S_EXTENDED[i][j] > eps):
-            S_EXTENDED[i][j] = 1
+        if(XI_SC[i][j] > eps):
+            XI_SC[i][j] = 1
         else:
-            S_EXTENDED[i][j] = 0
+            XI_SC[i][j] = 0
 
         if(ETA[i][j] > eps):
             ETA[i][j] = 1
@@ -96,8 +91,8 @@ mpl.rcParams["hatch.linewidth"] = 2.5
 cset0 = ax.contourf(X, Y, SC, 1, cmap=cmap0, hatches=[None, None])
 cset1 = ax.contourf(X, Y, CDW, 1, cmap=cmap1, alpha=0.4)
 cset2 = ax.contourf(X, Y, AFM, 1, cmap=cmap2, alpha=0.4)
-cset3 = ax.contourf(X, Y, D_X2_Y2, 1, cmap=cmap3, alpha=0.4)
-cset4 = ax.contourf(X, Y, S_EXTENDED, 1, cmap=cmap4, alpha=0.4)
+cset3 = ax.contourf(X, Y, GAMMA_SC, 1, cmap=cmap3, alpha=0.4)
+#cset4 = ax.contourf(X, Y, XI_SC, 1, cmap=cmap4, alpha=0.4)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch
