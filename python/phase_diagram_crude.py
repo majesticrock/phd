@@ -92,7 +92,7 @@ cset0 = ax.contourf(X, Y, SC, 1, cmap=cmap0, hatches=[None, None])
 cset1 = ax.contourf(X, Y, CDW, 1, cmap=cmap1, alpha=0.4)
 cset2 = ax.contourf(X, Y, AFM, 1, cmap=cmap2, alpha=0.4)
 cset3 = ax.contourf(X, Y, GAMMA_SC, 1, cmap=cmap3, alpha=0.4)
-#cset4 = ax.contourf(X, Y, XI_SC, 1, cmap=cmap4, alpha=0.4)
+cset4 = ax.contourf(X, Y, XI_SC, 1, cmap=cmap4, alpha=0.4)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch
@@ -100,8 +100,8 @@ from matplotlib.patches import Patch
 legend_elements = [Patch(facecolor='C0', label=r'$s$-wave'),
             Patch(facecolor='C1', label=r'CDW'),
             Patch(facecolor='C2', label=r'AFM'),
-            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$-wave'),
-            Patch(facecolor='C4', label=r'$\tilde{s}$-wave')]
+            Patch(facecolor='C3', label=r'$\tilde{s}$-wave'),
+            Patch(facecolor='C4', label=r'$d_{x^2 - y^2}$-wave')]
 ax.legend(handles=legend_elements, loc='upper left')
 
 plt.xlabel(r"$" + labels[0] + "/t$")
