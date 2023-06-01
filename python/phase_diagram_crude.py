@@ -79,29 +79,28 @@ for i in range(0, T_SIZE):
 
 
 X, Y = np.meshgrid(U, T)
-cmap0 = colors.ListedColormap(['white', 'C0'])
-cmap1 = colors.ListedColormap(['white', 'C1'])
-cmap2 = colors.ListedColormap(['white', 'C2'])
-cmap3 = colors.ListedColormap(['white', 'C3'])
-cmap4 = colors.ListedColormap(['white', 'C4'])
+cmap0 = colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C0', 0.5)])
+cmap1 = colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C1', 0.5)])
+cmap2 = colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C2', 0.5)])
+cmap3 = colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C3', 0.5)])
+cmap4 = colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C4', 0.5)])
 
 fig, ax = plt.subplots()
 
-mpl.rcParams["hatch.linewidth"] = 2.5
-cset0 = ax.contourf(X, Y, SC, 1, cmap=cmap0, hatches=[None, None])
-cset1 = ax.contourf(X, Y, CDW, 1, cmap=cmap1, alpha=0.4)
-cset2 = ax.contourf(X, Y, AFM, 1, cmap=cmap2, alpha=0.4)
-cset3 = ax.contourf(X, Y, GAMMA_SC, 1, cmap=cmap3, alpha=0.4)
-cset4 = ax.contourf(X, Y, XI_SC, 1, cmap=cmap4, alpha=0.4)
+cset0 = ax.contourf(X, Y, SC, 1, cmap=cmap0)
+cset1 = ax.contourf(X, Y, CDW, 1, cmap=cmap1)
+cset2 = ax.contourf(X, Y, AFM, 1, cmap=cmap2)
+cset3 = ax.contourf(X, Y, XI_SC, 1, cmap=cmap3)
+#cset4 = ax.contourf(X, Y, GAMMA_SC, 1, cmap=cmap4)
 #cbar = fig.colorbar(cset1)
 
 from matplotlib.patches import Patch
 
-legend_elements = [Patch(facecolor='C0', label=r'$s$-wave'),
+legend_elements = [Patch(facecolor='C0', label=r'$s$'),
             Patch(facecolor='C1', label=r'CDW'),
             Patch(facecolor='C2', label=r'AFM'),
-            Patch(facecolor='C3', label=r'$\tilde{s}$-wave'),
-            Patch(facecolor='C4', label=r'$d_{x^2 - y^2}$-wave')]
+            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$')]
+            #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
 ax.legend(handles=legend_elements, loc='upper left')
 
 plt.xlabel(r"$" + labels[0] + "/t$")
