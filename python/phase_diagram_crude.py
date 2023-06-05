@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import colors
-import matplotlib as mpl
 import sys
 import gzip
 
@@ -10,7 +9,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0"
+    name = "T0.1"
     data_folder = f"data/phases/{name}/"
 
 
