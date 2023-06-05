@@ -25,7 +25,8 @@ with gzip.open(data_folder + "xi_sc.dat.gz", 'rt') as f_open:
     XI_SC = abs(np.loadtxt(f_open))
 with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
     ETA = abs(np.loadtxt(f_open))
-
+with gzip.open(data_folder + "boundaries.dat.gz", 'rt') as f_open:
+    BOUND = np.loadtxt(f_open).transpose()
 
 labels = ["T", "U"]
 T_SIZE = len(CDW)
@@ -101,6 +102,10 @@ legend_elements = [Patch(facecolor='C0', label=r'$s$'),
             Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$')]
             #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
 ax.legend(handles=legend_elements, loc='upper left')
+
+for i in range(0, 12):
+    print(BOUND[i])
+    ax.plot(BOUND[i], T, "k-")
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
