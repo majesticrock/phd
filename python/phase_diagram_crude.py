@@ -25,8 +25,19 @@ with gzip.open(data_folder + "xi_sc.dat.gz", 'rt') as f_open:
     XI_SC = abs(np.loadtxt(f_open))
 with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
     ETA = abs(np.loadtxt(f_open))
-with gzip.open(data_folder + "boundaries.dat.gz", 'rt') as f_open:
-    BOUND = np.loadtxt(f_open).transpose()
+with gzip.open(data_folder + "boundaries_cdw.dat.gz", 'rt') as f_open:
+    BOUND_CDW = np.loadtxt(f_open)
+with gzip.open(data_folder + "boundaries_afm.dat.gz", 'rt') as f_open:
+    BOUND_AFM = np.loadtxt(f_open)
+with gzip.open(data_folder + "boundaries_sc.dat.gz", 'rt') as f_open:
+    BOUND_SC = np.loadtxt(f_open)
+with gzip.open(data_folder + "boundaries_gamma_sc.dat.gz", 'rt') as f_open:
+    BOUND_GAMMA_SC = np.loadtxt(f_open)
+with gzip.open(data_folder + "boundaries_xi_sc.dat.gz", 'rt') as f_open:
+    BOUND_XI_SC = np.loadtxt(f_open)
+with gzip.open(data_folder + "boundaries_eta.dat.gz", 'rt') as f_open:
+    BOUND_ETA = np.loadtxt(f_open)
+
 
 labels = ["T", "U"]
 T_SIZE = len(CDW)
@@ -103,9 +114,18 @@ legend_elements = [Patch(facecolor='C0', label=r'$s$'),
             #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
 ax.legend(handles=legend_elements, loc='upper left')
 
-for i in range(0, 12):
-    print(BOUND[i])
-    ax.plot(BOUND[i], T, "k-")
+if(len(BOUND_CDW) == 2):
+    ax.plot(BOUND_CDW[1], BOUND_CDW[0], "kx")
+if(len(BOUND_AFM) == 2):
+    ax.plot(BOUND_AFM[1], BOUND_AFM[0], "kx")
+if(len(BOUND_SC) == 2):
+    ax.plot(BOUND_SC[1], BOUND_SC[0], "kx")
+if(len(BOUND_GAMMA_SC) == 2):
+    ax.plot(BOUND_GAMMA_SC[1], BOUND_GAMMA_SC[0], "kx")
+if(len(BOUND_XI_SC) == 2):
+    ax.plot(BOUND_XI_SC[1], BOUND_XI_SC[0], "kx")
+if(len(BOUND_ETA) == 2):
+    ax.plot(BOUND_ETA[1], BOUND_ETA[0], "kx")
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
