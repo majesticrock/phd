@@ -12,6 +12,15 @@ else:
     name = "T0.1"
     data_folder = f"data/phases/{name}/"
 
+def pair_sort(pair_arr, sortBy):
+    if len(pair_arr) < 2: 
+        return
+    n = len(pair_arr[sortBy])
+    for i in range(sortBy, n):
+        for j in range(i + 1, n):
+            if pair_arr[sortBy][i] > pair_arr[sortBy][j]:
+                pair_arr[sortBy][i], pair_arr[sortBy][j] = pair_arr[sortBy][j], pair_arr[sortBy][i]
+                pair_arr[1 - sortBy][i], pair_arr[1 - sortBy][j] = pair_arr[1 - sortBy][j], pair_arr[1 - sortBy][i]
 
 with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
     CDW = np.loadtxt(f_open)
@@ -25,18 +34,26 @@ with gzip.open(data_folder + "xi_sc.dat.gz", 'rt') as f_open:
     XI_SC = abs(np.loadtxt(f_open))
 with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
     ETA = abs(np.loadtxt(f_open))
+
+
 with gzip.open(data_folder + "boundaries_cdw.dat.gz", 'rt') as f_open:
     BOUND_CDW = np.loadtxt(f_open)
+    pair_sort(BOUND_CDW, 0)
 with gzip.open(data_folder + "boundaries_afm.dat.gz", 'rt') as f_open:
     BOUND_AFM = np.loadtxt(f_open)
+    pair_sort(BOUND_AFM, 0)
 with gzip.open(data_folder + "boundaries_sc.dat.gz", 'rt') as f_open:
     BOUND_SC = np.loadtxt(f_open)
+    pair_sort(BOUND_SC, 0)
 with gzip.open(data_folder + "boundaries_gamma_sc.dat.gz", 'rt') as f_open:
     BOUND_GAMMA_SC = np.loadtxt(f_open)
+    pair_sort(BOUND_GAMMA_SC, 0)
 with gzip.open(data_folder + "boundaries_xi_sc.dat.gz", 'rt') as f_open:
     BOUND_XI_SC = np.loadtxt(f_open)
+    pair_sort(BOUND_XI_SC, 1)
 with gzip.open(data_folder + "boundaries_eta.dat.gz", 'rt') as f_open:
     BOUND_ETA = np.loadtxt(f_open)
+    pair_sort(BOUND_ETA, 0)
 
 
 labels = ["T", "U"]
@@ -115,17 +132,17 @@ legend_elements = [Patch(facecolor='C0', label=r'$s$'),
 ax.legend(handles=legend_elements, loc='upper left')
 
 if(len(BOUND_CDW) == 2):
-    ax.plot(BOUND_CDW[1], BOUND_CDW[0], "kx")
+    ax.plot(BOUND_CDW[1], BOUND_CDW[0], "k.")
 if(len(BOUND_AFM) == 2):
-    ax.plot(BOUND_AFM[1], BOUND_AFM[0], "kx")
+    ax.plot(BOUND_AFM[1], BOUND_AFM[0], "k.")
 if(len(BOUND_SC) == 2):
-    ax.plot(BOUND_SC[1], BOUND_SC[0], "kx")
+    ax.plot(BOUND_SC[1], BOUND_SC[0], "k.")
 if(len(BOUND_GAMMA_SC) == 2):
-    ax.plot(BOUND_GAMMA_SC[1], BOUND_GAMMA_SC[0], "kx")
+    ax.plot(BOUND_GAMMA_SC[1], BOUND_GAMMA_SC[0], "k.")
 if(len(BOUND_XI_SC) == 2):
-    ax.plot(BOUND_XI_SC[1], BOUND_XI_SC[0], "kx")
+    ax.plot(BOUND_XI_SC[1], BOUND_XI_SC[0], "k.")
 if(len(BOUND_ETA) == 2):
-    ax.plot(BOUND_ETA[1], BOUND_ETA[0], "kx")
+    ax.plot(BOUND_ETA[1], BOUND_ETA[0], "k.")
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
