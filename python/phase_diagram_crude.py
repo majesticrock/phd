@@ -4,12 +4,12 @@ from matplotlib import colors
 import sys
 import gzip
 
-eps = 1e-5
+eps = 1e-10
 if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0.1"
+    name = "T0"
     data_folder = f"data/phases/{name}/"
 
 def pair_sort(pair_arr, sortBy):
@@ -143,6 +143,15 @@ if(len(BOUND_XI_SC) == 2):
     ax.plot(BOUND_XI_SC[1], BOUND_XI_SC[0], "k.")
 if(len(BOUND_ETA) == 2):
     ax.plot(BOUND_ETA[1], BOUND_ETA[0], "k.")
+
+
+micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
+micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()
+
+ax.plot(micnas_d[0], micnas_d[1], "r--")
+ax.plot(micnas_afm[0], micnas_afm[1], "r--")
+
+ax.plot(np.linspace(0, 2), 0.25 * np.linspace(0, 2), "k--")
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
