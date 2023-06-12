@@ -9,10 +9,10 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0_L80"
+    name = "T0_L200"
     data_folder = f"data/phases/{name}/"
 
-swapAxis = False
+swapAxis = True
 
 def pair_sort(pair_arr, sortBy):
     if len(pair_arr) < 2: 
