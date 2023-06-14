@@ -8,9 +8,9 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([-0.5, -0.3, -0.1])
+Vs = np.array([-0.1])
 
-folder = "data/L=70/"
+folder = "data/test/"
 name_suffix = "SC"
 fig, ax = plt.subplots()
 
