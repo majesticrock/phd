@@ -8,10 +8,10 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([-0.1])
+Vs = np.array([0.1])
 
 folder = "data/test/"
-name_suffix = "phase_sc_"
+name_suffix = "cdw"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
@@ -56,7 +56,7 @@ for q, T in enumerate(Ts):
             data = np.zeros(w_vals)
 
             for idx, element in enumerate(element_names):
-                file = f"{folder}{name}resolvent_{name_suffix}{element}.dat.gz"
+                file = f"{folder}{name}resolvent_{name_suffix}_{element}.dat.gz"
                 with gzip.open(file, 'rt') as f_open:
                     M = np.loadtxt(f_open)
                     A = M[0]
