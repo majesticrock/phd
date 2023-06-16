@@ -11,7 +11,7 @@ Us = np.array([-2.0])
 Vs = np.array([-0.1])
 
 folder = "data/test/"
-name_suffix = "cdw_"
+name_suffix = "phase_sc_"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
