@@ -10,10 +10,10 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0_L200"
+    name = "U+2"#"T0_L200"
     data_folder = f"data/phases/{name}/"
 
-swapAxis = True
+swapAxis = False
 
 def pair_sort(pair_arr, sortBy):
     if len(pair_arr) < 2: 
@@ -98,11 +98,11 @@ for i in range(0, len(file_names)):
 micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
 micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()
 
-ax.plot(micnas_d[0], micnas_d[1], "k--")
-ax.plot(micnas_afm[0], micnas_afm[1], "k--", label="Micnas")
-
-ax.set_xlim(-2, 2)
-ax.set_ylim(-2, 2)
+#ax.plot(micnas_d[0], micnas_d[1], "k--")
+#ax.plot(micnas_afm[0], micnas_afm[1], "k--", label="Micnas")
+#
+#ax.set_xlim(-2, 2)
+#ax.set_ylim(-2, 2)
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")
