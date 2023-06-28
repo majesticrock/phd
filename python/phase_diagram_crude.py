@@ -10,7 +10,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "U+2"#"T0_L200"
+    name = "U+2_2"#"T0_L200"
     data_folder = f"data/phases/{name}/"
 
 swapAxis = False
