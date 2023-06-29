@@ -10,7 +10,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "U+2_2"#"T0_L200"
+    name = "T0_2"#"T0_L200"
     data_folder = f"data/phases/{name}/"
 
 swapAxis = False
@@ -75,7 +75,10 @@ cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('
 fig, ax = plt.subplots()
 
 for i in range(0, len(file_names)):
-    ax.contourf(X, Y, crudeData[i], 1, cmap=cmaps[i])
+    if swapAxis:
+        ax.contourf(X, Y, crudeData[i], 1, cmap=cmaps[i])
+    else:
+        ax.contourf(Y, X, crudeData[i], 1, cmap=cmaps[i])
 
 from matplotlib.patches import Patch
 
@@ -90,9 +93,9 @@ ax.legend(handles=legend_elements, loc='upper left')
 for i in range(0, len(file_names)):
     if len(boundData[i]) == 2:
         if swapAxis:
-            ax.scatter(boundData[i][0], boundData[i][1], color="k", s=0.1)
-        else:
             ax.scatter(boundData[i][1], boundData[i][0], color="k", s=0.1)
+        else:
+            ax.scatter(boundData[i][0], boundData[i][1], color="k", s=0.1)
 
 
 micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
