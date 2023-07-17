@@ -27,6 +27,7 @@ def pair_sort(pair_arr, sortBy):
 
 file_names = np.array(["cdw", "afm", "sc", "xi_sc"])
 crudeData = []
+boundData = []
 
 for fname in file_names:
     with gzip.open(data_folder + f"{fname}.dat.gz", 'rt') as f_open:
@@ -34,6 +35,9 @@ for fname in file_names:
             crudeData.append(np.loadtxt(f_open).transpose())
         else:
             crudeData.append(np.loadtxt(f_open))
+
+    with gzip.open(data_folder + f"boundaries_{fname}.dat.gz", 'rt') as f_open:
+        boundData.append(np.loadtxt(f_open))
 
 labels = ["T", "U"]
 T_SIZE = len(crudeData[0])
@@ -85,6 +89,14 @@ legend_elements = [Patch(facecolor='C0', label=r'CDW'),
             Line2D([0], [0], label='Micnas', color='k', linestyle="--")]
             #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
 ax.legend(handles=legend_elements, loc='upper left')
+
+for i in range(0, len(file_names)):
+    if len(boundData[i]) == 2:
+        if swapAxis:
+            ax.scatter(boundData[i][1], boundData[i][0], color="k", s=0.1)
+        else:
+            ax.scatter(boundData[i][0], boundData[i][1], color="k", s=0.1)
+
 
 micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
 micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()

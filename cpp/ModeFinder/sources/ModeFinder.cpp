@@ -7,8 +7,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
-
-#include "../../HubbardMeanField/sources/Utility/OutputWriter.hpp"
+#include "../../HubbardMeanField/sources/Utility/OutputConvenience.hpp"
 
 const double CUT_OFF = 1e-6;
 
