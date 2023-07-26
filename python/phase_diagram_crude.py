@@ -80,9 +80,9 @@ from matplotlib.patches import Patch
 
 legend_elements = [Patch(facecolor='C0', label=r'CDW'),
             Patch(facecolor='C1', label=r'AFM'),
-            Patch(facecolor='C2', label=r'$s$'),
-            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$'),
-            Line2D([0], [0], label='Micnas', color='k', linestyle="--")]
+            Patch(facecolor='C2', label=r'$s$')]
+            #Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$'),
+            #Line2D([0], [0], label='Micnas', color='k', linestyle="--")]
             #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
 ax.legend(handles=legend_elements, loc='upper left')
 
