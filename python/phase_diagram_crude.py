@@ -10,8 +10,8 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0_1"#"T0_L200"
-    data_folder = f"data/phases/{name}/"
+    name = "V+2"#"T0_L200"
+    data_folder = f"data/phases/square/{name}/"
 
 swapAxis = False
 
@@ -95,8 +95,8 @@ micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()
 #ax.set_xlim(-2, 2)
 #ax.set_ylim(-2, 2)
 
-plt.xlabel(r"$" + labels[0] + "/t$")
-plt.ylabel(r"$" + labels[1] + "/t$")
+plt.xlabel(r"$" + labels[1] + "/t$")
+plt.ylabel(r"$" + labels[0] + "/t$")
 
 import os
 if not os.path.exists("python/build"):

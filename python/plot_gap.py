@@ -9,8 +9,8 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0_1"
-    data_folder = f"data/phases/{name}/"
+    name = "T0.1"
+    data_folder = f"data/phases/square/{name}/"
 
 x_axis_is_first = False
 
@@ -18,8 +18,8 @@ with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
     CDW = abs(np.loadtxt(f_open))
 with gzip.open(data_folder + "sc.dat.gz", 'rt') as f_open:
     SC =  abs(np.loadtxt(f_open))
-with gzip.open(data_folder + "eta.dat.gz", 'rt') as f_open:
-    ETA = abs(np.loadtxt(f_open))
+with gzip.open(data_folder + "afm.dat.gz", 'rt') as f_open:
+    AFM = abs(np.loadtxt(f_open))
 
 labels = ["T", "U"]
 T_SIZE = len(CDW)
@@ -39,7 +39,7 @@ with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
         elif i > 3:
             break
 
-data = np.sqrt(CDW*CDW + SC*SC + ETA*ETA)
+data = np.sqrt(CDW*CDW + SC*SC + AFM*AFM)
 
 if(not x_axis_is_first):
     T_SIZE, U_SIZE = U_SIZE, T_SIZE
