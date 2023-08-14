@@ -7,7 +7,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0_1"
+    name = "T0"
     data_folder = f"data/phases/square/{name}/"
 
 with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
@@ -32,15 +32,15 @@ with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
 data = np.sqrt(CDW*CDW + SC*SC + AFM*AFM)
 data = data.transpose()
 
-plt.plot(T, data, label='Mean Field')
+plt.plot(T, np.log(data), label='Mean Field')
 
 def theory(u, a):
     u = np.abs(u)
-    return a * (4. / u) * np.exp(-2 * np.pi * np.sqrt(1. / u))
+    return np.log(a * (4. / u) * np.exp(-2 * np.pi * np.sqrt(1. / u)))
 
 from scipy.optimize import curve_fit
-popt, pcov = curve_fit(theory, T, data)
-plt.plot(T, theory(T, *popt), label="Kopietz")
+#popt, pcov = curve_fit(theory, T, data)
+plt.plot(T, theory(T, 1), label="Kopietz")
 
 plt.xlabel('$' + labels[0] + '/t$')
 plt.ylabel(r'$\Delta/t$')
