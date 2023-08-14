@@ -1,26 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
 import gzip
 
-if(len(sys.argv) > 1):
-    data_folder = "data/" + sys.argv[1] + "/"
-    name = sys.argv[1]
-else:
-    name = "T0"
-    data_folder = f"data/phases/square/{name}/"
+data_folder = f"data/phases/small_U/afm_square.dat.gz"
 
-with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
-    CDW = abs(np.loadtxt(f_open))
-with gzip.open(data_folder + "sc.dat.gz", 'rt') as f_open:
-    SC =  abs(np.loadtxt(f_open))
-with gzip.open(data_folder + "afm.dat.gz", 'rt') as f_open:
+with gzip.open(data_folder, 'rt') as f_open:
     AFM = abs(np.loadtxt(f_open))
 
 labels = ["T", "U"]
-T_SIZE = len(CDW)
+T_SIZE = len(AFM)
 
-with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
+with gzip.open(data_folder, 'rt') as fp:
     for i, line in enumerate(fp):
         if i == 3:
             ls = line.split()
@@ -29,21 +19,32 @@ with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
         elif i > 3:
             break
 
-data = np.sqrt(CDW*CDW + SC*SC + AFM*AFM)
-data = data.transpose()
+AFM = AFM.transpose()
 
-plt.plot(T, np.log(data), label='Mean Field')
+plt.plot(T, np.log(AFM), label='Mean Field - Square')
 
 def theory(u, a):
     u = np.abs(u)
     return np.log(a * (4. / u) * np.exp(-2 * np.pi * np.sqrt(1. / u)))
-
-from scipy.optimize import curve_fit
-#popt, pcov = curve_fit(theory, T, data)
 plt.plot(T, theory(T, 1), label="Kopietz")
 
+data_folder = f"data/phases/small_U/afm_cube.dat.gz"
+
+with gzip.open(data_folder, 'rt') as f_open:
+    AFM = abs(np.loadtxt(f_open))
+
+labels = ["T", "U"]
+AFM = AFM.transpose()
+
+plt.plot(T, np.log(AFM), label='Mean Field - SC')
+
 plt.xlabel('$' + labels[0] + '/t$')
-plt.ylabel(r'$\Delta/t$')
+plt.ylabel(r'$\ln(\Delta/t)$')
 plt.legend()
 plt.tight_layout()
+
+import os
+if not os.path.exists("python/build"):
+    os.makedirs("python/build")
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()
