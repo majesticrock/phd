@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gzip
 
-data_folder = f"data/phases/small_U/afm_square.dat.gz"
+data_folder = "data/phases/square/T0/afm.dat.gz"#f"data/phases/small_U/afm_square.dat.gz"
 
 with gzip.open(data_folder, 'rt') as f_open:
     AFM = abs(np.loadtxt(f_open))
@@ -26,7 +26,7 @@ plt.plot(T, np.log(AFM), label='Mean Field - Square')
 def theory(u, a):
     u = np.abs(u)
     return np.log(a * (4. / u) * np.exp(-2 * np.pi * np.sqrt(1. / u)))
-plt.plot(T, theory(T, 1), label="Kopietz")
+plt.plot(T, theory(T, 1), "--", label="Kopietz")
 
 data_folder = f"data/phases/small_U/afm_cube.dat.gz"
 
@@ -38,7 +38,7 @@ AFM = AFM.transpose()
 
 plt.plot(T, np.log(AFM), label='Mean Field - SC')
 
-plt.xlabel('$' + labels[0] + '/t$')
+plt.xlabel('$' + labels[1] + '/t$')
 plt.ylabel(r'$\ln(\Delta/t)$')
 plt.legend()
 plt.tight_layout()
