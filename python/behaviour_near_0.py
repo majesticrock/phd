@@ -25,25 +25,33 @@ plt.plot(T, np.log(AFM), label='Mean Field - Square')
 
 def theory(u, a):
     u = np.abs(u)
-    return np.log(a * (4. / u) * np.exp(-2 * np.pi * np.sqrt(1. / u)))
-plt.plot(T, theory(T, 1), "--", label="Kopietz")
+    return np.log(a * (4.) * np.exp(-2 * np.pi * np.sqrt(1. / u)))
+plt.plot(T, theory(T, 10), "--", label="Kopietz")
 
 data_folder = "data/phases/cube/T0/afm.dat.gz"#f"data/phases/small_U/afm_cube.dat.gz"
 
 with gzip.open(data_folder, 'rt') as f_open:
     AFM = abs(np.loadtxt(f_open))
-
-labels = ["T", "U"]
 AFM = AFM.transpose()
+
+with gzip.open(data_folder, 'rt') as fp:
+    for i, line in enumerate(fp):
+        if i == 3:
+            ls = line.split()
+            labels[0] = ls[1].split("_")[0]
+            T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE+1)[:T_SIZE]
+        elif i > 3:
+            break
 
 plt.plot(T, np.log(AFM), label='Mean Field - SC')
 def theory(u, a):
     u = np.abs(u)
-    return np.log(a * (4.) * np.exp(-1. / (0.285346 * u)))
+    return np.log(a * np.exp(0.5 * np.log(36.)) * np.exp(-2. / (0.285346 * u)))
 plt.plot(T, theory(T, 1), "--", label="Theory 3D")
 
 plt.xlabel('$' + labels[1] + '/t$')
 plt.ylabel(r'$\ln(\Delta/t)$')
+plt.ylim(-50, 1)
 plt.legend()
 plt.tight_layout()
 
