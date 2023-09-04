@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gzip
 
-data_folder = "data/phases/square/T0/afm.dat.gz"#"data/phases/small_U/afm_square.dat.gz"#"data/phases/square/T0/afm.dat.gz"#
+data_folder = "data/phases/small_U/afm_square.dat.gz"#"data/phases/square/T0/afm.dat.gz"#
 
 with gzip.open(data_folder, 'rt') as f_open:
     AFM = abs(np.loadtxt(f_open))
@@ -28,7 +28,7 @@ def theory(u, a):
     return np.log10(a * (4.) * np.exp(-2 * np.pi * np.sqrt(1. / u)))
 plt.plot(T, theory(T, 10), "--", label="Kopietz")
 
-data_folder = "data/phases/cube/T0/afm.dat.gz"#f"data/phases/small_U/afm_cube.dat.gz"
+data_folder = "data/phases/small_U/afm_cube.dat.gz"#"data/phases/cube/T0/afm.dat.gz"#
 
 with gzip.open(data_folder, 'rt') as f_open:
     AFM = abs(np.loadtxt(f_open))
@@ -52,7 +52,7 @@ plt.plot(T, theory(T, 1), "--", label="Theory 3D")
 
 plt.xlabel('$' + labels[1] + '/t$')
 plt.ylabel(r'$\log_{10}(\Delta/t)$')
-plt.ylim(-20, 1)
+plt.ylim(-20, 0)
 plt.legend()
 plt.tight_layout()
 
