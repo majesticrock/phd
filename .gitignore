@@ -62,3 +62,4 @@ python/__pycache__
 cpp/ModeFinder/sources/Utility
 cpp/HubbardMeanField/auto_generated
 cpp/main
+cpp/HubbardMeanField/doxy
