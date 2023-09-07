@@ -8,10 +8,10 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([0.1])
+Vs = np.array([0.])
 
-folder = "data/test/"
-name_suffix = "cdw"
+folder = "data/modes/square/test/"
+name_suffix = "phase_sc"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
@@ -50,7 +50,7 @@ for q, T in enumerate(Ts):
 
             w_vals = 20000
             w_lin = np.linspace(0, plot_upper_lim, w_vals, dtype=complex)**2
-            w_lin += 1e-8j
+            w_lin += 1e-6j
             off = 1
 
             data = np.zeros(w_vals)
