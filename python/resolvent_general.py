@@ -8,7 +8,7 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([0.])
+Vs = np.array([-0.1])
 
 folder = "data/modes/square/test/"
 name_suffix = "phase_sc"
