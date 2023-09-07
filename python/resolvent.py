@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 
 # Calculates the resolvent in 1/w
 
-nameU = "-0.10"
-folder = "test"
+nameU = "-2.0"
+folder = "square/test"
 subfolder = ""
 name_suffix = ""
 
-file = f"data/{folder}/V_modes/{subfolder}{nameU}_resolvent{name_suffix}.txt"
+file = f"data/modes/{folder}/V_modes/{subfolder}{nameU}_resolvent{name_suffix}.txt"
 one_particle = 1 / np.abs(np.loadtxt(f"data/{folder}/V_modes/{subfolder}{nameU}_one_particle{name_suffix}.txt").flatten())
 
 M = np.loadtxt(file)
