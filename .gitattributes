@@ -1,4 +1,2 @@
-*.sh        eol=lf
-*.py        eol=lf
-*.cpp       eol=lf
-*.hpp       eol=lf
+# Enforce Unix newlines
+* text=auto eol=lf
