@@ -50,7 +50,7 @@ for q, T in enumerate(Ts):
 
             w_vals = 20000
             w_lin = np.linspace(0, plot_upper_lim, w_vals, dtype=complex)**2
-            w_lin += 1e-2j
+            w_lin += 1e-6j
             off = 1
 
             data = np.zeros(w_vals)
