@@ -10,8 +10,8 @@ Ts = np.array([0.])
 Us = np.array([-2.0])
 Vs = np.array([-0.1])
 
-folder = "data/modes/square/test/"
-name_suffix = "phase_sc"
+folder = "data/modes/square/momentum_test/"
+name_suffix = "higgs_sc"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
