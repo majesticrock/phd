@@ -10,9 +10,9 @@ Ts = np.array([0.])
 Us = np.array([-2.0])
 Vs = np.array([-0.1])
 
-folder = "data/modes/square/momentum_test/"
-name_suffix = "higgs_sc"
-element_names = ["a", "a+b", "a+ib"]
+folder = "data/modes/square/test/"
+name_suffix = "phase_sc"
+element_names = ["a"]#, "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
@@ -49,9 +49,10 @@ for q, T in enumerate(Ts):
                 return return_arr
 
             w_vals = 20000
-            w_lin = np.linspace(0, plot_upper_lim, w_vals, dtype=complex)**2
+            w_lin = np.linspace(0, plot_upper_lim, w_vals, dtype=complex)
             w_lin += 1e-6j
-            off = 1
+            w_lin = w_lin**2
+            off = 0
 
             data = np.zeros(w_vals)
 
@@ -84,6 +85,7 @@ for q, T in enumerate(Ts):
                 elif idx == 2:
                     data += dos( np.copy(w_lin) ).imag
 
+            print("sum: ", np.sum(data) * plot_upper_lim / w_vals)
             ax.plot(np.sqrt(w_lin.real), data, color=colors[q+r+s],
                 linewidth=(plt.rcParams["lines.linewidth"]), label=f"$V={V}$")
 
