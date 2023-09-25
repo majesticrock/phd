@@ -7,10 +7,9 @@ U = -2.0
 V = -0.1
 
 folder = "data/modes/square/test/"
-name_suffix = "phase_sc"
+name_suffix = "higgs_sc"
 name = f"T={T}/U={U}_V={V}/"
 element_names = ["a", "a+b", "a+ib"]
-type = "phase"
 
 file = f"{folder}{name}one_particle.dat.gz"
 with gzip.open(file, 'rt') as f_open:
