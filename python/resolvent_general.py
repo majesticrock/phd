@@ -12,7 +12,7 @@ Vs = np.array([-0.1])
 
 folder = "data/modes/square/test/"
 name_suffix = "phase_sc"
-element_names = ["a"]#, "a+b", "a+ib"]
+element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
@@ -62,7 +62,7 @@ for q, T in enumerate(Ts):
                     M = np.loadtxt(f_open)
                     A = M[0]
                     B = M[1]
-
+                #A[0] = 19.9705
                 deviation_from_inf = np.zeros(len(A) - 1)
                 for i in range(0, len(A) - 1):
                     deviation_from_inf[i] = abs((A[i] - a_inf) / a_inf) + abs((np.sqrt(B[i + 1]) - b_inf) / b_inf)
@@ -76,7 +76,10 @@ for q, T in enumerate(Ts):
                     G = w - A[len(A) - off_termi] - B[len(B) - off_termi] * terminator( w )
                     for j in range(len(A) - off_termi - 1, -1, -1):
                         G = w - A[j] - B[j + 1] / G
-                    return B[0] / G
+                    if idx==0:
+                        return B[0] / G
+                    else:
+                        return B[0] * np.sqrt(w) / G
                 
                 if idx == 0:
                     data -= dos( np.copy(w_lin) ).imag
@@ -85,9 +88,7 @@ for q, T in enumerate(Ts):
                 elif idx == 2:
                     data += dos( np.copy(w_lin) ).imag
 
-            print("sum: ", np.sum(data) * plot_upper_lim / w_vals)
-            ax.plot(np.sqrt(w_lin.real), data, color=colors[q+r+s],
-                linewidth=(plt.rcParams["lines.linewidth"]), label=f"$V={V}$")
+            ax.plot(np.sqrt(w_lin.real), data, color=colors[q+r+s], linewidth=(plt.rcParams["lines.linewidth"]), label=f"$V={V}$")
 
 legend = plt.legend()
 

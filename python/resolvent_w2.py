@@ -8,9 +8,9 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([0.])
+Vs = np.array([-0.5])
 
-folder = "data/modes/square/test/"
+folder = "data/modes/square/L=70/"
 name_suffix = "SC"
 fig, ax = plt.subplots()
 
@@ -35,7 +35,7 @@ for q, T in enumerate(Ts):
             a_inf = (roots[0] + roots[1]) * 0.5
             b_inf = ((roots[1] - roots[0]) * 0.25)
 
-            #ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label="Continuum")
+            ax.axvspan(np.sqrt(roots[1]), np.sqrt(roots[0]), alpha=.2, color="purple", label="Continuum")
             for idx, type in enumerate(types):
                 file = f"{folder}{name}resolvent_{type}_{name_suffix}.dat.gz"
                 with gzip.open(file, 'rt') as f_open:
@@ -95,6 +95,7 @@ legend_extra = plt.legend([dummy_lines[i] for i in [0,1]], [r"Amplitude", r"Phas
 ax.add_artist(legend)
 ax.add_artist(legend_extra)
 
+ax.set_xlim(-0.03, 8.5)
 ax.set_xlabel(r"$\epsilon / t$")
 ax.set_ylabel(r"$A(z)$")
 fig.tight_layout()
