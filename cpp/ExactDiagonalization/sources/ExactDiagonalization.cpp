@@ -125,7 +125,7 @@ int main()
 		if (index < 0) index += 2 * SYSTEM_SIZE;
 		index %= SYSTEM_SIZE;
 		return index;
-	};
+		};
 
 	for (int ki = 0; ki < 2 * SYSTEM_SIZE; ki++)
 	{
