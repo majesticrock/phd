@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import gzip
-import continued_fraction as cf
+import lib.continued_fraction as cf
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
