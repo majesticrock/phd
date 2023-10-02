@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.continued_fraction as cf
+from lib.iterate_containers import iterate_containers
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -22,36 +23,33 @@ lss = ["-", "--", "-."]
 
 plot_upper_lim = 8.5
 
-for q, T in enumerate(Ts):
-    for r, U in enumerate(Us):
-        for s, V in enumerate(Vs):
-            name = f"T={T}/U={U}_V={V}"
+for T, U, V in iterate_containers(Ts, Us, Vs):
+    name = f"T={T}/U={U}_V={V}"
             
-            w_vals = 20000
-            w_lin = np.linspace(0, plot_upper_lim, w_vals, dtype=complex)
-            w_lin += 1e-6j
-            w_lin = w_lin**2
+    w_vals = 20000
+    w_lin = np.linspace(0, plot_upper_lim, w_vals, dtype=complex)
+    w_lin += 1e-6j
+    w_lin = w_lin**2
+    data = np.zeros(w_vals)
 
-            data = np.zeros(w_vals)
-
-            for idx, element in enumerate(element_names):
-                file = f"{folder}{name}resolvent_{name_suffix}_{element}.dat.gz"
-                res = cf.ContinuedFraction(f"{folder}{name}", f"resolvent_{name_suffix}_{element}", True)
+    for idx, element in enumerate(element_names):
+        file = f"{folder}{name}resolvent_{name_suffix}_{element}.dat.gz"
+        res = cf.ContinuedFraction(f"{folder}{name}", f"resolvent_{name_suffix}_{element}", True)
                 
-                def dos(w):
-                    if idx==0:
-                        return res.continued_fraction(w)
-                    else:
-                        return np.sqrt(w) * res.continued_fraction(w)
+        def dos(w):
+            if idx==0:
+                return res.continued_fraction(w)
+            else:
+                return np.sqrt(w) * res.continued_fraction(w)
                 
-                if idx == 0:
-                    data -= dos( np.copy(w_lin) ).imag
-                elif idx == 1:
-                    data -= dos( np.copy(w_lin) ).imag
-                elif idx == 2:
-                    data += dos( np.copy(w_lin) ).imag
+        if idx == 0:
+            data -= dos( np.copy(w_lin) ).imag
+        elif idx == 1:
+            data -= dos( np.copy(w_lin) ).imag
+        elif idx == 2:
+            data += dos( np.copy(w_lin) ).imag
 
-            ax.plot(np.sqrt(w_lin.real), data, color=colors[q+r+s], linewidth=(plt.rcParams["lines.linewidth"]), label=f"$V={V}$")
+    ax.plot(np.sqrt(w_lin.real), data, linewidth=(plt.rcParams["lines.linewidth"]), label=f"$V={V}$")
 
 res.mark_continuum(ax)
 legend = plt.legend()
