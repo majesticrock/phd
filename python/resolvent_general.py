@@ -19,8 +19,6 @@ fig, ax = plt.subplots()
 #ax.set_xscale("log")
 ax.set_yscale("log")
 
-lss = ["-", "--", "-."]
-
 plot_upper_lim = 8.5
 
 for T, U, V in iterate_containers(Ts, Us, Vs):

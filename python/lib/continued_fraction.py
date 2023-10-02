@@ -67,3 +67,33 @@ class ContinuedFraction:
             deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
         self.terminate_at = len(self.A) - np.argmin(deviation_from_infinity) - 1
         print("Terminating at i=", np.argmin(deviation_from_infinity))
+        
+
+def resolvent_data(data_folder, name_suffix, lower_range, upper_range, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6):
+    w_lin = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
+    w_lin += (imaginary_offset * 1j)
+    w_squared = w_lin**2
+    data = np.zeros(number_of_values, dtype=complex)
+    
+    if xp_basis:
+        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
+        data = res.continued_fraction( np.copy(w_squared) )
+    else:
+        element_names = ["a", "a+b", "a+ib"]
+        for idx, element in enumerate(element_names):
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True)
+            
+        def dos(w):
+            if idx==0:
+                return res.continued_fraction(w)
+            else:
+                return np.sqrt(w) * res.continued_fraction(w)
+                
+        if idx == 0:
+            data += dos( np.copy(w_squared) )
+        elif idx == 1:
+            data -= dos( np.copy(w_squared) )
+        elif idx == 2:
+            data += dos( np.copy(w_squared) )
+            
+    return -data.imag, data.real, w_lin.real 
