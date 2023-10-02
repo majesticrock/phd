@@ -47,7 +47,7 @@ with gzip.open(data_folder, 'rt') as fp:
 plt.plot(T, np.log10(AFM), label='Mean Field - SC')
 def theory(u, a):
     u = np.abs(u)
-    return np.log10(a * np.exp(0.5 * np.log(36.)) * np.exp(-2. / (0.288731210720569176 * u)))
+    return np.log10(a * 6. * np.exp(-2. / (0.288731210720569176 * u)))
 plt.plot(T, theory(T, 1), "--", label="Theory 3D")
 
 plt.xlabel('$' + labels[1] + '/t$')

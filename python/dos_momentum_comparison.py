@@ -24,10 +24,8 @@ momentum_based.set_individual_colors("nice")
 dos_based.set_individual_colors("nice")
 
 types = [["data/modes/square/dos_disc=400/", dos_based], ["data/modes/square/momentum_L=20/", momentum_based]]
-name_suffix = "higgs_sc"
-element_names = ["a", "a+b", "a+ib"]
+name_suffix = "phase_SC"
 
-#ax.set_xscale("log")
 ax.set_yscale("log")
 
 plot_upper_lim = 8.5
@@ -37,46 +35,14 @@ for folder, curves in types:
     for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}_V={V}"
 
-        w_vals = 20000
-        w_lin = np.linspace(0, plot_upper_lim, w_vals, dtype=complex)
-        w_lin += 1e-6j
-        w_lin = w_lin**2
-        data = np.zeros(w_vals)
+        data_imag, data, w_lin = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim)
 
-        for idx, element in enumerate(element_names):
-            file = f"{folder}{name}resolvent_{name_suffix}_{element}.dat.gz"
-            res = cf.ContinuedFraction(f"{folder}{name}", f"resolvent_{name_suffix}_{element}", True)
-
-            def dos(w):
-                if idx==0:
-                    return res.continued_fraction(w)
-                else:
-                    return np.sqrt(w) * res.continued_fraction(w)
-
-            if idx == 0:
-                data -= dos( np.copy(w_lin) ).imag
-            elif idx == 1:
-                data -= dos( np.copy(w_lin) ).imag
-            elif idx == 2:
-                data += dos( np.copy(w_lin) ).imag
-
-        curves.plot(np.sqrt(w_lin.real), data)
+        curves.plot(w_lin, data_imag)
         color_labels.append(f"$U={U}$")
 
 #res.mark_continuum(ax)
 linestyle_labels = ['DOS', 'Momentum']
 color_and_linestyle_legends(ax, linestyle_labels=linestyle_labels, color_labels=color_labels, color_legend_title='', linestyle_legend_title="Method")
-
-#legend = plt.legend()
-#
-#import matplotlib.lines as mlines
-#dummy_lines = []
-#dummy_lines.append(mlines.Line2D([],[], color="k", linestyle="-"))
-#dummy_lines.append(mlines.Line2D([],[], color="k", linestyle="--", linewidth=2*plt.rcParams["lines.linewidth"]))
-#legend_extra = plt.legend([dummy_lines[i] for i in [0,1]], [r"DOS", r"Momentum"], loc="upper center")
-#
-#ax.add_artist(legend)
-#ax.add_artist(legend_extra)
 
 ax.set_xlabel(r"$\epsilon / t$")
 ax.set_ylabel(r"$A(z)$")
