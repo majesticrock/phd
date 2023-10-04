@@ -29,6 +29,9 @@
 % head
 \input{head.tex}
 
+\newcommand{\expec}[1]{\langle #1 \rangle}
+\newcommand{\timeDeriv}{\frac{\mathrm{d}}{\mathrm{d}t}}
+
 \begin{document}
 
 % Wer eine Schrift mit Serifen verwendet, kriegt vom Designer
@@ -46,98 +49,102 @@
 % text:
 \msection{Scientific context}
 
-Correlated quantum materials have been an everpresent subject of scientific research since the discovery of quantum mechanics.
-The BCS-theory of superconductivity from 1957 was the first of its kind to be able to describe the phenomenon, discovered in 1911 by Onnes.
+Correlated quantum materials have been an ever-present subject of scientific research since the discovery of quantum mechanics.
+The BCS-theory of superconductivity\cite{theory_of_sc} from 1957 was the first of its kind to be able to describe the phenomenon.
 It explains that two electrons form so-called Cooper pairs, which - in contrary to the composing electrons - are bosonic quasiparticles.
-If the temperature is below some critical temperature $T_c$ they can condese into a macroscopic occupation of the groundstate.
-This mechanism essentially allows for the well-known perfect conductivity.
+This pair formation is driven by electron-phonon interactions, that yield an effective attractive electron-electron interaction.
 
-\msection{Dynamic mean-field theory for spins and applications}
+If the temperature is below some critical temperature $T_c$ they can condense into a macroscopic occupation of the ground state and allow for the famous perfect conductivity.
+The two prominent collective excitations in a superconductor are the so-called Higgs and phase modes \cite{higgs, bo22}.
+The former is energetically located at the band edge and sometimes referred to as the amplitude mode.
+The latter originates in the invariance of the complex phase. 
+Changing the phase does not affect the energy, thus the mode is located at 0.
+
+A well-known and often used model is the so-called Hubbard model. Its Hamiltonian reads
+\begin{equation}
+    \label{eqn:hubbard}
+    H = -t \sum_{\langle i, j \rangle, \sigma} c_{i\sigma}^\dagger c_{j\sigma}  + U \sum_i c_{i\uparrow}^\dagger c_{i\downarrow}^\dagger c_{i\downarrow} c_{i\uparrow}\,,
+\end{equation}
+where the $\langle i, j \rangle$ denotes the summation over next neighbours, $t$ is a hopping strength, 
+$U$ denotes the on-site interaction strength and $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$.
+Most commonly, $U$ is positive and represents the repulsive Coulomb interaction of two electrons.
+In this case, the model exhibits antiferromagnetism (AFM).
+
+However, negative values for $U$ are also possible \cite{sentef}. They are oftentimes achieved by the aforementioned effective interactions mediated by phonons.
+If the system is precisely at half-filling and the underlying lattice of the system is bipartite, e.g. a square or simple cubic lattice, 
+the system can be transformed by a specific kind of particle-hole transformation \cite{micnas90}.
+This transformation effectively flips the sign of $U$, allowing researches to use the previously known antiferromagnetic results.
+However, instead of antiferromagnetism, the system now exhibits the coexistence of two distinct phases.
+Namely, s-wave superconductivity as described by the aforementioned BCS-theory and a so-called charge-density wave (CDW).
+The latter describes a system, where the electron density exhibits a wave like behaviour, similar to the spins in an antiferromagnetic phase.
 
 
-\begin{minipage}{0.44\textwidth}
-    The general idea of a mean-field approach is simple. We consider, e.g., a spin lattice consisting of a large number of interacting spins which essentially behave
-    the same. Now, we focus on one of these spins and substitute its complex quantum environment by an averaged field which is called \emph{mean-field}. 
-    This approximation reduces the intractable lattice problem to a single-site problem. Subsequently, the properties of the mean-field can be linked to those of 
-    the remaining spin leading to a so-called \emph{self-consistency problem}. Solving this is the key issue of a mean-field approach.
-\end{minipage}
-\hspace{0.01\textwidth}
-\begin{minipage}{0.54\textwidth}
-    \begin{center}
-        \includegraphics[width=\textwidth]{images/MFT_sketch.pdf}
-        \mcaption{1}{Example for a mean-field approach on a spin lattice.}
-    \end{center}
-\end{minipage}
+\msection{Methodology: Mean field theory and iterated equations of motion}
 
-\begin{minipage}{0.44\textwidth}
-    \begin{center}
-        \includegraphics[width=0.8\textwidth]{images/Correlation_sketch.pdf}
-        \mcaption{2}{Example for a correlation function of a spin-$1/2$. %At time zero the spin is aligned to its initial position yielding an expectation value of $1/4$. 
-        As the time increases, the spin loses the memory of its initial orientation.}
-    \end{center}
-\end{minipage}
-\hspace{0.01\textwidth}
-\begin{minipage}{0.54\textwidth}
-    In case of our dynamic mean-field theory for spins (spinDMFT), the mean-fields are time-dependent \cite{graes21}. It is developed to compute spin correlation functions such as 
-    \begin{align*}
-        g^{zz}(t,0) &:= \langle \mb{S}^{z}(t) \mb{S}^{z}(0) \rangle
-    \end{align*}
-    in the limit of large temperatures. These functions tell us, how much the spin at time $t$ is still correlated to its initial alignment. Correspondingly, they capture the 
-    decoherence induced by the spins environment.     
-\end{minipage}
-\vspace{2mm}
+Handling a quartic Hamiltonian, such as \autoref{eqn:hubbard}, is practically very difficult up to impossible,
+as the Hilbert spaces grow exponentially with the system size.
+The mean field approximation aims to reduce those kinds of Hamiltonians to a bilinear form by neglecting fluctuations around the the equilibrium.
+Therefore, one introduces so-called normal ordered operators
+\begin{equation}
+    :A: = A - \expec{A}_0\,.
+\end{equation}
+These allow rewriting the quartic term in the Hubbard Hamiltonian to
+\begin{subequations}
+\begin{align}
+    c_{i\uparrow}^\dagger c_{i\downarrow}^\dagger c_{i\downarrow} c_{i\uparrow} &= :c_{i\uparrow}^\dagger c_{i\downarrow}^\dagger c_{i\downarrow} c_{i\uparrow}:\\
+        &+\expec{c_{i\uparrow}^\dagger c_{i\downarrow}^\dagger} :c_{i\downarrow} c_{i\uparrow}: 
+            + :c_{i\uparrow}^\dagger c_{i\downarrow}^\dagger: \expec{c_{i\downarrow} c_{i\uparrow}} \\
+        &-\expec{c_{i\uparrow}^\dagger c_{i\downarrow}} :c_{i\downarrow}^\dagger c_{i\uparrow}: 
+            - :c_{i\uparrow}^\dagger c_{i\downarrow}: \expec{c_{i\downarrow}^\dagger c_{i\uparrow}} \\
+        &+\expec{c_{i\uparrow}^\dagger c_{i\uparrow}} :c_{i\downarrow}^\dagger c_{i\downarrow}: 
+            + :c_{i\uparrow}^\dagger c_{i\uparrow}: \expec{c_{i\downarrow}^\dagger c_{i\downarrow}} + \text{const}\,,
+\end{align}
+\end{subequations}
+where the first term $:c_{i\uparrow}^\dagger c_{i\downarrow}^\dagger c_{i\downarrow} c_{i\uparrow}:$ describes only small fluctuations that are neglected.
+The remainder is only bilinear in terms of operators as the expectation values are merely numbers.
 
-\begin{minipage}{0.65\textwidth}
-    A promising application of spinDMFT can be found in the context of nitrogen-vacancy (NV) centers in diamond \cite{jelez06}. They are subject of current research due 
-    to their stable spin states up to room temperature which is ideal for many applications such as magnetic sensing \cite{sushk14}. Close to the diamond surface, however, 
-    the NV-center coherence is strongly weakened because they are disturbed by other spins stemming from surface defects or adatoms. Understanding 
-    the dynamics of these other spins requires considering a large spin ensemble which is where spinDMFT can strike. We are currently collaborating with an experimental 
-    group from Boston who measures the correlation functions of the surface defect spins. While spinDMFT itself failed 
-    to capture their measurements, we recently obtained good agreement with an extended approach called \emph{Cluster-spinDMFT}.
-\end{minipage}
-\hspace{0.01\textwidth}
-\begin{minipage}{0.35\textwidth}
-    \begin{center}
-        \includegraphics[width=0.8\textwidth]{images/NV_ensemble.png}
-        \mcaption{3}{NV-center at a diamond surface with perturbing spins on the surface (black) \cite{rossk14}.}
-    \end{center}     
-\end{minipage}
-\vspace{1.3mm}
+The challenge here is obtaining these expectation values as they depend on the mean-field Hamiltonian, which in turn depends on the expectation values.
+The solution to this is a self-consistency calculation, for which one selects some starting values,
+solves the Hamiltonian for the new starting values and iterates until convergence is achieved.
 
-It is also possible to extend spinDMFT to external time dependencies. This enables us to introduce pulses to the mean-field simulation and to investigate phenomena such as 
-\emph{dynamic decoupling} \cite{uhrig07}. The idea of this is to periodically rotate a considered spin in order to weaken the effects of its environment and, 
-hence, to extend its coherence time.
+Afterwards, we use the iterated-equations-of-motion method (iEoM) to analyse the system for occurring excitations \cite{philip18, Kalthoff2017}.
+This method is based on the Heisenberg equations of motion 
+\begin{equation}
+    \timeDeriv A(t) = \frac{i}{\hbar} [H, A(t)]\,.
+\end{equation}
+To solve this equation, one needs an operator basis, which is complete in the sense, that each commutator $[H, A(t)]$ can be represented by this basis.
+Practically, this is often requires an infinite basis, which is impossible to implement numerically.
+The idea of the iEoM is, to iterate the commutation process and truncate at some point, assuming that the error becomes smaller with each iteration.
 
-Another potential project is the extension to spatial dependencies. Here, we plan to study how the effects of a pulse propagate through the sample. 
-The underlying phenomenon is called spin diffusion \cite{zu21}.
+Furthermore, an operator scalar product $(A|B)$ is introduced, which allows reducing the equations of motion from the operator form above to
+\begin{equation}
+    \timeDeriv \mathbf{c}(t) = \mathcal{M} \mathbf{c}(t)\,,
+\end{equation}
+where $\mathbf{c}(t)$ is a vector of time-dependent complex \emph{numbers} and a matrix
+\begin{equation}
+    \mathcal{M}_{ij} := (A_i | [H, A_j])\,,
+\end{equation}
+where $A_i, A_j$ are the operators from the aforementioned operator basis.
 
-As indicated above, a strong advantage of spinDMFT is its versatility. It can be easily extended to consider complex spin 
-configurations, anisotropies, time dependencies and more. Since the theoretical and numerical background has already been established, applying spinDMFT to new 
-scenarios becomes more and more important. Here, an internship is a great opportunity.
+All system dynamics are now contained within the complex-valued matrix $\mathcal{M}$, which can be analysed using a plethora of well-established numerical methods.
 
 
 \msection{Possible tasks during an internship}
 
-Generally, the internship involves mainly \emph{numerical} tasks and \emph{coding}. 
-%The work flow for applying the mean-field-approach looks as 
-%follows. First, a considered spin model has to be transformed to a mean-field model. Subsequently, the self-consistency conditions derived in the process can be solved with 
-%existing code in \textbf{C++}. Sometimes, numerical difficulties arise that demand to change details of the method. In the end, the results can be evaluated to 
-%observe exciting new phenomena. 
-A specific project could be the investigation of dynamic decoupling in a system comprising a single \emph{spin subject to a Gaussian noise}. Such a project would start
-with yourself reading through some literature provided by us so that you understand the fundamental ideas. Subsequently, you would start writing a first simple program in \textbf{C++}, 
-that introduces noise, artificial or from a mean-field approach, to a spin. In doing so, you can use existing code fragments from us on some of the required numerical methods. Subsequently, 
-you would introduce a pulse sequence such as \emph{UDD} \cite{uhrig07} to the spin in order to enhance its coherence.
-One goal of the project could be to find an optimal pulse sequence in dependence of the underlying noise. We emphasize, that this is only \textbf{one} potential project 
-and there are many other possibilities. Generally, a little experience 
-in \textbf{C++}, \emph{Python} or coding is advantageous. Moreover, knowledge of quantum mechanics is desirable.
+Generally, the internship involves mainly \emph{numerical} tasks and \emph{coding}, mainly utilising C++ and Python.
+Your project will involve the investigation of the excitations within a Hubbard model, depending on interactions or different lattices.
+You will begin by familiarising yourself with the topic using literature that we will provide.
+Subsequently, you would write a program that solves a self-consistency problem and analyses the system dynamics.
+We will provide you with some of our existing code fragments to help you get started.
+Generally, some experience in \textbf{C++}, \emph{Python} or coding is advantageous. Moreover, knowledge of quantum mechanics is required.
 
 
 \msection{General information}
 
-The chair currently consists of 9 people, that is, 6 PhD students, 1 postdoc as well as Prof. G\"otz S. Uhrig and Prof. Joachim Stolze. The group 
-works on a broad range of physical topics such as topological magnonics, non-equilibrium physics, coherence control and more. We have a weekly seminar in which
-progress is reported and articles are discussed (Journal Club). Feel free to visit our homepage 
-at \url{https://cmt.physik.tu-dortmund.de/uhrig-group/}. 
+The chair currently consists of 9 people, that is, 6 PhD students, 1 postdoc as well as Prof. G\"otz S. Uhrig and Prof. Joachim Stolze. 
+The group works on a broad range of physical topics such as topological magnonics, non-equilibrium physics, coherence control and more. 
+We have a weekly seminar in which progress is reported and articles are discussed (Journal Club). Feel free to visit our homepage at \url{https://cmt.physik.tu-dortmund.de/uhrig-group/}. 
+Our group already successfully hosted 2 RISE students in 2023.
 The methodology and the investigation of collective excitations is the research area of the PhD student Joshua Alth\"user who will also be your supervisor.
 You will get your own office space and access to our compute clusters. We do not offer a virtual internship.
 
