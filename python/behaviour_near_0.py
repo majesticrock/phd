@@ -24,11 +24,15 @@ AFM = AFM.transpose()
 plt.plot(T, np.log10(AFM), label='Mean Field - Square')
 
 def theory(u, a):
+    A = 4. * np.pi * np.pi
+    B = 2 * np.pi
     u = np.abs(u)
-    return np.log10(a * (4.) * np.exp(-2 * np.pi * np.sqrt(1. / u)))
+    return np.log10(a * A * np.exp(-B * np.sqrt(1. / u)))
 # https://journals.aps.org/prb/pdf/10.1103/PhysRevB.104.094524
+#          B = 1.90604, A = 0.02086 * np.sqrt(u)
+# Kopietz: B = 2 * np.pi, A = 4
 
-plt.plot(T, theory(T, 10), "--", label="Kopietz")
+plt.plot(T, theory(T, 1), "--", label="Kopietz")
 data_folder = "data/phases/small_U/afm_cube.dat.gz"#"data/phases/cube/T0/afm.dat.gz"#
 
 with gzip.open(data_folder, 'rt') as f_open:

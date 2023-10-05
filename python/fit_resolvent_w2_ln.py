@@ -11,14 +11,14 @@ use_xp = False
 if use_xp:
     folder = "data/modes/square/L=70/"
 else:
-    folder = "data/modes/square/test/"
+    folder = "data/modes/square/gamma_factor_20/"
 name_suffix = "phase_SC"
 fig, ax = plt.subplots()
 
-data_imag, data, w_lin = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, 1, xp_basis=use_xp)
+data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, 1, xp_basis=use_xp)
 plot_lower_lim = w_lin[np.argmax(data)] + 0.05
 plot_upper_lim = plot_lower_lim + 0.2
-data_imag, data, w_lin = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp)
+data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp)
 
 from scipy.optimize import curve_fit
 def func_ln(x, a, b):
