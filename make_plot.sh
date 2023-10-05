@@ -1,0 +1,1 @@
+TEXINPUTS=$(pwd): python python/$1.py
