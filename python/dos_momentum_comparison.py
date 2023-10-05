@@ -35,7 +35,7 @@ for folder, curves in types:
     for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}_V={V}"
 
-        data_imag, data, w_lin = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim)
+        data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim)
 
         curves.plot(w_lin, data_imag)
         color_labels.append(f"$U={U}$")

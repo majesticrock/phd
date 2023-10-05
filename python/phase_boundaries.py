@@ -10,8 +10,8 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0_1"#"T0_L200"
-    data_folder = f"data/phases/{name}/"
+    name = "T0"#"T0_L200"
+    data_folder = f"data/phases/square/{name}/"
 
 swapAxis = False
 
@@ -84,10 +84,11 @@ from matplotlib.patches import Patch
 
 legend_elements = [Patch(facecolor='C0', label=r'CDW'),
             Patch(facecolor='C1', label=r'AFM'),
-            Patch(facecolor='C2', label=r'$s$'),
-            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$'),
-            Line2D([0], [0], label='Micnas', color='k', linestyle="--")]
-            #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
+            Patch(facecolor='C2', label=r'$s$-wave'),
+            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$-wave')
+            #,Line2D([0], [0], label='Micnas', color='k', linestyle="--")
+            #,Patch(facecolor='C4', label=r'$\tilde{s}$')
+            ]
 ax.legend(handles=legend_elements, loc='upper left')
 
 for i in range(0, len(file_names)):
