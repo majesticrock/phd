@@ -11,7 +11,7 @@ Ts = np.array([0.])
 Us = np.array([-2.0])
 Vs = np.array([-0.1])
 
-folder = "data/modes/square/gamma_factor_200/"
+folder = "data/modes/square/dos_900/"
 name_suffix = "higgs_SC"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()

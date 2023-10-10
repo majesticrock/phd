@@ -11,7 +11,7 @@ use_xp = False
 if use_xp:
     folder = "data/modes/square/L=70/"
 else:
-    folder = "data/modes/square/gamma_factor_20/"
+    folder = "data/modes/square/dos_900/"
 name_suffix = "phase_SC"
 fig, ax = plt.subplots()
 
