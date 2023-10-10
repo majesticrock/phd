@@ -11,7 +11,7 @@ colors = prop_cycle.by_key()['color']
 fig, ax = plt.subplots()
 
 Ts = np.array([0.])
-Us = np.array([-2.0, -3.0])
+Us = np.array([-2.0])
 Vs = np.array([-0.1])
 
 dos_based = ps.CURVEFAMILY(total_size(Ts, Us, Vs), True, ax)
@@ -23,8 +23,8 @@ momentum_based.set_shared_kwargs(linewidth=2*plt.rcParams["lines.linewidth"])
 momentum_based.set_individual_colors("nice")
 dos_based.set_individual_colors("nice")
 
-types = [["data/modes/square/dos_disc=400/", dos_based], ["data/modes/square/momentum_L=20/", momentum_based]]
-name_suffix = "phase_SC"
+types = [["data/modes/square/gamma_factor_50/", dos_based], ["data/modes/square/momentum_L=20/", momentum_based]]
+name_suffix = "higgs_SC"
 
 ax.set_yscale("log")
 
@@ -37,6 +37,7 @@ for folder, curves in types:
 
         data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim)
 
+        print(np.trapz(data_imag))
         curves.plot(w_lin, data_imag)
         color_labels.append(f"$U={U}$")
 
