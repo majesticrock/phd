@@ -9,7 +9,7 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array(["0.25", "0.2", "0.15", "0.1", "0.05", "0.01", "0.005", "0.001", "0.0005", "0.0001", "0.00005", "0.0"])
+Vs = np.array(["0.25", "0.2", "0.15", "0.1", "0.05", "0.04", "0.03", "0.02", "0.01", "0.007", "0.005", "0.004", "0.002", "0.001", "0.0005", "0.0001", "0.00005", "0.0"])
 
 folder = "data/modes/square/dos_900/"
 element_names = ["a", "a+b", "a+ib"]
@@ -19,7 +19,7 @@ fig, ax = plt.subplots()
 ax.set_yscale("log")
 
 plot_upper_lim = 8.5
-name_suffix = "phase_SC"
+name_suffix = "higgs_SC"
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}_V={V}"
@@ -28,7 +28,7 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
 
 
 #res.mark_continuum(ax)
-#legend = plt.legend(loc=8)
+legend = plt.legend(loc=8)
 
 ax.set_xlabel(r"$z / t$")
 ax.set_ylabel(r"Spectral density / a.u.")

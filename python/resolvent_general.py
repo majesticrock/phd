@@ -19,18 +19,20 @@ fig, ax = plt.subplots()
 #ax.set_xscale("log")
 ax.set_yscale("log")
 
-plot_upper_lim = 8.5
+
+plot_upper_lim = 9
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}_V={V}"
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim, number_of_values=250000)
     ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), label=f"Higgs")
+    ax.plot(w_lin, (-np.log((w_lin - 0.770333) / (7.88 - 0.770333))) / (np.pi * np.pi))
 
 name_suffix = "phase_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}_V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim)
-    ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label=f"Phase")
+    #ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label=f"Phase")
 
 res.mark_continuum(ax)
 legend = plt.legend()
