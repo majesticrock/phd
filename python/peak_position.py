@@ -13,10 +13,6 @@ Vs = np.array(["0.25", "0.2", "0.15", "0.1", "0.05", "0.04", "0.03", "0.02", "0.
 
 folder = "data/modes/square/dos_900/"
 element_names = ["a", "a+b", "a+ib"]
-fig, ax = plt.subplots()
-
-#ax.set_xscale("log")
-#ax.set_yscale("log")
 
 plot_upper_lim = 8.5
 name_suffix = "phase_SC"
@@ -30,12 +26,41 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     peak_positions[counter] = w_lin[np.argmax(data)]
     counter += 1
 
-ax.plot(np.array([float(v) for v in Vs]), peak_positions, "x")
+fig, ax = plt.subplots()
+cut = 10
+v_data = np.array([float(v) for v in Vs])
+from scipy.optimize import curve_fit
+def func(x, a, b):
+    return np.sqrt(a * x + b)
+
+popt, pcov = curve_fit(func, v_data[cut:], peak_positions[cut:])
+x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
+ax.plot(x_lin, func(x_lin, *popt), label="Sqrt-Fit")
+
+ax.plot(v_data[:cut], peak_positions[:cut], "o", color="orange", label="Omitted data")
+ax.plot(v_data[cut:], peak_positions[cut:], "X", color="orange", label="Fitted data")
+
 ax.set_xlabel(r"$V / t$")
 ax.set_ylabel(r"Peak position $z/ t$")
-#legend = plt.legend(loc=8)
+legend = plt.legend()
 
 fig.tight_layout()
+
+#Create zoom
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes, zoomed_inset_axes, mark_inset
+
+axins = zoomed_inset_axes(ax, 8, loc='lower right', bbox_to_anchor=(0.9, 0.15), bbox_transform=fig.transFigure)
+axins.set_xlim(-0.001, 0.008)
+axins.set_ylim(-0.001, 0.15)
+
+axins.plot(x_lin, func(x_lin, *popt), label="Sqrt-Fit")
+axins.plot(v_data[:cut], peak_positions[:cut], "o", markersize=6, color="orange", label="Omitted data")
+axins.plot(v_data[cut:], peak_positions[cut:], "x", markersize=8, color="orange", mew=2.5, label="Fitted data")
+
+mark_inset(ax, axins, loc1=2, loc2=3, fc="none", ec="0.5")
+plt.yticks(visible=False)
+plt.xticks(visible=False)
 
 import os
 plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")

@@ -65,11 +65,11 @@ class ContinuedFraction:
         deviation_from_infinity = np.zeros(len(self.A) - 1)
         for i in range(0, len(self.A) - 1):
             deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
-        self.terminate_at = len(self.A) - np.argmin(deviation_from_infinity) - 1
+        self.terminate_at = len(self.A) - np.argmin(deviation_from_infinity)
         print("Terminating at i =", np.argmin(deviation_from_infinity))
         
 
-def resolvent_data(data_folder, name_suffix, lower_range, upper_range, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6):
+def resolvent_data(data_folder, name_suffix, lower_range, upper_range, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True):
     w_lin = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
     w_lin += (imaginary_offset * 1j)
     w_squared = w_lin**2
@@ -77,7 +77,7 @@ def resolvent_data(data_folder, name_suffix, lower_range, upper_range, xp_basis=
     
     if xp_basis:
         res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
-        data = res.continued_fraction( np.copy(w_squared) )
+        data = res.continued_fraction( np.copy(w_squared), withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
         for idx, element in enumerate(element_names):
@@ -85,9 +85,9 @@ def resolvent_data(data_folder, name_suffix, lower_range, upper_range, xp_basis=
             
             def dos(w):
                 if idx==0:
-                    return res.continued_fraction(w)
+                    return res.continued_fraction(w, withTerminator)
                 else:
-                    return np.sqrt(w) * res.continued_fraction(w)
+                    return np.sqrt(w) * res.continued_fraction(w, withTerminator)
                     
             if idx == 0:
                 data += dos( np.copy(w_squared) )
