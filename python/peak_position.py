@@ -15,11 +15,11 @@ folder = "data/modes/square/dos_900/"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
-ax.set_xscale("log")
+#ax.set_xscale("log")
 #ax.set_yscale("log")
 
 plot_upper_lim = 8.5
-name_suffix = "higgs_SC"
+name_suffix = "phase_SC"
 
 peak_positions = np.zeros(len(Vs))
 counter = 0
