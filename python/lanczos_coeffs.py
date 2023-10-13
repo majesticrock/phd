@@ -6,7 +6,9 @@ T = 0.
 U = -2.0
 V = -0.1
 
-folder = "data/modes/square/dos_900/"
+use_XP = True
+
+folder = "data/modes/square/test/"
 name_suffix = "phase_sc"
 name = f"T={T}/U={U}_V={V}/"
 element_names = ["a", "a+b", "a+ib"]
@@ -18,8 +20,11 @@ with gzip.open(file, 'rt') as f_open:
     a_inf = (roots[0] + roots[1]) * 0.5
     b_inf = ((roots[1] - roots[0]) * 0.25)
 
-element = element_names[0]
-file = f"{folder}{name}resolvent_{name_suffix}_{element}.dat.gz"
+if use_XP:
+    file = f"{folder}{name}resolvent_{name_suffix}.dat.gz"
+else:
+    element = element_names[0]
+    file = f"{folder}{name}resolvent_{name_suffix}_{element}.dat.gz"
 with gzip.open(file, 'rt') as f_open:
     M = np.loadtxt(f_open)
     A = M[0]
