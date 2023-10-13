@@ -11,7 +11,9 @@ Ts = np.array([0.])
 Us = np.array([-2.0])
 Vs = np.array([-0.1])
 
-folder = "data/modes/square/dos_900/"
+use_XP = True
+
+folder = "data/modes/square/test/"
 name_suffix = "higgs_SC"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
@@ -24,13 +26,13 @@ plot_upper_lim = 9
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}_V={V}"
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim, number_of_values=40000)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim, number_of_values=40000, xp_basis=use_XP)
     ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), label=f"Higgs")
 
 name_suffix = "phase_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}_V={V}"
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim, number_of_values=40000)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim, number_of_values=40000, xp_basis=use_XP)
     ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label=f"Phase")
 
 res.mark_continuum(ax)
