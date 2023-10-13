@@ -186,6 +186,7 @@ namespace Hubbard::Helper {
 				}
 			}
 		}
+		std::cout << K_minus << std::endl;
 
 		end = std::chrono::steady_clock::now();
 		std::cout << "Time for filling of M and N: "
