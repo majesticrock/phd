@@ -76,7 +76,10 @@ def resolvent_data(data_folder, name_suffix, lower_range, upper_range, xp_basis=
     data = np.zeros(number_of_values, dtype=complex)
     
     if xp_basis:
-        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
+        if name_suffix == "AFM" or name_suffix == "CDW":
+            res = res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True)
+        else:
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
         data = res.continued_fraction( np.copy(w_squared), withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
