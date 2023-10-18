@@ -37,14 +37,14 @@ plotter.set_shared_linestyle("--")
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}_V={V}"
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 1e-6, plot_upper_lim, number_of_values=20000, imaginary_offset=1e-6)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 1e-6, plot_upper_lim, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
     if realPart or both:
         realPlotter.plot(w_lin, data_real, linewidth=(plt.rcParams["lines.linewidth"]), label=f"$T={T}$")
     if not realPart or both:
         plotter.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), label=f"$T={T}$")
 
 #res.mark_continuum(ax)
-#legend = plt.legend(loc=8)
+legend = plt.legend(loc=8)
 
 ax.set_xlabel(r"$z / t$")
 ax.set_ylabel(r"Spectral density / a.u.")
