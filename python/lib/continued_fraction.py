@@ -67,22 +67,31 @@ class ContinuedFraction:
             deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
         self.terminate_at = len(self.A) - np.argmin(deviation_from_infinity)
         print("Terminating at i =", np.argmin(deviation_from_infinity))
-        
 
-def resolvent_data(data_folder, name_suffix, lower_range, upper_range, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True):
-    w_lin = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
-    w_lin += (imaginary_offset * 1j)
-    w_squared = w_lin**2
+def resolvent_data(data_folder, name_suffix, lower_range, upper_range=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True):
     data = np.zeros(number_of_values, dtype=complex)
-    
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
-            res = res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True)
+            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True)
         else:
             res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
+        
+        if upper_range is None:
+            upper_range = np.sqrt(res.roots[1]) + 0.5
+        w_lin = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
+        w_lin += (imaginary_offset * 1j)
+        w_squared = w_lin**2
+
         data = res.continued_fraction( np.copy(w_squared), withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
+        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True)
+        if upper_range is None:
+            upper_range = np.sqrt(res.roots[1]) + 0.5
+        w_lin = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
+        w_lin += (imaginary_offset * 1j)
+        w_squared = w_lin**2 
+        
         for idx, element in enumerate(element_names):
             res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True)
             
