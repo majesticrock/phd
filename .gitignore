@@ -16,7 +16,7 @@ stderr*
 cpp/HubbardMeanField/sources/SymbolicOperators
 
 #include literature
-!literature/
+!literature/*.pdf
 
 *.aux
 *.blg
