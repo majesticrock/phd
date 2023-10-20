@@ -4,11 +4,11 @@ import gzip
 
 T = 0.
 U = -2.0
-V = -0.1
+V = 1.0
 
 use_XP = True
 
-folder = "data/modes/square/test/"
+folder = "data/modes/square/dos_900/"
 name_suffix = "phase_sc"
 name = f"T={T}/U={U}_V={V}/"
 element_names = ["a", "a+b", "a+ib"]
@@ -38,7 +38,7 @@ ax.axhline(b_inf, linestyle="--", color="k", label="$b_\\infty$")
 ax.legend()
 ax.set_xlabel("Iteration $i$")
 ax.set_ylabel("Lanczos coefficient")
-ax.set_ylim(13, 34)
+#ax.set_ylim(13, 34)
 fig.tight_layout()
 
 import os
