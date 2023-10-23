@@ -10,7 +10,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0"#"T0_L200"
+    name = "test"#"T0_L200"
     data_folder = f"data/phases/square/{name}/"
 
 swapAxis = False
@@ -47,11 +47,11 @@ with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
     for i, line in enumerate(fp):
         if i == 2:
             ls = line.split()
-            labels[0] = ls[1].split("_")[0]
+            labels[1] = ls[1].split("_")[0]
             U = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), U_SIZE+1)[:U_SIZE]
         elif i == 3:
             ls = line.split()
-            labels[1] = ls[1].split("_")[0]
+            labels[0] = ls[1].split("_")[0]
             T = np.linspace(float(ls[1].split("=")[1]), float(ls[2].split("=")[1]), T_SIZE+1)[:T_SIZE]
         elif i > 3:
             break
@@ -80,6 +80,13 @@ for i in range(0, len(file_names)):
     else:
         ax.contourf(Y, X, crudeData[i], 1, cmap=cmaps[i])
 
+if swapAxis:
+    ax.set_ylim(np.min(T), np.max(T))
+    ax.set_xlim(np.min(U), np.max(U))
+else:
+    ax.set_xlim(np.min(T), np.max(T))
+    ax.set_ylim(np.min(U), np.max(U))
+
 from matplotlib.patches import Patch
 
 legend_elements = [Patch(facecolor='C0', label=r'CDW'),
@@ -89,6 +96,12 @@ legend_elements = [Patch(facecolor='C0', label=r'CDW'),
             #,Line2D([0], [0], label='Micnas', color='k', linestyle="--")
             #,Patch(facecolor='C4', label=r'$\tilde{s}$')
             ]
+
+with gzip.open(data_folder + f"coexistence_afm_cdw.dat.gz", 'rt') as f_open:
+    coexistence_data = np.loadtxt(f_open)
+ax.plot(coexistence_data[0], coexistence_data[1], linestyle="--", color="k", label="CDW")
+ax.plot(coexistence_data[0], coexistence_data[2], linestyle=":", color="k", label="AFM")
+
 ax.legend(handles=legend_elements, loc='upper left')
 
 for i in range(0, len(file_names)):
@@ -99,9 +112,8 @@ for i in range(0, len(file_names)):
             ax.scatter(boundData[i][0], boundData[i][1], color="k", s=0.1)
 
 
-micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
-micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()
-
+#micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
+#micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()
 #ax.plot(micnas_d[0], micnas_d[1], "k--")
 #ax.plot(micnas_afm[0], micnas_afm[1], "k--", label="Micnas")
 #
