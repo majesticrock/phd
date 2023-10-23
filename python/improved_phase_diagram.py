@@ -10,7 +10,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "dos_T0"#"T0_L200"
+    name = "test"#"T0_L200"
     data_folder = f"data/phases/square/{name}/"
 
 swapAxis = False
@@ -32,10 +32,17 @@ for fname in file_names:
     with gzip.open(data_folder + f"boundaries_{fname}.dat.gz", 'rt') as f_open:
         boundData.append(np.loadtxt(f_open))
 
-with gzip.open(data_folder + f"coexistence_afm_cdw.dat.gz", 'rt') as f_open:
-    coexistence_data = np.loadtxt(f_open)
-
 labels = ["U", "V"]
+with gzip.open(data_folder + "cdw.dat.gz", 'rt') as fp:
+    for i, line in enumerate(fp):
+        if i == 2:
+            ls = line.split()
+            labels[1] = ls[1].split("_")[0]
+        elif i == 3:
+            ls = line.split()
+            labels[0] = ls[1].split("_")[0]
+        elif i > 3:
+            break
 cmaps = []
 cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C0', 0.5)]))
 cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C1', 0.5)]))
@@ -46,14 +53,14 @@ fig, ax = plt.subplots()
 
 from matplotlib.patches import Patch
 
-legend_elements = [Patch(facecolor='C0', label=r'CDW'),
-            Patch(facecolor='C1', label=r'AFM'),
-            Patch(facecolor='C2', label=r'$s$-wave'),
-            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$-wave')
-            #,Line2D([0], [0], label='Micnas', color='k', linestyle="--")
-            #,Patch(facecolor='C4', label=r'$\tilde{s}$')
-            ]
-ax.legend(handles=legend_elements, loc='upper left')
+#legend_elements = [Patch(facecolor='C0', label=r'CDW'),
+#            Patch(facecolor='C1', label=r'AFM'),
+#            Patch(facecolor='C2', label=r'$s$-wave'),
+#            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$-wave')
+#            #,Line2D([0], [0], label='Micnas', color='k', linestyle="--")
+#            #,Patch(facecolor='C4', label=r'$\tilde{s}$')
+#            ]
+#ax.legend(handles=legend_elements, loc='upper left')
 
 for i in range(0, len(file_names)):
     if len(boundData[i]) == 2:
@@ -62,16 +69,19 @@ for i in range(0, len(file_names)):
         else:
             ax.scatter(boundData[i][0], boundData[i][1], color="k", s=0.1)
 
-ax.plot(coexistence_data[0], coexistence_data[1], linestyle="--", color="k")
-ax.plot(coexistence_data[0], coexistence_data[2], linestyle="--", color="k")
+with gzip.open(data_folder + f"coexistence_afm_cdw.dat.gz", 'rt') as f_open:
+    coexistence_data = np.loadtxt(f_open)
+ax.plot(coexistence_data[0], coexistence_data[1], linestyle="--", color="k", label="CDW")
+ax.plot(coexistence_data[0], coexistence_data[2], linestyle=":", color="k", label="AFM")
+ax.legend()
 
 #micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
 #micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()
 #ax.plot(micnas_d[0], micnas_d[1], "k--")
 #ax.plot(micnas_afm[0], micnas_afm[1], "k--", label="Micnas")
 
-#ax.set_xlim(-2, 2)
-#ax.set_ylim(-2, 2)
+ax.set_xlim(0, 4)
+ax.set_ylim(0, 2)
 
 plt.xlabel(r"$" + labels[0] + "/t$")
 plt.ylabel(r"$" + labels[1] + "/t$")

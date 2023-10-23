@@ -9,10 +9,10 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0.1"
+    name = "test"
     data_folder = f"data/phases/square/{name}/"
 
-x_axis_is_first = False
+x_axis_is_first = True
 
 with gzip.open(data_folder + "cdw.dat.gz", 'rt') as f_open:
     CDW = abs(np.loadtxt(f_open))
