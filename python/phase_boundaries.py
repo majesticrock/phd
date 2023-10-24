@@ -10,7 +10,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "dos_T0"#"T0_L200"
+    name = "dos_T0.1"#"T0_L200"
     data_folder = f"data/phases/square/{name}/"
 
 swapAxis = False
@@ -99,8 +99,9 @@ legend_elements = [Patch(facecolor='C0', label=r'CDW'),
 
 with gzip.open(data_folder + f"coexistence_afm_cdw.dat.gz", 'rt') as f_open:
     coexistence_data = np.loadtxt(f_open)
-ax.plot(coexistence_data[0], coexistence_data[1], linestyle="--", color="k", label="CDW")
-ax.plot(coexistence_data[0], coexistence_data[2], linestyle=":", color="k", label="AFM")
+if len(coexistence_data) > 0:
+    ax.plot(coexistence_data[0], coexistence_data[1], linestyle="--", color="k", label="CDW")
+    ax.plot(coexistence_data[0], coexistence_data[2], linestyle=":", color="k", label="AFM")
 
 ax.legend(handles=legend_elements, loc='upper left')
 
