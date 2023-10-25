@@ -27,7 +27,7 @@ name_suffix = "phase_SC"
 peak_positions = np.zeros(len(Vs))
 counter = 0
 for T, U, V in iterate_containers(Ts, Us, Vs):
-    name = f"T={T}/U={U}_V={V}"
+    name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
     
     peak_positions[counter] = w_lin[np.argmax(data)]# / extract_key(f"{folder}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")

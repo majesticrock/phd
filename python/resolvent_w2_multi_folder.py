@@ -36,7 +36,7 @@ plotter.set_individual_colors("default")
 plotter.set_shared_linestyle("-")
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
-    name = f"T={T}/U={U}_V={V}"
+    name = f"T={T}/U={U}/V={V}"
     
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 1e-4, number_of_values=30000, imaginary_offset=1e-6, xp_basis=True)
     if realPart or both:
