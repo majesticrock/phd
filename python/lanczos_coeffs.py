@@ -10,7 +10,7 @@ use_XP = True
 
 folder = "data/modes/square/dos_900/"
 name_suffix = "phase_sc"
-name = f"T={T}/U={U}_V={V}/"
+name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
 
 file = f"{folder}{name}one_particle.dat.gz"

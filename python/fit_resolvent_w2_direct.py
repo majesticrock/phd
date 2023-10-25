@@ -5,7 +5,7 @@ import lib.continued_fraction as cf
 T = 0.
 U = -3.0
 V = -0.1
-name = f"T={T}/U={U}_V={V}"
+name = f"T={T}/U={U}/V={V}"
 
 use_xp = False
 if use_xp:

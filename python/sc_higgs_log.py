@@ -20,7 +20,7 @@ fig, ax = plt.subplots()
 types = ["higgs"]
 lss = ["-", "--", "-."]
 
-name = f"T={T}/U={U}_V={V}/"
+name = f"T={T}/U={U}/V={V}/"
 
 file = f"{folder}{name}one_particle.dat.gz"
 with gzip.open(file, 'rt') as f_open:

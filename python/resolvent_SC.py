@@ -9,7 +9,7 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.1])
 Us = np.array([-2.0])
-Vs = np.array([-0.1])
+Vs = np.array([0.1])
 
 use_XP = True
 
@@ -25,13 +25,13 @@ plot_lower_lim = 0
 plot_upper_lim = 15
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
-    name = f"T={T}/U={U}_V={V}"
+    name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=20000, xp_basis=use_XP)
     ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), label=name_suffix)
 
 name_suffix = "higgs_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
-    name = f"T={T}/U={U}_V={V}"
+    name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=20000, xp_basis=use_XP)
     ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label=name_suffix)
 
