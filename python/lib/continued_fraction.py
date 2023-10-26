@@ -68,6 +68,17 @@ class ContinuedFraction:
         self.terminate_at = len(self.A) - np.argmin(deviation_from_infinity)
         print("Terminating at i =", np.argmin(deviation_from_infinity))
 
+def continuum_edges(data_folder, name_suffix, xp_basis=False):
+    if xp_basis:
+        if name_suffix == "AFM" or name_suffix == "CDW":
+            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True)
+        else:
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
+    else:
+        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_a", True)
+    
+    return np.sqrt(res.roots)
+
 def resolvent_data(data_folder, name_suffix, lower_range, upper_range=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True):
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
@@ -109,3 +120,7 @@ def resolvent_data(data_folder, name_suffix, lower_range, upper_range=None, xp_b
                 data += dos( np.copy(w_squared) )
             
     return -data.imag, data.real, w_lin.real, res
+
+def resolvent_in_continuum(data_folder, name_suffix, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True):
+    borders = continuum_edges(data_folder, name_suffix, xp_basis)
+    return resolvent_data(data_folder, name_suffix, borders[0], borders[1], xp_basis, number_of_values, imaginary_offset, withTerminator)
