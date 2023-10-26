@@ -7,41 +7,45 @@ from lib.iterate_containers import iterate_containers
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
-Ts = np.array([0.])
-Us = np.array([-2.0])
-Vs = np.array([-0.1])
+T = 0.
+U = -2.0
+V = -0.1
 
 use_XP = True
 
-folder = "data/modes/square/dos_900/"
-element_names = ["a", "a+b", "a+ib"]
+folder = "data/modes/square/dos_2500/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
 #ax.set_yscale("log")
 
+name = f"T={T}/U={U}/V={V}"
+phase_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "phase_SC", begin_offset=1e-6, range=0.01, number_of_values=20000, xp_basis=use_XP)
+higgs_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "higgs_SC", begin_offset=1e-6, range=0.01, number_of_values=20000, xp_basis=use_XP)
 
-for T, U, V in iterate_containers(Ts, Us, Vs):
-    name = f"T={T}/U={U}/V={V}"
-    phase_data, data_real, w_lin, res = cf.resolvent_in_continuum(f"{folder}{name}", "phase_SC", number_of_values=20000, xp_basis=use_XP)
-    higgs_data, data_real, w_lin, res = cf.resolvent_in_continuum(f"{folder}{name}", "higgs_SC", number_of_values=20000, xp_basis=use_XP)
-    
-    ax.plot(w_lin, higgs_data - phase_data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label="Higgs - Phase")
-    #ax.plot(w_lin, 0.75*0.1*(np.log(w_lin - np.sqrt(res.roots[0])))**2 )
+diff_data = higgs_data - phase_data
+ax.plot(w_lin, higgs_data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="-", label="Higgs")
+#ax.plot(w_lin, diff_data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label="Higgs - Phase")
+#ax.plot(w_lin, -data_real, label="Real part")
 
-res.mark_continuum(ax)
+from scipy.optimize import curve_fit
+def func(x, a, b):
+    return a * x + b
+
+def func2(x, a, b, c):
+    return a * (np.tanh(b*x - c) + 1)
+
+cut = 5000
+popt, pcov = curve_fit(func, w_lin[:cut], diff_data[:cut])
+ax.plot(w_lin, func(w_lin, *popt), "k--", label="Fit")
+
+#popt, pcov = curve_fit(func2, w_lin, -data_real, p0=(11, -1, 10))
+#ax.plot(w_lin, func2(w_lin, *popt), "k:", label="Fit")
+
 legend = plt.legend()
-
-#import matplotlib.lines as mlines
-#dummy_lines = []
-#dummy_lines.append(mlines.Line2D([],[], color="k", linestyle="-"))
-#dummy_lines.append(mlines.Line2D([],[], color="k", linestyle="--", linewidth=2*plt.rcParams["lines.linewidth"]))
-#legend_extra = plt.legend([dummy_lines[i] for i in [0,1]], [r"Amplitude", r"Phase"], loc="upper center")
-
 ax.add_artist(legend)
-#ax.add_artist(legend_extra)
 
-ax.set_xlabel(r"$z / t$")
+ax.set_xlabel(r"$\ln(z - z_-) / t$")
 ax.set_ylabel(r"Spectral density / a.u.")
 fig.tight_layout()
 
