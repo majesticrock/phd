@@ -13,15 +13,15 @@ V = -0.1
 
 use_XP = True
 
-folder = "data/modes/square/dos_2500/"
+folder = "data/modes/square/dos_900/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
 #ax.set_yscale("log")
 
 name = f"T={T}/U={U}/V={V}"
-phase_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "phase_SC", begin_offset=1e-6, range=0.01, number_of_values=20000, xp_basis=use_XP)
-higgs_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "higgs_SC", begin_offset=1e-6, range=0.01, number_of_values=20000, xp_basis=use_XP)
+phase_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "phase_SC", begin_offset=1e-5, range=0.1, number_of_values=20000, xp_basis=use_XP)
+higgs_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "higgs_SC", begin_offset=1e-5, range=0.1, number_of_values=20000, xp_basis=use_XP)
 
 diff_data = higgs_data - phase_data
 ax.plot(w_lin, higgs_data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="-", label="Higgs")

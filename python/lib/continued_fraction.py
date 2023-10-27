@@ -45,7 +45,7 @@ class ContinuedFraction:
     
     def __init__(self, data_folder, filename, z_squared=True):
         self.z_squared = z_squared
-        
+
         file = f"{data_folder}/one_particle.dat.gz"
         with gzip.open(file, 'rt') as f_open:
             one_particle = np.abs(np.loadtxt(f_open).flatten())

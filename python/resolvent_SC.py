@@ -7,19 +7,19 @@ from lib.iterate_containers import iterate_containers
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
-Ts = np.array([0.05])
+Ts = np.array([0.0])
 Us = np.array([-2.0])
 Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_2500/"
 name_suffix = "phase_SC"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
-#ax.set_yscale("log")
+ax.set_yscale("log")
 
 plot_lower_lim = 0
 plot_upper_lim = 8
@@ -27,12 +27,12 @@ plot_upper_lim = 8
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=20000, xp_basis=use_XP)
-    #ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), label=name_suffix)
+    ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), label=name_suffix)
 
 name_suffix = "higgs_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=200000, xp_basis=use_XP)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=20000, xp_basis=use_XP)
     ax.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label=name_suffix)
     #ax.plot(w_lin, 0.75*0.1*(np.log(w_lin - np.sqrt(res.roots[0])))**2 )
 
