@@ -13,7 +13,7 @@ V = -0.1
 
 use_XP = True
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_2500/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
