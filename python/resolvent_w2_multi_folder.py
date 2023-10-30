@@ -12,9 +12,9 @@ colors = prop_cycle.by_key()['color']
 realPart = False
 both = False
 
-Ts = np.array([0.])
+Ts = np.array([0.0, 0.1, 0.2])
 Us = np.array([-2.0])
-Vs = np.array(["-0.004", "-0.002", "-0.001", "-0.0005", "-0.0001", "-0.00005"])
+Vs = np.array([0.1])
 
 folder = "data/modes/square/dos_900/"
 fig, ax = plt.subplots()
@@ -33,16 +33,23 @@ realPlotter.set_individual_colors("default")
 
 plotter = ps.CURVEFAMILY(total_size(Ts, Us, Vs), axis=ax, allow_cycle=True)
 plotter.set_individual_colors("default")
-plotter.set_shared_linestyle("-")
+plotter.set_individual_linestyles()
+#plotter.set_shared_linestyle("-")
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
+    if len(Ts) > 1:
+        label = f"$T={T}$"
+    elif len(Us) > 1:
+        label = f"$U={U}$"
+    elif len(Vs) > 1:
+        label = f"$V={V}$"
     
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 1e-4, number_of_values=30000, imaginary_offset=1e-6, xp_basis=True)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
     if realPart or both:
-        realPlotter.plot(w_lin, data_real, linewidth=(plt.rcParams["lines.linewidth"]), label=f"$V={V}$")
+        realPlotter.plot(w_lin, data_real, label=label)
     if not realPart or both:
-        plotter.plot(w_lin, data, linewidth=(plt.rcParams["lines.linewidth"]), label=f"$V={V}$")
+        plotter.plot(w_lin, data, label=label)
 
 #res.mark_continuum(ax)
 legend = plt.legend(loc=8)
