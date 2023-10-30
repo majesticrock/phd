@@ -17,6 +17,8 @@ cpp/HubbardMeanField/sources/SymbolicOperators
 
 #include literature
 !literature/*.pdf
+!data/modes/square/dos_900/*.tar.gz
+!data/modes/square/dos_2500/*.tar.gz
 
 *.aux
 *.blg
