@@ -10,19 +10,30 @@ class ContinuedFraction:
         p = w - self.a_infinity
         q = 4 * self.b_infinity**2
         root = np.sqrt(np.real(p**2 - q), dtype=complex)
-        return_arr = np.zeros(len(w), dtype=complex)
-        for i in range(0, len(w)):
-            if(w[i] > self.roots[0]):
-                return_arr[i] = (p[i] - root[i]) / (2. * self.b_infinity**2)
+        
+        if hasattr(w, '__len__'):
+            return_arr = np.zeros(len(w), dtype=complex)
+            for i in range(0, len(w)):
+                if(w[i] > self.roots[0]):
+                    return_arr[i] = (p[i] - root[i]) / (2. * self.b_infinity**2)
+                else:
+                    return_arr[i] = (p[i] + root[i]) / (2. * self.b_infinity**2)
+        else:
+            if(w > self.roots[0]):
+                return (p - root) / (2. * self.b_infinity**2)
             else:
-                return_arr[i] = (p[i] + root[i]) / (2. * self.b_infinity**2)
+                return (p + root) / (2. * self.b_infinity**2)
         return return_arr
 
     def continued_fraction(self, w, withTerminator = True):
         if withTerminator:
-            for i in range(0, len(w)):
-                if(w[i].real > self.roots[0] and w[i].real < self.roots[1]):
-                    w[i] = w[i].real
+            if hasattr(w, '__len__'):
+                for i in range(0, len(w)):
+                    if w[i].real > self.roots[0] and w[i].real < self.roots[1]:
+                        w[i] = w[i].real
+            else:
+                if w.real > self.roots[0] and w.real < self.roots[1]:
+                    w = w.real
             G = w - self.A[len(self.A) - self.terminate_at] - self.B[len(self.B) - self.terminate_at] * self.terminator(w)
         else:
             G = w - self.A[len(self.A) - self.terminate_at]
@@ -79,8 +90,10 @@ def continuum_edges(data_folder, name_suffix, xp_basis=False):
     
     return np.sqrt(res.roots)
 
-def resolvent_data_log_z(data_folder, name_suffix, begin_offset=1e-6, range=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True):
+def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True):
     edges = continuum_edges(data_folder, name_suffix, xp_basis)
+    if lower_edge is None:
+        lower_edge = edges[0]
     if range is None:
         upper_range = np.log(edges[1])
     else:
@@ -89,7 +102,7 @@ def resolvent_data_log_z(data_folder, name_suffix, begin_offset=1e-6, range=None
         
     w_log = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
     w_log += (imaginary_offset * 1j)
-    w_squared = (np.exp(w_log) + edges[0])**2
+    w_squared = (np.exp(w_log) + lower_edge)**2
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
@@ -120,7 +133,7 @@ def resolvent_data_log_z(data_folder, name_suffix, begin_offset=1e-6, range=None
             
     return -data.imag, data.real, w_log.real, res
 
-def resolvent_data(data_folder, name_suffix, lower_range, upper_range=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, w_space=np.linspace):
+def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, use_start=True):
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
@@ -128,9 +141,9 @@ def resolvent_data(data_folder, name_suffix, lower_range, upper_range=None, xp_b
         else:
             res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
         
-        if upper_range is None:
-            upper_range = np.sqrt(res.roots[1]) + 0.5
-        w_lin = w_space(lower_range, upper_range, number_of_values, dtype=complex)[1:]
+        if upper_edge is None:
+            upper_edge = np.sqrt(res.roots[1]) + 0.5
+        w_lin = np.linspace(lower_edge, upper_edge, number_of_values, dtype=complex)[0 if use_start else 1:]
         w_lin += (imaginary_offset * 1j)
         w_squared = w_lin**2
 
@@ -138,9 +151,9 @@ def resolvent_data(data_folder, name_suffix, lower_range, upper_range=None, xp_b
     else:
         element_names = ["a", "a+b", "a+ib"]
         res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True)
-        if upper_range is None:
-            upper_range = np.sqrt(res.roots[1]) + 0.5
-        w_lin = w_space(lower_range, upper_range, number_of_values, dtype=complex)[1:]
+        if upper_edge is None:
+            upper_edge = np.sqrt(res.roots[1]) + 0.5
+        w_lin = np.linspace(lower_edge, upper_edge, number_of_values, dtype=complex)[0 if use_start else 1:]
         w_lin += (imaginary_offset * 1j)
         w_squared = w_lin**2 
         
