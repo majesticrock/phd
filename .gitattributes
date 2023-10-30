@@ -1,3 +1,4 @@
 # Enforce Unix newlines
 * text=auto eol=lf
 *.tar.gz binary
+*.pdf binary
