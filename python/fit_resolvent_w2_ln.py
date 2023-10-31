@@ -7,18 +7,16 @@ U = -2.0
 V = -0.1
 name = f"T={T}/U={U}/V={V}"
 
-use_xp = False
-if use_xp:
-    folder = "data/modes/square/L=70/"
-else:
-    folder = "data/modes/square/dos_900/"
+use_xp = True
+folder = "data/modes/square/dos_900/"
 name_suffix = "phase_SC"
 fig, ax = plt.subplots()
 
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, 1, xp_basis=use_xp)
-plot_lower_lim = w_lin[np.argmax(data)] + 0.05
+plot_lower_lim = w_lin[np.argmax(data)]
 plot_upper_lim = plot_lower_lim + 0.2
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp)
+#w_lin -= (plot_lower_lim - 1e-6)
 
 from scipy.optimize import curve_fit
 def func_ln(x, a, b):
