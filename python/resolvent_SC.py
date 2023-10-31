@@ -9,11 +9,11 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([0.1])
+Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_64k/"
 name_suffix = "phase_SC"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
@@ -22,7 +22,7 @@ fig, ax = plt.subplots()
 ax.set_yscale("symlog")
 
 plot_lower_lim = 0
-plot_upper_lim = 1.6
+plot_upper_lim = 8
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
@@ -35,7 +35,7 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=200000, xp_basis=use_XP, imaginary_offset=1e-6)
-    ax.plot(w_lin, data, "x", label=name_suffix)
+    ax.plot(w_lin, data, label=name_suffix)
     #ax.plot(w_lin, 0.75*0.1*(np.log(w_lin - np.sqrt(res.roots[0])))**2 )
 
 res.mark_continuum(ax)
