@@ -8,15 +8,14 @@ V = -0.1
 name = f"T={T}/U={U}/V={V}"
 
 use_xp = True
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_64k/"
 name_suffix = "phase_SC"
 fig, ax = plt.subplots()
 
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, 1, xp_basis=use_xp)
-plot_lower_lim = w_lin[np.argmax(data)]
+plot_lower_lim = w_lin[np.argmax(data)] + 0.005
 plot_upper_lim = plot_lower_lim + 0.2
-data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp)
-#w_lin -= (plot_lower_lim - 1e-6)
+data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp, imaginary_offset=0)
 
 from scipy.optimize import curve_fit
 def func_ln(x, a, b):
@@ -24,11 +23,11 @@ def func_ln(x, a, b):
 
 try:
     w_log = np.log(w_lin.real)
-    ax.plot(w_log, np.log(data), "-", label="Real")
+    ax.plot(w_log, np.log(data), "-", label="Data")
     popt, pcov = curve_fit(func_ln, w_log, np.log(data))
     ax.plot(w_log, func_ln(w_log, *popt), "--", label=r"$a \ln( z ) + b$")
     ax.set_xlabel(r"$\ln(z)$")
-    ax.set_ylabel(r"$\ln(g(z))$")
+    ax.set_ylabel(r"$\ln(\Re g(z))$")
     ax.text(0.05, 0.35, f"$a={popt[0]}$", transform = ax.transAxes)
     ax.text(0.05, 0.3, f"$b={popt[1]}$", transform = ax.transAxes)
 except RuntimeError:

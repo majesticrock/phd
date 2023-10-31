@@ -6,7 +6,8 @@ class ContinuedFraction:
     # In Python there is no need to declare one's variables beforehand.
     # How foolish of me to assume otherwise
     
-    def terminator(self, w):
+    def terminator(self, w_param):
+        w = w_param**2
         p = w - self.a_infinity
         q = 4 * self.b_infinity**2
         root = np.sqrt(np.real(p**2 - q), dtype=complex)
@@ -14,27 +15,33 @@ class ContinuedFraction:
         if hasattr(w, '__len__'):
             return_arr = np.zeros(len(w), dtype=complex)
             for i in range(0, len(w)):
-                if(w[i] > self.roots[0]):
-                    return_arr[i] = (p[i] - root[i]) / (2. * self.b_infinity**2)
+                if w_param[i].real > 0:
+                    if w[i].real > self.roots[0]:
+                        return_arr[i] = (p[i] - root[i]) / (2. * self.b_infinity**2)
+                    else:
+                        return_arr[i] = (p[i] + root[i]) / (2. * self.b_infinity**2)
                 else:
-                    return_arr[i] = (p[i] + root[i]) / (2. * self.b_infinity**2)
+                    if w[i].real > self.roots[1]:
+                        return_arr[i] = (p[i] - root[i]) / (2. * self.b_infinity**2)
+                    else:
+                        return_arr[i] = (p[i] + root[i]) / (2. * self.b_infinity**2)
         else:
-            if(w > self.roots[0]):
-                return (p - root) / (2. * self.b_infinity**2)
+            if w_param.real > 0:
+                if w.real > self.roots[0]:
+                    return (p - root) / (2. * self.b_infinity**2)
+                else:
+                    return (p + root) / (2. * self.b_infinity**2)
             else:
-                return (p + root) / (2. * self.b_infinity**2)
+                if w.real > self.roots[1]:
+                    return (p - root) / (2. * self.b_infinity**2)
+                else:
+                    return (p + root) / (2. * self.b_infinity**2)
         return return_arr
 
-    def continued_fraction(self, w, withTerminator = True):
+    def continued_fraction(self, w_param, withTerminator = True):
+        w = w_param**2
         if withTerminator:
-            if hasattr(w, '__len__'):
-                for i in range(0, len(w)):
-                    if w[i].real > self.roots[0] and w[i].real < self.roots[1]:
-                        w[i] = w[i].real
-            else:
-                if w.real > self.roots[0] and w.real < self.roots[1]:
-                    w = w.real
-            G = w - self.A[len(self.A) - self.terminate_at] - self.B[len(self.B) - self.terminate_at] * self.terminator(w)
+            G = w - self.A[len(self.A) - self.terminate_at] - self.B[len(self.B) - self.terminate_at] * self.terminator(w_param.real)
         else:
             G = w - self.A[len(self.A) - self.terminate_at]
         for j in range(len(self.A) - self.terminate_at - 1, -1, -1):
@@ -99,10 +106,11 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
     else:
         upper_range = np.log(begin_offset + range)
     lower_range = np.log(begin_offset)
-        
+    
     w_log = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
     w_log += (imaginary_offset * 1j)
-    w_squared = (np.exp(w_log) + lower_edge)**2
+    w_usage = np.exp(w_log) + lower_edge
+    
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
@@ -110,7 +118,7 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
         else:
             res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
         
-        data = res.continued_fraction( np.copy(w_squared), withTerminator)
+        data = res.continued_fraction( w_usage, withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
         res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True)
@@ -125,11 +133,11 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
                     return np.sqrt(w) * res.continued_fraction(w, withTerminator)
                     
             if idx == 0:
-                data += dos( np.copy(w_squared) )
+                data += dos( w_usage )
             elif idx == 1:
-                data -= dos( np.copy(w_squared) )
+                data -= dos( w_usage )
             elif idx == 2:
-                data += dos( np.copy(w_squared) )
+                data += dos( w_usage )
             
     return -data.imag, data.real, w_log.real, res
 
@@ -145,9 +153,7 @@ def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_bas
             upper_edge = np.sqrt(res.roots[1]) + 0.5
         w_lin = np.linspace(lower_edge, upper_edge, number_of_values, dtype=complex)[0 if use_start else 1:]
         w_lin += (imaginary_offset * 1j)
-        w_squared = w_lin**2
-
-        data = res.continued_fraction( np.copy(w_squared), withTerminator)
+        data = res.continued_fraction( w_lin, withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
         res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True)
@@ -155,7 +161,6 @@ def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_bas
             upper_edge = np.sqrt(res.roots[1]) + 0.5
         w_lin = np.linspace(lower_edge, upper_edge, number_of_values, dtype=complex)[0 if use_start else 1:]
         w_lin += (imaginary_offset * 1j)
-        w_squared = w_lin**2 
         
         for idx, element in enumerate(element_names):
             res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True)
@@ -167,11 +172,11 @@ def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_bas
                     return np.sqrt(w) * res.continued_fraction(w, withTerminator)
                     
             if idx == 0:
-                data += dos( np.copy(w_squared) )
+                data += dos( w_lin )
             elif idx == 1:
-                data -= dos( np.copy(w_squared) )
+                data -= dos( w_lin )
             elif idx == 2:
-                data += dos( np.copy(w_squared) )
+                data += dos( w_lin )
             
     return -data.imag, data.real, w_lin.real, res
 
