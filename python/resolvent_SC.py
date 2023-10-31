@@ -9,34 +9,41 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([-0.1])
+Vs = np.array([0.0])
 
 use_XP = True
 
-folder = "data/modes/square/dos_64k/"
-name_suffix = "phase_SC"
+folder = "data/modes/square/dos_900/"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
-ax.set_yscale("symlog")
+ax.set_yscale("log")
+#ax.set_ylim(-.00001, .00001)
 
 plot_lower_lim = 0
-plot_upper_lim = 8
+plot_upper_lim = 1.2
 
+name_suffix = "phase_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=200000, xp_basis=use_XP, imaginary_offset=1e-6)
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
     ax.plot(w_lin, data, label=name_suffix)
 
 name_suffix = "higgs_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=200000, xp_basis=use_XP, imaginary_offset=1e-6)
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
     ax.plot(w_lin, data, label=name_suffix)
-    #ax.plot(w_lin, 0.75*0.1*(np.log(w_lin - np.sqrt(res.roots[0])))**2 )
+    
+name_suffix = "CDW"
+for T, U, V in iterate_containers(Ts, Us, Vs):
+    name = f"T={T}/U={U}/V={V}"
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
+    ax.plot(w_lin, data, "--", label=name_suffix)
 
 res.mark_continuum(ax)
 legend = plt.legend()
@@ -50,7 +57,7 @@ legend = plt.legend()
 ax.add_artist(legend)
 #ax.add_artist(legend_extra)
 
-ax.set_xlim(plot_lower_lim, plot_upper_lim)
+ax.set_xlim(plot_lower_lim - 0.03, plot_upper_lim)
 ax.set_xlabel(r"$z / t$")
 ax.set_ylabel(r"Spectral density / a.u.")
 fig.tight_layout()

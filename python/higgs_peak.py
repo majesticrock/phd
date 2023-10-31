@@ -13,35 +13,37 @@ V = -0.1
 
 use_XP = True
 
-folder = "data/modes/square/dos_2500/"
+folder = "data/modes/square/dos_64k/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
 #ax.set_yscale("log")
 
 name = f"T={T}/U={U}/V={V}"
-phase_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "phase_SC", range=0.45, begin_offset=1e-4, number_of_values=20000, xp_basis=use_XP)
-higgs_data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", "higgs_SC", range=0.45, begin_offset=1e-4, number_of_values=20000, xp_basis=use_XP)
+phase_imag, phase_real, w_log, res = cf.resolvent_data_log_z(f"{folder}{name}", "phase_SC", range=0.14, begin_offset=1e-8, number_of_values=10000, xp_basis=use_XP)
+higgs_imag, higgs_real, w_log, res = cf.resolvent_data_log_z(f"{folder}{name}", "higgs_SC", range=0.14, begin_offset=1e-8, number_of_values=10000, xp_basis=use_XP)
 
-diff_data = np.log(higgs_data )
-ax.plot(w_lin, diff_data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="-", label="Higgs")
-#ax.plot(w_lin, diff_data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label="Higgs - Phase")
-#ax.plot(w_lin, -data_real, label="Real part")
+diff_data = np.log(higgs_imag - phase_imag)
+ax.plot(w_log, diff_data, linestyle="-", label="Diff")
+ax.plot(w_log, np.log(higgs_imag), linewidth=1.75*plt.rcParams["lines.linewidth"], linestyle=":", label="Higgs")
+#ax.plot(w_log, diff_data, linewidth=(plt.rcParams["lines.linewidth"]), linestyle="--", label="Higgs - Phase")
+#ax.plot(w_log, -data_real, label="Real part")
 
 from scipy.optimize import curve_fit
 def func(x, a, b):
     return a * x + b
 
-popt, pcov = curve_fit(func, w_lin, diff_data)
-print(popt[0], " +/- ", np.sqrt(pcov[0][0]))
-print(popt[1], " +/- ", np.sqrt(pcov[1][1]))
-ax.plot(w_lin, func(w_lin, *popt), "k--", label="Fit")
+popt, pcov = curve_fit(func, w_log, diff_data)
+#popt[0] = 0.5
+ax.text(0.05, 0.35, f"$a={popt[0]}$", transform = ax.transAxes)
+ax.text(0.05, 0.3, f"$b={popt[1]}$", transform = ax.transAxes)
+ax.plot(w_log, func(w_log, *popt), "k--", label="Fit")
 
 legend = plt.legend()
 ax.add_artist(legend)
 
-ax.set_xlabel(r"$\ln(z - z_-) / t$")
-ax.set_ylabel(r"Spectral density / a.u.")
+ax.set_xlabel(r"$\ln(z - z_0) / t$")
+ax.set_ylabel(r"$\ln(\Im g(z - z_0))$")
 fig.tight_layout()
 
 import os
