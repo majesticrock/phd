@@ -13,7 +13,7 @@ both = False
 
 T = 0.0
 U = -2.0
-V = 0.1
+V = -0.1
 name = f"T={T}/U={U}/V={V}"
 
 folder = "data/modes/square/dos_900/"
@@ -21,26 +21,29 @@ fig, ax = plt.subplots()
 
 name_suffix = "phase_SC"
 
-data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0.5, 1, number_of_values=50000, imaginary_offset=1e-6, xp_basis=True)
-peak_pos = np.argmax(data)
-peak_pos_value = w_lin[peak_pos]
+data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=0.01, upper_edge=8, 
+                                                number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
+peak_pos_value = w_lin[np.argmax(data)]
 
-from scipy.optimize import fmin
+import scipy.optimize as opt
 def min_func(x):
-    return res.continued_fraction(x + 1e-6j, True).imag
-scipy_test = fmin(min_func, peak_pos)
+    return res.continued_fraction((x + 1e-6j)**2, True).imag
 
-print("Crude:", peak_pos_value)
-print("SciPy:", scipy_test[0])
-print(min_func(peak_pos_value), min_func(scipy_test[0]))
-exit()
+offset_peak = 0.2
+search_bounds = (0 if peak_pos_value - offset_peak < 0 else peak_pos_value - offset_peak, 
+                 np.sqrt(res.roots[0]) if peak_pos_value + offset_peak > np.sqrt(res.roots[0]) else peak_pos_value + offset_peak)
+scipy_result = opt.fmin_l_bfgs_b(min_func, search_bounds[1] - 1e-4, bounds=[search_bounds], approx_grad=True, epsilon=1e-10)
+peak_pos_value = scipy_result[0][0]
+#print("Crude:", peak_pos_value, "\n")
+print("SciPy:\n", scipy_result)
+#print(min_func(peak_pos_value), min_func(scipy_test[0][0]), "\n")
 
 data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", name_suffix, lower_edge=peak_pos_value,
-                                                          range=0.5, begin_offset=1e-12,
+                                                          range=0.01, begin_offset=1e-10,
                                                           number_of_values=2000, imaginary_offset=1e-6, xp_basis=True)
 w_lin -= peak_pos_value
-plot_data = (data_real)
-ax.plot(w_lin, plot_data, label="Data")
+plot_data = np.log(data_real)
+ax.plot(w_lin, plot_data, label="Data", linewidth=1.75*plt.rcParams["lines.linewidth"])
 
 from scipy.optimize import curve_fit
 def func(x, a, b):
@@ -51,9 +54,9 @@ print(popt[0], " +/- ", np.sqrt(pcov[0][0]))
 print(popt[1], " +/- ", np.sqrt(pcov[1][1]))
 ax.plot(w_lin, func(w_lin, *popt), "k--", label="Fit")
 
-
-ax.set_xlabel(r"$z / t$")
-ax.set_ylabel(r"Spectral density / a.u.")
+plt.legend()
+ax.set_xlabel(r"$\ln((z-z_-) / t)$")
+ax.set_ylabel(r"$\ln(g(z))$")
 #fig.tight_layout()
 
 import os
