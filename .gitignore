@@ -17,15 +17,15 @@ cpp/HubbardMeanField/sources/SymbolicOperators
 
 #include literature
 !literature/*.pdf
-!data/modes/square/
-!data/modes/square/*
-!data/modes/square/**/*
+
+#ignore data that is subject to change
+data/**/cube/
+data/**/test/
 
 *.aux
 *.blg
 *.fdb_latexmk
 *.log
-*.gz
 *.fls
 *.xml
 *.bbl
