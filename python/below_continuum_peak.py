@@ -13,13 +13,13 @@ both = False
 
 T = 0.0
 U = -2.0
-V = 0.0
+V = 0.1
 name = f"T={T}/U={U}/V={V}"
 
 folder = "data/modes/square/dos_900/"
 fig, ax = plt.subplots()
 
-name_suffix = "CDW"
+name_suffix = "phase_SC"
 
 data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=0.01, upper_edge=8, 
                                                 number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
