@@ -4,12 +4,12 @@ import lib.continued_fraction as cf
 
 T = 0.
 U = -2.0
-V = -0.1
+V = 0.0
 name = f"T={T}/U={U}/V={V}"
 
 use_xp = True
-folder = "data/modes/square/dos_64k/"
-name_suffix = "phase_SC"
+folder = "data/modes/square/dos_900/"
+name_suffix = "CDW"
 fig, ax = plt.subplots()
 
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, 1, xp_basis=use_xp)
