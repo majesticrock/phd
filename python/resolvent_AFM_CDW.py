@@ -8,8 +8,8 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-2.])
-Vs = np.array([.0])
+Us = np.array([4.1])
+Vs = np.array([1.])
 
 use_XP = True
 
@@ -22,7 +22,7 @@ fig, ax = plt.subplots()
 ax.set_yscale("log")
 
 plot_lower_lim = 0
-plot_upper_lim = 10
+plot_upper_lim = 15
 
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
