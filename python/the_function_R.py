@@ -16,10 +16,10 @@ axs[1].plot(phi, R_deriv[1], label=r"$\gamma = 0.5$")
 axs[1].plot(phi, R_deriv[2], label=r"$\gamma = 1$")
 
 axs[0].legend()
-axs[1].set_xlabel(r"$\varphi$")
+axs[1].set_xlabel(r"$u$")
 
-axs[0].set_ylabel(r"$R(\varphi, \gamma)$")
-axs[1].set_ylabel(r"$\partial_\varphi R(\varphi, \gamma)$")
+axs[0].set_ylabel(r"$R(u, \gamma)$")
+axs[1].set_ylabel(r"$\partial_u R(u, \gamma)$")
 
 plt.tight_layout()
 plt.show()
