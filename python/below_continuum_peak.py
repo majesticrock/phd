@@ -8,12 +8,11 @@ from lib.extract_key import *
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
-realPart = True
-both = False
+reversed = True
 
 T = 0.0
-U = -2.0
-V = -0.1
+U = 3.9
+V = 1.0
 name = f"T={T}/U={U}/V={V}"
 
 folder = "data/modes/square/dos_64k/"
@@ -42,9 +41,9 @@ print("SciPy:\n", scipy_result)
 
 data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", name_suffix, lower_edge=peak_pos_value,
                                                           range=0.1, begin_offset=1e-10,
-                                                          number_of_values=2000, imaginary_offset=1e-6, xp_basis=True)
+                                                          number_of_values=2000, imaginary_offset=1e-6, xp_basis=True, reversed=reversed)
 w_lin -= peak_pos_value
-plot_data = np.log(data_real)
+plot_data = np.log(np.abs(data_real))
 ax.plot(w_lin, plot_data, label="Data", linewidth=1.75*plt.rcParams["lines.linewidth"])
 
 from scipy.optimize import curve_fit
@@ -54,13 +53,13 @@ def func(x, a, b):
 popt, pcov = curve_fit(func, w_lin, plot_data)
 print(popt[0], " +/- ", np.sqrt(pcov[0][0]))
 print(popt[1], " +/- ", np.sqrt(pcov[1][1]))
-ax.text(0.05, 0.35, f"$a={popt[0]}$", transform = ax.transAxes)
-ax.text(0.05, 0.3, f"$b={popt[1]}$", transform = ax.transAxes)
+ax.text(0.05, 0.35, f"$a={popt[0]:.5f}$", transform = ax.transAxes)
+ax.text(0.05, 0.3, f"$b={popt[1]:.5f}$", transform = ax.transAxes)
 ax.plot(w_lin, func(w_lin, *popt), "k--", label="Fit")
 
 plt.legend()
 ax.set_xlabel(r"$\ln((z - z_0) / t)$")
-ax.set_ylabel(r"$\ln(\Re g(z - z_0))$")
+ax.set_ylabel(r"$\ln(\Re G^\mathrm{ret}(z - z_0))$")
 #fig.tight_layout()
 
 import os
