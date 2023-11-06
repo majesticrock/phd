@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import lib.continued_fraction as cf
 from lib.iterate_containers import iterate_containers
+import lib.plot_settings as ps
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -9,41 +10,45 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([-0.1])
+Vs = np.array([0.1])
 
 use_XP = True
 
-folder = "data/modes/square/dos_64k/"
+folder = "data/modes/square/dos_900/"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
-ax.set_yscale("log")
-#ax.set_ylim(0, 0.3)
+#ax.set_yscale("log")
+ax.set_ylim(0, 1)
+
+plotter = ps.CURVEFAMILY(3, axis=ax)
+plotter.set_individual_colors("nice")
+plotter.set_individual_linestyles(["-", "-.", "--"])
 
 plot_lower_lim = 0
-plot_upper_lim = 3
+plot_upper_lim = 8.5
 
 name_suffix = "phase_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
-    ax.plot(w_lin, data, label="Phase")
+    plotter.plot(w_lin, data, label="Phase")
 
 name_suffix = "higgs_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
-    ax.plot(w_lin, data, label="Higgs")
+    plotter.plot(w_lin, data, label="Higgs")
     
 name_suffix = "CDW"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
-    ax.plot(w_lin, data, "--", label=name_suffix)
+    plotter.plot(w_lin, data, label=name_suffix)
 
 res.mark_continuum(ax)
 legend = plt.legend()

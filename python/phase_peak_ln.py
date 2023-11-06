@@ -27,9 +27,9 @@ try:
     popt, pcov = curve_fit(func_ln, w_log, np.log(data))
     ax.plot(w_log, func_ln(w_log, *popt), "--", label=r"$a \ln( z ) + b$")
     ax.set_xlabel(r"$\ln(z)$")
-    ax.set_ylabel(r"$\ln(\Re g(z))$")
-    ax.text(0.05, 0.35, f"$a={popt[0]}$", transform = ax.transAxes)
-    ax.text(0.05, 0.3, f"$b={popt[1]}$", transform = ax.transAxes)
+    ax.set_ylabel(r"$\ln(\Re G^\mathrm{ret}(z))$")
+    ax.text(0.05, 0.35, f"$a={popt[0]:.5f}$", transform = ax.transAxes)
+    ax.text(0.05, 0.3, f"$b={popt[1]:.5f}$", transform = ax.transAxes)
 except RuntimeError:
     print("Could not estimate curve_fit")
 except ValueError:
