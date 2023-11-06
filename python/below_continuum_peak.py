@@ -18,7 +18,7 @@ name = f"T={T}/U={U}/V={V}"
 folder = "data/modes/square/dos_64k/"
 fig, ax = plt.subplots()
 
-name_suffix = "CDW"
+name_suffix = "AFM"
 
 data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=0.01, upper_edge=4, 
                                                 number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
