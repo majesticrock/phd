@@ -39,7 +39,7 @@ legend = plt.legend()
 ax.add_artist(legend)
 
 ax.set_xlabel(r"$\ln(z - z_0) / t$")
-ax.set_ylabel(r"$\ln(\Im g(z - z_0))$")
+ax.set_ylabel(r"$\ln(-\Im g(z - z_0))$")
 fig.tight_layout()
 
 import os

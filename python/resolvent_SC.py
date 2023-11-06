@@ -21,15 +21,15 @@ fig, ax = plt.subplots()
 ax.set_yscale("log")
 #ax.set_ylim(0, 0.3)
 
-plot_lower_lim = -0.2
-plot_upper_lim = 0.2
+plot_lower_lim = 0
+plot_upper_lim = 3
 
 name_suffix = "phase_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
-    ax.plot(w_lin, data_real, label="Phase")
+    ax.plot(w_lin, data, label="Phase")
 
 name_suffix = "higgs_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):

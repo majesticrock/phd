@@ -13,17 +13,18 @@ both = False
 
 T = 0.0
 U = -2.0
-V = 0.1
+V = -0.1
 name = f"T={T}/U={U}/V={V}"
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_64k/"
 fig, ax = plt.subplots()
 
-name_suffix = "phase_SC"
+name_suffix = "CDW"
 
-data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=0.01, upper_edge=8, 
+data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=0.01, upper_edge=4, 
                                                 number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
 peak_pos_value = w_lin[np.argmax(data)]
+print(peak_pos_value, data[np.argmax(data)])
 
 import scipy.optimize as opt
 def min_func(x):
@@ -32,8 +33,8 @@ def min_func(x):
 offset_peak = 0.2
 search_bounds = (0 if peak_pos_value - offset_peak < 0 else peak_pos_value - offset_peak, 
                  np.sqrt(res.roots[0]) if peak_pos_value + offset_peak > np.sqrt(res.roots[0]) else peak_pos_value + offset_peak)
-print(search_bounds)
-scipy_result = opt.fmin_l_bfgs_b(min_func, search_bounds[1] - 1e-4, bounds=[search_bounds], approx_grad=True, epsilon=1e-10)
+
+scipy_result = opt.fmin_l_bfgs_b(min_func, search_bounds[1] - 1e-1, bounds=[search_bounds], approx_grad=True, epsilon=1e-10)
 peak_pos_value = scipy_result[0][0]
 #print("Crude:", peak_pos_value, "\n")
 print("SciPy:\n", scipy_result)
