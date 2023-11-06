@@ -30,7 +30,7 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True, messages=False)
     
-    peak_positions[counter] = w_lin[np.argmax(data)] #/ extract_key(f"{folder}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
+    peak_positions[counter] = w_lin[np.argmax(data)] / extract_key(f"{folder}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
     counter += 1
 
 fig, ax = plt.subplots()
@@ -43,41 +43,18 @@ def func(x, a, b):
 peak_positions = np.log(peak_positions)
 popt, pcov = curve_fit(func, v_data[cut:], peak_positions[cut:])
 x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
-ax.plot(x_lin, func(x_lin, *popt), label="Fit 1")
-ax.text(-2, -2, f"$a_1={popt[0]:.5f}$")
-ax.text(-2, -2.7, f"$b_1={popt[1]:.5f}$")
+ax.plot(x_lin, func(x_lin, *popt), label="Fit")
+ax.text(-2, -2, f"$a={popt[0]:.5f}$")
+ax.text(-2, -2.7, f"$b={popt[1]:.5f}$")
 
-cut2 = 20
-popt, pcov = curve_fit(func, v_data[:cut2], peak_positions[:cut2])
-x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
-ax.plot(x_lin, func(x_lin, *popt), label="Fit 2")
-ax.text(-2, -4., f"$a_2={popt[0]:.5f}$")
-ax.text(-2, -4.7, f"$b_2={popt[1]:.5f}$")
-ax.plot(v_data[cut:], peak_positions[cut:], "X", label="Data Fit 1")
-ax.plot(v_data[:cut2], peak_positions[:cut2], "X", label="Data Fit 2")
-ax.plot(v_data[cut2:cut], peak_positions[cut2:cut], "o", label="Omitted data")
+ax.plot(v_data[cut:], peak_positions[cut:], "X", label="Data Fit")
+ax.plot(v_data[:cut], peak_positions[:cut], "o", label="Omitted data")
 
 ax.set_xlabel(r"$\ln(V / t)$")
-ax.set_ylabel(r"$\ln(z_0 / t)$")
+ax.set_ylabel(r"$\ln(z_0 / \Delta)$")
 legend = plt.legend(loc=2)
 
 fig.tight_layout()
-
-#Create zoom
-#from mpl_toolkits.axes_grid1 import make_axes_locatable
-#from mpl_toolkits.axes_grid1.inset_locator import inset_axes, zoomed_inset_axes, mark_inset
-#
-#axins = zoomed_inset_axes(ax, 8, loc='lower right', bbox_to_anchor=(0.9, 0.15), bbox_transform=fig.transFigure)
-#axins.set_xlim(-0.001, 0.008)
-#axins.set_ylim(-0.001, 0.15)
-#
-#axins.plot(x_lin, func(x_lin, *popt), label="Sqrt-Fit")
-#axins.plot(v_data[:cut], peak_positions[:cut], "o", markersize=6, color="orange", label="Omitted data")
-#axins.plot(v_data[cut:], peak_positions[cut:], "x", markersize=8, color="orange", mew=2.5, label="Fitted data")
-#
-#mark_inset(ax, axins, loc1=2, loc2=3, fc="none", ec="0.5")
-#plt.yticks(visible=False)
-#plt.xticks(visible=False)
 
 import os
 plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")

@@ -31,15 +31,15 @@ def func(x, a, b):
     return a * x + b
 
 popt, pcov = curve_fit(func, w_log, diff_data)
-ax.text(0.05, 0.35, f"$a={popt[0]}$", transform = ax.transAxes)
-ax.text(0.05, 0.3, f"$b={popt[1]}$", transform = ax.transAxes)
+ax.text(0.05, 0.35, f"$a={popt[0]:.5f}$", transform = ax.transAxes)
+ax.text(0.05, 0.3, f"$b={popt[1]:.5f}$", transform = ax.transAxes)
 ax.plot(w_log, func(w_log, *popt), "k--", label="Fit")
 
 legend = plt.legend()
 ax.add_artist(legend)
 
 ax.set_xlabel(r"$\ln(z - z_0) / t$")
-ax.set_ylabel(r"$\ln(-\Im g(z - z_0))$")
+ax.set_ylabel(r"$\ln(-\Im G^\mathrm{ret}(z - z_0))$")
 fig.tight_layout()
 
 import os
