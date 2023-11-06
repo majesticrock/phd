@@ -9,11 +9,11 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([0.])
+Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_64k/"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
@@ -21,22 +21,22 @@ fig, ax = plt.subplots()
 ax.set_yscale("log")
 #ax.set_ylim(0, 0.3)
 
-plot_lower_lim = 0
-plot_upper_lim = 9
+plot_lower_lim = -0.2
+plot_upper_lim = 0.2
 
 name_suffix = "phase_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
-    ax.plot(w_lin, data, label=name_suffix)
+    ax.plot(w_lin, data_real, label="Phase")
 
 name_suffix = "higgs_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
-    ax.plot(w_lin, data, label=name_suffix)
+    ax.plot(w_lin, data, label="Higgs")
     
 name_suffix = "CDW"
 for T, U, V in iterate_containers(Ts, Us, Vs):
@@ -55,5 +55,5 @@ ax.set_ylabel(r"Spectral density / a.u.")
 fig.tight_layout()
 
 import os
-#plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
+plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()

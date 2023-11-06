@@ -4,11 +4,11 @@ import gzip
 
 T = 0.
 U = -2.0
-V = 1.0
+V = -0.1
 
 use_XP = True
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_64k/"
 name_suffix = "phase_sc"
 name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
