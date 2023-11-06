@@ -4,16 +4,16 @@ import lib.continued_fraction as cf
 
 T = 0.
 U = -2.0
-V = 0.0
+V = -0.1
 name = f"T={T}/U={U}/V={V}"
 
 use_xp = True
-folder = "data/modes/square/dos_900/"
-name_suffix = "CDW"
+folder = "data/modes/square/dos_64k/"
+name_suffix = "phase_SC"
 fig, ax = plt.subplots()
 
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, 1, xp_basis=use_xp)
-plot_lower_lim = w_lin[np.argmax(data)] + 0.005
+plot_lower_lim = 0.005
 plot_upper_lim = plot_lower_lim + 0.2
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp, imaginary_offset=0)
 
