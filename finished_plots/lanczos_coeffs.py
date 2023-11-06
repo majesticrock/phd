@@ -4,14 +4,14 @@ import gzip
 
 T = 0.
 U = -2.0
-V = -0.5
+V = -0.1
 
-folder = "data/L=70/"
-name_suffix = "SC"
-name = f"T={T}/U={U}_V={V}/"
-type = "phase"
+use_XP = True
 
-file = f"{folder}{name}resolvent_{type}_{name_suffix}.dat.gz"
+folder = "data/modes/square/dos_64k/"
+name_suffix = "phase_sc"
+name = f"T={T}/U={U}/V={V}/"
+element_names = ["a", "a+b", "a+ib"]
 
 file = f"{folder}{name}one_particle.dat.gz"
 with gzip.open(file, 'rt') as f_open:
@@ -20,7 +20,11 @@ with gzip.open(file, 'rt') as f_open:
     a_inf = (roots[0] + roots[1]) * 0.5
     b_inf = ((roots[1] - roots[0]) * 0.25)
 
-file = f"{folder}{name}resolvent_{type}_{name_suffix}.dat.gz"
+if use_XP:
+    file = f"{folder}{name}resolvent_{name_suffix}.dat.gz"
+else:
+    element = element_names[0]
+    file = f"{folder}{name}resolvent_{name_suffix}_{element}.dat.gz"
 with gzip.open(file, 'rt') as f_open:
     M = np.loadtxt(f_open)
     A = M[0]
@@ -32,10 +36,11 @@ ax.plot(np.sqrt(B), 'o', label="$b_i$")
 ax.axhline(a_inf, linestyle="-" , color="k", label="$a_\\infty$")
 ax.axhline(b_inf, linestyle="--", color="k", label="$b_\\infty$")
 ax.legend()
-ax.set_xlabel("Iterarion $i$")
+ax.set_xlabel("Iteration $i$")
 ax.set_ylabel("Lanczos coefficient")
-ax.set_ylim(13, 34)
+#ax.set_ylim(13, 34)
 fig.tight_layout()
 
 import os
 plt.savefig(f"finished_plots/build/{os.path.basename(__file__).split('.')[0]}.svg")
+plt.show()
