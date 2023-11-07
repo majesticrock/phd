@@ -9,12 +9,12 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([3.75, 3.8, 3.85, 3.9, 3.925, 3.95, 3.975, 3.99, 3.995, 3.999,
-               4.001, 4.005, 4.01, 4.025, 4.05, 4.075, 4.1, 4.15, 4.2, 4.25])
+Us = np.array([3.7, 3.75, 3.8, 3.85, 3.9, 3.925, 3.95, 3.975, 3.99, 3.995, 3.999,
+               4.0,
+               4.001, 4.005, 4.01, 4.025, 4.05, 4.075, 4.1, 4.15, 4.2, 4.25, 4.3])
 Vs = np.array([1.])
 
 folder = "data/modes/square/dos_900/"
-element_names = ["a", "a+b", "a+ib"]
 colors = ["orange", "purple"]
 
 name_suffices = ["AFM", "CDW"]
