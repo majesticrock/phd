@@ -21,7 +21,6 @@ Vs = np.array(["50.0", "25.0", "15.0", "10.0", "8.0", "6.0", "4.0", "3.5", "3.0"
 folder = "data/modes/square/dos_900/"
 element_names = ["a", "a+b", "a+ib"]
 
-plot_upper_lim = 16
 name_suffix = "phase_SC"
 
 peak_positions = np.zeros(len(Vs))

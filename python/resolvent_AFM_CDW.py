@@ -9,7 +9,7 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([3.75])
+Us = np.array([4.0])
 Vs = np.array([1.])
 
 use_XP = True
@@ -48,7 +48,7 @@ name_suffix = "AFM"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=20000, xp_basis=use_XP)
-    ax.plot(w_lin, data, linestyle="-", label=name_suffix)
+    ax.plot(w_lin, data, linestyle="--", label=name_suffix)
     if createZoom:
         axins.plot(w_lin, data)
 
