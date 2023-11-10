@@ -83,9 +83,14 @@ class ContinuedFraction:
         deviation_from_infinity = np.zeros(len(self.A) - 1)
         for i in range(0, len(self.A) - 1):
             deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
-        self.terminate_at = len(self.A) - np.argmin(deviation_from_infinity)
+        # The lanczos coefficients have an oscillating behaviour at the beginnig
+        # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
+        # Therefore, we omit the first n (10) data points from our best fit search
+        ingore_first = 10
+        best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
+        self.terminate_at = len(self.A) - best_approx
         if self.messages: 
-            print("Terminating at i =", np.argmin(deviation_from_infinity))
+            print("Terminating at i =", best_approx)
 
 def continuum_edges(data_folder, name_suffix, xp_basis=False):
     if xp_basis:
