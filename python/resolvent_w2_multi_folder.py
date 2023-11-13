@@ -12,11 +12,11 @@ colors = prop_cycle.by_key()['color']
 realPart = False
 both = False
 
-Ts = np.array([0.0, 0.1, 0.2])
-Us = np.array([-2.0])
-Vs = np.array([0.1])
+Ts = np.array([0.0])
+Us = np.array([-2.0, -2.5, -3., -3.5])
+Vs = np.array([-0.1])
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/cube/dos_900/"
 fig, ax = plt.subplots()
 
 if realPart or both:
@@ -25,7 +25,7 @@ if realPart or both:
 else:
     ax.set_yscale("log")
 
-plot_upper_lim = 16
+plot_upper_lim = 1
 name_suffix = "phase_SC"
 
 realPlotter = ps.CURVEFAMILY(total_size(Ts, Us, Vs), axis=ax, allow_cycle=True)
@@ -45,7 +45,8 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     elif len(Vs) > 1:
         label = f"$V={V}$"
     
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, upper_edge=plot_upper_lim, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
+    print(w_lin[np.argmax(data)])
     if realPart or both:
         realPlotter.plot(w_lin, data_real, label=label)
     if not realPart or both:
