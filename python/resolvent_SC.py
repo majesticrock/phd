@@ -9,25 +9,25 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-3.])
-Vs = np.array([-0.1])
+Us = np.array([-2.0])
+Vs = np.array([10.0])
 
 use_XP = True
 
-folder = "data/modes/cube/dos_900/"
+folder = "data/modes/square/dos_900/"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
-#ax.set_yscale("log")
-ax.set_ylim(0, 1)
+ax.set_yscale("log")
+#ax.set_ylim(0, 1)
 
 plotter = ps.CURVEFAMILY(3, axis=ax)
 plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--"])
 
 plot_lower_lim = 0
-plot_upper_lim = 13
+plot_upper_lim = 90
 
 name_suffix = "phase_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
@@ -40,7 +40,7 @@ name_suffix = "higgs_SC"
 for T, U, V in iterate_containers(Ts, Us, Vs):
     name = f"T={T}/U={U}/V={V}"
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-3)
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
     plotter.plot(w_lin, data, label="Higgs")
     
 name_suffix = "CDW"
@@ -54,7 +54,7 @@ res.mark_continuum(ax)
 legend = plt.legend()
 ax.add_artist(legend)
 
-ax.set_xlim(plot_lower_lim - 0.03, plot_upper_lim)
+ax.set_xlim(plot_lower_lim, plot_upper_lim)
 ax.set_xlabel(r"$z / t$")
 ax.set_ylabel(r"Spectral density / a.u.")
 fig.tight_layout()

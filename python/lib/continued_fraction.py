@@ -95,15 +95,15 @@ class ContinuedFraction:
 def continuum_edges(data_folder, name_suffix, xp_basis=False):
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
-            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True)
+            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, False)
         else:
-            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True, False)
     else:
-        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_a", True)
+        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_a", True, False)
     
     return np.sqrt(res.roots)
 
-def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False):
+def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False, messages=True):
     edges = continuum_edges(data_folder, name_suffix, xp_basis)
         
     if lower_edge is None:
@@ -124,17 +124,17 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
-            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True)
+            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, messages)
         else:
-            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True)
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True, messages)
         
         data = res.continued_fraction( w_usage, withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
-        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True)
+        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True, messages)
         
         for idx, element in enumerate(element_names):
-            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True)
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True, messages)
             
             def dos(w):
                 if idx==0:
