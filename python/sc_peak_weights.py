@@ -23,7 +23,6 @@ folder = "data/modes/square/dos_900/"
 name_suffix = "phase_SC"
 
 weights = np.zeros(len(Vs))
-errors = np.zeros(len(Vs))
 counter = 0
 
 #fig_check, ax_check = plt.subplots()
@@ -65,7 +64,6 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     #line, = ax_check.plot(w_lin, fit_data, ls="-", label=f"V={V}")
     #ax_check.plot(w_lin, func(w_lin, *popt), ls="--", linewidth=4, color=line.get_color())
     weights[counter] = popt[1]
-    errors[counter] = np.sqrt(pcov[1][1])
 
     counter += 1
 
