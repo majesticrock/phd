@@ -1,4 +1,3 @@
-import numpy as np
 import matplotlib.pyplot as plt
 import lib.resolvent_peak as rp
 

@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.continued_fraction as cf
-from lib.iterate_containers import iterate_containers
+from lib.iterate_containers import naming_scheme
 from lib.extract_key import *
 import scipy.optimize as opt
+import lib.resolvent_peak as rp
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -23,21 +24,14 @@ name_suffix = "CDW"
 fig, ax = plt.subplots()
 
 name = f"T={T}/U=4.0/V={V}"
-data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=2.45, upper_edge=2.5, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True, messages=False)
-zero_value = w_lin[np.argmax(data)]
+zero_peak = rp.Peak(f"{folder}{name}", name_suffix, (2.45, 2.5))
+zero_value = zero_peak.improved_peak_position()[0][0]
 
 peak_positions = np.zeros(len(Us))
 counter = 0
-for U in Us:
-    name = f"T={T}/U={U}/V={V}"
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=2.4, upper_edge=2.85, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True, messages=False)
-
-    def min_func(x):
-        return res.continued_fraction(x + 1e-6j, True).imag
-    scipy_result = opt.fmin_l_bfgs_b(min_func, w_lin[np.argmax(data)], bounds=[(2.4, 2.85)], approx_grad=True, epsilon=1e-10)
-    #print(scipy_result[0][0], w_lin[np.argmax(data)], " -> ", scipy_result[0][0] - w_lin[np.argmax(data)])
-    gap_value = 2 * extract_key(f"{folder}{name}/resolvent_higgs_{name_suffix}.dat.gz", "Total Gap")
-    peak_positions[counter] = (scipy_result[0][0] - zero_value)
+for name in naming_scheme(T, Us, V):
+    peak = rp.Peak(f"{folder}{name}", name_suffix, (2.4, 2.85))
+    peak_positions[counter] = np.log(peak.improved_peak_position()[0][0] - zero_value)
     counter += 1
 
 cut = -int(len(Us) / 2)
@@ -47,7 +41,6 @@ from scipy.optimize import curve_fit
 def func(x, a, b):
     return a * x + b
 
-peak_positions = np.log(peak_positions)
 popt, pcov = curve_fit(func, u_data[cut:], peak_positions[cut:])
 ax.text(0.05, 0.35, f"$a_\\mathrm{{AFM}}={popt[0]:.5f}$", transform = ax.transAxes)
 ax.text(0.05, 0.3, f"$b_\\mathrm{{AFM}}={popt[1]:.5f}$", transform = ax.transAxes)

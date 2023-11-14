@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.continued_fraction as cf
-from lib.iterate_containers import iterate_containers
+from lib.iterate_containers import naming_scheme
 from lib.extract_key import *
+import lib.resolvent_peak as rp
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -23,11 +24,8 @@ fig, ax = plt.subplots()
 for i, name_suffix in enumerate(name_suffices):
     peak_positions = np.zeros(len(Us))
     counter = 0
-    for T, U, V in iterate_containers(Ts, Us, Vs):
-        name = f"T={T}/U={U}/V={V}"
-        data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=2, upper_edge=3, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True, messages=False)
-
-        peak_positions[counter] = w_lin[np.argmax(data)] #/ extract_key(f"{folder}{name}/resolvent_higgs_{name_suffix}.dat.gz", "Total Gap")
+    for name in naming_scheme(Ts, Us, Vs):
+        peak_positions[counter] = rp.Peak(f"{folder}{name}", name_suffix, (2, 3)).peak_position
         counter += 1
 
     u_data = (np.array([float(u) for u in Us]))#
