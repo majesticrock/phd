@@ -91,7 +91,33 @@ class ContinuedFraction:
         self.terminate_at = len(self.A) - best_approx
         if self.messages: 
             print("Terminating at i =", best_approx)
+            
+    def continuum_edges(self):
+        if not self.z_squared:
+            return self.roots
+        else:
+            return np.sqrt(self.roots)
 
+    def data_log_z(self, lower_edge=None, range=None, begin_offset=1e-6, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False):
+        edges = self.continuum_edges()
+        if lower_edge is None:
+            lower_edge = edges[0]
+        if range is None:
+            upper_range = np.log(edges[1])
+        else:
+            upper_range = np.log(begin_offset + range)
+        lower_range = np.log(begin_offset)
+
+        w_log = np.linspace(lower_range, upper_range, number_of_values, dtype=complex)
+        w_log += (imaginary_offset * 1j)
+        if reversed:
+            w_usage = lower_edge - np.exp(w_log)
+        else:
+            w_usage = lower_edge + np.exp(w_log)
+            
+        data = self.continued_fraction( w_usage, withTerminator)
+        return data, w_log.real
+    
 def continuum_edges(data_folder, name_suffix, xp_basis=False):
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
@@ -104,8 +130,7 @@ def continuum_edges(data_folder, name_suffix, xp_basis=False):
     return np.sqrt(res.roots)
 
 def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False, messages=True):
-    edges = continuum_edges(data_folder, name_suffix, xp_basis)
-        
+    edges = continuum_edges(data_folder, name_suffix, xp_basis)    
     if lower_edge is None:
         lower_edge = edges[0]
     if range is None:
