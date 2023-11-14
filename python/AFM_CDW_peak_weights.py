@@ -9,9 +9,11 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([3.7, 3.75, 3.8, 3.85, 3.9, 3.925, 3.95, 3.975, 3.99, 3.995, 3.999,
+Us = np.array([3.7, 3.75, 3.8, 3.85, 3.9, 3.925, 3.94, 3.95, 3.97, 3.975, #10 values
+               3.985, 3.99, 3.995, 3.997, 3.9985, 3.999, 3.9995, #7
                4.0,
-               4.001, 4.005, 4.01, 4.025, 4.05, 4.075, 4.1, 4.15, 4.2, 4.25, 4.3
+               4.0005, 4.001, 4.0015, 4.003, 4.005, 4.01, 4.015, 4.025, 4.03, 4.05, #10 values
+               4.06, 4.075, 4.1, 4.15, 4.2, 4.25, 4.3 #7
                ])
 Vs = np.array([1.])
 
@@ -20,6 +22,7 @@ colors = ["orange", "purple"]
 
 name_suffices = ["AFM", "CDW"]
 fig, ax = plt.subplots()
+u_data = np.array([float(u) for u in Us])
 
 for i, name_suffix in enumerate(name_suffices):
     weights = np.zeros(len(Us))
@@ -50,29 +53,22 @@ for i, name_suffix in enumerate(name_suffices):
 
         data, data_real, w_lin, res = cf.resolvent_data_log_z(f"{folder}{name}", name_suffix, lower_edge=peak_pos_value,
                                                             range=0.1, begin_offset=1e-10,
-                                                            number_of_values=2000, imaginary_offset=1e-6, xp_basis=True, reversed=reversed)
+                                                            number_of_values=2000, imaginary_offset=1e-6, xp_basis=True, reversed=reversed, messages=False)
         fit_data = np.log(np.abs(data_real))
         from scipy.optimize import curve_fit
         def func(x,  b):
             return - x + b
         popt, pcov = curve_fit(func, w_lin, fit_data)
         
-        #line, = ax.plot(w_lin, fit_data, ls="-", label=f"U={U}, {name_suffix}")
-        #ax.plot(w_lin, func(w_lin, *popt), ls="--", linewidth=4, color=line.get_color())
-        
-        weights[counter] = popt[0]
+        weights[counter] = np.exp(popt[0])
         counter += 1
 
-    u_data = (np.array([float(u) for u in Us]))#
-    ax.plot(u_data, weights, "X", label=f"{name_suffix}", color=colors[i])
-
+    ax.plot(u_data, (weights), marker="X", ls="-", label=f"{name_suffix}", color=colors[i])
 
 ax.set_xlabel(r"$U / t$")
 ax.set_ylabel(r"$\ln(w_0 \cdot t)$")
 ax.legend()
-
 fig.tight_layout()
-
 
 import os
 plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
