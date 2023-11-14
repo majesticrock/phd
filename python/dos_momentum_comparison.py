@@ -32,9 +32,7 @@ plot_upper_lim = 8.5
 
 color_labels = []
 for folder, curves in types:
-    for T, U, V in iterate_containers(Ts, Us, Vs):
-        name = f"T={T}/U={U}/V={V}"
-
+    for name in naming_scheme(Ts, Us, Vs):
         data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim)
 
         print(np.trapz(data_imag))

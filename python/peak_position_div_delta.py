@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import lib.continued_fraction as cf
-from lib.iterate_containers import iterate_containers
+from lib.iterate_containers import naming_scheme
 from lib.extract_key import *
+import lib.resolvent_peak as rp
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -25,11 +26,8 @@ name_suffix = "phase_SC"
 
 peak_positions = np.zeros(len(Vs))
 counter = 0
-for T, U, V in iterate_containers(Ts, Us, Vs):
-    name = f"T={T}/U={U}/V={V}"
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True, messages=False)
-    
-    peak_positions[counter] = w_lin[np.argmax(data)] / extract_key(f"{folder}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
+for name in naming_scheme(Ts, Us, Vs):
+    peak_positions[counter] = rp.Peak(f"{folder}{name}", name_suffix).peak_position / extract_key(f"{folder}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
     counter += 1
 
 fig, ax = plt.subplots()
