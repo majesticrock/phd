@@ -19,7 +19,6 @@ cpp/HubbardMeanField/sources/SymbolicOperators
 !literature/*.pdf
 
 #ignore data that is subject to change
-data/**/cube/
 data/**/test/
 
 *.aux
