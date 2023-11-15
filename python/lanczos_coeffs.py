@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import gzip
 
 T = 0.
-U = -2.5
+U = -2.0
 V = -0.1
 
 use_XP = True
 
-folder = "data/modes/cube/dos_2500/"
-name_suffix = "phase_sc"
+folder = "data/modes/cube/dos_6k/"
+name_suffix = "phase_SC"
 name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
 
@@ -31,8 +31,8 @@ with gzip.open(file, 'rt') as f_open:
     B = M[1]
 
 fig, ax = plt.subplots()
-ax.plot(A, 'x', label="$a_i$")
-ax.plot(np.sqrt(B), 'o', label="$b_i$")
+ax.plot(A, ls="-", marker='x', label="$a_i$")
+ax.plot(np.sqrt(B), ls="-", marker='o', label="$b_i$")
 ax.axhline(a_inf, linestyle="-" , color="k", label="$a_\\infty$")
 ax.axhline(b_inf, linestyle="--", color="k", label="$b_\\infty$")
 ax.legend()
