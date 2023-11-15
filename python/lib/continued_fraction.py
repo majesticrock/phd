@@ -6,6 +6,37 @@ class ContinuedFraction:
     # In Python there is no need to declare one's variables beforehand.
     # How foolish of me to assume otherwise
     
+    def __init__(self, data_folder, filename, z_squared=True, messages=True):
+        self.z_squared = z_squared
+        self.messages = messages
+        file = f"{data_folder}/one_particle.dat.gz"
+        with gzip.open(file, 'rt') as f_open:
+            one_particle = np.abs(np.loadtxt(f_open).flatten())
+        if z_squared:
+            self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
+        else:
+            self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])
+        self.a_infinity = (self.roots[0] + self.roots[1]) * 0.5
+        self.b_infinity = (self.roots[1] - self.roots[0]) * 0.25
+        
+        file = f"{data_folder}/{filename}.dat.gz"
+        with gzip.open(file, 'rt') as f_open:
+            M = np.loadtxt(f_open)
+            self.A = M[0]
+            self.B = M[1]
+            
+        deviation_from_infinity = np.zeros(len(self.A) - 1)
+        for i in range(0, len(self.A) - 1):
+            deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
+        # The lanczos coefficients have an oscillating behaviour at the beginnig
+        # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
+        # Therefore, we omit the first n (10) data points from our best fit search
+        ingore_first = 10
+        best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
+        self.terminate_at = len(self.A) - best_approx
+        if self.messages: 
+            print("Terminating at i =", best_approx)
+    
     def terminator(self, w_param):
         w = w_param**2
         p = w - self.a_infinity
@@ -60,37 +91,6 @@ class ContinuedFraction:
                 axes.axvspan(np.sqrt(self.roots[0]), np.sqrt(self.roots[1]), alpha=.2, color="purple", label="Continuum")
             else:
                 axes.axvspan(self.roots[0], self.roots[1], alpha=.2, color="purple", label="Continuum")
-    
-    def __init__(self, data_folder, filename, z_squared=True, messages=True):
-        self.z_squared = z_squared
-        self.messages = messages
-        file = f"{data_folder}/one_particle.dat.gz"
-        with gzip.open(file, 'rt') as f_open:
-            one_particle = np.abs(np.loadtxt(f_open).flatten())
-        if z_squared:
-            self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
-        else:
-            self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])
-        self.a_infinity = (self.roots[0] + self.roots[1]) * 0.5
-        self.b_infinity = (self.roots[1] - self.roots[0]) * 0.25
-        
-        file = f"{data_folder}/{filename}.dat.gz"
-        with gzip.open(file, 'rt') as f_open:
-            M = np.loadtxt(f_open)
-            self.A = M[0]
-            self.B = M[1]
-            
-        deviation_from_infinity = np.zeros(len(self.A) - 1)
-        for i in range(0, len(self.A) - 1):
-            deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
-        # The lanczos coefficients have an oscillating behaviour at the beginnig
-        # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
-        # Therefore, we omit the first n (10) data points from our best fit search
-        ingore_first = 10
-        best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
-        self.terminate_at = len(self.A) - best_approx
-        if self.messages: 
-            print("Terminating at i =", best_approx)
             
     def continuum_edges(self):
         if not self.z_squared:
@@ -117,6 +117,10 @@ class ContinuedFraction:
             
         data = self.continued_fraction( w_usage, withTerminator)
         return data, w_log.real
+    
+    def weight_of_continuum(self, number_of_values=2000, imaginary_offset=0):
+        w_lin = np.linspace(self.continuum_edges()[0], self.continuum_edges()[1], number_of_values)
+        return -np.trapz(self.continued_fraction(w_lin + imaginary_offset * 1j).imag, w_lin) / np.pi
     
 def continuum_edges(data_folder, name_suffix, xp_basis=False):
     if xp_basis:
