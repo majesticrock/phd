@@ -10,12 +10,11 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.0])
-Vs = np.array([10.0])
+Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/square/dos_900/"
-element_names = ["a", "a+b", "a+ib"]
+folder = "data/modes/cube/dos_6k/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
@@ -27,7 +26,7 @@ plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--"])
 
 plot_lower_lim = 0
-plot_upper_lim = 90
+plot_upper_lim = 12
 
 name_suffix = "phase_SC"
 for name in naming_scheme(Ts, Us, Vs):

@@ -16,7 +16,7 @@ Ts = np.array([0.0])
 Us = np.array([-2.0, -2.5, -3., -3.5])
 Vs = np.array([-0.1])
 
-folder = "data/modes/cube/dos_900/"
+folder = "data/modes/cube/dos_6k/"
 fig, ax = plt.subplots()
 
 if realPart or both:
