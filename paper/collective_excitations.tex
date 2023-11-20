@@ -125,7 +125,7 @@
 Authors are advised to check the author instructions for the journal they are submitting to for word limits and if structural elements like subheadings, citations, or equations are permitted.}
 
 
-\keywords{Hubbard model, collective excitations, superconductivity, charge order, spin order}
+\keywords{Hubbard model, collective excitations, superconductivity, charge density wave, antiferromagnetism}
 
 %%\pacs[JEL Classification]{D8, H51}
 
@@ -142,14 +142,31 @@ Authors are advised to check the author instructions for the journal they are su
 \section{Introduction}\label{sec1}
 
 The Hubbard model at half-filling has been employed in a plethora of previous studies. 
-Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order, tantalizing the model's usage for the description of high-temperature superconductivity \cite{yang89}.
-Shortly afterward, an exact $SO(4)$ symmetry was discovered, which allows a degeneracy of a superconductivity (SC) and a charge-density wave (CDW) with an attractive on-site interaction \cite{yang90}.
-There exists a particle-hole transformation on bipartite lattices, that maps the attractive Hubbard model exactly onto the repulsive one, exhibiting antiferromagnetism (AFM).
+Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
+tantalizing the model's usage for the description of high-temperature superconductivity \cite{yang89}.
+Shortly afterward, an exact $SO(4)$ symmetry was discovered,
+which allows a degeneracy of superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
+This coexistence can be argued by the existence of a particle-hole transformation on bipartite lattices, 
+that maps the attractive Hubbard model exactly onto the repulsive one, exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
 The previously mentioned SC and CDW phases map to different spin operators \cite{zitko15,lieb89}.
 \newline
-Many recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity \cite{Nicoletti14,Casandruc15,patel16,sentef17,Buenemann17}.
-Other studies focusing on equilibrium systems investigated phases including various additional interaction with and without doping 
-
+Many recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity 
+\cite{Nicoletti14,Krull14,Casandruc15,patel16,sentef17,Buenemann17}.
+Other studies, focusing on equilibrium systems, 
+investigated the phases and various quantities therein of said model including various additional interactions with and without doping 
+\cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
+In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
+\textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models, ggf nochmal suchen...}
+The 2D case already exhibits a wide range of possible phases, including CDW, AFM as well as $s$- and $d_{x^2 - y^2}$-wave superconductivity
+\cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22}.
+\newline
+In this article, we will first employ a mean-field approximation to the interaction terms 
+and then use the methodology from the so-called iterated equations of motion approach,
+which has already seen success in the handling of interaction quenches \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
+Here, on commutes operators from a suitable operator basis with the Hamiltonian and adds the newly occurring terms to it.
+Naturally, a truncation is necessary for most practical applications, however, the approximation becomes better the more terms are included within the basis.
+The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
+\newline
 
 
 \section{Methods}\label{sec3}
