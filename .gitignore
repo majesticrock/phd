@@ -12,6 +12,15 @@ build/
 *.csv
 stdout*
 stderr*
+python/__pycache__
+python/lib/__pycache__
+cpp/ModeFinder/sources/Utility
+cpp/HubbardMeanField/auto_generated
+cpp/HubbardMeanField/small_auto_generated
+cpp/main
+cpp/HubbardMeanField/doxy
+*.bin
+
 
 cpp/HubbardMeanField/sources/SymbolicOperators
 
@@ -63,10 +72,3 @@ data/**/test/
 *.exe
 *.out
 *.app
-python/__pycache__
-python/lib/__pycache__
-cpp/ModeFinder/sources/Utility
-cpp/HubbardMeanField/auto_generated
-cpp/main
-cpp/HubbardMeanField/doxy
-*.bin
