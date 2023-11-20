@@ -7,7 +7,7 @@ TeXOptions = -lualatex \
 
 
 build/collective_excitations.pdf: FORCE | build
-	latexmk $(TeXOptions) collective_excitations.tex
+	latexmk $(TeXOptions) collective_excitations.tex 1> build/log || cat build/log
 
 FORCE:
 
@@ -15,3 +15,4 @@ build:
 	mkdir -p build/
 
 clean:
+	rm -rf build/
