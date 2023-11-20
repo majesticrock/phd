@@ -8,7 +8,7 @@ V = -0.1
 
 use_XP = True
 
-folder = "data/modes/square/dos_1500/"
+folder = "data/modes/square/dos_2500/"
 name_suffix = "phase_SC"
 name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
