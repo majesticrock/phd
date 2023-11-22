@@ -9,23 +9,23 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-2.0])
-Vs = np.array([-0.1])
+Us = np.array([0.])
+Vs = np.array([0.])
 
 use_XP = True
 
-folder = "data/modes/cube/dos_6k/"
+folder = "data/modes/square/dos_900/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
-ax.set_yscale("log")
+#ax.set_yscale("log")
 #ax.set_ylim(0, 1)
 
 plotter = ps.CURVEFAMILY(3, axis=ax)
 plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--"])
 
-plot_lower_lim = 0
+plot_lower_lim = -12
 plot_upper_lim = 12
 
 name_suffix = "phase_SC"
