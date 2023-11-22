@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import gzip
 
 T = 0.
-U = -2.0
+U = -2.5
 V = -0.1
 
 use_XP = True
 
-folder = "data/modes/square/dos_2500/"
+folder = "data/modes/cube/dos_6k/"
 name_suffix = "phase_SC"
 name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
