@@ -168,7 +168,7 @@ Naturally, a truncation is necessary for most practical applications, however, t
 The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
 Additionally, we will show an explicit way to obtain various Green's functions from the aforementioned methodology.
 By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
-The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Krull16,Schwarz20,Fan22}.
+The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Krull16,Schwarz20,Fan22}.
 \newline
 The remainder of this paper is organized as follows:
 In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as the main equations and relations used throughout this article.
@@ -180,8 +180,76 @@ In the appendix \textcolor{red}{(or in the supplemental material?)}, we will der
 
 \section{Model and governing equations}\label{sec:model}
 
-Hamiltonian, Mean Field, Phasendiagramm (vermutlich nur als Skizze, Details gibt es ja in anderen Papern zu Hauf),
-Endergebnisse der iEoM und Zusammenhang mit den GF mit Verweis auf die Herleitung im Anhang, $\gamma$-Diskretisierung erklären
+The Hamiltonian of the extended Hubbard model is given by
+\begin{equation}
+    \begin{aligned}
+        H = &-t \sum_{\langle i, j \rangle, \sigma} \left( c_{i\sigma}^\dagger c_{j\sigma} + \text{h.c.} \right) 
+        + \mu \sum_{i,\sigma} n_{i\sigma} \\
+        &+ U \sum_{i} n_{i\uparrow} n_{i\downarrow} 
+        + \frac{V}{2} \sum_{\langle i, j\rangle, \sigma} n_{i\sigma} n_{j\sigma}\,,
+    \end{aligned}
+\end{equation}
+where $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$ and $\langle i, j\rangle$ denotes the summation over next neighbours.
+The parameters are the hopping amplitude $t$, the onsite interaction $U$,the intersite interaction $V$ and the chemical potential $\mu$.
+Throughout this article, we will give all energy related quantities in terms of the hopping amplitude, which we subsequently set to unity $t=1$.
+Applying a Fourier transformation into $k$-space yields the single-particle dispersion 
+\begin{equation}
+    \epsilon_0 (\vec{k}) = -2t \sum_{\alpha=1}^D \cos(k_\alpha)\,,\quad k_\alpha \in [-\pi, \pi)\,,
+\end{equation}
+with the system's dimension $D$ and the dimensionless momentum $\vec{k}$.
+The interaction terms are then mean-field decoupled. 
+We follow the naming scheme of Ref. \cite{sentef17}
+\begin{equation}
+    \begin{aligned}
+        n_{k\sigma} &:= c_{\vec{k}\sigma}^\dagger c_{\vec{k}\sigma}\,,          &f_k     &:= c_{-\vec{k}\downarrow} c_{\vec{k}\uparrow}\,, \\
+        g_{k\sigma} &:= c_{\vec{k}\sigma}^\dagger c_{\vec{k}+\vec{Q}\sigma}\,,  &\eta_k  &:= c_{-\vec{k}-\vec{Q}\downarrow} c_{\vec{k}\uparrow}\,,
+    \end{aligned}
+\end{equation}
+where $\vec{Q} := (\pi, ...)$ defines the nesting vector for the CDW and AFM phases.
+We use these abbreviations to write down the mean-field parameters
+\begin{subequations}
+    \begin{align}
+        \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{ZV}{N}\right) \sum_{\vec{k}\sigma} \langle g_{k\sigma} \rangle\,, \\
+        \Delta_\text{AFM} &= \frac{U}{2N} \sum_{\vec{k}} \left( \langle g_{k\uparrow} \rangle - \langle g_{k\downarrow} \rangle \right)\,, \\
+        \Delta_\text{SC} &= \frac{U}{N} \sum_{\vec{k}} \langle f_k \rangle\,, \\
+        \Delta_\eta &= \frac{U}{N} \sum_{\vec{k}} \langle \eta_k \rangle\,, \\
+        \Delta_n &= \frac{V}{N} \sum_{\vec{k},\sigma} \sum_{\alpha=1}^D \cos k_\alpha \langle n_{k\sigma} \rangle\,,
+    \end{align}
+\end{subequations}
+where $Z$ denotes the coordination number of the lattice.
+In total, we obtain the mean-field Hamiltonian in spinor representation as
+\begin{equation}
+    H_\text{MF} = \sum_{\vec{k}} \Psi^\dagger (\vec{k}) h(\vec{k}) \Psi (\vec{k})\,,
+\end{equation}
+with the spinors \textcolor{red}{Wie macht man denn diese Ganzzeilengleichungen?}
+%\begin{strip}
+\begin{equation}
+    h(\vec{k}) .= \begin{pmatrix}
+        \epsilon_0 (\vec{k}) & \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & \Delta_\text{SC} & \Delta_\eta \\
+        \Delta_\text{CDW} - \Delta_\text{AFM} & \epsilon_0 (\vec{k} + \vec{Q}) & \Delta_\eta & \Delta_\text{SC} \\
+        \Delta_\text{SC}^* & \Delta_\eta^* & - \epsilon_0 (-\vec{k}) & - \Delta_\text{CDW} - \Delta_\text{AFM} \\
+        \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & - \epsilon_0 (-\vec{k} - \vec{Q})
+        \end{pmatrix}
+\end{equation}
+%\end{strip}
+Now, the entire Hamiltonian and thus all expectation values only depend on
+\begin{equation}
+    \hat{\gamma}(\vec{k}) := \sum_{\alpha=1}^D \cos(k_\alpha)\,,
+\end{equation}
+which allows us to replace the momentum sums by energy integrals using the density of states
+\begin{equation}
+    \rho(\gamma) := \frac{1}{N} \sum_{\vec{k}} \delta \left(\gamma - \hat{\gamma} (\vec{k}) \right)\,.
+\end{equation}
+As an example, consider 
+\begin{equation}
+    \Delta_\text{SC} = \frac{U}{2N} \int \mathrm{d}\gamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
+\end{equation}
+We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
+Solving the mean field equations iteratively, one obtains the groundstate phase diagram at temperature $T=0$ as shown in \textcolor{red}{FIGURE}.
+Note, that the phase separated state as well as the $d_{x^2 - y^2}$-superconducting state, that have been confirmed in for the square lattice \cite{Micnas88b,Huang13},
+cannot be described by our method. This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vec{k})$.
+
+
 
 \section{Results}\label{sec:results}
 
