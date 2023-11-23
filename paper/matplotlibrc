@@ -15,10 +15,7 @@ lines.linewidth : 2
 
 pgf.rcfonts : False
 
-#backend : pgf
-## TeX benutzen
-#text.usetex : True
-#pgf.texsystem : lualatex
-
-savefig.directory : ./plots
-savefig.format : eps
+backend : pgf
+# TeX benutzen
+text.usetex : True
+pgf.texsystem : lualatex

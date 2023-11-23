@@ -58,6 +58,8 @@
 \newcommand{\kplusQ}{\vk+\vQ}
 \newcommand{\kminusQ}{-\vk-\vQ}
 
+\newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}}
+
 \begin{document} 
 
 % Preliminary title
@@ -97,9 +99,9 @@ Abstract text Abstract text Abstract text Abstract text Abstract text Abstract t
 
 \section{Introduction}\label{sec:introduction}
 
-The Hubbard model has been employed in a plethora of previous studies. 
+The Hubbard model has been studied in a plethora of previous studies. 
 Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
-tantalizing the model's usage for the description of high-temperature superconductivity \cite{yang89}.
+encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
 Shortly afterward, an exact $SO(4)$ symmetry was discovered,
 which allows a degeneracy of superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
 This coexistence can be argued by the existence of a particle-hole transformation on bipartite lattices, 
@@ -109,8 +111,9 @@ The previously mentioned SC and CDW phases map to different spin operators \cite
 Many recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity 
 \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
 Other studies, focusing on equilibrium systems, 
-investigated the phases and various quantities therein of said model including various additional interactions with and without doping 
+investigated the phases and various quantities therein of the said model including various additional interactions with and without doping 
 \cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
+\newline
 In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
 \textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models, ggf nochmal suchen...}
 The 2D case already exhibits a wide range of possible phases, including CDW, AFM as well as $s$- and $d_{x^2 - y^2}$-wave superconductivity
@@ -127,15 +130,16 @@ By extension, we also obtain the spectral functions of the investigated systems 
 The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Krull16,Schwarz20,Fan22}.
 \newline
 The remainder of this paper is organized as follows:
-In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as the main equations and relations used throughout this article.
+In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as the methods used in this article.
 Next, we show our results in \autoref{sec:results}.
 Lastly, in \autoref{sec:conclusion}, we will discuss our results.
 In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
 
-\section{Model and governing equations}\label{sec:model}
+\section{Model}\label{sec:model}
 
 The Hamiltonian of the extended Hubbard model is given by
 \begin{equation}
+    \label{eqn:full_hamiltonian}
     \begin{aligned}
         H = &-t \sum_{\langle i, j \rangle, \sigma} \left( c_{i\sigma}^\dagger c_{j\sigma} + \text{h.c.} \right) 
         + \mu \sum_{i,\sigma} n_{i\sigma} \\
@@ -164,11 +168,13 @@ We follow the naming scheme of Ref. \cite{sentef17}
 \end{equation}
 
 where $\vQ := (\pi, ...)$ defines the nesting vector for the CDW and AFM phases.
-We use these abbreviations to write down the mean-field parameters
+We use the following abbreviations to write down the mean-field parameters
 
 \begin{subequations}
     \begin{align}
+        \label{eqn:delta_cdw}
         \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{ZV}{N}\right) \sum_{\vk\sigma} \langle g_{\vk\sigma} \rangle\,, \\
+        \label{eqn:delta_afm}
         \Delta_\text{AFM} &= \frac{U}{2N} \sum_{\vk} \left( \langle g_{k\uparrow} \rangle - \langle g_{\vk\downarrow} \rangle \right)\,, \\
         \Delta_\text{SC} &= \frac{U}{N} \sum_{\vk} \langle f_{\vk} \rangle\,, \\
         \Delta_\eta &= \frac{U}{N} \sum_{\vk} \langle \eta_{\vk} \rangle\,, \\
@@ -177,9 +183,16 @@ We use these abbreviations to write down the mean-field parameters
 \end{subequations}
 
 where $Z$ denotes the coordination number of the lattice.
+The last parameter, $\Delta_n$, renormalizes the hoping term to
+
+\begin{equation}
+    \epsilon( \vk ) := -(2 + \Delta_n) \sum_{\alpha=1}^D \cos(k_\alpha)\,.
+\end{equation}
+
 In total, we obtain the mean-field Hamiltonian in spinor representation as
 
 \begin{equation}
+    \label{eqn:mf_hamiltonian}
     H_\text{MF} = \sum_{\vk} \Psi^\dagger (\vk) h(\vk) \Psi (\vk)\,,
 \end{equation}
 
@@ -193,13 +206,22 @@ and
 \begin{widetext}
 \begin{equation}
     h(\vk) := \begin{pmatrix}
-        \epsilon_0 (\vk) & \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & \Delta_\text{SC} & \Delta_\eta \\
-        \Delta_\text{CDW} - \Delta_\text{AFM} & \epsilon_0 (\vk + \vQ) & \Delta_\eta & \Delta_\text{SC} \\
-        \Delta_\text{SC}^* & \Delta_\eta^* & - \epsilon_0 (-\vk) & - \Delta_\text{CDW} - \Delta_\text{AFM} \\
-        \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & - \epsilon_0 (-\vk - \vQ)\,.
+        \epsilon (\vk) & \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & \Delta_\text{SC} & \Delta_\eta \\
+        \Delta_\text{CDW} - \Delta_\text{AFM} & \epsilon (\vk + \vQ) & \Delta_\eta & \Delta_\text{SC} \\
+        \Delta_\text{SC}^* & \Delta_\eta^* & - \epsilon (-\vk) & - \Delta_\text{CDW} - \Delta_\text{AFM} \\
+        \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & - \epsilon (-\vk - \vQ)\,.
         \end{pmatrix}
 \end{equation}
 \end{widetext}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.48\textwidth]{plots/phase_diagram.pdf}
+    \caption{The phase diagram obtained for the extended Hubbard model on (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
+    The CDW-AFM boundary lies at $U = ZV$, where $Z$ is the coordination number. For $U<0$ and $V=0$, there is a coexistence of CDW and $s$-wave SC.
+    The boundary for the $d_{x^2 - y^2}$-wave SC for the square lattice has been taken from Ref. \cite{Micnas88b}, as it is not accessible using our formalism.}
+    \label{fig:phase_diagram}
+\end{figure}
 
 Now, the entire Hamiltonian and thus all expectation values only depend on
 \begin{equation}
@@ -219,9 +241,59 @@ As an example, consider
     \Delta_\text{SC} = \frac{U}{2N} \int \mathrm{d}\gamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
 \end{equation}
 We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
-Solving the mean-field equations iteratively, one obtains the groundstate phase diagram at temperature $T=0$ as shown in \textcolor{red}{FIGURE}.
-Note, that the phase-separated state as well as the $d_{x^2 - y^2}$-superconducting state, which has been confirmed in for the square lattice \cite{Micnas88b,Huang13},
-cannot be described by our method. This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vk)$.
+Solving the mean-field equations iteratively, one obtains the groundstate phase diagram at temperature $T=0$ as shown in \autoref{fig:phase_diagram}.
+Note, that the $d_{x^2 - y^2}$-superconducting state, which has been confirmed for the square lattice \cite{Micnas88b,Huang13}, cannot be described by our method. 
+This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vk)$.
+\newline
+The CDW-AFM boundary is located at $U = ZV$, where $Z$ is the coordination.
+This holds for both the square lattice ($Z=4$) and the simple cubic lattice ($Z=6$) and can be seen by comparing \eqref{eqn:delta_cdw} and \eqref{eqn:delta_afm}:
+Crossing the aforementioned line, changes which one of the two prefactors is larger.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  Methods                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+To investigate the collective modes, we employ the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
+We will present the general ideas briefly here and direct the interested reader to the appendix \textcolor{red}{!REF!} for a detailed explanation and derivation.
+\newline
+We start with some operator basis $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
+i.e. any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
+We can then express any time-depend operator from this basis as
+
+\begin{equation}
+    a(t) = \sum_j c_j(t) A_j\,,
+\end{equation}
+
+where $c_j(t)$ captures the entire time dependence. 
+Plugging this into the Heisenberg equation of motion and applying an operator scalar product $(A_i|\cdot)$ to both sides of the equation yields
+
+\begin{equation}
+    \begin{aligned}
+        \ddt a(t) = \sum_j \ddt c_j(t) A_j &= i \sum_j c_j(t) [H, A_j] \\
+        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{:=\mathcal{N_{ij}}} \ddt c_j(t) &= i \sum_j \underbrace{(A_i | [H, A_j])}_{:=\mathcal{M_{ij}}} c_j(t) \\
+        \Rightarrow \mathcal{N} \ddt \vec{c}(t) &= i \mathcal{M} \vec{c}(t)\,.
+    \end{aligned}
+\end{equation}
+
+The matrices $\mathcal{N}$ and $\mathcal{M}$ contain all the dynamics and energetic properties of the system but have the significant advantage of being simple matrices rather than operators acting on an enormous Hilbert space.
+\newline
+However, most Hamiltonians do not allow any such operator basis to exist. 
+Therefore, one repeats this commutation process and includes the occurring terms within a bigger basis,
+hoping to get better results as the basis size increases.
+
+In this article, we will be using the operator pseudo scalar product
+
+\begin{equation}
+\label{eqn:scalar_product}
+    (A | B) := \langle [A^\dagger, B] \rangle\,,
+\end{equation}
+
+where the expectation values are taken with respect to the thermal equilibrium of the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}.
+Nevertheless, we will compute $\mathcal{M}$ using the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
