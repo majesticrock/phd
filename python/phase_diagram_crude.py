@@ -10,7 +10,7 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "dos_T0.1"#"T0_L200"
+    name = "T0"#"T0_L200"
     data_folder = f"data/phases/square/{name}/"
 
 swapAxis = False
@@ -80,20 +80,11 @@ from matplotlib.patches import Patch
 
 legend_elements = [Patch(facecolor='C0', label=r'CDW'),
             Patch(facecolor='C1', label=r'AFM'),
-            Patch(facecolor='C2', label=r'$s$')]
-            #Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$'),
+            Patch(facecolor='C2', label=r'$s$'),
+            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$')]
             #Line2D([0], [0], label='Micnas', color='k', linestyle="--")]
             #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
 ax.legend(handles=legend_elements, loc='upper left')
-
-micnas_d   =  np.loadtxt("data/micnas_d_wave.csv").transpose()
-micnas_afm = np.loadtxt("data/micnas_cdw_afm.csv").transpose()
-
-#ax.plot(micnas_d[0], micnas_d[1], "k--")
-#ax.plot(micnas_afm[0], micnas_afm[1], "k--", label="Micnas")
-#
-#ax.set_xlim(-2, 2)
-#ax.set_ylim(-2, 2)
 
 plt.xlabel(r"$" + labels[1] + "/t$")
 plt.ylabel(r"$" + labels[0] + "/t$")

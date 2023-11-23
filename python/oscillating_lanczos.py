@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import gzip
 
 T = 0.
-U = -2.0
-V = -0.1
+U = 0.
+V = 0.
 
 use_XP = True
 
@@ -48,11 +48,12 @@ n_space = np.linspace(1, len(A_star), len(A_star))
 ax.plot(n_space, A_star, ls="-", marker='x', label="$a_i^*$")
 
 from scipy.optimize import curve_fit
-def func(n, a, alpha, phi0):
-    return a * n**(-1-alpha) * np.sin((2*n - 1) + 2*phi0)
+def func(n, alpha, theta0, phi0):
+    return alpha * n**(-1 - 0.5) * np.sin((2 * n + 1) * theta0 + 2*phi0)
 
 fit_cut = 3
-popt, pcov = curve_fit(func, n_space[fit_cut:], A_star[fit_cut:])
+cut_upper = 70
+popt, pcov = curve_fit(func, n_space[fit_cut:cut_upper], A_star[fit_cut:cut_upper])
 ax.plot(np.linspace(1, len(A_star), 500), func(np.linspace(1, len(A_star), 500), *popt))
 print(popt)
 
