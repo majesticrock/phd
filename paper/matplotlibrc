@@ -1,0 +1,24 @@
+font.size : 14
+font.family : serif
+font.serif : Latin Modern Math
+
+axes.xmargin : 0.005
+
+xtick.direction : in
+ytick.direction : in
+xtick.top : True
+ytick.right : True
+xtick.minor.visible : True
+ytick.minor.visible : True
+
+lines.linewidth : 2
+
+pgf.rcfonts : False
+
+#backend : pgf
+## TeX benutzen
+#text.usetex : True
+#pgf.texsystem : lualatex
+
+savefig.directory : ./plots
+savefig.format : eps

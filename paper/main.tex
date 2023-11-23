@@ -1,0 +1,257 @@
+\documentclass[
+    reprint, 
+    aps,
+    preprintnumbers,
+    twocolumn,
+    prb,
+    superscriptaddress
+]{revtex4-2}
+
+
+%=======================
+% Packages:
+%=======================
+
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage[multiple]{footmisc}
+\usepackage{lipsum}
+\usepackage{rotating}
+\usepackage{perpage}
+\usepackage{chronology}
+\usepackage{lipsum}
+\usepackage{amssymb}
+\usepackage{amsbsy}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usepackage{etoolbox}
+\usepackage{graphics}
+\usepackage{abraces}
+\makeatletter
+\let\unit\relax % otherwise there are package conflicts with siunitx
+\makeatother
+\usepackage{siunitx}
+\usepackage{hyperref}
+%\usepackage{float}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{url}
+\usepackage{physics}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{placeins}
+\usepackage[normalem]{ulem}
+\usepackage{mhchem}
+
+
+%=======================
+% New Commands:
+%=======================
+
+\newcommand{\vk}{\vec{k}}
+\newcommand{\vQ}{\vec{Q}}
+\newcommand{\up}{\uparrow}
+\newcommand{\down}{\downarrow}
+\newcommand{\kplusQ}{\vk+\vQ}
+\newcommand{\kminusQ}{-\vk-\vQ}
+
+\begin{document} 
+
+% Preliminary title
+\title{Collective excitations in the 2- and 3-dimensional extended Hubbard model}
+
+%=======================
+% Authors:
+%=======================
+
+\author{Joshua Alth\"user}\email{joshua.althueser@tu-dortmund.de}
+\affiliation{Condensed Matter Theory, TU Dortmund University,
+Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
+
+\author{G\"otz S.~Uhrig}
+\email{goetz.uhrig@tu-dortmund.de}
+\affiliation{Condensed Matter Theory, TU Dortmund University,
+Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  Abstract                                                 %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+Abstract text Abstract text Abstract text Abstract text Abstract text Abstract text Abstract text 
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                Introduction                                               %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}\label{sec:introduction}
+
+The Hubbard model has been employed in a plethora of previous studies. 
+Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
+tantalizing the model's usage for the description of high-temperature superconductivity \cite{yang89}.
+Shortly afterward, an exact $SO(4)$ symmetry was discovered,
+which allows a degeneracy of superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
+This coexistence can be argued by the existence of a particle-hole transformation on bipartite lattices, 
+that maps the attractive Hubbard model exactly onto the repulsive one, exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
+The previously mentioned SC and CDW phases map to different spin operators \cite{zitko15,lieb89}.
+\newline
+Many recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity 
+\cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
+Other studies, focusing on equilibrium systems, 
+investigated the phases and various quantities therein of said model including various additional interactions with and without doping 
+\cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
+In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
+\textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models, ggf nochmal suchen...}
+The 2D case already exhibits a wide range of possible phases, including CDW, AFM as well as $s$- and $d_{x^2 - y^2}$-wave superconductivity
+\cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22}.
+\newline
+In this article, we will first employ a mean-field approximation to the interaction terms 
+and then use the methodology from the so-called iterated equations of motion approach,
+which has already seen success in the handling of interaction quenches \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
+Here, one commutes operators from a suitable operator basis with the Hamiltonian and adds the newly occurring terms to it.
+Naturally, a truncation is necessary for most practical applications, however, the approximation becomes better the more terms are included within the basis.
+The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
+Additionally, we will show an explicit way to obtain various Green's functions from the aforementioned methodology.
+By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
+The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Krull16,Schwarz20,Fan22}.
+\newline
+The remainder of this paper is organized as follows:
+In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as the main equations and relations used throughout this article.
+Next, we show our results in \autoref{sec:results}.
+Lastly, in \autoref{sec:conclusion}, we will discuss our results.
+In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
+
+\section{Model and governing equations}\label{sec:model}
+
+The Hamiltonian of the extended Hubbard model is given by
+\begin{equation}
+    \begin{aligned}
+        H = &-t \sum_{\langle i, j \rangle, \sigma} \left( c_{i\sigma}^\dagger c_{j\sigma} + \text{h.c.} \right) 
+        + \mu \sum_{i,\sigma} n_{i\sigma} \\
+        &+ U \sum_{i} n_{i\uparrow} n_{i\downarrow} 
+        + \frac{V}{2} \sum_{\langle i, j\rangle, \sigma} n_{i\sigma} n_{j\sigma}\,,
+    \end{aligned}
+\end{equation}
+
+where $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$ and $\langle i, j\rangle$ denotes the summation over next neighbours.
+The parameters are the hopping amplitude $t$, the onsite interaction $U$, the intersite interaction $V$ and the chemical potential $\mu$.
+Throughout this article, we will give all energy-related quantities in terms of the hopping amplitude, which we subsequently set to unity $t=1$.
+Applying a Fourier transformation into $k$-space yields the single-particle dispersion 
+
+\begin{equation}
+    \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha)\,,\quad k_\alpha \in [-\pi, \pi)\,,
+\end{equation}
+with the system's dimension $D$ and the dimensionless momentum $\vk$.
+The interaction terms are then mean-field decoupled. 
+We follow the naming scheme of Ref. \cite{sentef17}
+
+\begin{equation}
+    \begin{aligned}
+        n_{k\sigma} &:= c_{\vk\sigma}^\dagger c_{\vk\sigma}\,,      &f_k     &:= c_{-\vk\down} c_{\vk\up}\,, \\
+        g_{k\sigma} &:= c_{\vk\sigma}^\dagger c_{\vk+\vQ\sigma}\,,  &\eta_k  &:= c_{-\vk-\vQ\down} c_{\vk\up}\,,
+    \end{aligned}
+\end{equation}
+
+where $\vQ := (\pi, ...)$ defines the nesting vector for the CDW and AFM phases.
+We use these abbreviations to write down the mean-field parameters
+
+\begin{subequations}
+    \begin{align}
+        \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{ZV}{N}\right) \sum_{\vk\sigma} \langle g_{\vk\sigma} \rangle\,, \\
+        \Delta_\text{AFM} &= \frac{U}{2N} \sum_{\vk} \left( \langle g_{k\uparrow} \rangle - \langle g_{\vk\downarrow} \rangle \right)\,, \\
+        \Delta_\text{SC} &= \frac{U}{N} \sum_{\vk} \langle f_{\vk} \rangle\,, \\
+        \Delta_\eta &= \frac{U}{N} \sum_{\vk} \langle \eta_{\vk} \rangle\,, \\
+        \Delta_n &= \frac{V}{N} \sum_{\vk,\sigma} \sum_{\alpha=1}^D \cos k_\alpha \langle n_{\vk\sigma} \rangle\,,
+    \end{align}
+\end{subequations}
+
+where $Z$ denotes the coordination number of the lattice.
+In total, we obtain the mean-field Hamiltonian in spinor representation as
+
+\begin{equation}
+    H_\text{MF} = \sum_{\vk} \Psi^\dagger (\vk) h(\vk) \Psi (\vk)\,,
+\end{equation}
+
+with the spinors
+\begin{equation}
+    \Psi^\dagger (\vk) := \left( c_{\vk\up}^\dagger\,, c_{\kplusQ\up}^\dagger\,, c_{-\vk\down}\,, c_{\kminusQ\down} \right)
+\end{equation}
+
+and 
+
+\begin{widetext}
+\begin{equation}
+    h(\vk) := \begin{pmatrix}
+        \epsilon_0 (\vk) & \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & \Delta_\text{SC} & \Delta_\eta \\
+        \Delta_\text{CDW} - \Delta_\text{AFM} & \epsilon_0 (\vk + \vQ) & \Delta_\eta & \Delta_\text{SC} \\
+        \Delta_\text{SC}^* & \Delta_\eta^* & - \epsilon_0 (-\vk) & - \Delta_\text{CDW} - \Delta_\text{AFM} \\
+        \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & - \epsilon_0 (-\vk - \vQ)\,.
+        \end{pmatrix}
+\end{equation}
+\end{widetext}
+
+Now, the entire Hamiltonian and thus all expectation values only depend on
+\begin{equation}
+    \hat{\gamma}(\vk) := \sum_{\alpha=1}^D \cos(k_\alpha)\,,
+\end{equation}
+i.e. for any operator $\hat{O}$ the following relation holds 
+\begin{equation}
+    \langle \hat{O}_{\vk} \rangle = \langle \hat{O}_{\vk'} \rangle =: \langle \hat{O}_{\gamma} \rangle\,,
+\end{equation}
+if $\hat{\gamma}(\vk) = \hat{\gamma}(\vk')$.
+This allows us to replace the momentum sums with energy integrals using the bare density of states
+\begin{equation}
+    \rho(\gamma) := \frac{1}{N} \sum_{\vk} \delta \left(\gamma - \hat{\gamma} (\vk) \right)\,.
+\end{equation}
+As an example, consider 
+\begin{equation}
+    \Delta_\text{SC} = \frac{U}{2N} \int \mathrm{d}\gamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
+\end{equation}
+We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
+Solving the mean-field equations iteratively, one obtains the groundstate phase diagram at temperature $T=0$ as shown in \textcolor{red}{FIGURE}.
+Note, that the phase-separated state as well as the $d_{x^2 - y^2}$-superconducting state, which has been confirmed in for the square lattice \cite{Micnas88b,Huang13},
+cannot be described by our method. This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vk)$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  Results                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Results}\label{sec:results}
+ 
+...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                Conclusion                                                 %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusion}\label{sec:conclusion}
+
+...
+
+
+%==============================================================================
+% Acknowledgments 
+%==============================================================================
+\begin{acknowledgments} 
+    ....
+\end{acknowledgments}
+
+\bibliography{sn-bibliography}
+%\bibliography{../../A_bibinput/liter10.bib}
+		
+\end{document}
