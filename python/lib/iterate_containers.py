@@ -17,7 +17,7 @@ def total_size(*containers):
     
 def naming_scheme(Ts, Us, Vs):
     for T, U, V in iterate_containers(Ts, Us, Vs):
-        yield f"T={T}/U={U}/V={V}"    
+        yield f"T={T}/U={U}/V={V}"
         
 ## Example usage
 #import numpy as np
