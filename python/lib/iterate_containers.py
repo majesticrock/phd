@@ -19,6 +19,9 @@ def naming_scheme(Ts, Us, Vs):
     for T, U, V in iterate_containers(Ts, Us, Vs):
         yield f"T={T}/U={U}/V={V}"
         
+def naming_scheme_tuples(tuples):
+    for T, U, V in tuples:
+        yield f"T={T}/U={U}/V={V}"
 ## Example usage
 #import numpy as np
 #
