@@ -130,12 +130,13 @@ By extension, we also obtain the spectral functions of the investigated systems 
 The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Krull16,Schwarz20,Fan22}.
 \newline
 The remainder of this paper is organized as follows:
-In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as the methods used in this article.
+In \autoref{sec:model} we will introduce the model and its Hamiltonian as well our mean-field theory.
+A brief overview over the iterated equations of motion approach is presented in \autoref{sec:ieom}.
 Next, we show our results in \autoref{sec:results}.
 Lastly, in \autoref{sec:conclusion}, we will discuss our results.
 In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
 
-\section{Model}\label{sec:model}
+\section{Model and mean-field theory}\label{sec:model}
 
 The Hamiltonian of the extended Hubbard model is given by
 \begin{equation}
@@ -161,6 +162,7 @@ The interaction terms are then mean-field decoupled.
 We follow the naming scheme of Ref. \cite{sentef17}
 
 \begin{equation}
+    \label{eqn:operators}
     \begin{aligned}
         n_{k\sigma} &:= c_{\vk\sigma}^\dagger c_{\vk\sigma}\,,      &f_k     &:= c_{-\vk\down} c_{\vk\up}\,, \\
         g_{k\sigma} &:= c_{\vk\sigma}^\dagger c_{\vk+\vQ\sigma}\,,  &\eta_k  &:= c_{-\vk-\vQ\down} c_{\vk\up}\,,
@@ -227,9 +229,10 @@ Now, the entire Hamiltonian and thus all expectation values only depend on
 \begin{equation}
     \hat{\gamma}(\vk) := \sum_{\alpha=1}^D \cos(k_\alpha)\,,
 \end{equation}
-i.e. for any operator $\hat{O}$ the following relation holds 
+i.e. for any operator $O$ the following relation holds 
 \begin{equation}
-    \langle \hat{O}_{\vk} \rangle = \langle \hat{O}_{\vk'} \rangle =: \langle \hat{O}_{\gamma} \rangle\,,
+    \label{eqn:equal_expecs}
+    \langle O_{\vk} \rangle = \langle O_{\vk'} \rangle =: \langle O_{\gamma} \rangle\,,
 \end{equation}
 if $\hat{\gamma}(\vk) = \hat{\gamma}(\vk')$.
 This allows us to replace the momentum sums with energy integrals using the bare density of states
@@ -251,9 +254,12 @@ Crossing the aforementioned line, changes which one of the two prefactors is lar
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%                                                  Methods                                                  %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Iterated equations of motion and Green's functions}\label{sec:ieom}
 
 To investigate the collective modes, we employ the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
 We will present the general ideas briefly here and direct the interested reader to the appendix \textcolor{red}{!REF!} for a detailed explanation and derivation.
@@ -270,6 +276,7 @@ where $c_j(t)$ captures the entire time dependence.
 Plugging this into the Heisenberg equation of motion and applying an operator scalar product $(A_i|\cdot)$ to both sides of the equation yields
 
 \begin{equation}
+    \label{eqn:heisenberg}
     \begin{aligned}
         \ddt a(t) = \sum_j \ddt c_j(t) A_j &= i \sum_j c_j(t) [H, A_j] \\
         \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{:=\mathcal{N_{ij}}} \ddt c_j(t) &= i \sum_j \underbrace{(A_i | [H, A_j])}_{:=\mathcal{M_{ij}}} c_j(t) \\
@@ -292,8 +299,99 @@ In this article, we will be using the operator pseudo scalar product
 
 where the expectation values are taken with respect to the thermal equilibrium of the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}.
 Nevertheless, we will compute $\mathcal{M}$ using the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
+\newline
+This choice enables us to write down matrix-valued Fourier-transformed Green's functions in terms of the aforementioned matrices
 
+\begin{equation}
+    \label{eqn:green_function}
+    \mathcal{G}(z = \omega + i0^+) = \mathcal{N} \frac{1}{-z \mathcal{N} - \mathcal{M}} \mathcal{N} := -\mathcal{N} \mathcal{R}(z) \mathcal{N}\,,
+\end{equation}
 
+where we defined the resolvent
+
+\begin{equation}
+    \label{eqn:resolvent}
+    \mathcal{R}(z) := \frac{1}{z \mathcal{N} + \mathcal{M}}\,.
+\end{equation}
+
+Here, the different matrix elements correspond to various Green's functions, depending on the operator basis.
+For example, assume the operator in the basis is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
+
+\begin{equation}
+    \mathcal{G}_{00}(z = \omega +i0^+) =  G(z) = -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
+\end{equation}
+
+For a detailed derivation of this statement, we refer the reader to the appendix \textcolor{red}{!REF!}.
+
+Our operator basis consists of operators of the type
+
+\begin{equation}
+    A_\gamma := \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
+\end{equation}
+
+where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
+Different indices are taken as additional basis operators, e.g. $n_{\vk \up}$ and $n_{\vk \down}$ are taken into the basis separately.
+We then order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.
+
+\begin{equation}
+    X_i := A_i + A_i^\dagger\,,\quad P_i := A_i - A_i^\dagger\,.
+\end{equation}
+
+Our basis is then $\mathcal{B}_{XP} := {X_i, P_i}$.
+If some operators would be 0 ($P_i$ for any $n$-type term) or duplicates (certain $X_i$ for $g$-type terms), we omit them.
+\newline
+Due to this choice of basis, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
+
+\begin{equation}
+    \mathcal{M} = \begin{pmatrix}
+        \mathcal{K}_+ & \kappa \\ \kappa^\dagger & \mathcal{K}_-
+    \end{pmatrix}\,,\quad \mathcal{N} = \begin{pmatrix}
+        \Lambda_+ & \mathcal{L} \\ \mathcal{L}^\dagger & \Lambda_-
+    \end{pmatrix}\,,
+\end{equation}
+
+where $\Im [\mathcal{K}_\pm] = \Re [\kappa] = 0$ and $\Re [\Lambda_\pm] = \Im [\mathcal{L}] = 0$.
+Furthermore, if all occurring expectation values are real, both matrices have large empty blocks.
+This condition is fulfilled for all cases investigated in this article.
+Additionally, we can utilize this block structure to rewrite \eqref{eqn:resolvent} to
+
+\begin{equation}
+    \mathcal{R}(z) \vert_X = - \check{N}^{-1/2} \frac{1}{z^2 - \underbrace{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}}_{:= \check{M}}} \check{N}^{-1/2}\,,
+\end{equation}
+
+where $\vert_X$ denotes the block corresponding to the $X$-terms in the basis and $\check{N} := \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$.
+An analogous form can be found for the $P$-block.
+
+Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
+This can be achieved using a Lanczos tridiagonalization and subsequently a continued fraction expansion in the form of
+
+\begin{widetext}
+\begin{equation}
+    \left( z^2 - \begin{pmatrix}
+        z - a_0 & b_1 & 0 & 0 & \cdots \\
+        b_1 & z - a_1 & b_2 & 0 & \cdots \\
+        0 & b_2 & z - a_2 & b_3 & \cdots \\
+        \vdots & \vdots & \vdots & \vdots & \ddots
+    \end{pmatrix} \right)_{00}^{-1} = \dfrac{1}{z^2 - a_0 - \dfrac{b_1^2}{z^2 - a_1 - \dfrac{b_2^2}{ z^2 - a_2 - \hdots}}}\,\,
+\end{equation}
+\end{widetext}
+
+where $a_i$ and $b_i$ are the Lanczos coefficients \cite{PettiforRecursion,ViswanathRecursion}.
+In the single-band case, the coefficients approach the limit
+
+\begin{equation}
+    \label{eqn:inf_lanczos}
+    a_\infty = \frac{\omega_+ + \omega_-}{2}\text{ and } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
+\end{equation}
+
+where $\omega_\pm$ represent the upper and lower band edge, respectively.
+This behaviour allows us to terminate the continued fraction, if the convergence is good enough, using the so-called square root terminator
+
+\begin{equation}
+    T(\omega) = \frac{1}{2b_\infty^2} \left( \omega - a_\infty \mp \sqrt{(\omega - a_\infty)^2 - 4 b_\infty^2} \right)\,,
+\end{equation}
+
+where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and $|\omega - a_\infty| < 2b_\infty$ and the positive one otherwise.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -303,7 +401,9 @@ Nevertheless, we will compute $\mathcal{M}$ using the full Hubbard Hamiltonian \
 
 \section{Results}\label{sec:results}
  
-...
+\subsection{SC-CDW transition}
+
+\subsection{CDW-AFM transition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
