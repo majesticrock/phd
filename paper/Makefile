@@ -1,6 +1,6 @@
 all: build/main.pdf
 
-PLTS_SCR=phase_diagram.py
+PLTS_SCR=phase_diagram.py resolvent_overview.py
 
 PLTS_PDF=$(addprefix plots/, $(subst .py,.pdf,$(PLTS_SCR)))
 
