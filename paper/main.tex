@@ -59,6 +59,7 @@
 \newcommand{\kminusQ}{-\vk-\vQ}
 
 \newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}}
+\newcommand{\dgamma}{\mathrm{d}\gamma}
 
 \begin{document} 
 
@@ -241,7 +242,7 @@ This allows us to replace the momentum sums with energy integrals using the bare
 \end{equation}
 As an example, consider 
 \begin{equation}
-    \Delta_\text{SC} = \frac{U}{2N} \int \mathrm{d}\gamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
+    \Delta_\text{SC} = \frac{U}{2N} \int \dgamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
 \end{equation}
 We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
 Solving the mean-field equations iteratively, one obtains the groundstate phase diagram at temperature $T=0$ as shown in \autoref{fig:phase_diagram}.
@@ -315,7 +316,7 @@ where we defined the resolvent
 \end{equation}
 
 Here, the different matrix elements correspond to various Green's functions, depending on the operator basis.
-For example, assume the operator in the basis is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
+For instance, assume the operator in the basis is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
 
 \begin{equation}
     \mathcal{G}_{00}(z = \omega +i0^+) =  G(z) = -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
@@ -381,7 +382,7 @@ In the single-band case, the coefficients approach the limit
 
 \begin{equation}
     \label{eqn:inf_lanczos}
-    a_\infty = \frac{\omega_+ + \omega_-}{2}\text{ and } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
+    a_\infty = \frac{\omega_+ + \omega_-}{2}\text{  and  } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
 \end{equation}
 
 where $\omega_\pm$ represent the upper and lower band edge, respectively.
@@ -400,7 +401,48 @@ where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Results}\label{sec:results}
- 
+
+In this section, we will be investigating four different diagonal Green's functions $G_{AA}(\omega + i0^+)$, namely with
+
+\begin{subequations}
+    \label{eqn:resolvent_bases}
+    \begin{align}
+        A_\text{Higgs} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} + f_{vk}^\dagger \right)\,,\\
+        A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{vk}^\dagger \right)\,,\\
+        A_\text{CDW} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right)\,,\\
+        A_\text{AFM} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right)\,,
+    \end{align}
+\end{subequations}
+
+where $N$ is the number of lattice sites in the system. 
+Note, that this choice of normalization cancels out with other system size-dependent terms so that our final results do not depend on it at all.
+The first operator catches the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
+The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of the plots is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
+    The shaded area marks the two-particle continuum.
+    The panels (a), (b), and (c) show the spectral functions in the SC, CDW, and AFM phases, respectively.}
+    \label{fig:resolvent_overview}
+\end{figure*}
+
+Let us first show and discuss the general form of the spectral functions
+\begin{equation}
+    \mathcal{A}(\omega) = -\frac{1}{\pi} \Im \left[ \mathcal{G}(\omega + i0^+) \right]
+\end{equation}
+
+in various phases and afterward, we will describe the behaviour of the occurring modes as the system approaches a phase transition.
+\newline
+Firstly, all of the aforementioned operators are (anti-)Hermitian. Therefore, their commutator $[A^\dagger, A]$ vanishes.
+Thus, abiding by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{AB} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80},
+all spectral functions must be symmetrical about $\omega=0$. Therefore, we will only show the $\omega \geq 0$ in our plots.
+\newline
+Multiple spectral functions in the SC, CDW, and AFM phases are shown in \autoref{fig:resolvent_overview}.
+
 \subsection{SC-CDW transition}
 
 \subsection{CDW-AFM transition}
