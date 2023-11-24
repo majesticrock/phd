@@ -14,13 +14,17 @@ build/main.pdf: $(PLTS_PDF)
 build/main.pdf: FORCE | build
 	latexmk $(TeXOptions) main.tex 1> build/log || cat build/log
 
-plots/%.pdf: %.py
+plots/%.pdf: %.py | plots
 	TEXINPUTS=$$(pwd): python $<
 
 FORCE:
+
+plots:
+	mkdir -p plots/
 
 build:
 	mkdir -p build/
 
 clean:
 	rm -rf build/
+	rm -rf plots/
