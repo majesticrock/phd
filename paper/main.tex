@@ -419,33 +419,51 @@ Note, that this choice of normalization cancels out with other system size-depen
 The first operator catches the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
 The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of the plots is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
-    The shaded area marks the two-particle continuum.
-    The panels (a), (b), and (c) show the spectral functions in the SC, CDW, and AFM phases, respectively.}
-    \label{fig:resolvent_overview}
-\end{figure*}
+\subsection{SC-CDW transition}
 
 Let us first show and discuss the general form of the spectral functions
 \begin{equation}
     \mathcal{A}(\omega) = -\frac{1}{\pi} \Im \left[ \mathcal{G}(\omega + i0^+) \right]
 \end{equation}
 
-in various phases and afterward, we will describe the behaviour of the occurring modes as the system approaches a phase transition.
+in the SC and CDW phase and afterward, we will describe the behaviour of the occurring modes as the system approaches a phase transition.
 \newline
-Firstly, all of the aforementioned operators are (anti-)Hermitian. Therefore, their commutator $[A^\dagger, A]$ vanishes.
-Thus, abiding by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{AB} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80},
-all spectral functions must be symmetrical about $\omega=0$. Therefore, we will only show the $\omega \geq 0$ in our plots.
+Firstly, all of the operators mentioned in \eqref{eqn:resolvent_bases} are (anti-)Hermitian. 
+Therefore, their commutator $[A^\dagger, A]$ vanishes and, 
+abiding by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80},
+all spectral functions must be symmetrical about $\omega=0$. 
+For this reason, we will only show the $\omega \geq 0$ in our plots.
 \newline
-Multiple spectral functions in the SC, CDW, and AFM phases are shown in \autoref{fig:resolvent_overview}.
+The corresponding spectral functions in the SC and CDW phases are shown in \autoref{fig:resolvent_overview_SC}.
+We chose $U=-2$ for all plots and $V=\pm0.1$. 
 
-\subsection{SC-CDW transition}
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of the plots is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
+    The shaded area marks the two-particle continuum.
+    The panels (a), (b), and (c) show the spectral functions in the SC and CDW phases, respectively.}
+    \label{fig:resolvent_overview_SC}
+\end{figure*}
 
-\subsection{CDW-AFM transition}
+\subsection{AFM-CDW transition}
+
+Similar to the previous section, we will first show the general form of the spectral functions with respect to the operators \eqref{eqn:resolvent_bases}.
+They are depicted in \autoref{fig:resolvent_overview_AFM}, choosing $V=1$ for the square lattice and $V=0.5$ for the simple cubic lattice.
+For the CDW phase (panel a) we chose $V=4.1$ and for the AFM phase (panel b) $V=3.9$.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    %The left edge of the plots is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
+    The shaded area marks the two-particle continuum.
+    The panels (a) and (b) show the spectral functions in the CDW and AFM phases, respectively.}
+    \label{fig:resolvent_overview_AFM}
+\end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
