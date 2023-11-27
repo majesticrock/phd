@@ -9,13 +9,13 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([5.0])
-Vs = np.array([1.])
+Us = np.array([3.0])
+Vs = np.array([0.5])
 
 use_XP = True
 createZoom = False
 
-folder = "data/modes/square/dos_3k/"
+folder = "data/modes/cube/test/"
 name_suffix = "CDW"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()
@@ -24,7 +24,7 @@ fig, ax = plt.subplots()
 ax.set_yscale("log")
 #ax.set_ylim(0, 1)
 
-plot_lower_lim = 2
+plot_lower_lim = 0
 plot_upper_lim = 14
 
 if createZoom:

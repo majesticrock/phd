@@ -14,7 +14,7 @@ import lib.plot_settings as ps
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
-params = [ [0., -2., -0.1], [0., -2.0, 0.] ]
+params = [ [0., -2., -0.1], [0., -2.0, 0.1] ]
 
 use_XP = True
 
@@ -49,7 +49,6 @@ for j, folder in enumerate(folders):
             
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         res.mark_continuum(axs[i][j])
-
 
 legend = axs[0][0].legend(loc="upper center")
 for i in range(ncols):
