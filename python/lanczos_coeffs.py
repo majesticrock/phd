@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import gzip
 
 T = 0.
-U = 3.
-V = 0.5
+U = -2.
+V = 0.1
 
 use_XP = True
 
 folder = "data/modes/cube/test/"
-name_suffix = "higgs_AFM"
+name_suffix = "higgs_SC"
 name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
 
