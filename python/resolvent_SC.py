@@ -9,17 +9,17 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-2.0])
+Us = np.array([-2.])
 Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/cube/dos_3k/"
+folder = "data/modes/cube/test/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
 #ax.set_yscale("log")
-#ax.set_ylim(0, 1)
+ax.set_ylim(0, 1)
 
 plotter = ps.CURVEFAMILY(3, axis=ax)
 plotter.set_individual_colors("nice")
