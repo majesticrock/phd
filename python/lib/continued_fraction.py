@@ -2,6 +2,8 @@ import numpy as np
 import gzip
 import matplotlib.pyplot as plt
 
+NORM_FACTOR = -(1. / np.pi) 
+
 class ContinuedFraction:
     # In Python there is no need to declare one's variables beforehand.
     # How foolish of me to assume otherwise
@@ -81,7 +83,7 @@ class ContinuedFraction:
         return self.B[0] / G
     
     def spectral_density(self, w_param, withTerminator = True):
-        return -(1. / np.pi) * self.continued_fraction(w_param, withTerminator).imag
+        return NORM_FACTOR * self.continued_fraction(w_param, withTerminator).imag
     
     def mark_continuum(self, axes=None, label="Continuum"):
         if label is not None:
@@ -186,7 +188,7 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
             elif idx == 2:
                 data += dos( w_usage )
             
-    return -data.imag, data.real, w_log.real, res
+    return NORM_FACTOR * data.imag, data.real, w_log.real, res
 
 def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, use_start=True, messages=True):
     data = np.zeros(number_of_values, dtype=complex)
@@ -225,7 +227,7 @@ def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_bas
             elif idx == 2:
                 data += dos( w_lin )
             
-    return -data.imag, data.real, w_lin.real, res
+    return NORM_FACTOR * data.imag, data.real, w_lin.real, res
 
 def resolvent_in_continuum(data_folder, name_suffix, range=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, w_space=np.linspace):
     borders = continuum_edges(data_folder, name_suffix, xp_basis)

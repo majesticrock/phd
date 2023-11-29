@@ -87,7 +87,18 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-Abstract text Abstract text Abstract text Abstract text Abstract text Abstract text Abstract text 
+    We investigate the superconducting (SC), charge-density wave (CDW), and antiferromagnetic (AFM) phases 
+    in the extended Hubbard model at zero temperature and half-filling.
+    We employ the iterated equations of motion approach \cite{Kalthoff17,bleicker18} to compute the two-particle Green's functions and
+    by extension, the corresponding spectral densities.
+    This renders a comprehensive analysis of the behaviour of collective excitations possible
+    as the model's parameters are changed across phase transitions.
+    We identify the well-known amplitude (Higgs) and phase (Leggett) modes within the 
+    superconducting phase and observe a similar excitation in the CDW phase
+    which shift towards zero energy as the system approaches the phase transition to the SC phase.
+    In the CDW phase, close to the phase transition to the AFM phase, we find a collective mode 
+    which does not change significantly and another modes which becomes soft
+    as the phase boundary is approached.
 \end{abstract}
 
 \maketitle
@@ -418,41 +429,55 @@ where $N$ is the number of lattice sites in the system.
 Note, that this choice of normalization cancels out with other system size-dependent terms so that our final results do not depend on it at all.
 The first operator catches the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
 The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
+\newline
+Note additionally, that all of the aforementioned operators are (anti-)Hermitian. 
+Therefore, their commutator $[A^\dagger, A]$ vanishes and, 
+abiding by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80},
+all spectral functions
 
-\subsection{SC-CDW transition}
-
-Let us first show and discuss the general form of the spectral functions
 \begin{equation}
     \mathcal{A}(\omega) = -\frac{1}{\pi} \Im \left[ \mathcal{G}(\omega + i0^+) \right]
 \end{equation}
 
-in the SC and CDW phase and afterward, we will describe the behaviour of the occurring modes as the system approaches a phase transition.
-\newline
-Firstly, all of the operators mentioned in \eqref{eqn:resolvent_bases} are (anti-)Hermitian. 
-Therefore, their commutator $[A^\dagger, A]$ vanishes and, 
-abiding by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80},
-all spectral functions must be symmetrical about $\omega=0$. 
-For this reason, we will only show the $\omega \geq 0$ in our plots.
-\newline
-The corresponding spectral functions in the SC and CDW phases are shown in \autoref{fig:resolvent_overview_SC}.
-We chose $U=-2$ for all plots and $V=\pm0.1$. 
+must be symmetrical about $\omega=0$.
+For this reason, we will only show the $\omega \geq 0$ in our plots. 
+
+\subsection{SC-CDW transition}
 
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
     \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
     The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of the plots is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
+    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
     The shaded area marks the two-particle continuum.
     The panels (a), (b), and (c) show the spectral functions in the SC and CDW phases, respectively.}
     \label{fig:resolvent_overview_SC}
 \end{figure*}
 
-\subsection{AFM-CDW transition}
+Let us first show and discuss the general form of the spectral functions in the SC and CDW phase and afterward, 
+we will describe the behaviour of the occurring modes as the system approaches a phase transition.
+\newline
+The spectral functions corresponding to the individual operators in \eqref{eqn:resolvent_bases} are shown in \autoref{fig:resolvent_overview_SC}.
+We chose $U=-2$ for the square lattice and $U=-2.5$ for the simple cubic lattice and $V=\pm0.1$ for both lattices.
+\newline
+There are a variety of different features. The difference between the two lattices is mostly quantitative in nature.
+First and foremost, in the SC phase, there is a sharp peak located at $\omega=0$, only in the phase spectral function,
+and another peak, only in the amplitude spectral function, located at $\omega=2\Delta_\text{SC}$.
+We identify them with the well-known Leggett and Higgs modes in superconductors.
+In the CDW phase, both of these spectral functions become identical and form a sharp peak below the two-particle continuum.
+\newline
+The CDW spectral function shows a peak below the continuum only in the SC phase, while having another peak at $\omega=2\Delta$ in the CDW phase.
+The AFM spectral function is restricted to the continuum for both phases and both lattices.
+For the square lattice, however, there is a peak located at the upper edge of the two-particle continuum.
 
-Similar to the previous section, we will first show the general form of the spectral functions with respect to the operators \eqref{eqn:resolvent_bases}.
-They are depicted in \autoref{fig:resolvent_overview_AFM}, choosing $V=1$ for the square lattice and $V=0.75$ for the simple cubic lattice.
-For the CDW phase (panel a) we chose $U=ZV + 0.1$ and for the AFM phase (panel b) $V=ZV - 0.1$.
+To further classify the aforementioned peak that lie outside the two-particle continuum,
+we turn towards the real part of the Green's function.
+We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly to obtain.
+
+It is related to the imaginary part by the Kramers-Kronig relations.
+
+\subsection{AFM-CDW transition}
 
 \begin{figure*}
     \centering
@@ -464,6 +489,11 @@ For the CDW phase (panel a) we chose $U=ZV + 0.1$ and for the AFM phase (panel b
     The panels (a) and (b) show the spectral functions in the CDW and AFM phases, respectively.}
     \label{fig:resolvent_overview_AFM}
 \end{figure*}
+
+Similar to the previous section, we will first show the general form of the spectral functions with respect to the operators \eqref{eqn:resolvent_bases}.
+They are depicted in \autoref{fig:resolvent_overview_AFM}, choosing $V=1$ for the square lattice and $V=0.75$ for the simple cubic lattice.
+For the CDW phase (panel a) we chose $U=ZV + 0.1$ and for the AFM phase (panel b) $V=ZV - 0.1$.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
