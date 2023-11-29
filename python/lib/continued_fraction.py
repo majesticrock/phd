@@ -80,17 +80,25 @@ class ContinuedFraction:
 
         return self.B[0] / G
     
-    def mark_continuum(self, axes=None):
-        if axes is None:
-            if self.z_squared:
-                plt.axvspan(np.sqrt(self.roots[0]), np.sqrt(self.roots[1]), alpha=.2, color="purple", label="Continuum")
-            else:
-                plt.axvspan(self.roots[0], self.roots[1], alpha=.2, color="purple", label="Continuum")
+    def spectral_density(self, w_param, withTerminator = True):
+        return -(1. / np.pi) * self.continued_fraction(w_param, withTerminator).imag
+    
+    def mark_continuum(self, axes=None, label="Continuum"):
+        if label is not None:
+            args = {"alpha" : 0.2, "color": "purple", "label" : label}
         else:
-            if self.z_squared:
-                axes.axvspan(np.sqrt(self.roots[0]), np.sqrt(self.roots[1]), alpha=.2, color="purple", label="Continuum")
-            else:
-                axes.axvspan(self.roots[0], self.roots[1], alpha=.2, color="purple", label="Continuum")
+            args = {"alpha" : 0.2, "color": "purple"}
+            
+        if axes is None:
+            plotter = plt.axvspan
+        else:
+            plotter = axes.axvspan
+            
+        if self.z_squared:
+            plotter(np.sqrt(self.roots[0]), np.sqrt(self.roots[1]), **args)
+        else:
+            plotter(self.roots[0], self.roots[1], **args)
+
             
     def continuum_edges(self):
         if not self.z_squared:

@@ -343,9 +343,10 @@ cmptuorange =   generate_linear_cmap_3p( black_rgb, tuorange_rgb, white_rgb )
 # maps for different property ranges (using python Dicts):
 color_maps = { "cmptugreen": cmptugreen, "cmptuorange": cmptuorange }
 
-color_ranges = { "default": [], "nice": [] }
+color_ranges = { "default": [], "nice": [], "nice2" : [] }
 color_ranges["default"] = np.array(( "black", "blue", "red", "green", "orange", "purple", "deepskyblue", "magenta", "lime", "yellow" ))
 color_ranges["nice"] = np.array(( "blue", "orange", "black", "green", "deepskyblue", "magenta" ))
+color_ranges["nice2"] = np.array(( "indigo", "darkorange", "green", "navy" ))
 #color_ranges["thesis_tugreen"] = np.array(( "black", "#1a2505", "#344a0a", "#e6f1d1", "#b5d474", "#b5d474", "#9cc646", tugreen, "#699313", "#4f6e0e",    ))
 
 linestyle_ranges = { "default": [] }

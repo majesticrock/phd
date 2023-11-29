@@ -8,7 +8,7 @@ V = 0.1
 
 use_XP = True
 
-folder = "data/modes/cube/test/"
+folder = "data/modes/cube/dos_3k/"
 name_suffix = "higgs_SC"
 name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
