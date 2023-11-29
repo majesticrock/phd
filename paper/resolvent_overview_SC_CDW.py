@@ -11,11 +11,9 @@ import lib.continued_fraction as cf
 from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 
-prop_cycle = plt.rcParams['axes.prop_cycle']
-colors = prop_cycle.by_key()['color']
-
+# visually scale the data for visibility
+SCALE = 5
 params = [ [0., -2., -0.1], [0., -2.0, 0.1] ]
-
 use_XP = True
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
@@ -27,7 +25,7 @@ fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 6), sharey=True
 plotters = np.empty((nrows, ncols), dtype=ps.CURVEFAMILY)
 for i in range(nrows):
     for j in range(ncols):
-        axs[i][j].set_ylim(0, 0.75)
+        axs[i][j].set_ylim(0, .99)
         plotters[i][j] = ps.CURVEFAMILY(4, axis=axs[i][j])
         plotters[i][j].set_individual_colors("nice2")
         #plotters[i][j].set_individual_linestyles(["-", "--", "-", "-"])
@@ -40,29 +38,31 @@ labels = ["Phase", "Higgs", "CDW", "AFM"]
 
 for j, folder in enumerate(folders):
     usage_upper_lim = 2 * plot_upper_lim if j == 0 else 3 * plot_upper_lim
-        
+    if j == 1:
+        params[0][1] = -2.5
+        params[1][1] = -2.5
     for i, name in enumerate(naming_scheme_tuples(params)):
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
-                                                            number_of_values=10000, xp_basis=use_XP, imaginary_offset=1e-6, messages=False)
+                                                            number_of_values=5000, xp_basis=use_XP, imaginary_offset=1e-5, messages=False)
             if k % 2 == 1:
-                plotters[i][j].plot(w_lin, data, label=label, dashes=(5, 4))
+                plotters[i][j].plot(w_lin, SCALE*data, label=label, dashes=(6, 6))
             else:
-                plotters[i][j].plot(w_lin, data, label=label)
+                plotters[i][j].plot(w_lin, SCALE*data, label=label)
             
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         res.mark_continuum(axs[i][j], None)
 
-legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2)
+legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
 for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$z / t$")
 for i in range(nrows):
     axs[i][0].set_ylabel(r"$\mathcal{A}(\omega)$ / a.u.")
-axs[0][0].title.set_text("Square lattice")
-axs[0][1].title.set_text("Simple cubic lattice")
+axs[0][0].title.set_text("Square - $U=-2$")
+axs[0][1].title.set_text("Simple cubic - $U=-2.5$")
 
-axs[0][1].text(11.6, 0.65, r"(a)")
-axs[1][1].text(11.6, 0.65, r"(b)")
+axs[0][1].text(10.6, 0.87, r"(a) SC")
+axs[1][1].text(10.6, 0.87, r"(b) CDW")
 
 fig.tight_layout()
 plt.savefig("plots/resolvent_overview_SC_CDW.pdf")
