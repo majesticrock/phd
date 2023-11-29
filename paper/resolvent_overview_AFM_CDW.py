@@ -30,8 +30,8 @@ for i in range(nrows):
     for j in range(ncols):
         axs[i][j].set_ylim(0, 0.75)
         plotters[i][j] = ps.CURVEFAMILY(4, axis=axs[i][j])
-        plotters[i][j].set_individual_colors("nice")
-        plotters[i][j].set_individual_linestyles(["-", "--", "-", "-"])
+        plotters[i][j].set_individual_colors("nice2")
+        #plotters[i][j].set_individual_linestyles(["-", "--", "-", "-"])
 
 plot_lower_lim = 0#-0.05
 plot_upper_lim = 5.2
@@ -43,23 +43,30 @@ for j, folder in enumerate(folders):
     usage_upper_lim = 2 * plot_upper_lim if j == 0 else 2.7 * plot_upper_lim
     if j == 1: 
         # the sc lattice uses a different V for the CDW-AFM border due to the changed coordination number
-        params[1][2] = 0.5
-        params[0][2] = 0.5
+        params[0][2] = 0.75
+        params[1][2] = 0.75
+        params[0][1] = 4.6
+        params[1][1] = 4.4
         
     for i, name in enumerate(naming_scheme_tuples(params)):
-        for name_suffix, label in zip(name_suffices, labels):
+        for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
                                                             number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, messages=False)
-            plotters[i][j].plot(w_lin, data, label=label)
+            if k % 2 == 1:
+                plotters[i][j].plot(w_lin, data, label=label, dashes=(5, 4))
+            else:
+                plotters[i][j].plot(w_lin, data, label=label)
             
             cont = np.sqrt(res.roots[0])
-            create_zoom(axs[i][j], 0.5, 0.05, 0.2, 0.9, (cont - 0.025, cont), ylim=(0, 0.35))
             
+        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.3, 0.75, (cont - 0.02, cont), ylim=(0, 0.35), y_func=lambda x: -res.continued_fraction(x + 1e-6j).imag)  
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
-        res.mark_continuum(axs[i][j])
+        res.mark_continuum(axs[i][j], None)
+        #res.mark_continuum(axins, None)
 
 
-legend = axs[0][0].legend(loc="upper center")
+legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2)
+
 for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$z / t$")
 for i in range(nrows):
