@@ -3,81 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import ListedColormap
 from io import StringIO
-import os
 import inspect
-
-
-# ========================================================
-# ======================== LABELS ========================
-# ========================================================
-
-# function : sets a given string as label via plt or axis
-def SetLabelByString( labelstr, direction, axis = None ):
-    if axis is None:
-        if direction == 'x':
-            plt.xlabel(r'%s'%labelstr)
-        elif direction == 'y':
-            plt.ylabel(r'%s'%labelstr)
-        else: 
-            raise RuntimeError( "Direction unknown! Allowed is only 'x' or 'y'." )
-    else:
-        if direction == 'x':
-            axis.set_xlabel(r'%s'%labelstr)
-        elif direction == 'y':
-            axis.set_ylabel(r'%s'%labelstr)
-        else:
-            raise RuntimeError( "Direction unknown! Allowed is only 'x' or 'y'." )
-
-# function : sets a label in certain style from variable + unit
-def SetLabel( style, variable, unit, direction, axis = None ):
-    if style == "STD":
-        SetLabel_STD( variable, unit, direction, axis )
-    elif style == "PRB":
-        SetLabel_PRB( variable, unit, direction, axis )
-    else:
-        raise RuntimeError( "style unknown!" )
-
-# function : sets a label in STD style from variable + unit | is called from the above function but can also be directly used
-def SetLabel_STD( variable, unit, direction, axis = None ):
-    if unit != None:
-        labelstr = r"$" + variable + r"[" + unit + r"]$"
-    else:
-        labelstr = r"$" + variable + r"$"
-    SetLabelByString( labelstr, direction, axis )
-
-# function : sets a label in PRB style from variable + unit | is called from the above function but can also be directly used
-def SetLabel_PRB( variable, unit, direction, axis = None ):
-    if unit != None:
-        labelstr = r"$" + variable + r"$ (units of $" + unit + r"$)"
-    else:
-        labelstr = r"$" + variable + r"$"
-    SetLabelByString( labelstr, direction, axis )
-
-
-# ========================================================
-# ======================== FOLDERS =======================
-# ========================================================
-
-# function : builds a folder
-def BuildFolder( path ):
-    try:
-        os.mkdir( path )
-    except:
-        pass
-
-# function : builds a folder tree from an array of folders and a global path
-def BuildFolderTree( tree, path = "" ):
-    total_path = ""
-    if path != "": # then add path to total_path
-        if path[-1] != "/": # then add "/"
-            total_path = "/"
-        total_path = path + total_path
-    
-    for i in range( 0, len(np.atleast_1d(tree)) ): # build all subfolders
-        total_path += np.atleast_1d(tree)[i] + "/"
-        BuildFolder( total_path[:-1] )
-    return total_path
-
 
 # =======================================================
 # ======================== CURVEFAMILY ==================
@@ -92,7 +18,6 @@ CURVEFAMILY_description += "3.) plot your data with the plot method\n"
 CURVEFAMILY_description += "\t- hand over x, y and optionally increase or other arguments that are allowed in plt.plot or plt.errorbar\n"
 CURVEFAMILY_description += "\t- a certain property set can be skipped with skip_to_next or considered twice if increase is set to False\n"
 CURVEFAMILY_description += "\t- any individual simple arguments, e.g., markersize can be handed over as kwargs in the plot method \n"
-
 class CURVEFAMILY():
     # initial variables:
     familysize = 1
@@ -115,6 +40,11 @@ class CURVEFAMILY():
     shared_linestyle = "-"
     linestyle_range = 0 # has to be set
 
+    # dashes:
+    is_dashes_shared = True
+    shared_dashes = None
+    dashes_range = 0 # has to be set
+
     # markerstyle:
     is_markerstyle_shared = True
     shared_markerstyle = ""
@@ -131,32 +61,16 @@ class CURVEFAMILY():
     plot_errorbars = False
     shared_errorbarstyle = ""
 
+    # labels:
+    legend_indices = []
+
     # initialization
     def __init__( self, familysize, allow_cycle = False, axis = None ):
         self.familysize = familysize
         self.allow_cycle = allow_cycle
         self.axis = axis
         self.curve_counter = 0
-
-    # shared kwargs
-    def set_shared_kwargs( self, **kwargs ):
-        self.shared_kwargs = kwargs 
-
-    # return the curve counter
-    def get_counter( self ):
-        if self.curve_counter >= self.familysize:
-            raise Exception("curve_counter exceeds the familysize")
-        return self.curve_counter
-
-    # increase the curve counter if demanded
-    def increase_counter_if( self, increase ): 
-        if increase: 
-            self.curve_counter += 1
-        if self.curve_counter == self.familysize:
-            if self.allow_cycle:
-                self.curve_counter = 0
-            else:
-                print("CURVEFAMILY has been completed")
+        self.legend_indices = []
 
     # list all available methods
     def help( self ):
@@ -182,7 +96,28 @@ class CURVEFAMILY():
         print_dict( "color_maps", color_maps )
         print_dict( "color_ranges", color_ranges )
         print_dict( "linestyle_ranges", linestyle_ranges )
+        print_dict( "dashes_ranges", dashes_ranges )
         print_dict( "markerstyle_ranges", markerstyle_ranges )
+
+    # shared kwargs
+    def set_shared_kwargs( self, **kwargs ):
+        self.shared_kwargs = kwargs 
+
+    # return the curve counter
+    def get_counter( self ):
+        if self.curve_counter >= self.familysize:
+            raise Exception("curve_counter exceeds the familysize")
+        return self.curve_counter
+
+    # increase the curve counter if demanded
+    def increase_counter_if( self, increase ): 
+        if increase: 
+            self.curve_counter += 1
+        if self.curve_counter == self.familysize:
+            if self.allow_cycle:
+                self.curve_counter = 0
+            else:
+                print("CURVEFAMILY has been completed")
 
 # ==================== COLORS =========================
     def set_shared_color( self, color ):
@@ -241,7 +176,28 @@ class CURVEFAMILY():
         else:
             return self.linestyle_range[ current_counter ]
 # ====================================================
-    
+
+# ==================== DASHES ====================
+    def set_shared_dashes( self, dashes ):
+        self.is_dashes_shared = True
+        self.shared_dashes = dashes
+
+    def set_individual_dashes( self, dashes_range = "default" ):
+        self.is_dashes_shared = False
+        if np.shape( dashes_range ) == (): # use predefined dashes_range
+            self.dashes_range = dashes_ranges[dashes_range]
+        else: # use custom dashes_range
+            self.dashes_range = dashes_range
+
+    def get_dashes( self, increase = False ):
+        current_counter = self.get_counter()
+        self.increase_counter_if( increase )
+        if self.is_dashes_shared:
+            return self.shared_dashes
+        else:
+            return self.dashes_range[ current_counter ]
+# ====================================================
+
 # ==================== MARKERSTYLES ==================
     def set_shared_markerstyle( self, markerstyle ):
         self.is_markerstyle_shared = True
@@ -290,25 +246,45 @@ class CURVEFAMILY():
         self.plot_errorbars = True
         self.shared_errorbarstyle = errorbarstyle
 
-    # this has to be done
+    # individiual errorbar style not yet implemented
 # ====================================================
-    def plot( self, x, y, increase = True, **kwargs ):
+
+# ==================== LABELS ==================
+    # if the legend is set manually, this function can help remembering which curves shall be labelled
+    # to this end, add_to_legend_indices needs to be set to True in the plot-call
+    def get_indices_for_legend( self ):
+        return self.legend_indices
+# ==============================================
+
+# ==================== PLOTTING ===================
+    def plot( self, x, y, increase = True, add_to_legend_indices = False, **kwargs ):
         plotter = None
         if self.axis is None: # plot with plt
             if self.plot_errorbars:
                 plotter = plt.errorbar
             else:
                 plotter = plt.plot
+            if add_to_legend_indices:
+                self.legend_indices += [len(plt.gca().get_lines())]
+
         else: # plot on a given axis
             if self.plot_errorbars:
                 plotter = self.axis.errorbar
             else:
                 plotter = self.axis.plot
+            if add_to_legend_indices:
+                self.legend_indices += [len(self.axis.get_lines())]
         
-        if self.shared_kwargs is None: # guarantee that shared_kwargs is not empty
+        if self.shared_kwargs is None: # guarantee that shared_kwargs is not empty (otherwise it doesn't work)
             self.shared_kwargs = {"visible" : True}
-
-        plotter( x, y, color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), markevery = self.get_markevery( len(np.atleast_1d(x)) ), **kwargs, **self.shared_kwargs )
+        
+        # The parameter 'dashes' overrides the linestyle/ls parameter. So if it is not set (i.e. None), we do not want to pass it to the plot function
+        if self.get_dashes() is not None:
+            plotter( x, y, color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
+                    markevery = self.get_markevery( len(np.atleast_1d(x)) ), dashes=self.get_dashes(), **kwargs, **self.shared_kwargs )
+        else:
+            plotter( x, y, color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
+                    markevery = self.get_markevery( len(np.atleast_1d(x)) ), **kwargs, **self.shared_kwargs )
         self.increase_counter_if( increase )
 
     def skip_to_next( self ):
@@ -317,6 +293,10 @@ class CURVEFAMILY():
     def set_axis( self, axis ):
         self.axis = axis
 
+
+# =================================================================
+# ======================== COLORS AND COLOR MAPS ==================
+# =================================================================
 # colors:
 black_rgb = [0,0,0]
 lightblack_rgb = [0,0,0,0.5]
@@ -340,6 +320,10 @@ def generate_linear_cmap_3p( cl_rgb, cm_rgb, cr_rgb ):
 cmptugreen =    generate_linear_cmap_3p( black_rgb, tugreen_rgb, white_rgb )
 cmptuorange =   generate_linear_cmap_3p( black_rgb, tuorange_rgb, white_rgb )
 
+
+# =================================================================
+# ======================== OTHER PLOT PROPERTIES ==================
+# =================================================================
 # maps for different property ranges (using python Dicts):
 color_maps = { "cmptugreen": cmptugreen, "cmptuorange": cmptuorange }
 
@@ -347,15 +331,18 @@ color_ranges = { "default": [], "nice": [], "nice2" : [] }
 color_ranges["default"] = np.array(( "black", "blue", "red", "green", "orange", "purple", "deepskyblue", "magenta", "lime", "yellow" ))
 color_ranges["nice"] = np.array(( "blue", "orange", "black", "green", "deepskyblue", "magenta" ))
 color_ranges["nice2"] = np.array(( "indigo", "darkorange", "green", "navy" ))
-#color_ranges["thesis_tugreen"] = np.array(( "black", "#1a2505", "#344a0a", "#e6f1d1", "#b5d474", "#b5d474", "#9cc646", tugreen, "#699313", "#4f6e0e",    ))
 
 linestyle_ranges = { "default": [] }
 linestyle_ranges["default"] = np.array(( "solid", "dotted", "dashed", "dashdot", "solid", "dotted", "dashed", "dashdot", "solid", "dotted" ))
+
+dashes_ranges = { "default": [] }
+dashes_ranges["default"] = [(1, 0), (5, 5), (1, 0), (5, 5), (1, 0), (5, 5), (1, 0), (5, 5)]
 
 markerstyle_ranges = { "default": [], "short": [] }
 markerstyle_ranges["default"] = np.array(( "x", "s", "^", "v", "o", "D", "2", "1", "p", "P" ))
 markerstyle_ranges["short"] = np.array(( ".", "x", "+", "1", "2" ))
 
+# nice print function for dictionaries
 def print_dict( dict_name, dict ):
     content = list(dict.items())
     print( "===%s===" %dict_name )

@@ -24,6 +24,7 @@ ax.set_ylim(0, 1)
 plotter = ps.CURVEFAMILY(3, axis=ax)
 plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--"])
+plotter.set_individual_dashes()
 
 plot_lower_lim = 0
 plot_upper_lim = 12
