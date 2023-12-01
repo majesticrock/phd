@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from lib.iterate_containers import *
 from lib.extract_key import *
 import lib.resolvent_peak as rp
-# Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
@@ -32,9 +31,10 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     upper = 8 * float(V) + 2
     
     peak = rp.Peak(f"{folder}{name}", name_suffix, (lower, upper))
+    peak_pos_value = np.copy(peak.peak_position)
     scipy_result = peak.improved_peak_position(1e-2, 1e-12)
-
-    if scipy_result[2]["warnflag"] != 0:
+    # only an issue if the difference is too large;
+    if scipy_result[2]["warnflag"] != 0 and np.abs((scipy_result[0][0] - peak_pos_value) / peak_pos_value) > 1e-3:
         print(f"We might not have found the peak for V={V}!\nWe found ", peak_pos_value, " and\n", scipy_result)
     peak_pos_value = scipy_result[0][0]
     popt, pcov, w_log, y_data = peak.fit_real_part(0.01, 1e-8)

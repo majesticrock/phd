@@ -10,7 +10,7 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.])
-Vs = np.array([-0.1])
+Vs = np.array([0.])
 
 use_XP = True
 
@@ -19,14 +19,14 @@ fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
 #ax.set_yscale("log")
-ax.set_ylim(0, 1)
+ax.set_ylim(0, 0.2)
 
-plotter = ps.CURVEFAMILY(3, axis=ax)
-plotter.set_individual_colors("nice")
-plotter.set_individual_linestyles(["-", "-.", "--"])
-plotter.set_individual_dashes()
+plotter = ps.CURVEFAMILY(4, axis=ax)
+plotter.set_individual_colors("nice2")
+plotter.set_individual_linestyles(["-", "-.", "--", ":"])
+#plotter.set_individual_dashes()
 
-plot_lower_lim = 0
+plot_lower_lim = -0.05
 plot_upper_lim = 12
 
 name_suffix = "phase_SC"
@@ -42,6 +42,12 @@ for name in naming_scheme(Ts, Us, Vs):
     plotter.plot(w_lin, data, label="Higgs")
     
 name_suffix = "CDW"
+for name in naming_scheme(Ts, Us, Vs):
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
+    plotter.plot(w_lin, data, label=name_suffix)
+
+name_suffix = "AFM"
 for name in naming_scheme(Ts, Us, Vs):
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6)
