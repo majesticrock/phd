@@ -28,7 +28,7 @@ for i in range(nrows):
         axs[i][j].set_ylim(0, .99)
         plotters[i][j] = ps.CURVEFAMILY(4, axis=axs[i][j])
         plotters[i][j].set_individual_colors("nice2")
-        #plotters[i][j].set_individual_linestyles(["-", "--", "-", "-"])
+        plotters[i][j].set_individual_dashes([(1,0), (6,6), (1,0), (6,6)])
 
 plot_lower_lim = -0.05
 plot_upper_lim = 4.25
@@ -45,10 +45,7 @@ for j, folder in enumerate(folders):
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
                                                             number_of_values=5000, xp_basis=use_XP, imaginary_offset=1e-5, messages=False)
-            if k % 2 == 1:
-                plotters[i][j].plot(w_lin, SCALE*data, label=label, dashes=(6, 6))
-            else:
-                plotters[i][j].plot(w_lin, SCALE*data, label=label)
+            plotters[i][j].plot(w_lin, SCALE*data, label=label)
             
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         res.mark_continuum(axs[i][j], None)
