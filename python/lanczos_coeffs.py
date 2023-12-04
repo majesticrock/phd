@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import gzip
 
 T = 0.
-U = -2.
+U = -2.5
 V = 0.1
 
 use_XP = True
@@ -29,6 +29,10 @@ with gzip.open(file, 'rt') as f_open:
     M = np.loadtxt(f_open)
     A = M[0]
     B = M[1]
+
+from scipy.signal import find_peaks
+first_artifact = find_peaks(B[1:], prominence=5e2, width=1)
+print(first_artifact)
 
 fig, ax = plt.subplots()
 ax.plot(A, ls="-", marker='x', label="$a_i$")
