@@ -62,6 +62,9 @@
 \newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}}
 \newcommand{\dgamma}{\mathrm{d}\gamma}
 
+\newcommand{\mM}{\mathcal{M}}
+\newcommand{\mN}{\mathcal{N}}
+
 \begin{document} 
 
 % Preliminary title
@@ -292,12 +295,12 @@ Plugging this into the Heisenberg equation of motion and applying an operator sc
     \label{eqn:heisenberg}
     \begin{aligned}
         \ddt a(t) = \sum_j \ddt c_j(t) A_j &= i \sum_j c_j(t) [H, A_j] \\
-        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{:=\mathcal{N_{ij}}} \ddt c_j(t) &= i \sum_j \underbrace{(A_i | [H, A_j])}_{:=\mathcal{M_{ij}}} c_j(t) \\
-        \Rightarrow \mathcal{N} \ddt \vec{c}(t) &= i \mathcal{M} \vec{c}(t)\,.
+        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{:=\mN_{ij}} \ddt c_j(t) &= i \sum_j \underbrace{(A_i | [H, A_j])}_{:=\mM_{ij}} c_j(t) \\
+        \Rightarrow \mN \ddt \vec{c}(t) &= i \mM \vec{c}(t)\,.
     \end{aligned}
 \end{equation}
 
-The matrices $\mathcal{N}$ and $\mathcal{M}$ contain all the dynamics and energetic properties of the system but have the significant advantage of being simple matrices rather than operators acting on an enormous Hilbert space.
+The matrices $\mN$ and $\mM$ contain all the dynamics and energetic properties of the system but have the significant advantage of being simple matrices rather than operators acting on an enormous Hilbert space.
 \newline
 However, most Hamiltonians do not allow any such operator basis to exist. 
 Therefore, one repeats this commutation process and includes the occurring terms within a bigger basis,
@@ -311,20 +314,20 @@ In this article, we will be using the operator pseudo scalar product
 \end{equation}
 
 where the expectation values are taken with respect to the thermal equilibrium of the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}.
-Nevertheless, we will compute $\mathcal{M}$ using the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
+Nevertheless, we will compute $\mM$ using the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
 \newline
 This choice enables us to write down matrix-valued Fourier-transformed Green's functions in terms of the aforementioned matrices
 
 \begin{equation}
     \label{eqn:green_function}
-    \mathcal{G}(z = \omega + i0^+) = \mathcal{N} \frac{1}{-z \mathcal{N} - \mathcal{M}} \mathcal{N} := -\mathcal{N} \mathcal{R}(z) \mathcal{N}\,,
+    \mathcal{G}(z = \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN := -\mN \mathcal{R}(z) \mN\,,
 \end{equation}
 
 where we defined the resolvent
 
 \begin{equation}
     \label{eqn:resolvent}
-    \mathcal{R}(z) := \frac{1}{z \mathcal{N} + \mathcal{M}}\,.
+    \mathcal{R}(z) := \frac{1}{z \mN + \mM}\,.
 \end{equation}
 
 Here, the different matrix elements correspond to various Green's functions, depending on the operator basis.
@@ -356,9 +359,10 @@ If some operators would be 0 ($P_i$ for any $n$-type term) or duplicates (certai
 Due to this choice of basis, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
 
 \begin{equation}
-    \mathcal{M} = \begin{pmatrix}
+    \label{eqn:xp_basis}
+    \mM = \begin{pmatrix}
         \mathcal{K}_+ & \kappa \\ \kappa^\dagger & \mathcal{K}_-
-    \end{pmatrix}\,,\quad \mathcal{N} = \begin{pmatrix}
+    \end{pmatrix}\,,\quad \mN = \begin{pmatrix}
         \Lambda_+ & \mathcal{L} \\ \mathcal{L}^\dagger & \Lambda_-
     \end{pmatrix}\,,
 \end{equation}
@@ -490,6 +494,7 @@ For the square lattice, however, there is a peak located at the upper edge of th
     \label{fig:peaks_in_sc}
 \end{figure}
 
+\textcolor{red}{Die Festellung, dass die Peaks deltas bzw Ableitungen von deltas sind, könnte ich mir auch in einem Anhang vorstellen.}
 To further classify the aforementioned peak that lies outside the two-particle continuum,
 we turn towards the real part of the Green's function.
 We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly to obtain its power-law behaviour.
@@ -501,7 +506,7 @@ In practice, we use
 \end{align}
 
 where $\omega_0$ is the peak's position and $a, b$ are fit parameters.
-The real part is related to the imaginary part via the Kramers-Kronig relations.
+The real part is related to the imaginary part via the Kramers-Kronig relations. \textcolor{red}{Zitiert man die oder nimmt man an, dass jeder weiß, worum es da geht?}
 Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e. $a=-1$ and the peak has the weight $\exp(b)$.
 Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e. $\delta'(\omega - \omega_0)$.
 
@@ -532,11 +537,14 @@ This time around, the exponent is $a\approx-0.5$, indicating that the peak behav
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw_position.pdf}
-    \caption{todo}
+    \caption{The upper panels show double logarithmic plots of the positions $\omega_0$ of the SC peak in the CDW phases while the lower panels show their respective weights $w_0 = e^{b}$.
+    The left column shows the results for the square lattice at $U=-2$ and the right column for the simple cubic lattice at $U=-2.5$.
+    The fits are linear, i.e. $y(V) = c \ln(V/t) + d$ and the parameters are printed on the individual panals.}
     \label{fig:sc_in_cdw_behaviour}
 \end{figure*}
 
 With the prevalent peaks discussed, we turn towards their behaviour as the system approaches the phase transition at $V=0$.
+\textcolor{red}{TODO; weiter beschreiben}
 
 \subsection{AFM-CDW transition}
 
@@ -566,13 +574,123 @@ For the CDW phase (panel a) we chose $U=ZV + 0.1$ and for the AFM phase (panel b
 
 ...
 
-
 %==============================================================================
 % Acknowledgments 
 %==============================================================================
 \begin{acknowledgments} 
     ....
 \end{acknowledgments}
+
+\appendix
+\section{Obtaining Green's functions from the iEoM-matrices}
+
+In this appendix section, we will derive the relation between the matrices $\mM, \mN$ from \eqref{eqn:heisenberg} and the Green's functions of the system.
+For that, consider their definition
+
+\begin{align}
+    G_{AB^\dagger}^\text{ret} (t) &= - i \langle [ A(t), B^\dagger(0) ] \rangle \theta(t) \nonumber \\ 
+    \Rightarrow G^\text{ret} (z = \omega + i0^+) &= - i \int_0^\infty \exp(izt) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t \nonumber
+\end{align}
+
+Since $A$ and $B$ are included in the operator basis, we can rewrite them as dot-products of the vector
+\begin{equation}
+    \vec{A} := \left( A_1, A_2, \dots, A_N \right)\,, \quad
+    \vec{A}^\dagger := \begin{pmatrix}
+        A_1^\dagger \\ A_2^\dagger \\ \vdots \\ A_N^\dagger
+    \end{pmatrix}\,,
+\end{equation}
+
+and some other vector with complex-valued vector $\vec{a}$ which has its coefficients set in such a way,
+that $\vec{a} \cdot \vec{A}$ is equal to the desired operator. 
+For instance, $\vec{a} \equiv \vec{e}_1$ in order to represent $A_1$.
+Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differential equation \eqref{eqn:heisenberg} to obtain
+
+\begin{equation}
+    \vec{c}(t) = \exp \left( i \mN^{-1} \mM t \right) \vec{c}(0)\,.
+\end{equation}
+
+This allows us to finally obtain
+
+\begin{align}
+    G^\text{ret} (z) &= i \int_0^\infty \exp(izt) \langle [ (\vec{A} \vec{b}(0))^\dagger, \vec{A} \vec{a}(t) ] \rangle\ \mathrm{d}t \nonumber \\
+        &= i \int_0^\infty \exp(izt) \vec{b}^\dagger(0) \underbrace{\langle [ \vec{A}^\dagger, \vec{A} ] \rangle}_{\equiv \mN} \vec{a}(t) \mathrm{d}t \nonumber \\
+        &= i  \int_0^\infty \vec{b}^\dagger(0) \mN \exp \left( i \left(\mN^{-1} \mM + z \right) t \right) \vec{a}(0) \mathrm{d}t  \nonumber \\
+        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}(0) \nonumber \\
+        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{ \underbrace{\mM + z \mN}}_{\equiv \mathcal{R}(z)} \mN \right] \vec{a}(0)\,,
+\end{align}
+
+where $\vec{a}(0)$ and $\vec{b}(0)$ are chosen such, that their product with $\vec{A}$ yields $A(0)$ and $B(0)$, respectively.
+The task at hand is finding the resolvent as $\mathcal{R}$.
+Normally, one would desire to compute
+
+\begin{align}
+    \mathcal{R}(z) = \mN^{-1/2} \frac{1}{z +\mN^{-1/2} \mM \mN^{-1/2}} \mN^{-1/2}\,,
+\end{align}
+
+and then utilize a Lanczos algorithm to obtain a tridiagonal form of $\mN^{-1/2} \mM \mN^{-1/2}$.
+However, $\mN$ is not positive in our case due to the nature of the commutator, which means that $\mN$ cannot have a real square root.
+One could also fathom computing
+
+\begin{align}
+    \mathcal{R}(z) = \frac{1}{z} \mM^{-1/2} \frac{1}{\mM^{-1/2}\mathcal{N}\mM^{-1/2} + \frac{1}{z} } \mM^{-1/2}\,,
+\end{align}
+
+which does in fact work, if $\mM$ is positive, however resolving feature that lie near $z=0$ are difficult to resolve.
+Nevertheless, let us show that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
+For any $\vec{x} \in \mathbb{C}^N$, consider
+
+\begin{align}
+    \vec{x}^\dagger \mM \vec{x} &= \sum_{ij} x_i^* x_j \mM_{ij} \nonumber \\
+        &= \langle \left[ \sum_i x_i^* A_i^\dagger, \left[ H, \sum_j x_j A_j \right] \right]  \rangle \nonumber \\
+        &= \langle [B^\dagger, [H, B]] \rangle\,,\quad B := \sum_j x_j A_j\,.
+\end{align}
+
+Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace [\exp(-\beta H_\text{MF}) O]$, where $\beta$ is the inverse temperature and $Z$ the partition function, and the commutators, we obtain
+
+\begin{widetext}
+    \begin{align}
+        \langle [B^\dagger, [H, B]] \rangle &= \frac{1}{Z} \Trace [\exp(-\beta H) [B^\dagger, [H, B]]] \nonumber \\
+            &= \frac{1}{Z} \sum_j e^{-\beta \epsilon_j} \bra{\psi_j} [B^\dagger, [H, B]] \ket{\psi_j} \nonumber \\
+            &= \frac{1}{Z} \sum_j e^{-\beta \epsilon_j} \left[ \bra{\psi_j} B^\dagger (H - \epsilon_j) B \ket{\psi_j} + \bra{\psi_j} B (H - \epsilon_j) B^\dagger \ket{\psi_j} \right] \nonumber \\
+            &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B^\dagger \ket{\psi_j} \right] \nonumber \\
+            &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) \underbrace{ \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} \bra{\psi_i} B^\dagger \ket{\psi_j} \right]}_{:=C_{ij} = C_{ji} \geq 0} \nonumber \\
+            &= \frac{1}{2Z} \left[ \sum_{ij} C_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) - \sum_{ij} C_{ij} e^{-\beta \epsilon_i} (\epsilon_i - \epsilon_j) \right] \nonumber \\
+            &= \frac{1}{2Z} \sum_{ij} C_{ij} \left( e^{-\beta \epsilon_j} - e^{-\beta \epsilon_i} \right) \left( \epsilon_i - \epsilon_j \right) \geq 0\,.
+    \end{align}
+\end{widetext}
+
+Thus, we are able to compute a real square root of $\mathcal{M}$.
+
+We embrace the matrix structure in \eqref{eqn:xp_basis} and assume that all matrix entries are real.
+Then, with $m|_X$ denoting the block of a matrix $m$ spanned by the $X$-operators in the basis, we can calculate
+
+\begin{align}
+    r(z) &:= \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
+        &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + \frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_X \nonumber \\
+        &= \left. \frac{1}{\mM} \sum_{j=0}^\infty \left( -z \mN \frac{1}{\mM} \right)^j \right\vert_X \,.
+\end{align}
+
+We may omit every second element of the sum, as we want to obtain the upper left block of the matrix, and $\mN$ always swaps the upper left and lower right block.
+Thus, we obtain
+
+\begin{align}
+    r(z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_X \nonumber \\
+        &= \left. \frac{1}{\mM - z^2 \mN \mM^{-1} \mN} \right\vert_X \nonumber \\
+        &= \frac{1}{\mathcal{K}_+ - z^2 \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger}\,.
+\end{align}
+
+Next, we define $\mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger := \check{N}$ for brevity.
+Since $\mathcal{M}$ is positive semidefinite and block diagonal, its blocks $\mathcal{K}_\pm$ must be positive semidefinite as well.
+Therefore, $\check{N}$ is also positive semidefinite and we can define its square root.
+The inverse in the following can be replaced by the pseudo-inverse in case $\check{N}$ has a singular part.
+We obtain
+
+\begin{equation}
+    r(z) = \check{N}^{-1/2} \frac{1}{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2} - z^2} \check{N}^{-1/2}\,.
+\end{equation}
+
+The matrix $\check{M} := \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
+Hence, we can tridiagonalize it using a standard Lanczos algorithm in order to obtain a continued fraction expansion.
 
 \bibliography{sn-bibliography}
 %\bibliography{../../A_bibinput/liter10.bib}

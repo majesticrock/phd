@@ -45,7 +45,7 @@ for i in range(2):
     axs[i].text(0.05, 0.3, f"$b={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[i].transAxes)
     plotters[i].plot(w_log, func(w_log, *popt), label="Fit")
 
-axs[0].legend("upper right")
+axs[0].legend(loc="upper right")
 
 axs[1].set_xlabel(r"$\ln((\omega - \omega_0) / t)$")
 axs[1].text(-0.08, 1, r"$\ln(-\Im \mathcal{G}_\mathrm{Higgs}(\omega - \omega_0 + i0^+))$", va='center', ha='center', rotation='vertical', transform = axs[1].transAxes)
