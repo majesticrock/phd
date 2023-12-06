@@ -45,8 +45,6 @@
 \usepackage{placeins}
 \usepackage[normalem]{ulem}
 \usepackage{mhchem}
-\usepackage{caption}
-\usepackage{subcaption}
 
 %=======================
 % New Commands:
@@ -118,23 +116,23 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
 The Hubbard model has been studied in a plethora of previous studies. 
 Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
 encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
-Shortly afterward, an exact $SO(4)$ symmetry was discovered,
+Shortly afterward, an exact SO(4) symmetry was discovered,
 which allows a degeneracy of superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
 This coexistence can be argued by the existence of a particle-hole transformation on bipartite lattices, 
 that maps the attractive Hubbard model exactly onto the repulsive one, exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
 The previously mentioned SC and CDW phases map to different spin operators \cite{zitko15,lieb89}.
-\newline
+
 Many recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity 
 \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
 Other studies, focusing on equilibrium systems, 
 investigated the phases and various quantities therein of the said model including various additional interactions with and without doping 
 \cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
-\newline
+
 In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
 \textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models, ggf nochmal suchen...}
 The 2D case already exhibits a wide range of possible phases, including CDW, AFM as well as $s$- and $d_{x^2 - y^2}$-wave superconductivity
 \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22}.
-\newline
+
 In this article, we will first employ a mean-field approximation to the interaction terms 
 and then use the methodology from the so-called iterated equations of motion approach,
 which has already seen success in the handling of interaction quenches \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
@@ -144,7 +142,7 @@ The functionality of this method has been compared to the density matrix formali
 Additionally, we will show an explicit way to obtain various Green's functions from the aforementioned methodology.
 By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
 The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Krull16,Schwarz20,Fan22}.
-\newline
+
 The remainder of this paper is organized as follows:
 In \autoref{sec:model} we will introduce the model and its Hamiltonian as well our mean-field theory.
 A brief overview over the iterated equations of motion approach is presented in \autoref{sec:ieom}.
@@ -153,6 +151,10 @@ Lastly, in \autoref{sec:conclusion}, we will discuss our results.
 In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
 
 \section{Model and mean-field theory}\label{sec:model}
+
+\subsection{Model}
+
+\textcolor{red}{Schreiben wie cool das Hubbard Model ist}
 
 The Hamiltonian of the extended Hubbard model is given by
 \begin{equation}
@@ -164,34 +166,32 @@ The Hamiltonian of the extended Hubbard model is given by
         + \frac{V}{2} \sum_{\langle i, j\rangle, \sigma} n_{i\sigma} n_{j\sigma}\,,
     \end{aligned}
 \end{equation}
-
-where $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$ and $\langle i, j\rangle$ denotes the summation over next neighbours.
+where $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$ 
+and $\langle i, j\rangle$ denotes the summation over next neighbours.
 The parameters are the hopping amplitude $t$, the onsite interaction $U$, the intersite interaction $V$ and the chemical potential $\mu$.
-Throughout this article, we will give all energy-related quantities in terms of the hopping amplitude, which we subsequently set to unity $t=1$.
 Applying a Fourier transformation into $k$-space yields the single-particle dispersion 
-
 \begin{equation}
     \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha)\,,\quad k_\alpha \in [-\pi, \pi)\,,
 \end{equation}
 with the system's dimension $D$ and the dimensionless momentum $\vk$.
-The interaction terms are then mean-field decoupled. 
-We follow the naming scheme of Ref. \cite{sentef17}
 
+\subsection{Static mean-field theory}
+
+Next, we decouple the the interaction terms.
+We define 
 \begin{equation}
     \label{eqn:operators}
     \begin{aligned}
-        n_{k\sigma} &:= c_{\vk\sigma}^\dagger c_{\vk\sigma}\,,      &f_k     &:= c_{-\vk\down} c_{\vk\up}\,, \\
-        g_{k\sigma} &:= c_{\vk\sigma}^\dagger c_{\vk+\vQ\sigma}\,,  &\eta_k  &:= c_{-\vk-\vQ\down} c_{\vk\up}\,,
+        n_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk\sigma}\,,      &f_k     &\coloneqq  c_{-\vk\down} c_{\vk\up}\,, \\
+        g_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk+\vQ\sigma}\,,  &\eta_k  &\coloneqq  c_{-\vk-\vQ\down} c_{\vk\up}\,,
     \end{aligned}
 \end{equation}
-
-where $\vQ := (\pi, ...)$ defines the nesting vector for the CDW and AFM phases.
+where $\vQ \coloneqq  (\pi, ...)$ defines the nesting vector for the CDW and AFM phases, see Ref. \cite{sentef17}.
 We use the following abbreviations to write down the mean-field parameters
-
 \begin{subequations}
     \begin{align}
         \label{eqn:delta_cdw}
-        \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{ZV}{N}\right) \sum_{\vk\sigma} \langle g_{\vk\sigma} \rangle\,, \\
+        \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{zV}{N}\right) \sum_{\vk\sigma} \langle g_{\vk\sigma} \rangle\,, \\
         \label{eqn:delta_afm}
         \Delta_\text{AFM} &= \frac{U}{2N} \sum_{\vk} \left( \langle g_{k\uparrow} \rangle - \langle g_{\vk\downarrow} \rangle \right)\,, \\
         \Delta_\text{SC} &= \frac{U}{N} \sum_{\vk} \langle f_{\vk} \rangle\,, \\
@@ -199,75 +199,80 @@ We use the following abbreviations to write down the mean-field parameters
         \Delta_n &= \frac{V}{N} \sum_{\vk,\sigma} \sum_{\alpha=1}^D \cos k_\alpha \langle n_{\vk\sigma} \rangle\,,
     \end{align}
 \end{subequations}
-
-where $Z$ denotes the coordination number of the lattice.
-The last parameter, $\Delta_n$, renormalizes the hoping term to
-
+where $z$ denotes the coordination number of the lattice.
+The last parameter, $\Delta_n$, renormalizes the hopping term to
 \begin{equation}
-    \epsilon( \vk ) := -(2 + \Delta_n) \sum_{\alpha=1}^D \cos(k_\alpha)\,.
+    \epsilon( \vk ) \coloneqq  -(2 + \Delta_n) \sum_{\alpha=1}^D \cos(k_\alpha)\,.
 \end{equation}
-
 In total, we obtain the mean-field Hamiltonian in spinor representation as
-
 \begin{equation}
     \label{eqn:mf_hamiltonian}
     H_\text{MF} = \sum_{\vk} \Psi^\dagger (\vk) h(\vk) \Psi (\vk)\,,
 \end{equation}
-
 with the spinors
 \begin{equation}
-    \Psi^\dagger (\vk) := \left( c_{\vk\up}^\dagger\,, c_{\kplusQ\up}^\dagger\,, c_{-\vk\down}\,, c_{\kminusQ\down} \right)
+    \Psi^\dagger (\vk) \coloneqq  \left( c_{\vk\up}^\dagger\,, c_{\kplusQ\up}^\dagger\,, c_{-\vk\down}\,, c_{\kminusQ\down} \right)
 \end{equation}
-
 and 
-
-\begin{widetext}
 \begin{equation}
-    h(\vk) := \begin{pmatrix}
-        \epsilon (\vk) & \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & \Delta_\text{SC} & \Delta_\eta \\
-        \Delta_\text{CDW} - \Delta_\text{AFM} & \epsilon (\vk + \vQ) & \Delta_\eta & \Delta_\text{SC} \\
-        \Delta_\text{SC}^* & \Delta_\eta^* & - \epsilon (-\vk) & - \Delta_\text{CDW} - \Delta_\text{AFM} \\
-        \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_\text{CDW}^* - \Delta_\text{AFM}^* & - \epsilon (-\vk - \vQ)\,.
-        \end{pmatrix}
+    h(\vk) \coloneqq  \begin{pmatrix}
+        \epsilon (\vk) & \Delta_-^* & \Delta_\text{SC} & \Delta_\eta \\
+        \Delta_- & \epsilon (\vk + \vQ) & \Delta_\eta & \Delta_\text{SC} \\
+        \Delta_\text{SC}^* & \Delta_\eta^* & - \epsilon (-\vk) & - \Delta_+ \\
+        \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_+^* & - \epsilon (-\vk - \vQ)
+        \end{pmatrix}\,,
 \end{equation}
-\end{widetext}
+where we defined $\Delta_\pm \coloneqq  \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
 
 \begin{figure}
     \centering
     \includegraphics[width=.48\textwidth]{plots/phase_diagram.pdf}
-    \caption{The phase diagram obtained for the extended Hubbard model on (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
-    The CDW-AFM boundary lies at $U = ZV$, where $Z$ is the coordination number. For $U<0$ and $V=0$, there is a coexistence of CDW and $s$-wave SC.
-    The boundary for the $d_{x^2 - y^2}$-wave SC for the square lattice has been taken from Ref. \cite{Micnas88b}, as it is not accessible using our formalism.}
+    \caption{The phase diagram obtained for the extended Hubbard model on 
+    (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
+    The CDW-AFM boundary lies at $U = zV$, where $z$ is the coordination number. 
+    For $U<0$ and $V=0$, there is a coexistence of CDW and $s$-wave SC.
+    The boundary for the $d_{x^2 - y^2}$-wave SC (dashed line) for the square lattice has been taken from Ref. \cite{Micnas88b}, 
+    as it is not accessible using our formalism.}
     \label{fig:phase_diagram}
 \end{figure}
 
-Now, the entire Hamiltonian and thus all expectation values only depend on
+We observe that the entire Hamiltonian and thus all expectation values only depend on
 \begin{equation}
-    \hat{\gamma}(\vk) := \sum_{\alpha=1}^D \cos(k_\alpha)\,,
+    \hat{\gamma}(\vk) \coloneqq \frac{1}{D} \sum_{\alpha=1}^D \cos(k_\alpha)\,,
 \end{equation}
-i.e. for any operator $O$ the following relation holds 
+i.e., for any operator $\hat{O}$ the following relation holds 
 \begin{equation}
     \label{eqn:equal_expecs}
-    \langle O_{\vk} \rangle = \langle O_{\vk'} \rangle =: \langle O_{\gamma} \rangle\,,
+    \langle \hat{O}_{\vk} \rangle = \langle \hat{O}_{\vk'} \rangle \eqqcolon \langle \hat{O}_{\gamma} \rangle\,,
 \end{equation}
 if $\hat{\gamma}(\vk) = \hat{\gamma}(\vk')$.
-This allows us to replace the momentum sums with energy integrals using the bare density of states
+While two-dimensional systems around the size of $100\times100$ lattice sites can still be solved by using momentum sums,
+computing solutions for large three-dimensional systems becomes impossible due to the $N=L^3$ scaling.
+This issue can be resolved by using the aforementioned fact and replacing the momentum sums with energy integrals using the bare density of states (DOS)
 \begin{equation}
-    \rho(\gamma) := \frac{1}{N} \sum_{\vk} \delta \left(\gamma - \hat{\gamma} (\vk) \right)\,.
+    \rho(\gamma) \coloneqq  \frac{1}{N} \sum_{\vk} \delta \left(\gamma - \hat{\gamma} (\vk) \right)\,.
 \end{equation}
-As an example, consider 
+As an example, we consider 
 \begin{equation}
-    \Delta_\text{SC} = \frac{U}{2N} \int \dgamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
+    \Delta_\text{SC} = \frac{U}{2N} \int_{-1}^{1} \dgamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
 \end{equation}
 We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
-Solving the mean-field equations iteratively, one obtains the groundstate phase diagram at temperature $T=0$ as shown in \autoref{fig:phase_diagram}.
-Note, that the $d_{x^2 - y^2}$-superconducting state, which has been confirmed for the square lattice \cite{Micnas88b,Huang13}, cannot be described by our method. 
-This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vk)$.
-\newline
-The CDW-AFM boundary is located at $U = ZV$, where $Z$ is the coordination.
-This holds for both the square lattice ($Z=4$) and the simple cubic lattice ($Z=6$) and can be seen by comparing \eqref{eqn:delta_cdw} and \eqref{eqn:delta_afm}:
+This allows us to access both two- and three-dimensional models on equal footing.
+We can compute any phase as long as it does not introduce another kind of momentum dependence.
+
+We solve the mean-field equations self-consistently.
+The $\gamma$-integrals are approximated numerically using a $\tanh$-$\sinh$ quadrature \cite{takahasi73}, 
+terminating once $|1 - \int \dgamma \rho(\gamma)| < 10^{-13}$ and reusing the computed points and weights.
+This method excells at dealing with the singularities in the DOS, 
+requiring merely a few hundred function evaluations to achieve the desired accuracy.
+
+This procedure yields the groundstate phase diagram at temperature $T=0$ shown in \autoref{fig:phase_diagram}.
+The CDW-AFM boundary is located at $U = zV$, where $z$ is the coordination.
+This holds for both the square lattice ($z=4$) and the simple cubic lattice ($z=6$) and can be seen by comparing \eqref{eqn:delta_cdw} and \eqref{eqn:delta_afm}:
 Crossing the aforementioned line, changes which one of the two prefactors is larger.
 
+Note, that the $d_{x^2 - y^2}$-superconducting state, which has been confirmed for the square lattice \cite{Micnas88b,Huang13}, cannot be described by our method. 
+This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vk)$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -279,85 +284,68 @@ Crossing the aforementioned line, changes which one of the two prefactors is lar
 
 To investigate the collective modes, we employ the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
 We will present the general ideas briefly here and direct the interested reader to the appendix \textcolor{red}{!REF!} for a detailed explanation and derivation.
-\newline
-We start with some operator basis $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
-i.e. any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
-We can then express any time-depend operator from this basis as
 
+We start with some operator basis $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
+i.e., any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
+We can then express any time-depend operator from this basis as
 \begin{equation}
     a(t) = \sum_j c_j(t) A_j\,,
 \end{equation}
-
 where $c_j(t)$ captures the entire time dependence. 
 Plugging this into the Heisenberg equation of motion and applying an operator scalar product $(A_i|\cdot)$ to both sides of the equation yields
-
 \begin{equation}
     \label{eqn:heisenberg}
     \begin{aligned}
         \ddt a(t) = \sum_j \ddt c_j(t) A_j &= i \sum_j c_j(t) [H, A_j] \\
-        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{:=\mN_{ij}} \ddt c_j(t) &= i \sum_j \underbrace{(A_i | [H, A_j])}_{:=\mM_{ij}} c_j(t) \\
+        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{\coloneqq \mN_{ij}} \ddt c_j(t) &= i \sum_j \underbrace{(A_i | [H, A_j])}_{\coloneqq \mM_{ij}} c_j(t) \\
         \Rightarrow \mN \ddt \vec{c}(t) &= i \mM \vec{c}(t)\,.
     \end{aligned}
 \end{equation}
-
 The matrices $\mN$ and $\mM$ contain all the dynamics and energetic properties of the system but have the significant advantage of being simple matrices rather than operators acting on an enormous Hilbert space.
-\newline
+
 However, most Hamiltonians do not allow any such operator basis to exist. 
 Therefore, one repeats this commutation process and includes the occurring terms within a bigger basis,
 hoping to get better results as the basis size increases.
 
 In this article, we will be using the operator pseudo scalar product
-
 \begin{equation}
 \label{eqn:scalar_product}
-    (A | B) := \langle [A^\dagger, B] \rangle\,,
+    (A | B) \coloneqq  \langle [A^\dagger, B] \rangle\,,
 \end{equation}
-
 where the expectation values are taken with respect to the thermal equilibrium of the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}.
 Nevertheless, we will compute $\mM$ using the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
-\newline
-This choice enables us to write down matrix-valued Fourier-transformed Green's functions in terms of the aforementioned matrices
 
+This choice enables us to write down matrix-valued Fourier-transformed Green's functions in terms of the aforementioned matrices
 \begin{equation}
     \label{eqn:green_function}
-    \mathcal{G}(z = \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN := -\mN \mathcal{R}(z) \mN\,,
+    \mathcal{G}(z = \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN \coloneqq  -\mN \mathcal{R}(z) \mN\,,
 \end{equation}
-
 where we defined the resolvent
-
 \begin{equation}
     \label{eqn:resolvent}
-    \mathcal{R}(z) := \frac{1}{z \mN + \mM}\,.
+    \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}\,.
 \end{equation}
-
 Here, the different matrix elements correspond to various Green's functions, depending on the operator basis.
 For instance, assume the operator in the basis is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
-
 \begin{equation}
     \mathcal{G}_{00}(z = \omega +i0^+) =  G(z) = -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
 \end{equation}
-
 For a detailed derivation of this statement, we refer the reader to the appendix \textcolor{red}{!REF!}.
 
 Our operator basis consists of operators of the type
-
 \begin{equation}
-    A_\gamma := \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
+    A_\gamma \coloneqq  \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
 \end{equation}
-
 where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
 Different indices are taken as additional basis operators, e.g. $n_{\vk \up}$ and $n_{\vk \down}$ are taken into the basis separately.
 We then order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.
-
 \begin{equation}
-    X_i := A_i + A_i^\dagger\,,\quad P_i := A_i - A_i^\dagger\,.
+    X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger\,.
 \end{equation}
-
-Our basis is then $\mathcal{B}_{XP} := {X_i, P_i}$.
+Our basis is then $\mathcal{B}_{XP} \coloneqq  {X_i, P_i}$.
 If some operators would be 0 ($P_i$ for any $n$-type term) or duplicates (certain $X_i$ for $g$-type terms), we omit them.
-\newline
-Due to this choice of basis, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
 
+Due to this choice of basis, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
 \begin{equation}
     \label{eqn:xp_basis}
     \mM = \begin{pmatrix}
@@ -366,17 +354,14 @@ Due to this choice of basis, the matrices occurring in \eqref{eqn:heisenberg} ha
         \Lambda_+ & \mathcal{L} \\ \mathcal{L}^\dagger & \Lambda_-
     \end{pmatrix}\,,
 \end{equation}
-
 where $\Im [\mathcal{K}_\pm] = \Re [\kappa] = 0$ and $\Re [\Lambda_\pm] = \Im [\mathcal{L}] = 0$.
 Furthermore, if all occurring expectation values are real, both matrices have large empty blocks.
 This condition is fulfilled for all cases investigated in this article.
 Additionally, we can utilize this block structure to rewrite \eqref{eqn:resolvent} to
-
 \begin{equation}
-    \mathcal{R}(z) \vert_X = - \check{N}^{-1/2} \frac{1}{z^2 - \underbrace{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}}_{:= \check{M}}} \check{N}^{-1/2}\,,
+    \mathcal{R}(z) \vert_X = - \check{N}^{-1/2} \frac{1}{z^2 - \underbrace{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}}_{\coloneqq  \check{M}}} \check{N}^{-1/2}\,,
 \end{equation}
-
-where $\vert_X$ denotes the block corresponding to the $X$-terms in the basis and $\check{N} := \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$.
+where $\vert_X$ denotes the block corresponding to the $X$-terms in the basis and $\check{N} \coloneqq  \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$.
 An analogous form can be found for the $P$-block.
 
 Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
@@ -395,19 +380,15 @@ This can be achieved using a Lanczos tridiagonalization and subsequently a conti
 
 where $a_i$ and $b_i$ are the Lanczos coefficients \cite{PettiforRecursion,ViswanathRecursion}.
 In the single-band case, the coefficients approach the limit
-
 \begin{equation}
     \label{eqn:inf_lanczos}
     a_\infty = \frac{\omega_+ + \omega_-}{2}\text{  and  } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
 \end{equation}
-
 where $\omega_\pm$ represents the upper and lower band edge, respectively.
 This behaviour allows us to terminate the continued fraction, if the convergence is good enough, using the so-called square root terminator
-
 \begin{equation}
     T(\omega) = \frac{1}{2b_\infty^2} \left( \omega - a_\infty \mp \sqrt{(\omega - a_\infty)^2 - 4 b_\infty^2} \right)\,,
 \end{equation}
-
 where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and $|\omega - a_\infty| < 2b_\infty$ and the positive one otherwise.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -430,7 +411,6 @@ where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and 
 \end{figure*}
 
 In this section, we will be investigating four different diagonal Green's functions $G_{AA}(\omega + i0^+)$, namely with
-
 \begin{subequations}
     \label{eqn:resolvent_bases}
     \begin{align}
@@ -440,21 +420,18 @@ In this section, we will be investigating four different diagonal Green's functi
         A_\text{AFM} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right)\,,
     \end{align}
 \end{subequations}
-
 where $N$ is the number of lattice sites in the system. 
 Note, that this choice of normalization cancels out with other system size-dependent terms so that our final results do not depend on it at all.
 The first operator catches the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
 The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
-\newline
+
 Note additionally, that all of the aforementioned operators are (anti-)Hermitian. 
 Therefore, their commutator $[A^\dagger, A]$ vanishes and, 
 abiding by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80},
 all spectral functions
-
 \begin{equation}
     \mathcal{A}(\omega) = -\frac{1}{\pi} \Im \left[ \mathcal{G}(\omega + i0^+) \right]
 \end{equation}
-
 must be symmetrical about $\omega=0$.
 For this reason, we will only show the $\omega \geq 0$ in our plots. 
 Additionally, we will add a small imaginary part of $10^{-5}$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
@@ -463,52 +440,50 @@ Additionally, we will add a small imaginary part of $10^{-5}$ to $\omega$ in ord
 
 Let us first show and discuss the general form of the spectral functions in the SC and CDW phase and afterward, 
 we will describe the behaviour of the occurring modes as the system approaches a phase transition.
-\newline
+
 The spectral functions corresponding to the individual operators in \eqref{eqn:resolvent_bases} are shown in \autoref{fig:resolvent_overview_SC}.
 We chose $U=-2$ for the square lattice and $U=-2.5$ for the simple cubic lattice and $V=\pm0.1$ for both lattices.
-\newline
+
 There are a variety of different features. The difference between the two lattices is mostly quantitative in nature.
 First and foremost, in the SC phase, there is a sharp peak located at $\omega=0$, only in the phase spectral function,
 and another peak, only in the amplitude spectral function, located at $\omega=2\Delta_\text{SC}$.
 We identify them with the well-known Leggett and Higgs modes in superconductors.
 In the CDW phase, both of these spectral functions become identical and form a sharp peak below the two-particle continuum.
-\newline
+
 The CDW spectral function shows a peak below the continuum only in the SC phase while having another peak at $\omega=2\Delta$ in the CDW phase.
 The AFM spectral function is restricted to the continuum for both phases and both lattices.
 For the square lattice, however, there is a peak located at the upper edge of the two-particle continuum.
 
+\centering
 \begin{figure}
     \centering
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{plots/phase_peak.pdf}
-        \caption{Phase Green's function}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \includegraphics[width=\textwidth]{plots/cdw_peak_in_sc.pdf}
-        \caption{CDW Green's function}
-    \end{subfigure}
-    \caption{Log-log plot of the real part of the phase (a) and CDW (b) Green's functions in the SC phase.
-    The results for both lattice types are shown but are qualitatively identical.
-    The power-law exponent is $a=-2$ and $a=-1$, respectively, indicating that the CDW peak is a $\delta$ distribution, while the phase peak is the derivative of one.}
-    \label{fig:peaks_in_sc}
+    \includegraphics[width=0.48\textwidth]{plots/phase_peak.pdf}
+    \caption{Phase Green's function}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.48\textwidth]{plots/cdw_peak_in_sc.pdf}
+    \caption{Log-log plot of the real part of the phase (a) and CDW (b) Green's functions in the SC phase.
+        The results for both lattice types are shown but are qualitatively identical.
+        The power-law exponent is $a=-2$ and $a=-1$, respectively, indicating that the CDW peak is a $\delta$ distribution, while the phase peak is the derivative of one.}
+        \label{fig:peaks_in_sc}
+\end{figure}
+
 
 \textcolor{red}{Die Festellung, dass die Peaks deltas bzw Ableitungen von deltas sind, könnte ich mir auch in einem Anhang vorstellen.}
 To further classify the aforementioned peak that lies outside the two-particle continuum,
 we turn towards the real part of the Green's function.
 We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly to obtain its power-law behaviour.
 In practice, we use
-
 \begin{align}
     \ln(\Re[\mathcal{G}](\omega - \omega_0 )) &= a \ln(\omega - \omega_0) + b \nonumber \\ 
     \Leftrightarrow \Re[\mathcal{G}] (\omega) &= (\omega - \omega_0)^a e^b\,,
 \end{align}
-
 where $\omega_0$ is the peak's position and $a, b$ are fit parameters.
 The real part is related to the imaginary part via the Kramers-Kronig relations. \textcolor{red}{Zitiert man die oder nimmt man an, dass jeder weiß, worum es da geht?}
-Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e. $a=-1$ and the peak has the weight $\exp(b)$.
-Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e. $\delta'(\omega - \omega_0)$.
+Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$ and the peak has the weight $\exp(b)$.
+Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e., $\delta'(\omega - \omega_0)$.
 
 The plots for the phase peak and the CDW peak in the SC phase can be seen in \autoref{fig:peaks_in_sc}.
 The SC peak in the CDW phase behaves similarly to the latter and is therefore not shown explicitly.
@@ -539,7 +514,7 @@ This time around, the exponent is $a\approx-0.5$, indicating that the peak behav
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw_position.pdf}
     \caption{The upper panels show double logarithmic plots of the positions $\omega_0$ of the SC peak in the CDW phases while the lower panels show their respective weights $w_0 = e^{b}$.
     The left column shows the results for the square lattice at $U=-2$ and the right column for the simple cubic lattice at $U=-2.5$.
-    The fits are linear, i.e. $y(V) = c \ln(V/t) + d$ and the parameters are printed on the individual panals.}
+    The fits are linear, i.e., $y(V) = c \ln(V/t) + d$ and the parameters are printed on the individual panals.}
     \label{fig:sc_in_cdw_behaviour}
 \end{figure*}
 
@@ -561,7 +536,7 @@ With the prevalent peaks discussed, we turn towards their behaviour as the syste
 
 Similar to the previous section, we will first show the general form of the spectral functions with respect to the operators \eqref{eqn:resolvent_bases}.
 They are depicted in \autoref{fig:resolvent_overview_AFM}, choosing $V=1$ for the square lattice and $V=0.75$ for the simple cubic lattice.
-For the CDW phase (panel a) we chose $U=ZV + 0.1$ and for the AFM phase (panel b) $V=ZV - 0.1$.
+For the CDW phase (panel a) we chose $U=zV + 0.1$ and for the AFM phase (panel b) $V=zV - 0.1$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -586,31 +561,25 @@ For the CDW phase (panel a) we chose $U=ZV + 0.1$ and for the AFM phase (panel b
 
 In this appendix section, we will derive the relation between the matrices $\mM, \mN$ from \eqref{eqn:heisenberg} and the Green's functions of the system.
 For that, consider their definition
-
 \begin{align}
     G_{AB^\dagger}^\text{ret} (t) &= - i \langle [ A(t), B^\dagger(0) ] \rangle \theta(t) \nonumber \\ 
     \Rightarrow G^\text{ret} (z = \omega + i0^+) &= - i \int_0^\infty \exp(izt) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t \nonumber
 \end{align}
-
 Since $A$ and $B$ are included in the operator basis, we can rewrite them as dot-products of the vector
 \begin{equation}
-    \vec{A} := \left( A_1, A_2, \dots, A_N \right)\,, \quad
-    \vec{A}^\dagger := \begin{pmatrix}
+    \vec{A} \coloneqq  \left( A_1, A_2, \dots, A_N \right)\,, \quad
+    \vec{A}^\dagger \coloneqq  \begin{pmatrix}
         A_1^\dagger \\ A_2^\dagger \\ \vdots \\ A_N^\dagger
     \end{pmatrix}\,,
 \end{equation}
-
 and some other vector with complex-valued vector $\vec{a}$ which has its coefficients set in such a way,
 that $\vec{a} \cdot \vec{A}$ is equal to the desired operator. 
 For instance, $\vec{a} \equiv \vec{e}_1$ in order to represent $A_1$.
 Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differential equation \eqref{eqn:heisenberg} to obtain
-
 \begin{equation}
     \vec{c}(t) = \exp \left( i \mN^{-1} \mM t \right) \vec{c}(0)\,.
 \end{equation}
-
 This allows us to finally obtain
-
 \begin{align}
     G^\text{ret} (z) &= i \int_0^\infty \exp(izt) \langle [ (\vec{A} \vec{b}(0))^\dagger, \vec{A} \vec{a}(t) ] \rangle\ \mathrm{d}t \nonumber \\
         &= i \int_0^\infty \exp(izt) \vec{b}^\dagger(0) \underbrace{\langle [ \vec{A}^\dagger, \vec{A} ] \rangle}_{\equiv \mN} \vec{a}(t) \mathrm{d}t \nonumber \\
@@ -618,33 +587,26 @@ This allows us to finally obtain
         &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}(0) \nonumber \\
         &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{ \underbrace{\mM + z \mN}}_{\equiv \mathcal{R}(z)} \mN \right] \vec{a}(0)\,,
 \end{align}
-
 where $\vec{a}(0)$ and $\vec{b}(0)$ are chosen such, that their product with $\vec{A}$ yields $A(0)$ and $B(0)$, respectively.
 The task at hand is finding the resolvent as $\mathcal{R}$.
 Normally, one would desire to compute
-
 \begin{align}
     \mathcal{R}(z) = \mN^{-1/2} \frac{1}{z +\mN^{-1/2} \mM \mN^{-1/2}} \mN^{-1/2}\,,
 \end{align}
-
 and then utilize a Lanczos algorithm to obtain a tridiagonal form of $\mN^{-1/2} \mM \mN^{-1/2}$.
 However, $\mN$ is not positive in our case due to the nature of the commutator, which means that $\mN$ cannot have a real square root.
 One could also fathom computing
-
 \begin{align}
     \mathcal{R}(z) = \frac{1}{z} \mM^{-1/2} \frac{1}{\mM^{-1/2}\mathcal{N}\mM^{-1/2} + \frac{1}{z} } \mM^{-1/2}\,,
 \end{align}
-
 which does in fact work, if $\mM$ is positive, however resolving feature that lie near $z=0$ are difficult to resolve.
 Nevertheless, let us show that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
 For any $\vec{x} \in \mathbb{C}^N$, consider
-
 \begin{align}
     \vec{x}^\dagger \mM \vec{x} &= \sum_{ij} x_i^* x_j \mM_{ij} \nonumber \\
         &= \langle \left[ \sum_i x_i^* A_i^\dagger, \left[ H, \sum_j x_j A_j \right] \right]  \rangle \nonumber \\
-        &= \langle [B^\dagger, [H, B]] \rangle\,,\quad B := \sum_j x_j A_j\,.
+        &= \langle [B^\dagger, [H, B]] \rangle\,,\quad B \coloneqq  \sum_j x_j A_j\,.
 \end{align}
-
 Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace [\exp(-\beta H_\text{MF}) O]$, where $\beta$ is the inverse temperature and $Z$ the partition function, and the commutators, we obtain
 
 \begin{widetext}
@@ -653,7 +615,7 @@ Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace 
             &= \frac{1}{Z} \sum_j e^{-\beta \epsilon_j} \bra{\psi_j} [B^\dagger, [H, B]] \ket{\psi_j} \nonumber \\
             &= \frac{1}{Z} \sum_j e^{-\beta \epsilon_j} \left[ \bra{\psi_j} B^\dagger (H - \epsilon_j) B \ket{\psi_j} + \bra{\psi_j} B (H - \epsilon_j) B^\dagger \ket{\psi_j} \right] \nonumber \\
             &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B^\dagger \ket{\psi_j} \right] \nonumber \\
-            &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) \underbrace{ \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} \bra{\psi_i} B^\dagger \ket{\psi_j} \right]}_{:=C_{ij} = C_{ji} \geq 0} \nonumber \\
+            &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) \underbrace{ \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} \bra{\psi_i} B^\dagger \ket{\psi_j} \right]}_{\coloneqq C_{ij} = C_{ji} \geq 0} \nonumber \\
             &= \frac{1}{2Z} \left[ \sum_{ij} C_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) - \sum_{ij} C_{ij} e^{-\beta \epsilon_i} (\epsilon_i - \epsilon_j) \right] \nonumber \\
             &= \frac{1}{2Z} \sum_{ij} C_{ij} \left( e^{-\beta \epsilon_j} - e^{-\beta \epsilon_i} \right) \left( \epsilon_i - \epsilon_j \right) \geq 0\,.
     \end{align}
@@ -663,33 +625,27 @@ Thus, we are able to compute a real square root of $\mathcal{M}$.
 
 We embrace the matrix structure in \eqref{eqn:xp_basis} and assume that all matrix entries are real.
 Then, with $m|_X$ denoting the block of a matrix $m$ spanned by the $X$-operators in the basis, we can calculate
-
 \begin{align}
-    r(z) &:= \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
+    r(z) &\coloneqq  \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
         &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + \frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_X \nonumber \\
         &= \left. \frac{1}{\mM} \sum_{j=0}^\infty \left( -z \mN \frac{1}{\mM} \right)^j \right\vert_X \,.
 \end{align}
-
 We may omit every second element of the sum, as we want to obtain the upper left block of the matrix, and $\mN$ always swaps the upper left and lower right block.
 Thus, we obtain
-
 \begin{align}
     r(z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_X \nonumber \\
         &= \left. \frac{1}{\mM - z^2 \mN \mM^{-1} \mN} \right\vert_X \nonumber \\
         &= \frac{1}{\mathcal{K}_+ - z^2 \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger}\,.
 \end{align}
-
-Next, we define $\mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger := \check{N}$ for brevity.
+Next, we define $\mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger \coloneqq  \check{N}$ for brevity.
 Since $\mathcal{M}$ is positive semidefinite and block diagonal, its blocks $\mathcal{K}_\pm$ must be positive semidefinite as well.
 Therefore, $\check{N}$ is also positive semidefinite and we can define its square root.
 The inverse in the following can be replaced by the pseudo-inverse in case $\check{N}$ has a singular part.
 We obtain
-
 \begin{equation}
     r(z) = \check{N}^{-1/2} \frac{1}{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2} - z^2} \check{N}^{-1/2}\,.
 \end{equation}
-
-The matrix $\check{M} := \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
+The matrix $\check{M} \coloneqq  \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
 Hence, we can tridiagonalize it using a standard Lanczos algorithm in order to obtain a continued fraction expansion.
 
 \bibliography{sn-bibliography}
