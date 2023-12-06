@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import gzip
 
 T = 0.
-U = -2.5
-V = 0.1
+U = -2.
+V = 1.0
 
 use_XP = True
 
