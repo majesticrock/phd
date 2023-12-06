@@ -65,11 +65,11 @@ for j, folder in enumerate(folders):
 legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
 
 for i in range(ncols):
-    axs[nrows - 1][i].set_xlabel(r"$\omega / t$")
+    axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
 for i in range(nrows):
-    axs[i][0].set_ylabel(r"$\mathcal{A}(\omega + i0^+)$ / a.u.")
-axs[0][0].title.set_text("Square - $V=1$")
-axs[0][1].title.set_text("Simple cubic - $V=0.75$")
+    axs[i][0].set_ylabel(r"$\mathcal{A}(\omega + i0^+) [t^{-1}]$")
+axs[0][0].title.set_text("Square - $V=1t$")
+axs[0][1].title.set_text("Simple cubic - $V=0.75t$")
 
 axs[0][1].text(11.5, 0.87, r"(a) AFM")
 axs[1][1].text(11.5, 0.87, r"(b) CDW")

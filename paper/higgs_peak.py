@@ -14,7 +14,7 @@ def func_ln(x, a, b):
     return a * x + b
 
 T = 0.
-Us = [-2., -2.5]
+U = -2.5
 V = -0.1
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
@@ -28,7 +28,7 @@ for i in range(2):
     plotters[i].set_individual_colors(["blue", "black", "orange"])
     plotters[i].set_individual_dashes([(1, 0), (1, 1), (5, 5)])
 
-    name = f"T={T}/U={Us[i]}/V={V}"
+    name = f"T={T}/U={U}/V={V}"
     phase_imag, phase_real, w_log, res = cf.resolvent_data_log_z(f"{folders[i]}{name}", "phase_SC", range=0.05, begin_offset=1e-3, number_of_values=10000, imaginary_offset=0, xp_basis=True, messages=False)
     higgs_imag, higgs_real, w_log, res = cf.resolvent_data_log_z(f"{folders[i]}{name}", "higgs_SC", range=0.05, begin_offset=1e-3, number_of_values=10000, imaginary_offset=0, xp_basis=True, messages=False)
 

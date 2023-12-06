@@ -134,7 +134,7 @@ The 2D case already exhibits a wide range of possible phases, including CDW, AFM
 \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22}.
 
 In this article, we will first employ a mean-field approximation to the interaction terms 
-and then use the methodology from the so-called iterated equations of motion approach,
+and then use the methodology from the so-called iterated equations of motion approach (iEoM),
 which has already seen success in the handling of interaction quenches \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
 Here, one commutes operators from a suitable operator basis with the Hamiltonian and adds the newly occurring terms to it.
 Naturally, a truncation is necessary for most practical applications, however, the approximation becomes better the more terms are included within the basis.
@@ -282,17 +282,19 @@ This is due to our restriction to terms that are proportional to $\hat{\gamma}(\
 
 \section{Iterated equations of motion and Green's functions}\label{sec:ieom}
 
-To investigate the collective modes, we employ the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
-We will present the general ideas briefly here and direct the interested reader to the appendix \textcolor{red}{!REF!} for a detailed explanation and derivation.
+So far we have discussed the static mean-field equations that essentially describe the static groundstate.
+These results will be used to compute the quantities, namely expectation values, necessary for the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
+With it, we can describe two-particle quantities like the various collective excitations of the system.
+We will present the general ideas briefly here and refer the interested reader to the appendix \textcolor{red}{!REF!} for a detailed explanation and derivation.
 
-We start with some operator basis $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
+We start with some operator set $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
 i.e., any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
-We can then express any time-depend operator from this basis as
+We can then express any time-depend operator from this set as
 \begin{equation}
     a(t) = \sum_j c_j(t) A_j\,,
 \end{equation}
 where $c_j(t)$ captures the entire time dependence. 
-Plugging this into the Heisenberg equation of motion and applying an operator scalar product $(A_i|\cdot)$ to both sides of the equation yields
+Inserting this into the Heisenberg equation of motion and applying an operator scalar product $(A_i|\cdot)$ to both sides of the equation yields
 \begin{equation}
     \label{eqn:heisenberg}
     \begin{aligned}
@@ -301,11 +303,14 @@ Plugging this into the Heisenberg equation of motion and applying an operator sc
         \Rightarrow \mN \ddt \vec{c}(t) &= i \mM \vec{c}(t)\,.
     \end{aligned}
 \end{equation}
-The matrices $\mN$ and $\mM$ contain all the dynamics and energetic properties of the system but have the significant advantage of being simple matrices rather than operators acting on an enormous Hilbert space.
+The matrices $\mN$ and $\mM$ contain all the dynamics and energetic properties of the system.
+The advantage is that one can now handle simple matrices rather than operators acting on an enormous Hilbert space.
+The size of these matrices depends entirely on the set of operators.
 
-However, most Hamiltonians do not allow any such operator basis to exist. 
-Therefore, one repeats this commutation process and includes the occurring terms within a bigger basis,
-hoping to get better results as the basis size increases.
+However, most Hamiltonians do not allow any such operator set to exist as the commutation usually introduces terms of higher order.
+For instance, a commuting a bilinear term with a quartic Hamiltonian yields, quartic terms. Repeating the commutation yields hexartic ones and so on.
+Therefore, one repeats this commutation process and includes the occurring terms within a bigger set,
+hoping to get better results as the set size increases.
 
 In this article, we will be using the operator pseudo scalar product
 \begin{equation}
@@ -313,41 +318,60 @@ In this article, we will be using the operator pseudo scalar product
     (A | B) \coloneqq  \langle [A^\dagger, B] \rangle\,,
 \end{equation}
 where the expectation values are taken with respect to the thermal equilibrium of the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}.
-Nevertheless, we will compute $\mM$ using the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
-
-This choice enables us to write down matrix-valued Fourier-transformed Green's functions in terms of the aforementioned matrices
+Note, that this is not a proper scalar product, as a norm defined using it can also be negative.
+For example, assume that for some operator $A$
 \begin{equation}
-    \label{eqn:green_function}
-    \mathcal{G}(z = \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN \coloneqq  -\mN \mathcal{R}(z) \mN\,,
+    ||A|| = (A | A) = \langle [A^\dagger, A] \rangle > 0\,,
 \end{equation}
-where we defined the resolvent
+then
+\begin{equation}
+    ||A^\dagger|| = (A^\dagger | A^\dagger) = \langle [A, A^\dagger] \rangle = - ||A|| < 0\,.
+\end{equation}
+We will compute $\mM$ by commutating with the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
+
+To study the collective excitation, we investigate various retarded Green's functions 
+\begin{equation}
+    G_{AB}^\text{ret} (t) = - i \langle [A(t), B] \rangle \Theta(t)\,,
+\end{equation}
+where $\Theta(t)$ is the Heaviside function, and their Fourier transformed
+\begin{equation}
+    \label{eqn:standard_gf}
+    G_{AB}(\omega + i0^+) = -i \int_0^{\infty} e^{izt} \langle [A(t), B] \rangle \mathrm{d}t\,.
+\end{equation}
+Our previous choice of pseudo scalar product enables us to write down a matrix-valued Green's functions in terms of the aforementioned matrices
+\begin{align}
+    \label{eqn:green_function}
+    \mathcal{G}(z &= \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN \\
+        &\coloneqq  -\mN \mathcal{R}(z) \mN\,,
+\end{align}
+where we used the resolvent
 \begin{equation}
     \label{eqn:resolvent}
     \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}\,.
 \end{equation}
-Here, the different matrix elements correspond to various Green's functions, depending on the operator basis.
-For instance, assume the operator in the basis is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
+The entries of this matrix $\mathcal{G}(z)$ are the Fourier transformed Green's functions mentioned in \eqref{eqn:standard_gf} with respect to the operators from the initially chosen set.
+For instance, assume the operator in the set is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
 \begin{equation}
     \mathcal{G}_{00}(z = \omega +i0^+) =  G(z) = -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
 \end{equation}
 For a detailed derivation of this statement, we refer the reader to the appendix \textcolor{red}{!REF!}.
 
-Our operator basis consists of operators of the type
+Our operator set consists of operators of the type
 \begin{equation}
     A_\gamma \coloneqq  \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
 \end{equation}
 where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
-Different indices are taken as additional basis operators, e.g. $n_{\vk \up}$ and $n_{\vk \down}$ are taken into the basis separately.
+Different indices are taken as additional set operators, e.g. $n_{\vk \up}$ and $n_{\vk \down}$ are taken into the set separately.
 We then order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.
 \begin{equation}
     X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger\,.
 \end{equation}
-Our basis is then $\mathcal{B}_{XP} \coloneqq  {X_i, P_i}$.
+Our set is then $\mathcal{B}_{XP} \coloneqq  {X_i, P_i}$.
 If some operators would be 0 ($P_i$ for any $n$-type term) or duplicates (certain $X_i$ for $g$-type terms), we omit them.
 
-Due to this choice of basis, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
+Due to this choice of set, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
 \begin{equation}
-    \label{eqn:xp_basis}
+    \label{eqn:xp_set}
     \mM = \begin{pmatrix}
         \mathcal{K}_+ & \kappa \\ \kappa^\dagger & \mathcal{K}_-
     \end{pmatrix}\,,\quad \mN = \begin{pmatrix}
@@ -361,7 +385,7 @@ Additionally, we can utilize this block structure to rewrite \eqref{eqn:resolven
 \begin{equation}
     \mathcal{R}(z) \vert_X = - \check{N}^{-1/2} \frac{1}{z^2 - \underbrace{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}}_{\coloneqq  \check{M}}} \check{N}^{-1/2}\,,
 \end{equation}
-where $\vert_X$ denotes the block corresponding to the $X$-terms in the basis and $\check{N} \coloneqq  \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$.
+where $\vert_X$ denotes the block corresponding to the $X$-terms in the set and $\check{N} \coloneqq  \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$.
 An analogous form can be found for the $P$-block.
 
 Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
@@ -370,9 +394,9 @@ This can be achieved using a Lanczos tridiagonalization and subsequently a conti
 \begin{widetext}
 \begin{equation}
     \left( z^2 - \begin{pmatrix}
-        z - a_0 & b_1 & 0 & 0 & \cdots \\
-        b_1 & z - a_1 & b_2 & 0 & \cdots \\
-        0 & b_2 & z - a_2 & b_3 & \cdots \\
+        a_0 & b_1 & 0 & 0 & \cdots \\
+        b_1 & a_1 & b_2 & 0 & \cdots \\
+        0 & b_2 & a_2 & b_3 & \cdots \\
         \vdots & \vdots & \vdots & \vdots & \ddots
     \end{pmatrix} \right)_{00}^{-1} = \dfrac{1}{z^2 - a_0 - \dfrac{b_1^2}{z^2 - a_1 - \dfrac{b_2^2}{ z^2 - a_2 - \hdots}}}\,\,
 \end{equation}
@@ -442,7 +466,7 @@ Let us first show and discuss the general form of the spectral functions in the 
 we will describe the behaviour of the occurring modes as the system approaches a phase transition.
 
 The spectral functions corresponding to the individual operators in \eqref{eqn:resolvent_bases} are shown in \autoref{fig:resolvent_overview_SC}.
-We chose $U=-2$ for the square lattice and $U=-2.5$ for the simple cubic lattice and $V=\pm0.1$ for both lattices.
+We chose $U=-2.5$ and $V=\pm0.1$ for both lattices.
 
 There are a variety of different features. The difference between the two lattices is mostly quantitative in nature.
 First and foremost, in the SC phase, there is a sharp peak located at $\omega=0$, only in the phase spectral function,
@@ -454,7 +478,6 @@ The CDW spectral function shows a peak below the continuum only in the SC phase 
 The AFM spectral function is restricted to the continuum for both phases and both lattices.
 For the square lattice, however, there is a peak located at the upper edge of the two-particle continuum.
 
-\centering
 \begin{figure}
     \centering
     \includegraphics[width=0.48\textwidth]{plots/phase_peak.pdf}
@@ -513,7 +536,7 @@ This time around, the exponent is $a\approx-0.5$, indicating that the peak behav
     \centering
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw_position.pdf}
     \caption{The upper panels show double logarithmic plots of the positions $\omega_0$ of the SC peak in the CDW phases while the lower panels show their respective weights $w_0 = e^{b}$.
-    The left column shows the results for the square lattice at $U=-2$ and the right column for the simple cubic lattice at $U=-2.5$.
+    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5$.
     The fits are linear, i.e., $y(V) = c \ln(V/t) + d$ and the parameters are printed on the individual panals.}
     \label{fig:sc_in_cdw_behaviour}
 \end{figure*}
@@ -565,7 +588,7 @@ For that, consider their definition
     G_{AB^\dagger}^\text{ret} (t) &= - i \langle [ A(t), B^\dagger(0) ] \rangle \theta(t) \nonumber \\ 
     \Rightarrow G^\text{ret} (z = \omega + i0^+) &= - i \int_0^\infty \exp(izt) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t \nonumber
 \end{align}
-Since $A$ and $B$ are included in the operator basis, we can rewrite them as dot-products of the vector
+Since $A$ and $B$ are included in the operator set, we can rewrite them as dot-products of the vector
 \begin{equation}
     \vec{A} \coloneqq  \left( A_1, A_2, \dots, A_N \right)\,, \quad
     \vec{A}^\dagger \coloneqq  \begin{pmatrix}
@@ -623,8 +646,8 @@ Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace 
 
 Thus, we are able to compute a real square root of $\mathcal{M}$.
 
-We embrace the matrix structure in \eqref{eqn:xp_basis} and assume that all matrix entries are real.
-Then, with $m|_X$ denoting the block of a matrix $m$ spanned by the $X$-operators in the basis, we can calculate
+We embrace the matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real.
+Then, with $m|_X$ denoting the block of a matrix $m$ spanned by the $X$-operators in the set, we can calculate
 \begin{align}
     r(z) &\coloneqq  \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
         &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + \frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_X \nonumber \\

@@ -13,7 +13,7 @@ import lib.plot_settings as ps
 
 # visually scale the data for visibility
 SCALE = 5
-params = [ [0., -2., -0.1], [0., -2.0, 0.1] ]
+params = [ [0., -2.5, -0.1], [0., -2.5, 0.1] ]
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
 nrows = 2
@@ -37,9 +37,7 @@ labels = ["Phase", "Higgs", "CDW", "AFM"]
 
 for j, folder in enumerate(folders):
     usage_upper_lim = 2 * plot_upper_lim if j == 0 else 3 * plot_upper_lim
-    if j == 1:
-        params[0][1] = -2.5
-        params[1][1] = -2.5
+
     for i, name in enumerate(naming_scheme_tuples(params)):
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
@@ -51,11 +49,11 @@ for j, folder in enumerate(folders):
 
 legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
 for i in range(ncols):
-    axs[nrows - 1][i].set_xlabel(r"$\omega / t$")
+    axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
 for i in range(nrows):
-    axs[i][0].set_ylabel(r"$\mathcal{A}(\omega + i0^+)$ / a.u.")
-axs[0][0].title.set_text("Square - $U=-2$")
-axs[0][1].title.set_text("Simple cubic - $U=-2.5$")
+    axs[i][0].set_ylabel(r"$\mathcal{A}(\omega + i0^+) [t^{-1}]$")
+axs[0][0].title.set_text("Square")
+axs[0][1].title.set_text("Simple cubic")
 
 axs[0][1].text(10.6, 0.87, r"(a) SC")
 axs[1][1].text(10.6, 0.87, r"(b) CDW")

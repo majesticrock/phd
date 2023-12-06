@@ -11,7 +11,7 @@ import lib.plot_settings as ps
 import lib.resolvent_peak as rp
 
 T = 0.
-Us = [-2., -2.5]
+U = -2.5
 V = -0.1
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
@@ -28,7 +28,7 @@ for i in range(2):
     plotters[i].set_individual_colors("nice2")
     plotters[i].set_individual_dashes()
 
-    name = f"T={T}/U={Us[i]}/V={V}"
+    name = f"T={T}/U={U}/V={V}"
     peak = rp.Peak(f"{folders[i]}{name}", name_suffix, initial_search_bounds=(0.3, 0.8))
     #print(peak.peak_position)
     peak.improved_peak_position(x0_offset=1e-1, gradient_epsilon=1e-12)
@@ -41,7 +41,7 @@ for i in range(2):
     axs[i].set_ylim(0, 22.5)#
     axs[i].legend()
     
-axs[1].set_xlabel(r"$\ln(\omega - \omega_0)$")
+axs[1].set_xlabel(r"$\ln((\omega - \omega_0) / t)$")
 axs[1].text(-0.08, 1, r"$\ln(\Re[\mathcal{G}_\mathrm{CDW}](\omega - \omega_0))$", va='center', ha='center', rotation='vertical', transform = axs[1].transAxes)
 fig.tight_layout()
 
