@@ -38,15 +38,15 @@ plotters = np.empty((2,2), dtype=ps.CURVEFAMILY)
 
 for i in range(len(Us)):
     counter = 0
-    plotters[0][i] = ps.CURVEFAMILY(3, axis=axs[0][i])
+    plotters[0][i] = ps.CURVEFAMILY(5, axis=axs[0][i])
     plotters[0][i].set_individual_colors("nice")
-    plotters[0][i].set_individual_linestyles(["-", "", ""])
-    plotters[0][i].set_individual_markerstyles(["", "X", "o"])
+    plotters[0][i].set_individual_linestyles(["-", "-", "", "", ""])
+    plotters[0][i].set_individual_markerstyles(["", "", "X", "X", "o"])
     
-    plotters[1][i] = ps.CURVEFAMILY(5, axis=axs[1][i])
+    plotters[1][i] = ps.CURVEFAMILY(3, axis=axs[1][i])
     plotters[1][i].set_individual_colors("nice")
-    plotters[1][i].set_individual_linestyles(["-", "-", "", "", ""])
-    plotters[1][i].set_individual_markerstyles(["", "", "X", "X", "o"])
+    plotters[1][i].set_individual_linestyles(["-", "", ""])
+    plotters[1][i].set_individual_markerstyles(["", "X", "o"])
     
     for T, U, V in iterate_containers(Ts, Us[i], Vs):
         name = f"T={T}/U={U}/V={V}"
@@ -71,39 +71,44 @@ for i in range(len(Us)):
     popt, pcov = curve_fit(rp.linear_function, v_data[cut:], weights[cut:])
     v_lin = np.linspace(v_data.min(), v_data.max(), 500)
     
-    plotters[0][i].plot(v_lin, rp.linear_function(v_lin, *popt), label="Fit")
-    plotters[0][i].plot(v_data[cut:], weights[cut:], "X", label="Fitted data")
-    plotters[0][i].plot(v_data[:cut], weights[:cut], "o", label="Omitted data")
+    plotters[1][i].plot(v_lin, rp.linear_function(v_lin, *popt), label="Fit")
+    plotters[1][i].plot(v_data[cut:], weights[cut:], "X", label="Fitted data")
+    plotters[1][i].plot(v_data[:cut], weights[:cut], "o", label="Omitted data")
     
-    axs[0][i].text(0.05, 0.4, f"$a={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
-    axs[0][i].text(0.05, 0.3, f"$b={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
+    axs[1][i].text(0.05, 0.4, f"$c={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.05, 0.3, f"$d={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
     
     peak_positions = np.log(peak_positions)
     popt, pcov = curve_fit(rp.linear_function, v_data[cut:], peak_positions[cut:])
     x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
-    plotters[1][i].plot(x_lin, rp.linear_function(x_lin, *popt), label="Fit 1")
-    axs[1][i].text(0.6, 0.4, f"$a_1={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[1][i].transAxes)
-    axs[1][i].text(0.6, 0.3, f"$b_1={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
+    plotters[0][i].plot(x_lin, rp.linear_function(x_lin, *popt), label="Fit 1")
+    axs[0][i].text(0.6, 0.4, f"$c_1={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.6, 0.3, f"$d_1={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
 
     cut2 = 20
     popt, pcov = curve_fit(rp.linear_function, v_data[:cut2], peak_positions[:cut2])
-    axs[1][i].text(0.6, 0.2, f"$a_2={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[1][i].transAxes)
-    axs[1][i].text(0.6, 0.1, f"$b_2={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
-    plotters[1][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
-    plotters[1][i].plot(v_data[cut:], peak_positions[cut:], "X", label="Data Fit 1")
-    plotters[1][i].plot(v_data[:cut2], peak_positions[:cut2], "X", label="Data Fit 2")
-    plotters[1][i].plot(v_data[cut2:cut], peak_positions[cut2:cut], "o", label="Omitted data")
+    axs[0][i].text(0.6, 0.2, f"$c_2={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.6, 0.1, f"$d_2={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
+    plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
+    plotters[0][i].plot(v_data[cut:], peak_positions[cut:], "X", label="Data Fit 1")
+    plotters[0][i].plot(v_data[:cut2], peak_positions[:cut2], "X", label="Data Fit 2")
+    plotters[0][i].plot(v_data[cut2:cut], peak_positions[cut2:cut], "o", label="Omitted data")
 
 axs[0][0].title.set_text("Square - $U=-2$")
 axs[0][1].title.set_text("Simple cubic - $U=-2.5$")
 
 axs[1][0].set_xlabel(r"$\ln(V / t)$")
 axs[1][1].set_xlabel(r"$\ln(V / t)$")
-axs[0][0].set_ylabel(r"$\ln(w_0 \cdot t)$")
-axs[1][0].set_ylabel(r"$\ln(\omega_0 / t)$")
-axs[0][0].legend(loc="lower right")
-axs[1][0].legend(loc="upper left")
+axs[1][0].set_ylabel(r"$b = \ln(w_0 \cdot t)$")
+axs[0][0].set_ylabel(r"$\ln(\omega_0 / t)$")
+axs[1][0].legend(loc="lower right")
+axs[0][0].legend(loc="upper left")
 fig.tight_layout()
+
+#axs[1][0].grid()
+#axs[1][1].grid()
+#axs[0][0].grid()
+#axs[0][1].grid()
 
 import os
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

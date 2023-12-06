@@ -1,9 +1,9 @@
 import numpy as np
 import gzip
 import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
 
 NORM_FACTOR = -(1. / np.pi) 
-
 class ContinuedFraction:
     # In Python there is no need to declare one's variables beforehand.
     # How foolish of me to assume otherwise
@@ -30,11 +30,19 @@ class ContinuedFraction:
         deviation_from_infinity = np.zeros(len(self.A) - 1)
         for i in range(0, len(self.A) - 1):
             deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
+        
         # The lanczos coefficients have an oscillating behaviour at the beginnig
         # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
         # Therefore, we omit the first n (10) data points from our best fit search
         ingore_first = 10
         best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
+
+        artifacts = find_peaks(self.B[1:], prominence=5e2, width=1)
+        if len(artifacts[0]) > 0:
+            first_artifact = artifacts[0][0] - 2 - int(artifacts[1]["widths"][0])
+            if best_approx > first_artifact:
+                best_approx = first_artifact
+        #best_approx = 100
         self.terminate_at = len(self.A) - best_approx
         if self.messages: 
             print("Terminating at i =", best_approx)
