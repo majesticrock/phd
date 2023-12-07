@@ -91,16 +91,10 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
 \begin{abstract}
     We investigate the superconducting (SC), charge-density wave (CDW), and antiferromagnetic (AFM) phases 
     in the extended Hubbard model at zero temperature and half-filling.
-    We employ the iterated equations of motion approach \cite{Kalthoff17,bleicker18} to compute the two-particle Green's functions and
-    by extension, the corresponding spectral densities.
-    This renders a comprehensive analysis of the behaviour of collective excitations possible
-    as the model's parameters are changed across phase transitions.
-    We identify the well-known amplitude (Higgs) and phase (Leggett) modes within the 
-    superconducting phase and observe a similar excitation in the CDW phase
-    which shift towards zero energy as the system approaches the phase transition to the SC phase.
-    In the CDW phase, close to the phase transition to the AFM phase, we find a collective mode 
-    which does not change significantly and another modes which becomes soft
-    as the phase boundary is approached.
+    We employ the iterated equations of motion approach \cite{Kalthoff17,bleicker18} to compute the two-particle Green's functions and by extension, the corresponding spectral densities.
+    This renders comprehensive analysis of the behaviour of collective excitations possible as the model's parameters are changed across phase transitions.
+    We identify the well-known amplitude (Higgs) and phase (Leggett) modes within the superconducting phase and observe a similar excitation in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase.
+    In the CDW phase, close to the phase transition to the AFM phase, we find a collective mode that does not change significantly and another mode that becomes soft as the phase boundary is approached.
 \end{abstract}
 
 \maketitle
@@ -144,8 +138,8 @@ By extension, we also obtain the spectral functions of the investigated systems 
 The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Krull16,Schwarz20,Fan22}.
 
 The remainder of this paper is organized as follows:
-In \autoref{sec:model} we will introduce the model and its Hamiltonian as well our mean-field theory.
-A brief overview over the iterated equations of motion approach is presented in \autoref{sec:ieom}.
+In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as our mean-field theory.
+A brief overview of the iterated equations of motion approach is presented in \autoref{sec:ieom}.
 Next, we show our results in \autoref{sec:results}.
 Lastly, in \autoref{sec:conclusion}, we will discuss our results.
 In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
@@ -168,8 +162,8 @@ The Hamiltonian of the extended Hubbard model is given by
 \end{equation}
 where $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$ 
 and $\langle i, j\rangle$ denotes the summation over next neighbours.
-The parameters are the hopping amplitude $t$, the onsite interaction $U$, the intersite interaction $V$ and the chemical potential $\mu$.
-Applying a Fourier transformation into $k$-space yields the single-particle dispersion 
+The parameters are the hopping amplitude $t$, the onsite interaction $U$, the intersite interaction $V$, and the chemical potential $\mu$.
+Applying a Fourier-transformation into $k$-space yields the single-particle dispersion 
 \begin{equation}
     \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha)\,,\quad k_\alpha \in [-\pi, \pi)\,,
 \end{equation}
@@ -177,7 +171,7 @@ with the system's dimension $D$ and the dimensionless momentum $\vk$.
 
 \subsection{Static mean-field theory}
 
-Next, we decouple the the interaction terms.
+Next, we decouple the interaction terms.
 We define 
 \begin{equation}
     \label{eqn:operators}
@@ -263,10 +257,10 @@ We can compute any phase as long as it does not introduce another kind of moment
 We solve the mean-field equations self-consistently.
 The $\gamma$-integrals are approximated numerically using a $\tanh$-$\sinh$ quadrature \cite{takahasi73}, 
 terminating once $|1 - \int \dgamma \rho(\gamma)| < 10^{-13}$ and reusing the computed points and weights.
-This method excells at dealing with the singularities in the DOS, 
+This method excels at dealing with the singularities in the DOS, 
 requiring merely a few hundred function evaluations to achieve the desired accuracy.
 
-This procedure yields the groundstate phase diagram at temperature $T=0$ shown in \autoref{fig:phase_diagram}.
+This procedure yields the ground state phase diagram at temperature $T=0$ shown in \autoref{fig:phase_diagram}.
 The CDW-AFM boundary is located at $U = zV$, where $z$ is the coordination.
 This holds for both the square lattice ($z=4$) and the simple cubic lattice ($z=6$) and can be seen by comparing \eqref{eqn:delta_cdw} and \eqref{eqn:delta_afm}:
 Crossing the aforementioned line, changes which one of the two prefactors is larger.
@@ -282,7 +276,7 @@ This is due to our restriction to terms that are proportional to $\hat{\gamma}(\
 
 \section{Iterated equations of motion and Green's functions}\label{sec:ieom}
 
-So far we have discussed the static mean-field equations that essentially describe the static groundstate.
+So far we have discussed the static mean-field equations that essentially describe the static ground state.
 These results will be used to compute the quantities, namely expectation values, necessary for the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
 With it, we can describe two-particle quantities like the various collective excitations of the system.
 We will present the general ideas briefly here and refer the interested reader to the appendix \textcolor{red}{!REF!} for a detailed explanation and derivation.
@@ -308,7 +302,7 @@ The advantage is that one can now handle simple matrices rather than operators a
 The size of these matrices depends entirely on the set of operators.
 
 However, most Hamiltonians do not allow any such operator set to exist as the commutation usually introduces terms of higher order.
-For instance, a commuting a bilinear term with a quartic Hamiltonian yields, quartic terms. Repeating the commutation yields hexartic ones and so on.
+For instance, commuting a bilinear term with a quartic Hamiltonian yields, quartic terms. Repeating the commutation yields hexartic ones and so on.
 Therefore, one repeats this commutation process and includes the occurring terms within a bigger set,
 hoping to get better results as the set size increases.
 
@@ -333,7 +327,7 @@ To study the collective excitation, we investigate various retarded Green's func
 \begin{equation}
     G_{AB}^\text{ret} (t) = - i \langle [A(t), B] \rangle \Theta(t)\,,
 \end{equation}
-where $\Theta(t)$ is the Heaviside function, and their Fourier transformed
+where $\Theta(t)$ is the Heaviside function, and their Fourier-transformed
 \begin{equation}
     \label{eqn:standard_gf}
     G_{AB}(\omega + i0^+) = -i \int_0^{\infty} e^{izt} \langle [A(t), B] \rangle \mathrm{d}t\,.
@@ -361,12 +355,12 @@ Our operator set consists of operators of the type
     A_\gamma \coloneqq  \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
 \end{equation}
 where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
-Different indices are taken as additional set operators, e.g. $n_{\vk \up}$ and $n_{\vk \down}$ are taken into the set separately.
+Different indices are taken as additional set operators, e.g. $n_{\vk \up}$, and $n_{\vk \down}$ are taken into the set separately.
 We then order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.
 \begin{equation}
     X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger\,.
 \end{equation}
-Our set is then $\mathcal{B}_{XP} \coloneqq  {X_i, P_i}$.
+Our set is then $\mathcal{B}_{XP} \coloneqq  \{ X_i, P_i \}$.
 If some operators would be 0 ($P_i$ for any $n$-type term) or duplicates (certain $X_i$ for $g$-type terms), we omit them.
 
 Due to this choice of set, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
@@ -468,7 +462,7 @@ we will describe the behaviour of the occurring modes as the system approaches a
 The spectral functions corresponding to the individual operators in \eqref{eqn:resolvent_bases} are shown in \autoref{fig:resolvent_overview_SC}.
 We chose $U=-2.5$ and $V=\pm0.1$ for both lattices.
 
-There are a variety of different features. The difference between the two lattices is mostly quantitative in nature.
+There are a variety of different features. The difference between the two lattices is mostly quantitative.
 First and foremost, in the SC phase, there is a sharp peak located at $\omega=0$, only in the phase spectral function,
 and another peak, only in the amplitude spectral function, located at $\omega=2\Delta_\text{SC}$.
 We identify them with the well-known Leggett and Higgs modes in superconductors.
@@ -537,7 +531,7 @@ This time around, the exponent is $a\approx-0.5$, indicating that the peak behav
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw_position.pdf}
     \caption{The upper panels show double logarithmic plots of the positions $\omega_0$ of the SC peak in the CDW phases while the lower panels show their respective weights $w_0 = e^{b}$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5$.
-    The fits are linear, i.e., $y(V) = c \ln(V/t) + d$ and the parameters are printed on the individual panals.}
+    The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
     \label{fig:sc_in_cdw_behaviour}
 \end{figure*}
 
