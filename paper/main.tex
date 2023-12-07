@@ -216,7 +216,7 @@ and
         \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_+^* & - \epsilon (-\vk - \vQ)
         \end{pmatrix}\,,
 \end{equation}
-where we defined $\Delta_\pm \coloneqq  \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
+where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
 
 \begin{figure}
     \centering
@@ -237,7 +237,7 @@ We observe that the entire Hamiltonian and thus all expectation values only depe
 i.e., for any operator $\hat{O}$ the following relation holds 
 \begin{equation}
     \label{eqn:equal_expecs}
-    \langle \hat{O}_{\vk} \rangle = \langle \hat{O}_{\vk'} \rangle \eqqcolon \langle \hat{O}_{\gamma} \rangle\,,
+    \langle \hat{O}_{\vk} \rangle = \langle \hat{O}_{\vk'} \rangle \eqqcolon \langle \hat{O}( \gamma ) \rangle\,,
 \end{equation}
 if $\hat{\gamma}(\vk) = \hat{\gamma}(\vk')$.
 While two-dimensional systems around the size of $100\times100$ lattice sites can still be solved by using momentum sums,
@@ -248,7 +248,7 @@ This issue can be resolved by using the aforementioned fact and replacing the mo
 \end{equation}
 As an example, we consider 
 \begin{equation}
-    \Delta_\text{SC} = \frac{U}{2N} \int_{-1}^{1} \dgamma \rho(\gamma) \langle f_{\gamma} \rangle\,.
+    \Delta_\text{SC} = \frac{U}{2N} \int_{-1}^{1} \dgamma \rho(\gamma) \langle f( \gamma ) \rangle\,.
 \end{equation}
 We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
 This allows us to access both two- and three-dimensional models on equal footing.
@@ -283,7 +283,7 @@ We will present the general ideas briefly here and refer the interested reader t
 
 We start with some operator set $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
 i.e., any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
-We can then express any time-depend operator from this set as
+We can then express any time-dependent operator from this set as
 \begin{equation}
     a(t) = \sum_j c_j(t) A_j\,,
 \end{equation}
@@ -323,44 +323,24 @@ then
 \end{equation}
 We will compute $\mM$ by commutating with the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
 
-To study the collective excitation, we investigate various retarded Green's functions 
+We create our operator set on the basis of \eqref{eqn:equal_expecs}.
+It consists of operators of the type
 \begin{equation}
-    G_{AB}^\text{ret} (t) = - i \langle [A(t), B] \rangle \Theta(t)\,,
-\end{equation}
-where $\Theta(t)$ is the Heaviside function, and their Fourier-transformed
-\begin{equation}
-    \label{eqn:standard_gf}
-    G_{AB}(\omega + i0^+) = -i \int_0^{\infty} e^{izt} \langle [A(t), B] \rangle \mathrm{d}t\,.
-\end{equation}
-Our previous choice of pseudo scalar product enables us to write down a matrix-valued Green's functions in terms of the aforementioned matrices
-\begin{align}
-    \label{eqn:green_function}
-    \mathcal{G}(z &= \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN \\
-        &\coloneqq  -\mN \mathcal{R}(z) \mN\,,
-\end{align}
-where we used the resolvent
-\begin{equation}
-    \label{eqn:resolvent}
-    \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}\,.
-\end{equation}
-The entries of this matrix $\mathcal{G}(z)$ are the Fourier transformed Green's functions mentioned in \eqref{eqn:standard_gf} with respect to the operators from the initially chosen set.
-For instance, assume the operator in the set is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
-\begin{equation}
-    \mathcal{G}_{00}(z = \omega +i0^+) =  G(z) = -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
-\end{equation}
-For a detailed derivation of this statement, we refer the reader to the appendix \textcolor{red}{!REF!}.
-
-Our operator set consists of operators of the type
-\begin{equation}
-    A_\gamma \coloneqq  \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
+    A_\gamma \coloneqq \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
 \end{equation}
 where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
-Different indices are taken as additional set operators, e.g. $n_{\vk \up}$, and $n_{\vk \down}$ are taken into the set separately.
-We then order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.
+Operators with different indices are put into the set individually, e.g., $n_{\gamma \up}$, and $n_{\gamma \down}$ are distinct operators in our set.
+
+Naturally, we have to discretize $\gamma$, 
+however, this allows us to obtain good results with drastically smaller matrices compared to a momentum-based operator set and obtain results for a three-dimensional system in the first place.
+Practically, we choose $N_\gamma = 3000$ equally spaced discretization points.
+A detailed explanation of the numerics is provided in the appendix \textcolor{red}{!REF!}.
+
+Next, we order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.,
 \begin{equation}
     X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger\,.
 \end{equation}
-Our set is then $\mathcal{B}_{XP} \coloneqq  \{ X_i, P_i \}$.
+Then, our set is given by $\mathcal{B}_{XP} \coloneqq \{ X_i, P_i \}$.
 If some operators would be 0 ($P_i$ for any $n$-type term) or duplicates (certain $X_i$ for $g$-type terms), we omit them.
 
 Due to this choice of set, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
@@ -372,15 +352,96 @@ Due to this choice of set, the matrices occurring in \eqref{eqn:heisenberg} have
         \Lambda_+ & \mathcal{L} \\ \mathcal{L}^\dagger & \Lambda_-
     \end{pmatrix}\,,
 \end{equation}
-where $\Im [\mathcal{K}_\pm] = \Re [\kappa] = 0$ and $\Re [\Lambda_\pm] = \Im [\mathcal{L}] = 0$.
-Furthermore, if all occurring expectation values are real, both matrices have large empty blocks.
+where the upper block refers to all $X_i$ and the lower block to all $P_i$.
+Furthermore, due to symmetry, the relations $\Im [\mathcal{K}_\pm] = \Re [\kappa] = 0$ and $\Re [\Lambda_\pm] = \Im [\mathcal{L}] = 0$ hold.
+Thus, if all occurring expectation values are real, both matrices have large empty blocks.
 This condition is fulfilled for all cases investigated in this article.
-Additionally, we can utilize this block structure to rewrite \eqref{eqn:resolvent} to
+Additionally, the matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
+We proof this statement in the appendix \textcolor{red}{!REF!}.
+
+To study the collective excitations, we investigate various retarded Green's functions 
 \begin{equation}
-    \mathcal{R}(z) \vert_X = - \check{N}^{-1/2} \frac{1}{z^2 - \underbrace{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}}_{\coloneqq  \check{M}}} \check{N}^{-1/2}\,,
+    G_{AB}^\text{ret} (t) = - i \langle [A(t), B] \rangle \Theta(t)\,,
 \end{equation}
-where $\vert_X$ denotes the block corresponding to the $X$-terms in the set and $\check{N} \coloneqq  \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$.
-An analogous form can be found for the $P$-block.
+and their Fourier-transformed
+\begin{equation}
+    \label{eqn:standard_gf}
+    G_{AB}(\omega + i0^+) = -i \int_0^{\infty} e^{izt} \langle [A(t), B] \rangle \mathrm{d}t\,,
+\end{equation}
+where $\Theta(t)$ is the Heaviside function.
+Our previous choice of pseudo scalar product enables us to write down a matrix-valued Green's functions in terms of the aforementioned matrices
+\begin{align}
+    \label{eqn:green_function}
+    \mathcal{G}(z &= \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN \\
+        &\coloneqq  -\mN \mathcal{R}(z) \mN\,,
+\end{align}
+where we used the resolvent
+\begin{equation}
+    \label{eqn:resolvent}
+    \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}\,.
+\end{equation}
+The entries of this matrix $\mathcal{G}(z)$ are the Fourier-transformed Green's functions mentioned in \eqref{eqn:standard_gf} with respect to the operators from the initially chosen set.
+For instance, assume the operator in the set is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
+\begin{align}
+    \mathcal{G}_{00}(z = \omega +i0^+) &=  G_{f_{\vk}(t) f_{\vk}^\dagger} (z) \nonumber \\
+        &= -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
+\end{align}
+
+In the following, we will derive this relation.
+For that, consider the Fourier-transformed Green's function \eqref{eqn:standard_gf} with respect to two operators $A$ and $B^\dagger$ that are included in our operator set
+\begin{align}
+    G_{AB^\dagger} (z) &= - i \int_0^\infty \exp(izt) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t
+\end{align}
+Since $A$ and $B$ are included in the operator set, we can rewrite them as dot products of the vector
+\begin{equation}
+    \vec{A} \coloneqq  \left( A_1, A_2, \dots, A_N \right)\,, \quad
+    \vec{A}^\dagger \coloneqq  \begin{pmatrix}
+        A_1^\dagger \\ A_2^\dagger \\ \vdots \\ A_N^\dagger
+    \end{pmatrix}\,,
+\end{equation}
+and some other complex-valued vector $\vec{a}$ which has its coefficients set in such a way,
+that $\vec{a} \cdot \vec{A}$ is equal to the desired operator. 
+For instance, $\vec{a} \equiv \vec{e}_1$ in order to represent $A_1$.
+
+Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differential equation \eqref{eqn:heisenberg} to obtain
+\begin{equation}
+    \vec{c}(t) = \exp \left( i \mN^{-1} \mM t \right) \vec{c}(0)\,.
+\end{equation}
+This allows us to finally obtain
+\begin{align}
+    G_{AB^\dagger} (z) &= i \int_0^\infty \exp(izt) \langle [ (\vec{A \cdot} \vec{b}(0))^\dagger, \vec{A} \cdot \vec{a}(t) ] \rangle\ \mathrm{d}t \nonumber \\
+        &= i \int_0^\infty \exp(izt) \vec{b}^\dagger(0) \underbrace{\langle [ \vec{A}^\dagger, \vec{A} ] \rangle}_{\equiv \mN} \vec{a}(t) \mathrm{d}t \nonumber \\
+        &= i  \int_0^\infty \vec{b}^\dagger(0) \mN \exp \left( i \left(\mN^{-1} \mM + z \right) t \right) \vec{a}(0) \mathrm{d}t  \nonumber \\
+        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}(0) \nonumber \\
+        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{ \underbrace{\mM + z \mN}}_{\equiv \mathcal{R}(z)} \mN \right] \vec{a}(0)\,,
+\end{align}
+where $\vec{a}(0)$ and $\vec{b}(0)$ are chosen such, that their product with $\vec{A}$ yields $A(0)$ and $B(0)$, respectively.
+The task at hand is finding the resolvent as $\mathcal{R}$.
+
+To do that, we embrace this matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real.
+Then, with $\mathcal{R}|_X$ denoting the block of a matrix $\mathcal{R}$ corresponding to the $X$-operators, we can calculate
+\begin{align}
+    r(z) &\coloneqq  \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
+        &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + \frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_X \nonumber \\
+        &= \left. \frac{1}{\mM} \sum_{j=0}^\infty \left( -z \mN \frac{1}{\mM} \right)^j \right\vert_X \,.
+\end{align}
+We may omit every second element of the sum, as we want to obtain the upper left block of the matrix, and $\mN$ always swaps the upper left and lower right block.
+Thus, we obtain
+\begin{align}
+    r(z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_X \nonumber \\
+        &= \left. \frac{1}{\mM - z^2 \mN \mM^{-1} \mN} \right\vert_X \nonumber \\
+        &= \frac{1}{\mathcal{K}_+ - z^2 \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger}\,.
+\end{align}
+Next, we define $\check{N} \coloneqq \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$ for brevity.
+Since $\mathcal{M}$ is positive semidefinite and block diagonal, its blocks $\mathcal{K}_\pm$ must be positive semidefinite as well.
+Therefore, $\check{N}$ is also positive semidefinite and we can define its square root.
+We obtain
+\begin{equation}
+    r(z) = \check{N}^{-1/2} \frac{1}{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2} - z^2} \check{N}^{-1/2}\,.
+\end{equation}
+The matrix $\check{M} \coloneqq  \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
+If $\check{N}$ has a singular part, the inverse can be replaced by the pseudo-inverse.
+The same calculation can be repeated by exchanging $X$ with $P$, yielding the relation for the remaining block.
 
 Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
 This can be achieved using a Lanczos tridiagonalization and subsequently a continued fraction expansion in the form of
@@ -391,7 +452,8 @@ This can be achieved using a Lanczos tridiagonalization and subsequently a conti
         a_0 & b_1 & 0 & 0 & \cdots \\
         b_1 & a_1 & b_2 & 0 & \cdots \\
         0 & b_2 & a_2 & b_3 & \cdots \\
-        \vdots & \vdots & \vdots & \vdots & \ddots
+        0 & 0 & b_3 & a_3 & \ddots \\
+        \vdots & \vdots & \vdots & \ddots & \ddots
     \end{pmatrix} \right)_{00}^{-1} = \dfrac{1}{z^2 - a_0 - \dfrac{b_1^2}{z^2 - a_1 - \dfrac{b_2^2}{ z^2 - a_2 - \hdots}}}\,\,
 \end{equation}
 \end{widetext}
@@ -402,12 +464,14 @@ In the single-band case, the coefficients approach the limit
     \label{eqn:inf_lanczos}
     a_\infty = \frac{\omega_+ + \omega_-}{2}\text{  and  } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
 \end{equation}
-where $\omega_\pm$ represents the upper and lower band edge, respectively.
-This behaviour allows us to terminate the continued fraction, if the convergence is good enough, using the so-called square root terminator
+where $\omega_\pm$ represents the upper and lower band edge, respectively \cite{PettiforRecursion}.
+This behaviour allows us to terminate the continued fraction, once the coefficients have converged close enough to these values, using the so-called square root terminator
 \begin{equation}
     T(\omega) = \frac{1}{2b_\infty^2} \left( \omega - a_\infty \mp \sqrt{(\omega - a_\infty)^2 - 4 b_\infty^2} \right)\,,
 \end{equation}
 where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and $|\omega - a_\infty| < 2b_\infty$ and the positive one otherwise.
+It is to be noted, that the coefficients start to drop off from this limit as more and more Lanczos iterations are performed \cite{ViswanathRecursion}.
+Therefore, we terminate the continued fraction with the aforementioned terminator at the coefficient pair that has the least deviation from $a_\infty$ and $b_\infty$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -428,20 +492,25 @@ where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and 
     \label{fig:resolvent_overview_SC}
 \end{figure*}
 
-In this section, we will be investigating four different diagonal Green's functions $G_{AA}(\omega + i0^+)$, namely with
+In this section, we will be investigating four different diagonal Green's functions $G_{AA^\dagger}(\omega + i0^+)$, namely with
 \begin{subequations}
     \label{eqn:resolvent_bases}
     \begin{align}
-        A_\text{Higgs} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right)\,,\\
-        A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right)\,,\\
-        A_\text{CDW} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right)\,,\\
-        A_\text{AFM} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right)\,,
+        A_\text{Higgs} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right) \nonumber \\ 
+            &= \int_{-1}^{1} \rho(\gamma) \left( f(\gamma) + f^\dagger (\gamma) \right) \mathrm{d}\gamma \,,\\
+        A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) \nonumber \\ 
+            &= i \int_{-1}^{1} \rho(\gamma) \left( f(\gamma) - f^\dagger (\gamma) \right) \mathrm{d}\gamma \,,\\
+        A_\text{CDW} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) \nonumber \\ 
+            &= \int_{-1}^{1} \rho(\gamma) \left( g_{\up}(\gamma) + g_{\down}(\gamma) \right) \mathrm{d}\gamma \,,\\
+        A_\text{AFM} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) \nonumber \\ 
+            &= \int_{-1}^{1} \rho(\gamma) \left( g_{\up}(\gamma) - g_{\down}(\gamma) \right) \mathrm{d}\gamma \,,
     \end{align}
 \end{subequations}
 where $N$ is the number of lattice sites in the system. 
-Note, that this choice of normalization cancels out with other system size-dependent terms so that our final results do not depend on it at all.
-The first operator catches the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
+Each one of these operators generates a different kind of collective mode.
+The first operator captures the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
 The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
+Note, that this choice of normalization cancels out with other system size-dependent terms so that our final results do not depend on it at all.
 
 Note additionally, that all of the aforementioned operators are (anti-)Hermitian. 
 Therefore, their commutator $[A^\dagger, A]$ vanishes and, 
@@ -576,47 +645,8 @@ For the CDW phase (panel a) we chose $U=zV + 0.1$ and for the AFM phase (panel b
 \appendix
 \section{Obtaining Green's functions from the iEoM-matrices}
 
-In this appendix section, we will derive the relation between the matrices $\mM, \mN$ from \eqref{eqn:heisenberg} and the Green's functions of the system.
-For that, consider their definition
-\begin{align}
-    G_{AB^\dagger}^\text{ret} (t) &= - i \langle [ A(t), B^\dagger(0) ] \rangle \theta(t) \nonumber \\ 
-    \Rightarrow G^\text{ret} (z = \omega + i0^+) &= - i \int_0^\infty \exp(izt) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t \nonumber
-\end{align}
-Since $A$ and $B$ are included in the operator set, we can rewrite them as dot-products of the vector
-\begin{equation}
-    \vec{A} \coloneqq  \left( A_1, A_2, \dots, A_N \right)\,, \quad
-    \vec{A}^\dagger \coloneqq  \begin{pmatrix}
-        A_1^\dagger \\ A_2^\dagger \\ \vdots \\ A_N^\dagger
-    \end{pmatrix}\,,
-\end{equation}
-and some other vector with complex-valued vector $\vec{a}$ which has its coefficients set in such a way,
-that $\vec{a} \cdot \vec{A}$ is equal to the desired operator. 
-For instance, $\vec{a} \equiv \vec{e}_1$ in order to represent $A_1$.
-Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differential equation \eqref{eqn:heisenberg} to obtain
-\begin{equation}
-    \vec{c}(t) = \exp \left( i \mN^{-1} \mM t \right) \vec{c}(0)\,.
-\end{equation}
-This allows us to finally obtain
-\begin{align}
-    G^\text{ret} (z) &= i \int_0^\infty \exp(izt) \langle [ (\vec{A} \vec{b}(0))^\dagger, \vec{A} \vec{a}(t) ] \rangle\ \mathrm{d}t \nonumber \\
-        &= i \int_0^\infty \exp(izt) \vec{b}^\dagger(0) \underbrace{\langle [ \vec{A}^\dagger, \vec{A} ] \rangle}_{\equiv \mN} \vec{a}(t) \mathrm{d}t \nonumber \\
-        &= i  \int_0^\infty \vec{b}^\dagger(0) \mN \exp \left( i \left(\mN^{-1} \mM + z \right) t \right) \vec{a}(0) \mathrm{d}t  \nonumber \\
-        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}(0) \nonumber \\
-        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{ \underbrace{\mM + z \mN}}_{\equiv \mathcal{R}(z)} \mN \right] \vec{a}(0)\,,
-\end{align}
-where $\vec{a}(0)$ and $\vec{b}(0)$ are chosen such, that their product with $\vec{A}$ yields $A(0)$ and $B(0)$, respectively.
-The task at hand is finding the resolvent as $\mathcal{R}$.
-Normally, one would desire to compute
-\begin{align}
-    \mathcal{R}(z) = \mN^{-1/2} \frac{1}{z +\mN^{-1/2} \mM \mN^{-1/2}} \mN^{-1/2}\,,
-\end{align}
-and then utilize a Lanczos algorithm to obtain a tridiagonal form of $\mN^{-1/2} \mM \mN^{-1/2}$.
-However, $\mN$ is not positive in our case due to the nature of the commutator, which means that $\mN$ cannot have a real square root.
-One could also fathom computing
-\begin{align}
-    \mathcal{R}(z) = \frac{1}{z} \mM^{-1/2} \frac{1}{\mM^{-1/2}\mathcal{N}\mM^{-1/2} + \frac{1}{z} } \mM^{-1/2}\,,
-\end{align}
-which does in fact work, if $\mM$ is positive, however resolving feature that lie near $z=0$ are difficult to resolve.
+
+
 Nevertheless, let us show that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
 For any $\vec{x} \in \mathbb{C}^N$, consider
 \begin{align}
@@ -639,31 +669,6 @@ Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace 
 \end{widetext}
 
 Thus, we are able to compute a real square root of $\mathcal{M}$.
-
-We embrace the matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real.
-Then, with $m|_X$ denoting the block of a matrix $m$ spanned by the $X$-operators in the set, we can calculate
-\begin{align}
-    r(z) &\coloneqq  \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
-        &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + \frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_X \nonumber \\
-        &= \left. \frac{1}{\mM} \sum_{j=0}^\infty \left( -z \mN \frac{1}{\mM} \right)^j \right\vert_X \,.
-\end{align}
-We may omit every second element of the sum, as we want to obtain the upper left block of the matrix, and $\mN$ always swaps the upper left and lower right block.
-Thus, we obtain
-\begin{align}
-    r(z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_X \nonumber \\
-        &= \left. \frac{1}{\mM - z^2 \mN \mM^{-1} \mN} \right\vert_X \nonumber \\
-        &= \frac{1}{\mathcal{K}_+ - z^2 \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger}\,.
-\end{align}
-Next, we define $\mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger \coloneqq  \check{N}$ for brevity.
-Since $\mathcal{M}$ is positive semidefinite and block diagonal, its blocks $\mathcal{K}_\pm$ must be positive semidefinite as well.
-Therefore, $\check{N}$ is also positive semidefinite and we can define its square root.
-The inverse in the following can be replaced by the pseudo-inverse in case $\check{N}$ has a singular part.
-We obtain
-\begin{equation}
-    r(z) = \check{N}^{-1/2} \frac{1}{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2} - z^2} \check{N}^{-1/2}\,.
-\end{equation}
-The matrix $\check{M} \coloneqq  \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
-Hence, we can tridiagonalize it using a standard Lanczos algorithm in order to obtain a continued fraction expansion.
 
 \bibliography{sn-bibliography}
 %\bibliography{../../A_bibinput/liter10.bib}
