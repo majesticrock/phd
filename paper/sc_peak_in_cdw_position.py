@@ -15,7 +15,7 @@ import lib.plot_settings as ps
 from scipy.optimize import curve_fit
 
 Ts = np.array([0.])
-Us = np.array([-2., -2.5])
+Us = np.array([-2.5])
 Vs = np.array(["50.0", "25.0", "15.0", "10.0", "8.0", "6.0", "4.0", "3.5", "3.0", "2.5", "2.0", "1.5", "1.4", "1.3",
                "1.2", "1.1", "1.0", "0.9", "0.8", "0.7", "0.6", "0.5", 
                "0.45", "0.4", "0.35", "0.3", "0.25", "0.2", "0.15",
@@ -36,7 +36,7 @@ fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 8.2), sharex=True, shar
 
 plotters = np.empty((2,2), dtype=ps.CURVEFAMILY)
 
-for i in range(len(Us)):
+for i in range(2):
     counter = 0
     plotters[0][i] = ps.CURVEFAMILY(5, axis=axs[0][i])
     plotters[0][i].set_individual_colors("nice")
@@ -48,7 +48,7 @@ for i in range(len(Us)):
     plotters[1][i].set_individual_linestyles(["-", "", ""])
     plotters[1][i].set_individual_markerstyles(["", "X", "o"])
     
-    for T, U, V in iterate_containers(Ts, Us[i], Vs):
+    for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}/V={V}"
         lower = float(V)
         upper = 8 * float(V) + 2
@@ -94,8 +94,8 @@ for i in range(len(Us)):
     plotters[0][i].plot(v_data[:cut2], peak_positions[:cut2], "X", label="Data Fit 2")
     plotters[0][i].plot(v_data[cut2:cut], peak_positions[cut2:cut], "o", label="Omitted data")
 
-axs[0][0].title.set_text("Square - $U=-2$")
-axs[0][1].title.set_text("Simple cubic - $U=-2.5$")
+axs[0][0].title.set_text("Square")
+axs[0][1].title.set_text("Simple cubic")
 
 axs[1][0].set_xlabel(r"$\ln(V / t)$")
 axs[1][1].set_xlabel(r"$\ln(V / t)$")
