@@ -72,3 +72,4 @@ data/**/test/
 *.exe
 *.out
 *.app
+data/modes/square/mom_test
