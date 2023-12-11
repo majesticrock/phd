@@ -248,7 +248,7 @@ This issue can be resolved by using the aforementioned fact and replacing the mo
 \end{equation}
 As an example, we consider 
 \begin{equation}
-    \Delta_\text{SC} = \frac{U}{2N} \int_{-1}^{1} \dgamma \rho(\gamma) \langle f( \gamma ) \rangle\,.
+    \Delta_\text{SC} = \frac{U}{N} \int_{-1}^{1} \dgamma \rho(\gamma) \langle f( \gamma ) \rangle\,.
 \end{equation}
 We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
 This allows us to access both two- and three-dimensional models on equal footing.
@@ -496,14 +496,10 @@ In this section, we will be investigating four different diagonal Green's functi
 \begin{subequations}
     \label{eqn:resolvent_bases}
     \begin{align}
-        A_\text{Higgs} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right) \nonumber \\ 
-            &= \int_{-1}^{1} \rho(\gamma) \left( f(\gamma) + f^\dagger (\gamma) \right) \mathrm{d}\gamma \,,\\
-        A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) \nonumber \\ 
-            &= i \int_{-1}^{1} \rho(\gamma) \left( f(\gamma) - f^\dagger (\gamma) \right) \mathrm{d}\gamma \,,\\
-        A_\text{CDW} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) \nonumber \\ 
-            &= \int_{-1}^{1} \rho(\gamma) \left( g_{\up}(\gamma) + g_{\down}(\gamma) \right) \mathrm{d}\gamma \,,\\
-        A_\text{AFM} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) \nonumber \\ 
-            &= \int_{-1}^{1} \rho(\gamma) \left( g_{\up}(\gamma) - g_{\down}(\gamma) \right) \mathrm{d}\gamma \,,
+        A_\text{Higgs} &= \frac{1}{N} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right) \,,\\
+        A_\text{Phase} &= \frac{i}{N} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) \,,\\
+        A_\text{CDW} &= \frac{1}{N} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) \,,\\
+        A_\text{AFM} &= \frac{1}{N} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) \,,
     \end{align}
 \end{subequations}
 where $N$ is the number of lattice sites in the system. 

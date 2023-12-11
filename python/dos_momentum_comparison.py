@@ -23,10 +23,10 @@ momentum_based.set_shared_kwargs(linewidth=2*plt.rcParams["lines.linewidth"])
 momentum_based.set_individual_colors("nice2")
 dos_based.set_individual_colors("nice2")
 
-types = [["data/modes/square/dos_3k/", dos_based], ["data/modes/square/momentum_L=40/", momentum_based]]
+types = [["data/modes/square/test/", dos_based], ["data/modes/square/momentum_L=20/", momentum_based]]
 name_suffix = "higgs_SC"
 
-ax.set_yscale("log")
+#ax.set_yscale("log")
 
 plot_upper_lim = 8.5
 
@@ -36,11 +36,8 @@ for folder, curves in types:
     for name in naming_scheme(Ts, Us, Vs):
         data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim, xp_basis=True)
 
-        print(np.trapz(data_imag))
-        if folder == types[0][0]:
-            curves.plot(w_lin, 4 * data_imag)
-        else:
-            curves.plot(w_lin, data_imag)
+        print(np.trapz(data_imag, w_lin))
+        curves.plot(w_lin, data_imag)
         color_labels.append(f"$U={Us[counter]}$")
         counter += 1
 
