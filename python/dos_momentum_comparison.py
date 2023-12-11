@@ -23,10 +23,11 @@ momentum_based.set_shared_kwargs(linewidth=2*plt.rcParams["lines.linewidth"])
 momentum_based.set_individual_colors("nice2")
 dos_based.set_individual_colors("nice2")
 
-types = [["data/modes/square/test/", dos_based], ["data/modes/square/momentum_L=20/", momentum_based]]
+types = [["data/modes/square/test/", dos_based], ["data/modes/square/momentum_L=40/", momentum_based]]
 name_suffix = "higgs_SC"
 
 #ax.set_yscale("log")
+ax.set_ylim(0, 0.75)
 
 plot_upper_lim = 8.5
 
