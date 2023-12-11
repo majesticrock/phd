@@ -4,6 +4,7 @@ import lib.continued_fraction as cf
 from lib.iterate_containers import *
 import lib.plot_settings as ps
 from lib.color_and_linestyle_legends import *
+from lib.resolvent_peak import *
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
@@ -24,20 +25,22 @@ momentum_based.set_individual_colors("nice2")
 dos_based.set_individual_colors("nice2")
 
 types = [["data/modes/square/test/", dos_based], ["data/modes/square/momentum_L=40/", momentum_based]]
-name_suffix = "higgs_SC"
+name_suffix = "higgs_CDW"
 
 #ax.set_yscale("log")
 ax.set_ylim(0, 0.75)
 
-plot_upper_lim = 8.5
+plot_upper_lim = 7.8813
 
 color_labels = []
 for folder, curves in types:
     counter = 0
     for name in naming_scheme(Ts, Us, Vs):
-        data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, plot_upper_lim, xp_basis=True)
-
-        print(np.trapz(data_imag, w_lin))
+        data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0.65, plot_upper_lim, xp_basis=True, number_of_values=1000)
+        peak = Peak(f"{folder}{name}", name_suffix)
+        (peak.improved_peak_position()[0][0])
+        
+        print(res.weight_of_continuum(number_of_values=10000) + peak.compute_weight())
         curves.plot(w_lin, data_imag)
         color_labels.append(f"$U={Us[counter]}$")
         counter += 1
