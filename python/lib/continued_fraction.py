@@ -79,6 +79,17 @@ class ContinuedFraction:
                     return (p + root) / (2. * self.b_infinity**2)
         return return_arr
 
+    def denominator(self, w_param, withTerminator = True):
+        w = w_param**2
+        if withTerminator:
+            G = w - self.A[len(self.A) - self.terminate_at] - self.B[len(self.B) - self.terminate_at] * self.terminator(w_param.real)
+        else:
+            G = w - self.A[len(self.A) - self.terminate_at]
+        for j in range(len(self.A) - self.terminate_at - 1, -1, -1):
+            G = w - self.A[j] - self.B[j + 1] / G
+
+        return G / self.B[0]
+
     def continued_fraction(self, w_param, withTerminator = True):
         w = w_param**2
         if withTerminator:
@@ -108,8 +119,7 @@ class ContinuedFraction:
             plotter(np.sqrt(self.roots[0]), np.sqrt(self.roots[1]), **args)
         else:
             plotter(self.roots[0], self.roots[1], **args)
-
-            
+         
     def continuum_edges(self):
         if not self.z_squared:
             return self.roots
