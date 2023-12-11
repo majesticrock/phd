@@ -51,6 +51,7 @@
 %=======================
 
 \newcommand{\vk}{\vec{k}}
+\newcommand{\vl}{\vec{l}}
 \newcommand{\vQ}{\vec{Q}}
 \newcommand{\up}{\uparrow}
 \newcommand{\down}{\downarrow}
@@ -298,6 +299,7 @@ Inserting this into the Heisenberg equation of motion and applying an operator s
     \end{aligned}
 \end{equation}
 The matrices $\mN$ and $\mM$ contain all the dynamics and energetic properties of the system.
+The former is referred to as a dynamical matrix while the latter is called a norm matrix.
 The advantage is that one can now handle simple matrices rather than operators acting on an enormous Hilbert space.
 The size of these matrices depends entirely on the set of operators.
 
@@ -326,6 +328,7 @@ We will compute $\mM$ by commutating with the full Hubbard Hamiltonian \eqref{eq
 We create our operator set on the basis of \eqref{eqn:equal_expecs}.
 It consists of operators of the type
 \begin{equation}
+    \label{eqn:ieom_basis_operator}
     A_\gamma \coloneqq \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
 \end{equation}
 where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
@@ -421,14 +424,14 @@ The task at hand is finding the resolvent as $\mathcal{R}$.
 To do that, we embrace this matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real.
 Then, with $\mathcal{R}|_X$ denoting the block of a matrix $\mathcal{R}$ corresponding to the $X$-operators, we can calculate
 \begin{align}
-    r(z) &\coloneqq  \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
+    r_X (z) &\coloneqq \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
         &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + \frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_X \nonumber \\
         &= \left. \frac{1}{\mM} \sum_{j=0}^\infty \left( -z \mN \frac{1}{\mM} \right)^j \right\vert_X \,.
 \end{align}
 We may omit every second element of the sum, as we want to obtain the upper left block of the matrix, and $\mN$ always swaps the upper left and lower right block.
 Thus, we obtain
 \begin{align}
-    r(z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_X \nonumber \\
+    r_X (z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_X \nonumber \\
         &= \left. \frac{1}{\mM - z^2 \mN \mM^{-1} \mN} \right\vert_X \nonumber \\
         &= \frac{1}{\mathcal{K}_+ - z^2 \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger}\,.
 \end{align}
@@ -437,11 +440,22 @@ Since $\mathcal{M}$ is positive semidefinite and block diagonal, its blocks $\ma
 Therefore, $\check{N}$ is also positive semidefinite and we can define its square root.
 We obtain
 \begin{equation}
-    r(z) = \check{N}^{-1/2} \frac{1}{\check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2} - z^2} \check{N}^{-1/2}\,.
+    r_X (z) = -\check{N}^{-1/2} \frac{1}{z^2 - \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}} \check{N}^{-1/2}\,.
 \end{equation}
-The matrix $\check{M} \coloneqq  \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
+The matrix $\check{M} \coloneqq \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
 If $\check{N}$ has a singular part, the inverse can be replaced by the pseudo-inverse.
 The same calculation can be repeated by exchanging $X$ with $P$, yielding the relation for the remaining block.
+Then, the definitions of the matrices above change in the following way
+\begin{equation}
+    \check{N}_P \coloneqq \mathcal{L}^\dagger \mathcal{K}_+^{-1} \mathcal{L}\,,\quad \check{M}_P \coloneqq \check{N}_P^{-1/2} \mathcal{K}_- \check{N}_P^{-1/2}\,.
+\end{equation}
+In conclusion, the Green's function is given by
+\begin{subequations}
+    \begin{align}
+        G_{AB^\dagger} \vert_P (z) &= - \left[ \vec{b}^\dagger (0) \right]_P \mathcal{L}^\dagger r_X (z) \mathcal{L} \left[ \vec{a}(0) \right]_P\,, \\
+        G_{AB^\dagger} \vert_X (z) &= - \left[ \vec{b}^\dagger (0) \right]_X \mathcal{L} r_P (z) \mathcal{L}^\dagger \left[ \vec{a}(0) \right]_X\,.
+    \end{align}
+\end{subequations}
 
 Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
 This can be achieved using a Lanczos tridiagonalization and subsequently a continued fraction expansion in the form of
@@ -452,13 +466,24 @@ This can be achieved using a Lanczos tridiagonalization and subsequently a conti
         a_0 & b_1 & 0 & 0 & \cdots \\
         b_1 & a_1 & b_2 & 0 & \cdots \\
         0 & b_2 & a_2 & b_3 & \cdots \\
-        0 & 0 & b_3 & a_3 & \ddots \\
-        \vdots & \vdots & \vdots & \ddots & \ddots
+        0 & 0 & b_3 & a_3 & \cdots \\
+        \vdots & \vdots & \vdots & \vdots & \ddots
     \end{pmatrix} \right)_{00}^{-1} = \dfrac{1}{z^2 - a_0 - \dfrac{b_1^2}{z^2 - a_1 - \dfrac{b_2^2}{ z^2 - a_2 - \hdots}}}\,\,
 \end{equation}
 \end{widetext}
 
 where $a_i$ and $b_i$ are the Lanczos coefficients \cite{PettiforRecursion,ViswanathRecursion}.
+Obtaining a diagonal block of $\mathcal{G}$ is easily achieved by setting $\vec{b}(0) = \vec{a}(0)$.
+Obtaining an off-diagonal block requires linear combinations in the form of \textcolor{red}{Ich bin damit nicht glücklich, da $\mathcal{G}$ ja eigentlich nicht hermitisch ist (wegen dem $z = \omega + i0^+$).
+Das ist für die Ergebnisse völlig egal, da ich eh nur diagonale Blöcke betrachte, aber nunja...}
+\begin{subequations}
+    \begin{align}
+        4 \Re [ \vec{a}^\dagger \mathcal{G} \vec{b} ] &= (\vec{a} + \vec{b})^\dagger \mathcal{G} (\vec{a} + \vec{b}) - (\vec{a} - \vec{b})^\dagger \mathcal{G} (\vec{a} - \vec{b}) \nonumber \\
+            &= 2 \vec{a}^\dagger \mathcal{G} \vec{b} + 2 \vec{b}^\dagger \mathcal{G} \vec{a}\,, \\
+        4i \Im [ \vec{a}^\dagger \mathcal{G} \vec{b} ] &= (\vec{a} + i \vec{b})^\dagger \mathcal{G} (\vec{a} + i \vec{b}) - (\vec{a} - i \vec{b})^\dagger \mathcal{G} (\vec{a} - i \vec{b}) \nonumber \\
+            &= 2i \vec{a}^\dagger \mathcal{G} \vec{b} - 2i \vec{b}^\dagger \mathcal{G} \vec{a}\,.
+    \end{align}
+\end{subequations}
 In the single-band case, the coefficients approach the limit
 \begin{equation}
     \label{eqn:inf_lanczos}
@@ -639,11 +664,9 @@ For the CDW phase (panel a) we chose $U=zV + 0.1$ and for the AFM phase (panel b
 \end{acknowledgments}
 
 \appendix
-\section{Obtaining Green's functions from the iEoM-matrices}
+\section{Semipositivity of the dynamical matrix}
 
-
-
-Nevertheless, let us show that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
+We show that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
 For any $\vec{x} \in \mathbb{C}^N$, consider
 \begin{align}
     \vec{x}^\dagger \mM \vec{x} &= \sum_{ij} x_i^* x_j \mM_{ij} \nonumber \\
@@ -660,11 +683,34 @@ Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace 
             &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B^\dagger \ket{\psi_j} \right] \nonumber \\
             &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) \underbrace{ \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} \bra{\psi_i} B^\dagger \ket{\psi_j} \right]}_{\coloneqq C_{ij} = C_{ji} \geq 0} \nonumber \\
             &= \frac{1}{2Z} \left[ \sum_{ij} C_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) - \sum_{ij} C_{ij} e^{-\beta \epsilon_i} (\epsilon_i - \epsilon_j) \right] \nonumber \\
-            &= \frac{1}{2Z} \sum_{ij} C_{ij} \left( e^{-\beta \epsilon_j} - e^{-\beta \epsilon_i} \right) \left( \epsilon_i - \epsilon_j \right) \geq 0\,.
+            &= \frac{1}{2Z} \sum_{ij} C_{ij} \left( e^{-\beta \epsilon_j} - e^{-\beta \epsilon_i} \right) \left( \epsilon_i - \epsilon_j \right) \geq 0 \,.
     \end{align}
 \end{widetext}
 
-Thus, we are able to compute a real square root of $\mathcal{M}$.
+\section{Numerical treatment of the iEoM matrices}
+
+We would like to use operators like \eqref{eqn:ieom_basis_operator} to span our operator set.
+However, numerically, it is impossible to matrices with infinite dimensions, requiring us to discretize.
+Additionally, we cannot numerically write down $\delta$ distributions as matrix elements. Therefore, we need some special treatments, which we will describe in this section.
+We discretize the $\gamma$-space equally with each abscissa $\gamma_i$ being spaced by $\Delta \gamma$.
+Then, we define an approximate $\delta$ function
+\begin{equation}
+    h(\gamma) \coloneqq \begin{cases}
+        \frac{1}{\Delta \gamma} & |\gamma| < \frac{\Delta \gamma}{2} \\ 0 & \text{otherwise}
+    \end{cases}\,.
+\end{equation}
+Computing an integral yields
+\begin{equation}
+    \int f(\tilde{\gamma}) h(\tilde{\gamma} - \gamma_j) \mathrm{d} \tilde{\gamma} \approx \sum_i f(\gamma_i) h(\gamma_i - \gamma_j) \Delta \gamma = f(\gamma_j)\,,
+\end{equation}
+and thereby mimicking the continuous $\delta$ distribution for a discrete description.
+Note, that if one takes the limit $\Delta \gamma \to 0$ there $\delta$ distribution is exactly reproduced.
+
+Numerically, we can compute the matrix elements like this
+\begin{align}
+    (A_i | A_j) &= \frac{(\Delta \gamma)^2}{N} \sum_{\vk \vl} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vl)) (A_{\vk} | A_{\vl}) 
+\end{align}
+
 
 \bibliography{sn-bibliography}
 %\bibliography{../../A_bibinput/liter10.bib}
