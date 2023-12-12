@@ -32,29 +32,29 @@ for i in range(nrows):
         plotters[i][j].set_individual_dashes([(1,0), (6,6), (1,0), (6,6)])
 
 plot_lower_lim = 0#-0.05
-plot_upper_lim = 5.2
+plot_upper_lim = 5.37
 
 name_suffices = ["phase_SC", "higgs_SC", "CDW", "AFM"]
 labels = ["Phase", "Higgs", "CDW", "AFM"]
 
 for j, folder in enumerate(folders):
-    usage_upper_lim = 2 * plot_upper_lim if j == 0 else 2.7 * plot_upper_lim
+    usage_upper_lim = 2 * plot_upper_lim if j == 0 else 2.8 * plot_upper_lim
     if j == 1: 
         # the sc lattice uses a different V for the CDW-AFM border due to the changed coordination number
-        params[0][2] = 0.75
-        params[1][2] = 0.75
-        params[0][1] = 4.6
-        params[1][1] = 4.4
+        params[0][1] = 6.1
+        params[1][1] = 5.9
         
     for i, name in enumerate(naming_scheme_tuples(params)):
         resolvents = np.empty(len(name_suffices), dtype=cf.ContinuedFraction)
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, resolvents[k] = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
-                                                            number_of_values=5000, xp_basis=True, imaginary_offset=1e-5, messages=False)
+                                                            number_of_values=10000, xp_basis=True, imaginary_offset=1e-5, messages=False)
             plotters[i][j].plot(w_lin, SCALE*data, label=label)
             
         cont = np.sqrt(resolvents[0].roots[0])
-        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.3, 0.75, (cont - 0.02, cont), ylim=(0, 0.55), 
+        zoomed_region = (cont - 0.02, cont) if j == 0 else (cont - 0.07, cont - 0.03) 
+
+        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.55), 
                             y_funcs=[lambda x, res=res: SCALE*res.spectral_density(x + 1e-5j) for res in resolvents])
   
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
@@ -68,8 +68,8 @@ for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
 for i in range(nrows):
     axs[i][0].set_ylabel(r"$\mathcal{A}(\omega + i0^+) [t^{-1}]$")
-axs[0][0].title.set_text("Square - $V=1t$")
-axs[0][1].title.set_text("Simple cubic - $V=0.75t$")
+axs[0][0].title.set_text("Square")
+axs[0][1].title.set_text("Simple cubic")
 
 axs[0][1].text(11.5, 0.87, r"(a) AFM")
 axs[1][1].text(11.5, 0.87, r"(b) CDW")
