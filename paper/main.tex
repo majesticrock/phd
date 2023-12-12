@@ -521,10 +521,10 @@ In this section, we will be investigating four different diagonal Green's functi
 \begin{subequations}
     \label{eqn:resolvent_bases}
     \begin{align}
-        A_\text{Higgs} &= \frac{1}{N} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right) \,,\\
-        A_\text{Phase} &= \frac{i}{N} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) \,,\\
-        A_\text{CDW} &= \frac{1}{N} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) \,,\\
-        A_\text{AFM} &= \frac{1}{N} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) \,,
+        A_\text{Higgs} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right) \,,\\
+        A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) \,,\\
+        A_\text{CDW}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) \,,\\
+        A_\text{AFM}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) \,,
     \end{align}
 \end{subequations}
 where $N$ is the number of lattice sites in the system. 
@@ -533,14 +533,8 @@ The first operator captures the amplitude mode of the $s$-wave superconducting s
 The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
 Note, that this choice of normalization cancels out with other system size-dependent terms so that our final results do not depend on it at all.
 
-Note additionally, that all of the aforementioned operators are (anti-)Hermitian. 
-Therefore, their commutator $[A^\dagger, A]$ vanishes and, 
-abiding by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80},
-all spectral functions
-\begin{equation}
-    \mathcal{A}(\omega) = -\frac{1}{\pi} \Im \left[ \mathcal{G}(\omega + i0^+) \right]
-\end{equation}
-must be symmetrical about $\omega=0$.
+Note additionally, that all of the aforementioned operators are Hermitian. 
+This that all spectral functions need to be completely antisymmetrical, see \autoref{sec:antisymmetry_spectral}.
 For this reason, we will only show the $\omega \geq 0$ in our plots. 
 Additionally, we will add a small imaginary part of $10^{-5}$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
 
@@ -708,8 +702,35 @@ Note, that if one takes the limit $\Delta \gamma \to 0$ there $\delta$ distribut
 
 Numerically, we can compute the matrix elements like this
 \begin{align}
-    (A_i | A_j) &= \frac{(\Delta \gamma)^2}{N} \sum_{\vk \vl} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vl)) (A_{\vk} | A_{\vl}) 
+    (A_i | A_j) &= \frac{(\Delta \gamma)^2}{N} \sum_{\vk \vl} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vl)) (A_{\vk} | A_{\vl})\,.
 \end{align}
+Here, all expression are finite numbers and do not require further treatment.
+Mutatis mutandis, one obtains a similar expression for $(A_i | [H, A_j])$.
+Additionally note, that the expressions $(A_{\vk} | A_{\vl})$ and $(A_{\vk} | [H, A_{\vl}])$ can be reduced to sums of terms that are proportional to $\gamma_i$ or $\gamma_j$, respectively.
+Therefore, it is not necessary to implement any sort of momentum space computations.
+
+\section{Antisymmetry of the spectral functions}
+\label{sec:antisymmetry_spectral}
+
+Consider any Hermitian operator $A$. 
+We compute the Fourier-transformed Green's function for positive and negative $\omega$
+\begin{align}
+    G_{AA}(\omega) &= -i \int_0^\infty e^{i \omega t} \langle [A(t), A] \rangle \mathrm{d}t\,, \nonumber \\
+    G_{AA}(- \omega) &= -i \int_0^\infty e^{-i \omega t} \langle [A(t), A] \rangle \mathrm{d}t\,.
+\end{align}
+We also compute the complex conjugate of the former
+\begin{align}
+    G_{AA}^* (\omega) &= i \int_0^\infty e^{-i \omega t} \langle [A(t), A] \rangle^* \mathrm{d}t \nonumber \\
+        &= i \int_0^\infty e^{-i \omega t} \langle [A^\dagger, A^\dagger(t)] \rangle \\
+        &= -i \int_0^\infty e^{-i \omega t} \langle [A(t), A] \rangle \\
+        &= G_{AA}(- \omega)
+\end{align}
+Taking the imaginary part reveals
+\begin{align}
+    \Im [ G_{AA}^* (\omega) ] = - \Im [G_{AA} (\omega) ] = \Im [G_{AA} (-\omega)]\,.
+\end{align}
+This proves that the imaginary part of such a Fourier-transformed Green's function is antisymmetrical and therefore the same applies to the spectral functions.
+Note that this fully abides by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80}.
 
 
 \bibliography{sn-bibliography}
