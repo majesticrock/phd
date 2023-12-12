@@ -1,4 +1,3 @@
-from mimetypes import init
 import numpy as np
 import scipy.optimize as opt
 import lib.continued_fraction as cf
@@ -45,3 +44,7 @@ class Peak:
         self.popt, self.pcov = opt.curve_fit(linear_function, w_log, y_data)
         return self.popt, self.pcov, w_log, y_data
     
+    def compute_weight(self):
+        self.fit_real_part(begin_offset=1e-9, range=0.02)
+        print(self.popt)
+        return np.exp(self.popt[1]) / 2
