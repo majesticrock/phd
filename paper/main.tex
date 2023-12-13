@@ -521,30 +521,28 @@ In this section, we will be investigating four different diagonal Green's functi
 \begin{subequations}
     \label{eqn:resolvent_bases}
     \begin{align}
-        A_\text{Higgs} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right) \,,\\
-        A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) \,,\\
-        A_\text{CDW}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) \,,\\
-        A_\text{AFM}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) \,,
+        A_\text{Higgs} &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} + f_{\vk}^\dagger \right)  
+            = \int \dgamma \left( f_{\gamma} + f_{\gamma}^\dagger \right) \,,\\
+        A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) = \int \dgamma \left( f_{\gamma} - f_{\gamma}^\dagger \right) \,,\\
+        A_\text{CDW}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) = \int \dgamma \left( g_{\gamma \up} + g_{\gamma \down} \right) \,,\\
+        A_\text{AFM}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) = \int \dgamma \left( g_{\gamma \up} - g_{\gamma \down} \right) \,,
     \end{align}
 \end{subequations}
 where $N$ is the number of lattice sites in the system. 
 Each one of these operators generates a different kind of collective mode.
 The first operator captures the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
 The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
-Note, that this choice of normalization cancels out with other system size-dependent terms so that our final results do not depend on it at all.
 
-Note additionally, that all of the aforementioned operators are Hermitian. 
-This that all spectral functions need to be completely antisymmetrical, see \autoref{sec:antisymmetry_spectral}.
+Note, that all of the aforementioned operators are Hermitian. 
+This means that all spectral functions need to be completely antisymmetrical, see \autoref{sec:antisymmetry_spectral}.
 For this reason, we will only show the $\omega \geq 0$ in our plots. 
-Additionally, we will add a small imaginary part of $10^{-5}$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
+Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
 
-\subsection{SC-CDW transition}
+\subsection{Classification of the spectral functions}
 
-Let us first show and discuss the general form of the spectral functions in the SC and CDW phase and afterward, 
-we will describe the behaviour of the occurring modes as the system approaches a phase transition.
-
-The spectral functions corresponding to the individual operators in \eqref{eqn:resolvent_bases} are shown in \autoref{fig:resolvent_overview_SC}.
-We chose $U=-2.5$ and $V=\pm0.1$ for both lattices.
+To begin, let us describe the the spectral function with respect to the operators above in the various phases.
+A plot of those in the SC and CDW phase, close to the phase transition, is shown in \autoref{fig:resolvent_overview_SC}.
+We chose $U=-2.5t$ and $V=\pm0.1t$ for both lattices.
 
 There are a variety of different features. The difference between the two lattices is mostly quantitative.
 First and foremost, in the SC phase, there is a sharp peak located at $\omega=0$, only in the phase spectral function,
@@ -556,37 +554,14 @@ The CDW spectral function shows a peak below the continuum only in the SC phase 
 The AFM spectral function is restricted to the continuum for both phases and both lattices.
 For the square lattice, however, there is a peak located at the upper edge of the two-particle continuum.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.48\textwidth]{plots/phase_peak.pdf}
-    \caption{Phase Green's function}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.48\textwidth]{plots/cdw_peak_in_sc.pdf}
-    \caption{Log-log plot of the real part of the phase (a) and CDW (b) Green's functions in the SC phase.
-        The results for both lattice types are shown but are qualitatively identical.
-        The power-law exponent is $a=-2$ and $a=-1$, respectively, indicating that the CDW peak is a $\delta$ distribution, while the phase peak is the derivative of one.}
-        \label{fig:peaks_in_sc}
-\end{figure}
-
-
-\textcolor{red}{Die Festellung, dass die Peaks deltas bzw Ableitungen von deltas sind, könnte ich mir auch in einem Anhang vorstellen.}
-To further classify the aforementioned peak that lies outside the two-particle continuum,
+To further classify the aforementioned peaks that lie outside the two-particle continuum,
 we turn towards the real part of the Green's function.
-We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly to obtain its power-law behaviour.
-In practice, we use
-\begin{align}
-    \ln(\Re[\mathcal{G}](\omega - \omega_0 )) &= a \ln(\omega - \omega_0) + b \nonumber \\ 
-    \Leftrightarrow \Re[\mathcal{G}] (\omega) &= (\omega - \omega_0)^a e^b\,,
-\end{align}
-where $\omega_0$ is the peak's position and $a, b$ are fit parameters.
-The real part is related to the imaginary part via the Kramers-Kronig relations. \textcolor{red}{Zitiert man die oder nimmt man an, dass jeder weiß, worum es da geht?}
-Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$ and the peak has the weight $\exp(b)$.
+We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behaviour.
+The real part is related to the imaginary part via the Kramers-Kronig relations.
+Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$ and the peak has the weight $w_0 = \exp(b)$.
 Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e., $\delta'(\omega - \omega_0)$.
 
-The plots for the phase peak and the CDW peak in the SC phase can be seen in \autoref{fig:peaks_in_sc}.
+The plots for the phase peak and the CDW peak in the SC phase can be found in \autoref{sec:fit_greens_functions}.
 The SC peak in the CDW phase behaves similarly to the latter and is therefore not shown explicitly.
 We get a good agreement with the power-law behaviour near the peaks with the exponents $a=-2$ (phase) and $a=-1$ (CDW), respectively.
 Therefore, we conclude that the CDW peak corresponds to a $\delta$ distribution, while the phase peak is its derivative.
@@ -594,21 +569,31 @@ Note, that the latter is located at $\omega=0$ of a perfectly asymmetrical boson
 This is given here, because $\int \delta'(\omega) \mathrm{d}\omega = 0$.
 The peak itself can be interpreted as two $\delta$ distributions at $0^\pm$.
 
-\begin{figure}
+\begin{figure*}
     \centering
-    \includegraphics[width=.48\textwidth]{plots/higgs_peak.pdf}
-    \caption{Log-log plot of the Higgs spectral function near $\omega = \omega_0 = 2\Delta_\text{SC}$ in the SC phase.
-    We additionally plot the difference between the Higgs and the phase spectral functions and fit it, as we interpret the latter as a background within the two-particle continuum.
-    The upper (lower) panel shows the results for the square (simple cubic) lattice.
-    The spectral function behaves as $1 / \sqrt{\omega - \omega_0}$.}
-    \label{fig:higgs_peak}
-\end{figure}
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The shaded area marks the two-particle continuum.
+    The panels (a) and (b) show the spectral functions in the CDW and AFM phases, respectively.}
+    \label{fig:resolvent_overview_AFM}
+\end{figure*}
 
-Next, we will investigate the Higgs peak. 
-Additionally, we see in \autoref{fig:resolvent_overview_SC} that the Higgs and phase spectral functions become indistinguishable towards the upper half of the two-particle continuum.
+Next, we will investigate the Higgs peak, this time around, turning towards the spectral function itself. 
+We see in \autoref{fig:resolvent_overview_SC} that the Higgs and phase spectral functions become indistinguishable towards the upper half of the two-particle continuum.
 Therefore, we interpret the latter as a background to the Higgs peak itself and compute the difference between both spectral functions.
-We plot the result double logarithmically and fit it again linearly, as seen in \autoref{fig:higgs_peak}.
-This time around, the exponent is $a\approx-0.5$, indicating that the peak behaves as $1 / \sqrt{\omega - \omega_0}$.
+Using the same methodology as before we obtain that the exponent is $a\approx-0.5$, indicating that the peak behaves as $1 / \sqrt{\omega - \omega_0}$.
+
+Lastly, we investigate the same spectral functions close to the AFM-CDW phase transition, depicted in \autoref{fig:resolvent_overview_AFM}.
+We choose $V=1t$ for both lattices and $U=zV \pm 0.1t$, where $z$ is the coordination number.
+Again, the both SC-related spectral functions are identical in both the CDW and AFM phase.
+Within the continuum their weight is shifted towards the upper edge and on the square lattice only, there is a peak above the continuum.
+In the AFM phase, both the CDW and AFM spectral functions have a peak close, but yet below, the two-particle continuum.
+The AFM peak is at a lower energy than the CDW one.
+In the CDW phase, this behaviour is reversed, i.e., the CDW peak lies lower.
+Using the same analysis as before, we conclude that each of these peaks is a $\delta$-peak.
+
+\subsection{SC-CDW transition}
 
 \begin{figure*}
     \centering
@@ -624,20 +609,7 @@ With the prevalent peaks discussed, we turn towards their behaviour as the syste
 
 \subsection{AFM-CDW transition}
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    %The left edge of the plots is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
-    The shaded area marks the two-particle continuum.
-    The panels (a) and (b) show the spectral functions in the CDW and AFM phases, respectively.}
-    \label{fig:resolvent_overview_AFM}
-\end{figure*}
-
-Similar to the previous section, we will first show the general form of the spectral functions with respect to the operators \eqref{eqn:resolvent_bases}.
-They are depicted in \autoref{fig:resolvent_overview_AFM}, choosing $V=1$ for the square lattice and $V=0.75$ for the simple cubic lattice.
-For the CDW phase (panel a) we chose $U=zV + 0.1$ and for the AFM phase (panel b) $V=zV - 0.1$.
+TODO
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -667,7 +639,11 @@ For any $\vec{x} \in \mathbb{C}^N$, consider
         &= \langle \left[ \sum_i x_i^* A_i^\dagger, \left[ H, \sum_j x_j A_j \right] \right]  \rangle \nonumber \\
         &= \langle [B^\dagger, [H, B]] \rangle\,,\quad B \coloneqq  \sum_j x_j A_j\,.
 \end{align}
-Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace [\exp(-\beta H_\text{MF}) O]$, where $\beta$ is the inverse temperature and $Z$ the partition function, and the commutators, we obtain
+For $\mM$ to be positive semidefinite the expression above must not be negative.
+Therefore, we need to show, that any diagonal element of $\mM$ is nonnegative.
+To do this, we expand the commutators and the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace [\exp(-\beta H_\text{MF}) O]$, 
+where $\beta$ is the inverse temperature and $Z$ the partition function.
+This procedure yields
 
 \begin{widetext}
     \begin{align}
@@ -680,6 +656,9 @@ Expanding the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace 
             &= \frac{1}{2Z} \sum_{ij} C_{ij} \left( e^{-\beta \epsilon_j} - e^{-\beta \epsilon_i} \right) \left( \epsilon_i - \epsilon_j \right) \geq 0 \,.
     \end{align}
 \end{widetext}
+
+This concludes our proof. Note, that the only assumption made, is that the expectation is to be taken with respect to the thermal equilibrium.
+
 
 \section{Numerical treatment of the iEoM matrices}
 
@@ -732,6 +711,33 @@ Taking the imaginary part reveals
 This proves that the imaginary part of such a Fourier-transformed Green's function is antisymmetrical and therefore the same applies to the spectral functions.
 Note that this fully abides by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80}.
 
+\section{Fits to the Green's functions}
+\label{sec:fit_greens_functions}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.48\textwidth]{plots/phase_peak.pdf}
+    \caption{Phase Green's function}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.48\textwidth]{plots/cdw_peak_in_sc.pdf}
+    \caption{Log-log plot of the real part of the phase (a) and CDW (b) Green's functions in the SC phase.
+        The results for both lattice types are shown but are qualitatively identical.
+        The power-law exponent is $a=-2$ and $a=-1$, respectively, indicating that the CDW peak is a $\delta$ distribution, while the phase peak is the derivative of one.}
+        \label{fig:peaks_in_sc}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.48\textwidth]{plots/higgs_peak.pdf}
+    \caption{Log-log plot of the Higgs spectral function near $\omega = \omega_0 = 2\Delta_\text{SC}$ in the SC phase.
+    We additionally plot the difference between the Higgs and the phase spectral functions and fit it, as we interpret the latter as a background within the two-particle continuum.
+    The upper (lower) panel shows the results for the square (simple cubic) lattice.
+    The spectral function behaves as $1 / \sqrt{\omega - \omega_0}$.}
+    \label{fig:higgs_peak}
+\end{figure}
 
 \bibliography{sn-bibliography}
 %\bibliography{../../A_bibinput/liter10.bib}
