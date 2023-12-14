@@ -9,23 +9,25 @@ from lib.extract_key import *
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
-realPart = False
+realPart = True
 both = False
 
 Ts = np.array([0.0])
-Us = np.array([-2.0, -2.5, -3., -3.5])
-Vs = np.array([-0.1])
+Us = np.array([-2.5])
+Vs = np.array([4., 6., 8., 10., 15., 25., 50.])
 
-folder = "data/modes/cube/dos_6k/"
+folder = "data/modes/cube/dos_3k/"
 fig, ax = plt.subplots()
 
 if realPart or both:
     ax.set_xscale("log")
     ax.set_yscale("symlog")
-else:
-    ax.set_yscale("log")
+#else:
+#    ax.set_yscale("log")
 
-plot_upper_lim = 1
+
+plot_lower_lim = 20
+plot_upper_lim = 620
 name_suffix = "phase_SC"
 
 realPlotter = ps.CURVEFAMILY(total_size(Ts, Us, Vs), axis=ax, allow_cycle=True)
@@ -45,7 +47,7 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     elif len(Vs) > 1:
         label = f"$V={V}$"
     
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, 0, upper_edge=plot_upper_lim, number_of_values=20000, imaginary_offset=1e-6, xp_basis=True)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, lower_edge=plot_lower_lim, upper_edge=plot_upper_lim, number_of_values=20000, imaginary_offset=1e-1, xp_basis=True)
     print(w_lin[np.argmax(data)])
     if realPart or both:
         realPlotter.plot(w_lin, data_real, label=label)

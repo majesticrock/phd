@@ -34,14 +34,14 @@ class ContinuedFraction:
         # The lanczos coefficients have an oscillating behaviour at the beginnig
         # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
         # Therefore, we omit the first n (10) data points from our best fit search
-        ingore_first = 10
+        ingore_first = 20
         best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
 
-        artifacts = find_peaks(self.B[1:], prominence=5e2, width=1)
-        if len(artifacts[0]) > 0:
-            first_artifact = artifacts[0][0] - 2 - int(artifacts[1]["widths"][0])
-            if best_approx > first_artifact:
-                best_approx = first_artifact
+        #artifacts = find_peaks(self.B[1:], prominence=5e2, width=1)
+        #if len(artifacts[0]) > 0:
+        #    first_artifact = artifacts[0][0] - 2 - int(artifacts[1]["widths"][0])
+        #    if best_approx > first_artifact:
+        #        best_approx = first_artifact
         #best_approx = 100
         self.terminate_at = len(self.A) - best_approx
         if self.messages: 

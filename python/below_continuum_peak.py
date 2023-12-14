@@ -4,16 +4,17 @@ import lib.resolvent_peak as rp
 reversed = True
 
 T = 0.0
-U = 3.7
-V = 1.0
+U = -2.5
+V = 25.
 name = f"T={T}/U={U}/V={V}"
-folder = "data/modes/square/dos_900/"
-name_suffix = "AFM"
+folder = "data/modes/cube/dos_3k/"
+name_suffix = "higgs_SC"
 fig, ax = plt.subplots()
 
-peak = rp.Peak(f"{folder}{name}", name_suffix, initial_search_bounds=(1., 4.))
-peak.improved_peak_position(x0_offset=1e-2, gradient_epsilon=1e-12)
-popt, pcov, w_space, y_data = peak.fit_real_part(range=0.01, begin_offset=1e-10, reversed=True)
+peak = rp.Peak(f"{folder}{name}", name_suffix, initial_search_bounds=(290., 310.), imaginary_offset=1e-5)
+print(peak.peak_position)
+print(peak.improved_peak_position(x0_offset=1e-2, gradient_epsilon=1e-12))
+popt, pcov, w_space, y_data = peak.fit_real_part(range=0.01, begin_offset=1e-8)
 
 ax.text(0.05, 0.35, f"$a={popt[0]:.5f}$", transform = ax.transAxes)
 ax.text(0.05, 0.3, f"$b={popt[1]:.5f}$", transform = ax.transAxes)
