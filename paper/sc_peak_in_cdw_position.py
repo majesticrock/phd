@@ -16,13 +16,12 @@ from scipy.optimize import curve_fit
 
 Ts = np.array([0.])
 Us = np.array([-2.5])
-Vs = np.array(["50.0", "25.0", "15.0", "10.0", "8.0", "6.0", "4.0", "3.5", "3.0", "2.5", "2.0", "1.5", "1.4", "1.3",
-               "1.2", "1.1", "1.0", "0.9", "0.8", "0.7", "0.6", "0.5", 
-               "0.45", "0.4", "0.35", "0.3", "0.25", "0.2", "0.15",
-               "0.1", "0.07", "0.05", "0.04", "0.03", "0.02", "0.01", 
-               "0.007", "0.005", "0.004", "0.003", "0.002", "0.0015", "0.001", 
-               "0.0007", "0.0005", "0.0004", "0.0003", "0.0002", "0.00015", "0.0001", 
-               "0.00007", "0.00005", "0.00003"])
+Vs = np.array(["0.00001", "0.00002", "0.00003", "0.00004", "0.00005", "0.00006", "0.00007", "0.00008", "0.00009", 
+               "0.0001", "0.0002", "0.0003", "0.0004", "0.0005", "0.0006", "0.0007", "0.0008", "0.0009", 
+               "0.001", "0.002", "0.003", "0.004", "0.005", "0.006", "0.007", "0.008", "0.009", 
+               "0.01", "0.02", "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", 
+               "0.1", "0.13", "0.15", "0.2", "0.25", "0.3", "0.35", "0.4", "0.45", "0.5", "0.6", "0.7", "0.8", "0.9", 
+               "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "6.0", "8.0", "10.0", "15.0", "25.0", "50.0"])
 v_data = np.log(np.array([float(v) for v in Vs]))
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
@@ -67,32 +66,32 @@ for i in range(2):
         weights[counter] = popt[1]
         counter += 1
 
-    cut = -18
-    popt, pcov = curve_fit(rp.linear_function, v_data[cut:], weights[cut:])
+    cut = 25
+    popt, pcov = curve_fit(rp.linear_function, v_data[:cut], weights[:cut])
     v_lin = np.linspace(v_data.min(), v_data.max(), 500)
     
     plotters[1][i].plot(v_lin, rp.linear_function(v_lin, *popt), label="Fit")
-    plotters[1][i].plot(v_data[cut:], weights[cut:], "X", label="Fitted data")
-    plotters[1][i].plot(v_data[:cut], weights[:cut], "o", label="Omitted data")
+    plotters[1][i].plot(v_data[cut:], weights[cut:], "o", label="Omitted data")
+    plotters[1][i].plot(v_data[:cut], weights[:cut], "X", label="Fitted data")
     
     axs[1][i].text(0.05, 0.4, f"$c={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[1][i].transAxes)
     axs[1][i].text(0.05, 0.3, f"$d={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
     
     peak_positions = np.log(peak_positions)
-    popt, pcov = curve_fit(rp.linear_function, v_data[cut:], peak_positions[cut:])
+    popt, pcov = curve_fit(rp.linear_function, v_data[:cut], peak_positions[:cut])
     x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
     plotters[0][i].plot(x_lin, rp.linear_function(x_lin, *popt), label="Fit 1")
     axs[0][i].text(0.6, 0.4, f"$c_1={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
     axs[0][i].text(0.6, 0.3, f"$d_1={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
 
-    cut2 = 20
-    popt, pcov = curve_fit(rp.linear_function, v_data[:cut2], peak_positions[:cut2])
+    cut2 = len(Vs) - 12
+    popt, pcov = curve_fit(rp.linear_function, v_data[cut2:], peak_positions[cut2:])
     axs[0][i].text(0.6, 0.2, f"$c_2={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
     axs[0][i].text(0.6, 0.1, f"$d_2={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
     plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
-    plotters[0][i].plot(v_data[cut:], peak_positions[cut:], "X", label="Data Fit 1")
-    plotters[0][i].plot(v_data[:cut2], peak_positions[:cut2], "X", label="Data Fit 2")
-    plotters[0][i].plot(v_data[cut2:cut], peak_positions[cut2:cut], "o", label="Omitted data")
+    plotters[0][i].plot(v_data[cut:cut2], peak_positions[cut:cut2], "o", label="Omitted data")
+    plotters[0][i].plot(v_data[:cut], peak_positions[:cut], "X", label="Data Fit 1")
+    plotters[0][i].plot(v_data[cut2:], peak_positions[cut2:], "X", label="Data Fit 2")
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")

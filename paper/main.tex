@@ -93,7 +93,7 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
     We investigate the superconducting (SC), charge-density wave (CDW), and antiferromagnetic (AFM) phases 
     in the extended Hubbard model at zero temperature and half-filling.
     We employ the iterated equations of motion approach \cite{Kalthoff17,bleicker18} to compute the two-particle Green's functions and by extension, the corresponding spectral densities.
-    This renders comprehensive analysis of the behaviour of collective excitations possible as the model's parameters are changed across phase transitions.
+    This renders comprehensive analysis of the behavior of collective excitations possible as the model's parameters are changed across phase transitions.
     We identify the well-known amplitude (Higgs) and phase (Leggett) modes within the superconducting phase and observe a similar excitation in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase.
     In the CDW phase, close to the phase transition to the AFM phase, we find a collective mode that does not change significantly and another mode that becomes soft as the phase boundary is approached.
 \end{abstract}
@@ -118,7 +118,7 @@ that maps the attractive Hubbard model exactly onto the repulsive one, exhibitin
 The previously mentioned SC and CDW phases map to different spin operators \cite{zitko15,lieb89}.
 
 Many recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity 
-\cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
+\cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
 Other studies, focusing on equilibrium systems, 
 investigated the phases and various quantities therein of the said model including various additional interactions with and without doping 
 \cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
@@ -136,7 +136,9 @@ Naturally, a truncation is necessary for most practical applications, however, t
 The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
 Additionally, we will show an explicit way to obtain various Green's functions from the aforementioned methodology.
 By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
-The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Krull16,Schwarz20,Fan22}.
+The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Tsuji15,Krull16,Schwarz20,Fan22}.
+The former is located at zero energy as our model describes neutral superfluids.
+The latter is found at the lower edge of the two-particle continuum.
 
 The remainder of this paper is organized as follows:
 In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as our mean-field theory.
@@ -162,9 +164,9 @@ The Hamiltonian of the extended Hubbard model is given by
     \end{aligned}
 \end{equation}
 where $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$ 
-and $\langle i, j\rangle$ denotes the summation over next neighbours.
+and $\langle i, j\rangle$ denotes the summation over the next neighbors.
 The parameters are the hopping amplitude $t$, the onsite interaction $U$, the intersite interaction $V$, and the chemical potential $\mu$.
-Applying a Fourier-transformation into $k$-space yields the single-particle dispersion 
+Applying a Fourier transform into $k$ space yields the single-particle dispersion 
 \begin{equation}
     \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha)\,,\quad k_\alpha \in [-\pi, \pi)\,,
 \end{equation}
@@ -323,7 +325,7 @@ then
 \begin{equation}
     ||A^\dagger|| = (A^\dagger | A^\dagger) = \langle [A, A^\dagger] \rangle = - ||A|| < 0\,.
 \end{equation}
-We will compute $\mM$ by commutating with the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behaviour rather than the one particle dynamics given by the mean-field approximation.
+We will compute $\mM$ by commutating with the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behavior rather than the one particle dynamics given by the mean-field approximation.
 
 We create our operator set on the basis of \eqref{eqn:equal_expecs}.
 It consists of operators of the type
@@ -474,23 +476,21 @@ This can be achieved using a Lanczos tridiagonalization and subsequently a conti
 
 where $a_i$ and $b_i$ are the Lanczos coefficients \cite{PettiforRecursion,ViswanathRecursion}.
 Obtaining a diagonal block of $\mathcal{G}$ is easily achieved by setting $\vec{b}(0) = \vec{a}(0)$.
-Obtaining an off-diagonal block requires linear combinations in the form of \textcolor{red}{Ich bin damit nicht glücklich, da $\mathcal{G}$ ja eigentlich nicht hermitisch ist (wegen dem $z = \omega + i0^+$).
-Das ist für die Ergebnisse völlig egal, da ich eh nur diagonale Blöcke betrachte, aber nunja...}
-\begin{subequations}
-    \begin{align}
-        4 \Re [ \vec{a}^\dagger \mathcal{G} \vec{b} ] &= (\vec{a} + \vec{b})^\dagger \mathcal{G} (\vec{a} + \vec{b}) - (\vec{a} - \vec{b})^\dagger \mathcal{G} (\vec{a} - \vec{b}) \nonumber \\
-            &= 2 \vec{a}^\dagger \mathcal{G} \vec{b} + 2 \vec{b}^\dagger \mathcal{G} \vec{a}\,, \\
-        4i \Im [ \vec{a}^\dagger \mathcal{G} \vec{b} ] &= (\vec{a} + i \vec{b})^\dagger \mathcal{G} (\vec{a} + i \vec{b}) - (\vec{a} - i \vec{b})^\dagger \mathcal{G} (\vec{a} - i \vec{b}) \nonumber \\
-            &= 2i \vec{a}^\dagger \mathcal{G} \vec{b} - 2i \vec{b}^\dagger \mathcal{G} \vec{a}\,.
-    \end{align}
-\end{subequations}
+Obtaining an off-diagonal block requires linear combinations in the form of 
+\begin{align}
+    \vec{a}^\dagger \mathcal{G} \vec{b} &= \frac{1}{4} \Big\{ 
+        \underbrace{\left[ (\vec{a} + \vec{b})^\dagger \mathcal{G} (\vec{a} + \vec{b}) - (\vec{a} - \vec{b})^\dagger \mathcal{G} (\vec{a} - \vec{b}) \right]}_{ = 2 \vec{a}^\dagger \mathcal{G} \vec{b} + 2 \vec{b}^\dagger \mathcal{G} \vec{a}} \\
+    &-i \underbrace{\left[ (\vec{a} + i \vec{b})^\dagger \mathcal{G} (\vec{a} + i \vec{b}) - (\vec{a} - i \vec{b})^\dagger \mathcal{G} (\vec{a} - i \vec{b}) \right]}_{= 2i \vec{a}^\dagger \mathcal{G} \vec{b} - 2i \vec{b}^\dagger \mathcal{G} \vec{a}} \Big\}\,, \nonumber
+\end{align}
+i.e., one computes the four diagonal blocks and then simply adds them as described above.
+
 In the single-band case, the coefficients approach the limit
 \begin{equation}
     \label{eqn:inf_lanczos}
     a_\infty = \frac{\omega_+ + \omega_-}{2}\text{  and  } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
 \end{equation}
 where $\omega_\pm$ represents the upper and lower band edge, respectively \cite{PettiforRecursion}.
-This behaviour allows us to terminate the continued fraction, once the coefficients have converged close enough to these values, using the so-called square root terminator
+This behavior allows us to terminate the continued fraction, once the coefficients have converged close enough to these values, using the so-called square root terminator
 \begin{equation}
     T(\omega) = \frac{1}{2b_\infty^2} \left( \omega - a_\infty \mp \sqrt{(\omega - a_\infty)^2 - 4 b_\infty^2} \right)\,,
 \end{equation}
@@ -531,7 +531,7 @@ In this section, we will be investigating four different diagonal Green's functi
 where $N$ is the number of lattice sites in the system. 
 Each one of these operators generates a different kind of collective mode.
 The first operator captures the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
-The remaining two capture the collective behaviour of the CDW and AFM states, respectively.
+The remaining two capture the collective behavior of the CDW and AFM states, respectively.
 
 Note, that all of the aforementioned operators are Hermitian. 
 This means that all spectral functions need to be completely antisymmetrical, see \autoref{sec:antisymmetry_spectral}.
@@ -540,7 +540,17 @@ Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in or
 
 \subsection{Classification of the spectral functions}
 
-To begin, let us describe the the spectral function with respect to the operators above in the various phases.
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The shaded area marks the two-particle continuum.
+    The panels (a) and (b) show the spectral functions in the CDW and AFM phases, respectively.}
+    \label{fig:resolvent_overview_AFM}
+\end{figure*}
+
+To begin, let us describe the spectral function with respect to the operators above in the various phases.
 A plot of those in the SC and CDW phase, close to the phase transition, is shown in \autoref{fig:resolvent_overview_SC}.
 We chose $U=-2.5t$ and $V=\pm0.1t$ for both lattices.
 
@@ -556,42 +566,32 @@ For the square lattice, however, there is a peak located at the upper edge of th
 
 To further classify the aforementioned peaks that lie outside the two-particle continuum,
 we turn towards the real part of the Green's function.
-We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behaviour.
+We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
 The real part is related to the imaginary part via the Kramers-Kronig relations.
 Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$ and the peak has the weight $w_0 = \exp(b)$.
 Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e., $\delta'(\omega - \omega_0)$.
 
 The plots for the phase peak and the CDW peak in the SC phase can be found in \autoref{sec:fit_greens_functions}.
 The SC peak in the CDW phase behaves similarly to the latter and is therefore not shown explicitly.
-We get a good agreement with the power-law behaviour near the peaks with the exponents $a=-2$ (phase) and $a=-1$ (CDW), respectively.
+We get a good agreement with the power-law behavior near the peaks with the exponents $a=-2$ (phase) and $a=-1$ (CDW), respectively.
 Therefore, we conclude that the CDW peak corresponds to a $\delta$ distribution, while the phase peak is its derivative.
 Note, that the latter is located at $\omega=0$ of a perfectly asymmetrical bosonic spectral function and therefore must have 0 weight.
 This is given here, because $\int \delta'(\omega) \mathrm{d}\omega = 0$.
 The peak itself can be interpreted as two $\delta$ distributions at $0^\pm$.
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The shaded area marks the two-particle continuum.
-    The panels (a) and (b) show the spectral functions in the CDW and AFM phases, respectively.}
-    \label{fig:resolvent_overview_AFM}
-\end{figure*}
-
-Next, we will investigate the Higgs peak, this time around, turning towards the spectral function itself. 
+Next, we will investigate the Higgs peak, this time around, turning toward the spectral function itself. 
 We see in \autoref{fig:resolvent_overview_SC} that the Higgs and phase spectral functions become indistinguishable towards the upper half of the two-particle continuum.
 Therefore, we interpret the latter as a background to the Higgs peak itself and compute the difference between both spectral functions.
 Using the same methodology as before we obtain that the exponent is $a\approx-0.5$, indicating that the peak behaves as $1 / \sqrt{\omega - \omega_0}$.
 
 Lastly, we investigate the same spectral functions close to the AFM-CDW phase transition, depicted in \autoref{fig:resolvent_overview_AFM}.
 We choose $V=1t$ for both lattices and $U=zV \pm 0.1t$, where $z$ is the coordination number.
-Again, the both SC-related spectral functions are identical in both the CDW and AFM phase.
+Again, both SC-related spectral functions are identical in both the CDW and AFM phases.
 Within the continuum their weight is shifted towards the upper edge and on the square lattice only, there is a peak above the continuum.
 In the AFM phase, both the CDW and AFM spectral functions have a peak close, but yet below, the two-particle continuum.
 The AFM peak is at a lower energy than the CDW one.
-In the CDW phase, this behaviour is reversed, i.e., the CDW peak lies lower.
-Using the same analysis as before, we conclude that each of these peaks is a $\delta$-peak.
+In the CDW phase, this behavior is reversed, i.e., the CDW peak lies lower.
+Using the same analysis as before, we conclude that each of these peaks is a $\delta$ peak.
 
 \subsection{SC-CDW transition}
 
@@ -601,10 +601,10 @@ Using the same analysis as before, we conclude that each of these peaks is a $\d
     \caption{The upper panels show double logarithmic plots of the positions $\omega_0$ of the SC peak in the CDW phases while the lower panels show their respective weights $w_0 = e^{b}$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5$.
     The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
-    \label{fig:sc_in_cdw_behaviour}
+    \label{fig:sc_in_cdw_behavior}
 \end{figure*}
 
-With the prevalent peaks discussed, we turn towards their behaviour as the system approaches the phase transition at $V=0$.
+With the prevalent peaks discussed, we turn towards their behavior as the system approaches the phase transition at $V=0$.
 \textcolor{red}{TODO; weiter beschreiben}
 
 \subsection{AFM-CDW transition}
@@ -683,9 +683,9 @@ Numerically, we can compute the matrix elements like this
 \begin{align}
     (A_i | A_j) &= \frac{(\Delta \gamma)^2}{N} \sum_{\vk \vl} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vl)) (A_{\vk} | A_{\vl})\,.
 \end{align}
-Here, all expression are finite numbers and do not require further treatment.
+Here, all expressions are finite numbers and do not require further treatment.
 Mutatis mutandis, one obtains a similar expression for $(A_i | [H, A_j])$.
-Additionally note, that the expressions $(A_{\vk} | A_{\vl})$ and $(A_{\vk} | [H, A_{\vl}])$ can be reduced to sums of terms that are proportional to $\gamma_i$ or $\gamma_j$, respectively.
+Additionally, note, that the expressions $(A_{\vk} | A_{\vl})$ and $(A_{\vk} | [H, A_{\vl}])$ can be reduced to sums of terms that are proportional to $\gamma_i$ or $\gamma_j$, respectively.
 Therefore, it is not necessary to implement any sort of momentum space computations.
 
 \section{Antisymmetry of the spectral functions}
