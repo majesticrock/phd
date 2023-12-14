@@ -55,8 +55,8 @@ for i in range(nrows):
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
-axs[0][1].text(10.6, 0.87, r"(a) SC")
-axs[1][1].text(10.6, 0.87, r"(b) CDW")
+axs[0][1].text(10.4, 0.87, r"(a) SC")
+axs[1][1].text(10.4, 0.87, r"(b) CDW")
 
 fig.tight_layout()
 plt.savefig("plots/resolvent_overview_SC_CDW.pdf")
