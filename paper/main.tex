@@ -136,7 +136,7 @@ Naturally, a truncation is necessary for most practical applications, however, t
 The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
 Additionally, we will show an explicit way to obtain various Green's functions from the aforementioned methodology.
 By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
-The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Cea14,Tsuji15,Krull16,Schwarz20,Fan22}.
+The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Varma02,Cea14,Measson14,Tsuji15,Krull16,Schwarz20,Fan22}.
 The former is located at zero energy as our model describes neutral superfluids.
 The latter is found at the lower edge of the two-particle continuum.
 
@@ -145,7 +145,7 @@ In \autoref{sec:model} we will introduce the model and its Hamiltonian as well a
 A brief overview of the iterated equations of motion approach is presented in \autoref{sec:ieom}.
 Next, we show our results in \autoref{sec:results}.
 Lastly, in \autoref{sec:conclusion}, we will discuss our results.
-In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
+%In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
 
 \section{Model and mean-field theory}\label{sec:model}
 
@@ -282,7 +282,6 @@ This is due to our restriction to terms that are proportional to $\hat{\gamma}(\
 So far we have discussed the static mean-field equations that essentially describe the static ground state.
 These results will be used to compute the quantities, namely expectation values, necessary for the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
 With it, we can describe two-particle quantities like the various collective excitations of the system.
-We will present the general ideas briefly here and refer the interested reader to the appendix \textcolor{red}{!REF!} for a detailed explanation and derivation.
 
 We start with some operator set $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
 i.e., any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
@@ -339,7 +338,7 @@ Operators with different indices are put into the set individually, e.g., $n_{\g
 Naturally, we have to discretize $\gamma$, 
 however, this allows us to obtain good results with drastically smaller matrices compared to a momentum-based operator set and obtain results for a three-dimensional system in the first place.
 Practically, we choose $N_\gamma = 3000$ equally spaced discretization points.
-A detailed explanation of the numerics is provided in the appendix \textcolor{red}{!REF!}.
+A detailed explanation of the numerics is provided in the appendix \autoref{sec:numerical_ieom}.
 
 Next, we order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.,
 \begin{equation}
@@ -362,7 +361,7 @@ Furthermore, due to symmetry, the relations $\Im [\mathcal{K}_\pm] = \Re [\kappa
 Thus, if all occurring expectation values are real, both matrices have large empty blocks.
 This condition is fulfilled for all cases investigated in this article.
 Additionally, the matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
-We proof this statement in the appendix \textcolor{red}{!REF!}.
+We proof this statement in the appendix \autoref{sec:positive_M}.
 
 To study the collective excitations, we investigate various retarded Green's functions 
 \begin{equation}
@@ -414,6 +413,7 @@ Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differe
 \end{equation}
 This allows us to finally obtain
 \begin{align}
+    \label{eqn:green_derivation}
     G_{AB^\dagger} (z) &= i \int_0^\infty \exp(izt) \langle [ (\vec{A \cdot} \vec{b}(0))^\dagger, \vec{A} \cdot \vec{a}(t) ] \rangle\ \mathrm{d}t \nonumber \\
         &= i \int_0^\infty \exp(izt) \vec{b}^\dagger(0) \underbrace{\langle [ \vec{A}^\dagger, \vec{A} ] \rangle}_{\equiv \mN} \vec{a}(t) \mathrm{d}t \nonumber \\
         &= i  \int_0^\infty \vec{b}^\dagger(0) \mN \exp \left( i \left(\mN^{-1} \mM + z \right) t \right) \vec{a}(0) \mathrm{d}t  \nonumber \\
@@ -631,6 +631,7 @@ TODO
 
 \appendix
 \section{Semipositivity of the dynamical matrix}
+\label{sec:positive_M}
 
 We show that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
 For any $\vec{x} \in \mathbb{C}^N$, consider
@@ -661,6 +662,7 @@ This concludes our proof. Note, that the only assumption made, is that the expec
 
 
 \section{Numerical treatment of the iEoM matrices}
+\label{sec:numerical_ieom}
 
 We would like to use operators like \eqref{eqn:ieom_basis_operator} to span our operator set.
 However, numerically, it is impossible to matrices with infinite dimensions, requiring us to discretize.
@@ -676,17 +678,40 @@ Computing an integral yields
 \begin{equation}
     \int f(\tilde{\gamma}) h(\tilde{\gamma} - \gamma_j) \mathrm{d} \tilde{\gamma} \approx \sum_i f(\gamma_i) h(\gamma_i - \gamma_j) \Delta \gamma = f(\gamma_j)\,,
 \end{equation}
-and thereby mimicking the continuous $\delta$ distribution for a discrete description.
-Note, that if one takes the limit $\Delta \gamma \to 0$ there $\delta$ distribution is exactly reproduced.
+showing that $h(\gamma)$ mimicks the continuous $\delta$ distribution for a discrete description.
+Note, that if one takes the limit $\Delta \gamma \to 0$ the $\delta$ distribution is exactly reproduced.
 
 Numerically, we can compute the matrix elements like this
-\begin{align}
-    (A_i | A_j) &= \frac{(\Delta \gamma)^2}{N} \sum_{\vk \vl} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vl)) (A_{\vk} | A_{\vl})\,.
-\end{align}
+\begin{equation}
+    \label{eqn:numerical_example}
+    (A_i | A_j) = \frac{1}{N} \sum_{\vk \vl} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vl)) (A_{\vk} | A_{\vl})\,.
+\end{equation}
 Here, all expressions are finite numbers and do not require further treatment.
 Mutatis mutandis, one obtains a similar expression for $(A_i | [H, A_j])$.
 Additionally, note, that the expressions $(A_{\vk} | A_{\vl})$ and $(A_{\vk} | [H, A_{\vl}])$ can be reduced to sums of terms that are proportional to $\gamma_i$ or $\gamma_j$, respectively.
 Therefore, it is not necessary to implement any sort of momentum space computations.
+For example, consider $A_{\vk} = f_{\vk}^\dagger$, then
+\begin{equation}
+    ( f_{\vk}^\dagger | f_{\vl}^\dagger ) = \delta_{\vk, \vl} \langle 1 - n_{\vk \uparrow} - n_{\vk \downarrow} \rangle \eqqcolon \delta_{\vk, \vl} \alpha(\vk)
+\end{equation}
+holds. Inserting this into \eqref{eqn:numerical_example} yields
+\begin{align}
+    (A_i | A_j) &= \frac{1}{N} \sum_{\vk} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vk)) \alpha(\vk)\,.
+\end{align}
+As stated in the main text, see \eqref{eqn:equal_expecs}, $\alpha(\vk)$ depends only on $\hat{\gamma}(\vk)$, hence we can switch from the momentum sum to a $\gamma$ integration
+\begin{align}
+    (A_i | A_j) &= \int \rho(\gamma) h(\gamma_i - \gamma) h(\gamma_j - \gamma) \alpha(\gamma) \dgamma \nonumber \\
+        &\approx \rho(\gamma_i) h(\gamma_j - \gamma_i) \alpha(\gamma_i) \nonumber \\
+        &= \frac{\delta_{ij}}{\Delta \gamma} \rho(\gamma_i) \alpha(\gamma_i)\,.
+\end{align}
+Later on, when we compute the spectral functions, we perform another two $\gamma$ integrations, for example, let us compute the first Lanczos coefficient for $A_\text{Higgs}$.
+Then, the elements of the vectors mentioned in \eqref{eqn:green_derivation} are given by
+\begin{equation}
+    a_i = b_i = \begin{cases}
+        \Delta \gamma & i \text{ corresponds to an } f\text{-type basis operator} \\
+        0 & \text{otherwise}
+    \end{cases}\,.
+\end{equation}
 
 \section{Antisymmetry of the spectral functions}
 \label{sec:antisymmetry_spectral}
