@@ -7,6 +7,7 @@ if os.name == "nt":
 else:
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/python")
 
+import lib.continued_fraction as cf
 from lib.iterate_containers import *
 from lib.extract_key import *
 import lib.resolvent_peak as rp
@@ -40,19 +41,21 @@ for i in range(2):
     plotters[0][i] = ps.CURVEFAMILY(5, axis=axs[0][i])
     plotters[0][i].set_individual_colors("nice")
     plotters[0][i].set_individual_linestyles(["-", "-", "", "", ""])
-    plotters[0][i].set_individual_markerstyles(["", "", "X", "X", "o"])
+    plotters[0][i].set_individual_markerstyles(["", "", "o", "X", "X"])
     
     plotters[1][i] = ps.CURVEFAMILY(3, axis=axs[1][i])
     plotters[1][i].set_individual_colors("nice")
     plotters[1][i].set_individual_linestyles(["-", "", ""])
-    plotters[1][i].set_individual_markerstyles(["", "X", "o"])
+    plotters[1][i].set_individual_markerstyles(["", "o", "X"])
     
     for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}/V={V}"
-        lower = float(V)
-        upper = 8 * float(V) + 2
-
-        peak = rp.Peak(f"{folders[i]}{name}", name_suffix, (lower, upper))
+        cont_edges = cf.continuum_edges(f"{folders[i]}{name}", name_suffix, True)
+        
+        lower = 0 if float(V) < 1 else float(V)
+        upper = 13 * float(V) + 2 if 13 * float(V) + 2 < cont_edges[0] else cont_edges[0]
+        
+        peak = rp.Peak(f"{folders[i]}{name}", name_suffix, (lower, upper), imaginary_offset=1e-5)
         peak_pos_value = np.copy(peak.peak_position)
         scipy_result = peak.improved_peak_position(1e-2, 1e-12)
         # only an issue if the difference is too large;
@@ -62,7 +65,7 @@ for i in range(2):
         peak_pos_value = scipy_result[0][0]
         peak_positions[counter] = np.copy(scipy_result[0][0])
 
-        popt, pcov, w_log, y_data = peak.fit_real_part(0.01, 1e-8)
+        popt, pcov, w_log, y_data = peak.fit_real_part(0.01, 1e-7)
         weights[counter] = popt[1]
         counter += 1
 

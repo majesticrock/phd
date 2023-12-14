@@ -13,8 +13,6 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
-# visually scale the data for visibility
-SCALE = 5
 params = [ [0., 4.1, 1.], [0., 3.9, 1.] ]
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
@@ -49,13 +47,13 @@ for j, folder in enumerate(folders):
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, resolvents[k] = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
                                                             number_of_values=10000, xp_basis=True, imaginary_offset=1e-5, messages=False)
-            plotters[i][j].plot(w_lin, SCALE*data, label=label)
+            plotters[i][j].plot(w_lin, data, label=label)
             
         cont = np.sqrt(resolvents[0].roots[0])
         zoomed_region = (cont - 0.02, cont) if j == 0 else (cont - 0.07, cont - 0.03) 
 
         axins = create_zoom(axs[i][j], 0.4, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.55), 
-                            y_funcs=[lambda x, res=res: SCALE*res.spectral_density(x + 1e-5j) for res in resolvents])
+                            y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents])
   
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         resolvents[0].mark_continuum(axs[i][j], None)

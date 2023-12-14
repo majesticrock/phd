@@ -11,8 +11,6 @@ import lib.continued_fraction as cf
 from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 
-# visually scale the data for visibility
-SCALE = 5
 params = [ [0., -2.5, -0.1], [0., -2.5, 0.1] ]
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
@@ -42,7 +40,7 @@ for j, folder in enumerate(folders):
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
                                                             number_of_values=5000, xp_basis=True, imaginary_offset=1e-5, messages=False)
-            plotters[i][j].plot(w_lin, SCALE*data, label=label)
+            plotters[i][j].plot(w_lin, data, label=label)
             
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         res.mark_continuum(axs[i][j], None)
