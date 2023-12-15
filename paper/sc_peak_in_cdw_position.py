@@ -17,12 +17,21 @@ from scipy.optimize import curve_fit
 
 Ts = np.array([0.])
 Us = np.array([-2.5])
-Vs = np.array(["0.00001", "0.00002", "0.00003", "0.00004", "0.00005", "0.00006", "0.00007", "0.00008", "0.00009", 
-               "0.0001", "0.0002", "0.0003", "0.0004", "0.0005", "0.0006", "0.0007", "0.0008", "0.0009", 
-               "0.001", "0.002", "0.003", "0.004", "0.005", "0.006", "0.007", "0.008", "0.009", 
-               "0.01", "0.02", "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", 
+Vs = np.array(["0.00001", "0.000013", "0.000015", "0.000017", "0.00002", "0.000025", 
+               "0.00003", "0.00004", "0.00005", "0.00006", "0.00007", "0.00008", "0.00009", 
+               
+               "0.0001", "0.00013", "0.00015", "0.00017", "0.0002", "0.00025", "0.0003", 
+               "0.0004", "0.0005", "0.0006", "0.0007", "0.0008", "0.0009", 
+               
+               "0.001", "0.0013", "0.0015", "0.0017", "0.002", "0.0025", 
+               "0.003", "0.004", "0.005", "0.006", "0.007", "0.008", "0.009", 
+               
+               "0.01", "0.013", "0.015", "0.017", "0.02", "0.025", 
+               "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", 
+               
                "0.1", "0.13", "0.15", "0.2", "0.25", "0.3", "0.35", "0.4", "0.45", "0.5", "0.6", "0.7", "0.8", "0.9", 
-               "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "6.0", "8.0", "10.0", "15.0", "25.0", "50.0"])
+               "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0", 
+               "2.5", "3.0", "3.5", "4.0", "6.0", "8.0", "10.0", "15.0", "25.0", "50.0"])
 v_data = np.log(np.array([float(v) for v in Vs]))
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
@@ -36,17 +45,20 @@ fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 8.2), sharex=True, shar
 
 plotters = np.empty((2,2), dtype=ps.CURVEFAMILY)
 
+#cr = ps.color_ranges["nice"]
+
+
 for i in range(2):
     counter = 0
     plotters[0][i] = ps.CURVEFAMILY(5, axis=axs[0][i])
     plotters[0][i].set_individual_colors("nice")
     plotters[0][i].set_individual_linestyles(["-", "-", "", "", ""])
-    plotters[0][i].set_individual_markerstyles(["", "", "o", "X", "X"])
+    plotters[0][i].set_individual_markerstyles(["", "", "x", "x", "v"])
     
     plotters[1][i] = ps.CURVEFAMILY(3, axis=axs[1][i])
     plotters[1][i].set_individual_colors("nice")
     plotters[1][i].set_individual_linestyles(["-", "", ""])
-    plotters[1][i].set_individual_markerstyles(["", "o", "X"])
+    plotters[1][i].set_individual_markerstyles(["", "x", "v"])
     
     for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}/V={V}"
@@ -57,25 +69,25 @@ for i in range(2):
         
         peak = rp.Peak(f"{folders[i]}{name}", name_suffix, (lower, upper), imaginary_offset=1e-5)
         peak_pos_value = np.copy(peak.peak_position)
-        scipy_result = peak.improved_peak_position(1e-2, 1e-12)
+        peak_result = peak.improved_peak_position(xtol=1e-12)
         # only an issue if the difference is too large;
-        if scipy_result[2]["warnflag"] != 0 and np.abs((scipy_result[0][0] - peak_pos_value) / peak_pos_value) > 1e-3:
-            print(f"We might not have found the peak for V={V}!\nWe found ", peak_pos_value, " and\n", scipy_result)
+        if not peak_result["success"]:
+            print(f"We might not have found the peak for V={V}!\nWe found ", peak_pos_value, " and\n", peak_result)
 
-        peak_pos_value = scipy_result[0][0]
-        peak_positions[counter] = np.copy(scipy_result[0][0])
+        peak_pos_value = peak_result["x"]
+        peak_positions[counter] = np.copy(peak_pos_value)
 
-        popt, pcov, w_log, y_data = peak.fit_real_part(0.01, 1e-7)
+        popt, pcov, w_log, y_data = peak.fit_real_part(0.001, 1e-7)
         weights[counter] = popt[1]
         counter += 1
 
-    cut = 25
+    cut = 40
     popt, pcov = curve_fit(rp.linear_function, v_data[:cut], weights[:cut])
     v_lin = np.linspace(v_data.min(), v_data.max(), 500)
     
     plotters[1][i].plot(v_lin, rp.linear_function(v_lin, *popt), label="Fit")
-    plotters[1][i].plot(v_data[cut:], weights[cut:], "o", label="Omitted data")
-    plotters[1][i].plot(v_data[:cut], weights[:cut], "X", label="Fitted data")
+    plotters[1][i].plot(v_data[:cut], weights[:cut], label="Fitted data")
+    plotters[1][i].plot(v_data[cut:], weights[cut:], label="Omitted data")
     
     axs[1][i].text(0.05, 0.4, f"$c={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[1][i].transAxes)
     axs[1][i].text(0.05, 0.3, f"$d={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
@@ -87,14 +99,14 @@ for i in range(2):
     axs[0][i].text(0.6, 0.4, f"$c_1={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
     axs[0][i].text(0.6, 0.3, f"$d_1={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
 
-    cut2 = len(Vs) - 12
+    cut2 = len(Vs) - 27
     popt, pcov = curve_fit(rp.linear_function, v_data[cut2:], peak_positions[cut2:])
     axs[0][i].text(0.6, 0.2, f"$c_2={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
     axs[0][i].text(0.6, 0.1, f"$d_2={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
     plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
-    plotters[0][i].plot(v_data[cut:cut2], peak_positions[cut:cut2], "o", label="Omitted data")
-    plotters[0][i].plot(v_data[:cut], peak_positions[:cut], "X", label="Data Fit 1")
-    plotters[0][i].plot(v_data[cut2:], peak_positions[cut2:], "X", label="Data Fit 2")
+    plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Data Fit 1")
+    plotters[0][i].plot(v_data[cut2:], peak_positions[cut2:], label="Data Fit 2")
+    plotters[0][i].plot(v_data[cut:cut2], peak_positions[cut:cut2], label="Omitted data")
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
