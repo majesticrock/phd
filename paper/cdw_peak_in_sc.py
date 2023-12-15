@@ -31,7 +31,7 @@ for i in range(2):
     name = f"T={T}/U={U}/V={V}"
     peak = rp.Peak(f"{folders[i]}{name}", name_suffix, initial_search_bounds=(0.3, 0.8))
     #print(peak.peak_position)
-    peak.improved_peak_position(x0_offset=1e-1, gradient_epsilon=1e-12)
+    peak.improved_peak_position(xtol=1e-13)
     popt, pcov, w_space, y_data = peak.fit_real_part(range=0.05, begin_offset=1e-10, reversed=False)
     
     axs[i].text(0.05, 0.4, f"$a={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[i].transAxes)

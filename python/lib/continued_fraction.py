@@ -150,7 +150,7 @@ class ContinuedFraction:
         w_lin = np.linspace(self.continuum_edges()[0], self.continuum_edges()[1], number_of_values)
         return -np.trapz(self.continued_fraction(w_lin + imaginary_offset * 1j).imag, w_lin) / np.pi
     
-def continuum_edges(data_folder, name_suffix, xp_basis=False):
+def continuum_edges(data_folder, name_suffix, xp_basis=True):
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
             res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, False)
@@ -161,7 +161,7 @@ def continuum_edges(data_folder, name_suffix, xp_basis=False):
     
     return np.sqrt(res.roots)
 
-def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False, messages=True):
+def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False, messages=True):
     edges = continuum_edges(data_folder, name_suffix, xp_basis)    
     if lower_edge is None:
         lower_edge = edges[0]
@@ -208,7 +208,7 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
             
     return NORM_FACTOR * data.imag, data.real, w_log.real, res
 
-def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, use_start=True, messages=True):
+def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, use_start=True, messages=True):
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
@@ -247,7 +247,7 @@ def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_bas
             
     return NORM_FACTOR * data.imag, data.real, w_lin.real, res
 
-def resolvent_in_continuum(data_folder, name_suffix, range=None, xp_basis=False, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, w_space=np.linspace):
+def resolvent_in_continuum(data_folder, name_suffix, range=None, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, w_space=np.linspace):
     borders = continuum_edges(data_folder, name_suffix, xp_basis)
     if range is None:
         return resolvent_data(data_folder, name_suffix, borders[0], borders[1], xp_basis, number_of_values, imaginary_offset, withTerminator, w_space)

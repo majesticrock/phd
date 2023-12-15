@@ -32,11 +32,11 @@ for T, U, V in iterate_containers(Ts, Us, Vs):
     
     peak = rp.Peak(f"{folder}{name}", name_suffix, (lower, upper))
     peak_pos_value = np.copy(peak.peak_position)
-    scipy_result = peak.improved_peak_position(1e-2, 1e-12)
+    peak_result = peak.improved_peak_position(xtol=1e-13)
     # only an issue if the difference is too large;
-    if scipy_result[2]["warnflag"] != 0 and np.abs((scipy_result[0][0] - peak_pos_value) / peak_pos_value) > 1e-3:
-        print(f"We might not have found the peak for V={V}!\nWe found ", peak_pos_value, " and\n", scipy_result)
-    peak_pos_value = scipy_result[0][0]
+    if not peak_result["success"]:
+        print(f"We might not have found the peak for V={V}!\nWe found ", peak_pos_value, " and\n", peak_result)
+    peak_pos_value = peak_result["x"]
     popt, pcov, w_log, y_data = peak.fit_real_part(0.01, 1e-8)
     weights[counter] = popt[1]
     counter += 1

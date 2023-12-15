@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.optimize as opt
+from lib.bounded_minimize import bounded_minimize
 import lib.continued_fraction as cf
 
 def linear_function(x, a, b):
@@ -22,7 +23,7 @@ class Peak:
     def real_part(self, x):
         return self.resolvent.continued_fraction(x + self.imaginary_offset * 1j).real
     
-    def improved_peak_position(self, x0_offset=0, gradient_epsilon=1e-10):
+    def improved_peak_position(self, xtol=2e-12):
         offset_peak = 0.2
         search_bounds = (0 if self.peak_position - offset_peak < 0 else self.peak_position - offset_peak, 
                  np.sqrt(self.resolvent.roots[0]) if self.peak_position + offset_peak > np.sqrt(self.resolvent.roots[0]) else self.peak_position + offset_peak)
@@ -30,9 +31,9 @@ class Peak:
         def min_func(x):
             return self.imaginary_part(x)
         
-        scipy_result = opt.fmin_l_bfgs_b(min_func, search_bounds[1] - x0_offset, bounds=[search_bounds], approx_grad=True, epsilon=gradient_epsilon)
-        self.peak_position = scipy_result[0][0]
-        return scipy_result
+        result = bounded_minimize(min_func, bounds=search_bounds, xtol=xtol)
+        self.peak_position = result["x"]
+        return result
     
     def fit_real_part(self, range=0.01, begin_offset=1e-10, reversed=False):
         data, w_log = self.resolvent.data_log_z(lower_edge=self.peak_position, range=range, begin_offset=begin_offset, 
