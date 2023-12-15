@@ -11,17 +11,17 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 T = 0.
-Us = np.array([3.7, 3.725, 3.75, 3.775, 3.8, 3.825, 3.85, 3.875, 3.9, 3.91,  # 10
+Us = np.array([3.7, 3.725, 3.75, 3.8, 3.825, 3.85, 3.875, 3.9, 3.91,  # 9
                3.925, 3.94, 3.95, 3.96, 3.97, 3.975, 3.985, 3.99, 3.995, # 9
                3.997, 3.9985, 3.999, 3.9995, # 4
-               4.0, # 1
+               #4.0, # 1
                4.0005, 4.001, 4.0015, 4.003, # 4
                4.005, 4.01, 4.015, 4.025, 4.03, 4.04, 4.05, 4.06, 4.075, # 9
-               4.09, 4.1, 4.125, 4.15, 4.175, 4.2, 4.225, 4.25, 4.275, 4.3 # 10
+               4.09, 4.1, 4.125, 4.15, 4.175, 4.2, 4.25, 4.275, 4.3 # 9
     ])
 V = 1.
 
-folder = "data/modes/square/dos_900/"
+folder = "data/modes/square/dos_3k/"
 colors = ["orange", "purple", "green",  "black"]
 
 name_suffix = "CDW"
@@ -29,13 +29,13 @@ fig, ax = plt.subplots()
 
 name = f"T={T}/U=4.0/V={V}"
 zero_peak = rp.Peak(f"{folder}{name}", name_suffix, (2.45, 2.5))
-zero_value = zero_peak.improved_peak_position()[0][0]
+zero_value = zero_peak.improved_peak_position()["x"]
 
 peak_positions = np.zeros(len(Us))
 counter = 0
 for name in naming_scheme(T, Us, V):
     peak = rp.Peak(f"{folder}{name}", name_suffix, (2.4, 2.85))
-    peak_positions[counter] = np.log(peak.improved_peak_position()[0][0] - zero_value)
+    peak_positions[counter] = np.log(peak.improved_peak_position()["x"] - zero_value)
     counter += 1
 
 cut = -int(len(Us) / 2)

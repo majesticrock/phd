@@ -117,11 +117,12 @@ This coexistence can be argued by the existence of a particle-hole transformatio
 that maps the attractive Hubbard model exactly onto the repulsive one, exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
 The previously mentioned SC and CDW phases map to different spin operators \cite{zitko15,lieb89}.
 
-Many recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity 
-\cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
-Other studies, focusing on equilibrium systems, 
-investigated the phases and various quantities therein of the said model including various additional interactions with and without doping 
+Numerous studies have been performed on equilibrium systems. 
+These investigated the phases and various quantities therein of the said model including various additional interactions with and without doping 
 \cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
+For a long time, works on the dynamics of the superconducting gap parameter focused on its behavior after an instantaneous quench, 
+yielding damped or persistent oscillations depending on the magnitude of the quench \cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Barankov06,Cui19}.
+More recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
 
 In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
 \textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models, ggf nochmal suchen...}
@@ -361,7 +362,7 @@ Furthermore, due to symmetry, the relations $\Im [\mathcal{K}_\pm] = \Re [\kappa
 Thus, if all occurring expectation values are real, both matrices have large empty blocks.
 This condition is fulfilled for all cases investigated in this article.
 Additionally, the matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
-We proof this statement in the appendix \autoref{sec:positive_M}.
+We prove this statement in the appendix \autoref{sec:positive_M}.
 
 To study the collective excitations, we investigate various retarded Green's functions 
 \begin{equation}
@@ -704,14 +705,28 @@ As stated in the main text, see \eqref{eqn:equal_expecs}, $\alpha(\vk)$ depends 
         &\approx \rho(\gamma_i) h(\gamma_j - \gamma_i) \alpha(\gamma_i) \nonumber \\
         &= \frac{\delta_{ij}}{\Delta \gamma} \rho(\gamma_i) \alpha(\gamma_i)\,.
 \end{align}
-Later on, when we compute the spectral functions, we perform another two $\gamma$ integrations, for example, let us compute the first Lanczos coefficient for $A_\text{Higgs}$.
-Then, the elements of the vectors mentioned in \eqref{eqn:green_derivation} are given by
+Since $\Delta \gamma$ is a positive constant factor, it does not impact any of our matrix operations, i.e., we can pull it out to the front of the expressions $\mM \to \tilde{m} (\Delta \gamma)^2$ and $\mN \to \tilde{n} (\Delta \gamma)^2$.
+Then, we can rewrite \eqref{eqn:green_derivation} as
+\begin{equation}
+    G_{AB^\dagger} = - (\Delta \gamma)^2 \vec{b}^\dagger (0) \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right] \vec{a}(0)\,.
+\end{equation}
+To give a practical example, let us compute $A_\text{Higgs}$ from \eqref{eqn:resolvent_bases}.
+We order our operator set such that all $f_\gamma^{(\dagger)}$ are upfront. 
+This requires the vector elements $\vec{a}$ and $\vec{b}$ to be
 \begin{equation}
     a_i = b_i = \begin{cases}
-        \Delta \gamma & i \text{ corresponds to an } f\text{-type basis operator} \\
+        1 & i < 2 N_\gamma \\
         0 & \text{otherwise}
-    \end{cases}\,.
+    \end{cases}\,,
 \end{equation}
+where $N_\gamma$ is the number of discretization points.
+Using this, we can expand the relation for the Green's function
+\begin{align}
+    G_{AB^\dagger} (z) &= -(\Delta \gamma)^2 \sum_{i=0}^{2 N_\gamma} \sum_{j=0}^{2 N_\gamma} \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right]_{ij} \nonumber \\
+        &\approx - \int \dgamma \int \dgamma' \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right](\gamma, \gamma')\,.
+\end{align}
+The first line is an approximation of the integral in the second line, as each matrix element corresponds to a specific value for $\gamma$.
+Note, that the sum going up to $2N_\gamma$ rather than $N_\gamma$ merely arises from the fact, that we need to integrate over both $f_\gamma$ and $f_\gamma^\dagger$ to obtain $A_\text{Higgs}$.
 
 \section{Antisymmetry of the spectral functions}
 \label{sec:antisymmetry_spectral}
