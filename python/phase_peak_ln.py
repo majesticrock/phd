@@ -3,16 +3,16 @@ import matplotlib.pyplot as plt
 import lib.continued_fraction as cf
 
 T = 0.
-U = -2.0
+U = -2.5
 V = -0.1
 name = f"T={T}/U={U}/V={V}"
 
 use_xp = True
-folder = "data/modes/square/dos_64k/"
+folder = "data/modes/square/dos_3k/"
 name_suffix = "phase_SC"
 fig, ax = plt.subplots()
 
-plot_lower_lim = 0.005
+plot_lower_lim = 0.0005
 plot_upper_lim = plot_lower_lim + 0.2
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp, imaginary_offset=0)
 
