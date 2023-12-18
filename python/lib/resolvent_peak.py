@@ -7,14 +7,19 @@ def linear_function(x, a, b):
     return a * x + b
 
 class Peak:
-    def __init__(self, data_folder, name_suffix, initial_search_bounds=(0., None), imaginary_offset=1e-6, xp_basis=True):
+    def __init__(self, data_folder, name_suffix, initial_search_bounds=(0., "lower_edge"), imaginary_offset=1e-6, xp_basis=True):
         self.data_folder = data_folder
         self.name_suffic = name_suffix
         self.imaginary_offset = imaginary_offset
         self.xp_basis = xp_basis
         
-        data, data_real, w_lin, self.resolvent = cf.resolvent_data(data_folder, name_suffix, lower_edge=initial_search_bounds[0], upper_edge=initial_search_bounds[1], 
-                                                             xp_basis=xp_basis, imaginary_offset=imaginary_offset, messages=False)
+        if initial_search_bounds[1] == "lower_edge":
+            upper_edge = cf.continuum_edges(data_folder, name_suffix, xp_basis=xp_basis)[0]
+        else:
+            upper_edge = initial_search_bounds[1]
+        
+        data, data_real, w_lin, self.resolvent = cf.resolvent_data(data_folder, name_suffix, lower_edge=initial_search_bounds[0], 
+                                                        upper_edge=upper_edge, xp_basis=xp_basis, imaginary_offset=imaginary_offset, messages=False)
         self.peak_position = w_lin[np.argmax(data)]
     
     def imaginary_part(self, x):
