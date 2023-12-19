@@ -41,19 +41,18 @@ name_suffix = "phase_SC"
 
 weights = np.zeros(len(Vs))
 peak_positions = np.zeros(len(Vs))
+peak_positions_div_delta = np.zeros(len(Vs))
 fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 8.2), sharex=True, sharey="row", gridspec_kw=dict(hspace=0, wspace=0))
 
 plotters = np.empty((2,2), dtype=ps.CURVEFAMILY)
 
-#cr = ps.color_ranges["nice"]
-
 
 for i in range(2):
     counter = 0
-    plotters[0][i] = ps.CURVEFAMILY(5, axis=axs[0][i])
+    plotters[0][i] = ps.CURVEFAMILY(6, axis=axs[0][i])
     plotters[0][i].set_individual_colors("nice")
-    plotters[0][i].set_individual_linestyles(["-", "-", "", "", ""])
-    plotters[0][i].set_individual_markerstyles(["", "", "x", "x", "v"])
+    plotters[0][i].set_individual_linestyles(["-", "-", "", "", "", ""])
+    plotters[0][i].set_individual_markerstyles(["", "", "x", "x", "v", "1"])
     
     plotters[1][i] = ps.CURVEFAMILY(3, axis=axs[1][i])
     plotters[1][i].set_individual_colors("nice")
@@ -62,6 +61,7 @@ for i in range(2):
     
     for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}/V={V}"
+        
         cont_edges = cf.continuum_edges(f"{folders[i]}{name}", name_suffix, True)
         
         lower = 0 if float(V) < 1 else float(V)
@@ -76,7 +76,8 @@ for i in range(2):
 
         peak_pos_value = peak_result["x"]
         peak_positions[counter] = np.copy(peak_pos_value)
-
+        peak_positions_div_delta[counter] = np.copy(peak_pos_value) / extract_key(f"{folders[i]}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
+        
         popt, pcov, w_log, y_data = peak.fit_real_part(0.001, 1e-7)
         weights[counter] = popt[1]
         counter += 1
@@ -93,30 +94,32 @@ for i in range(2):
     axs[1][i].text(0.05, 0.3, f"$d={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
     
     peak_positions = np.log(peak_positions)
+    peak_positions_div_delta = np.log(peak_positions_div_delta)
     popt, pcov = curve_fit(rp.linear_function, v_data[:cut], peak_positions[:cut])
     x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
     plotters[0][i].plot(x_lin, rp.linear_function(x_lin, *popt), label="Fit 1")
-    axs[0][i].text(0.6, 0.4, f"$c_1={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
-    axs[0][i].text(0.6, 0.3, f"$d_1={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.9, f"$c_1={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.8, f"$d_1={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
 
     cut2 = len(Vs) - 27
     popt, pcov = curve_fit(rp.linear_function, v_data[cut2:], peak_positions[cut2:])
-    axs[0][i].text(0.6, 0.2, f"$c_2={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
-    axs[0][i].text(0.6, 0.1, f"$d_2={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.7, f"$c_2={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.6, f"$d_2={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
     plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
     plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Data Fit 1")
     plotters[0][i].plot(v_data[cut2:], peak_positions[cut2:], label="Data Fit 2")
     plotters[0][i].plot(v_data[cut:cut2], peak_positions[cut:cut2], label="Omitted data")
+    plotters[0][i].plot(v_data, peak_positions_div_delta, label=r"$\omega_0 / \Delta_\mathrm{CDW}$")
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
 axs[1][0].set_xlabel(r"$\ln(V / t)$")
 axs[1][1].set_xlabel(r"$\ln(V / t)$")
-axs[1][0].set_ylabel(r"$b = \ln(w_0 \cdot t)$")
+axs[1][0].set_ylabel(r"$b = \ln(w_0)$")
 axs[0][0].set_ylabel(r"$\ln(\omega_0 / t)$")
-axs[1][0].legend(loc="lower right")
-axs[0][0].legend(loc="upper left")
+axs[1][1].legend(loc="lower right")
+axs[0][1].legend(loc="lower right", ncol=2)
 fig.tight_layout()
 
 #axs[1][0].grid()

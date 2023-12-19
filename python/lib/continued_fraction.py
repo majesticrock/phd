@@ -106,9 +106,9 @@ class ContinuedFraction:
     
     def mark_continuum(self, axes=None, label="Continuum"):
         if label is not None:
-            args = {"alpha" : 0.2, "color": "purple", "label" : label}
+            args = {"alpha" : 0.333, "color": "grey", "label" : label}
         else:
-            args = {"alpha" : 0.2, "color": "purple"}
+            args = {"alpha" : 0.333, "color": "grey"}
             
         if axes is None:
             plotter = plt.axvspan
