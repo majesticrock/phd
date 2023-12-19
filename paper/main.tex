@@ -536,7 +536,7 @@ The first operator captures the amplitude mode of the $s$-wave superconducting s
 The remaining two capture the collective behavior of the CDW and AFM states, respectively.
 
 Note, that all of the aforementioned operators are Hermitian. 
-This means that all spectral functions need to be completely antisymmetrical, see \autoref{sec:antisymmetry_spectral}.
+This means that all spectral functions need to be completely antisymmetrical, see appendix \autoref{sec:antisymmetry_spectral}.
 For this reason, we will only show the $\omega \geq 0$ in our plots. 
 Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
 
@@ -574,7 +574,7 @@ The real part is related to the imaginary part via the Kramers-Kronig relations.
 Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$ and the peak has the weight $w_0 = \exp(b)$.
 Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e., $\delta'(\omega - \omega_0)$.
 
-The plots for the phase peak and the CDW peak in the SC phase can be found in \autoref{sec:fit_greens_functions}.
+The plots for the phase peak and the CDW peak in the SC phase can be found in appendix \autoref{sec:fit_greens_functions}.
 The SC peak in the CDW phase behaves similarly to the latter and is therefore not shown explicitly.
 We get a good agreement with the power-law behavior near the peaks with the exponents $a=-2$ (phase) and $a=-1$ (CDW), respectively.
 Therefore, we conclude that the CDW peak corresponds to a $\delta$ distribution, while the phase peak is its derivative.
@@ -602,13 +602,20 @@ Using the same analysis as before, we conclude that each of these peaks is a $\d
     \centering
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw_position.pdf}
     \caption{The upper panels show double logarithmic plots of the positions $\omega_0$ of the SC peak in the CDW phases while the lower panels show their respective weights $w_0 = e^{b}$.
+    In the upper panel, the pink markers additionally show the peak position devided by the gap $\omega_0 / \Delta_\text{CDW}$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
     The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
     \label{fig:sc_in_cdw_behavior}
 \end{figure*}
 
-With the prevalent peaks discussed, we turn towards their behavior as the system approaches the phase transition at $V=0$.
-\textcolor{red}{TODO; weiter beschreiben}
+With the prevalent peaks discussed, we turn towards their behavior as the system approaches the phase transition at $V=0$ for $U=-2.5t$.
+First and foremost, we investigate the peak in $\mathcal{A}_\text{Phase}(\omega)$ and $\mathcal{A}_\text{Higgs}(\omega)$ in the CDW phase.
+The evolution of its position $\omega_0$ and its weight $w_0$ as $V$ is varied can be viewed double logarithmically in \autoref{fig:sc_in_cdw_behavior}.
+For $V \ll 1$, the position grows with the square root of $V$. This behavior then transitions to a purely linear growth for large $V$.
+Deviding $\omega_0$ by the gap $\Delta_\text{CDW}$ results in a plateau for large $V$ while leaving the square root behavior at the beginning mostly unchanged.
+
+
+
 
 \subsection{AFM-CDW transition}
 
