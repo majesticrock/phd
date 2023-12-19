@@ -48,7 +48,7 @@ for i in range(2):
 axs[0].legend(loc="upper right")
 
 axs[1].set_xlabel(r"$\ln((\omega - \omega_0) / t)$")
-axs[1].text(-0.08, 1, r"$\ln(-\Im \mathcal{G}_\mathrm{Higgs}(\omega - \omega_0 + i0^+))$", va='center', ha='center', rotation='vertical', transform = axs[1].transAxes)
+axs[1].text(-0.08, 1, r"$\ln(-\Im \mathcal{G}_\mathrm{Higgs}(\omega))$", va='center', ha='center', rotation='vertical', transform = axs[1].transAxes)
 fig.tight_layout()
 
 import os

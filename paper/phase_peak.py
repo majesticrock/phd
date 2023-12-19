@@ -40,7 +40,7 @@ for i in range(2):
     axs[i].text(0.05, 0.3, f"$b={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[i].transAxes)
 
 axs[0].legend()
-axs[1].set_xlabel(r"$\ln(\omega)$")
+axs[1].set_xlabel(r"$\ln(\omega / t)$")
 axs[1].text(-0.08, 1, r"$\ln(\Re[\mathcal{G}_\mathrm{Phase}](\omega))$", va='center', ha='center', rotation='vertical', transform = axs[1].transAxes)
 fig.tight_layout()
 

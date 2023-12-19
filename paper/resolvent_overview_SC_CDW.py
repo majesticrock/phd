@@ -10,14 +10,15 @@ else:
 import lib.continued_fraction as cf
 from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
+from lib.create_zoom import *
 
-params = [ [0., -2.5, -0.1], [0., -2.5, 0.1] ]
+params = [ [0., -2.5, -0.1], [0., -2.5, 0.0], [0., -2.5, 0.1], [0., -2.5, 0.5] ]
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
-nrows = 2
+nrows = 4
 ncols = 2
 # ax = axs[row][col]
-fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 6), sharey=True, sharex="col", gridspec_kw=dict(hspace=0, wspace=0))
+fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 10), sharey=True, sharex="col", gridspec_kw=dict(hspace=0, wspace=0))
 
 plotters = np.empty((nrows, ncols), dtype=ps.CURVEFAMILY)
 for i in range(nrows):
@@ -25,7 +26,7 @@ for i in range(nrows):
         axs[i][j].set_ylim(0, .99)
         plotters[i][j] = ps.CURVEFAMILY(4, axis=axs[i][j])
         plotters[i][j].set_individual_colors("nice2")
-        plotters[i][j].set_individual_dashes([(1,0), (6,6), (1,0), (6,6)])
+        plotters[i][j].set_individual_dashes([(1,0), (6,6), (1.5, 2), (6,6)])
 
 plot_lower_lim = -0.05
 plot_upper_lim = 4.25
@@ -37,13 +38,24 @@ for j, folder in enumerate(folders):
     usage_upper_lim = 2 * plot_upper_lim if j == 0 else 3 * plot_upper_lim
 
     for i, name in enumerate(naming_scheme_tuples(params)):
+        resolvents = np.empty(len(name_suffices), dtype=cf.ContinuedFraction)
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
-            data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
-                                                            number_of_values=5000, xp_basis=True, imaginary_offset=1e-5, messages=False)
+            data, data_real, w_lin, resolvents[k] = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
+                                                            number_of_values=7000, xp_basis=True, imaginary_offset=1e-5, messages=False)
             plotters[i][j].plot(w_lin, data, label=label)
             
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
-        res.mark_continuum(axs[i][j], None)
+        resolvents[0].mark_continuum(axs[i][j], None)
+        
+        if i == 1:
+            zoomed_region = (-0.01, 0.1)
+            axins = create_zoom(axs[i][j], 0.2, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.55), 
+                                y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents])
+        elif i == 3:
+            cont = np.sqrt(resolvents[0].roots[0])
+            zoomed_region = (cont - 0.04, cont) if j == 0 else (cont - 0.07, cont - 0.03) 
+            axins = create_zoom(axs[i][j], 0.1, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.55), 
+                                y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents])
 
 legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
 for i in range(ncols):
@@ -53,8 +65,10 @@ for i in range(nrows):
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
-axs[0][1].text(10.4, 0.87, r"(a) SC")
-axs[1][1].text(10.4, 0.87, r"(b) CDW")
+axs[0][1].text(8.8, 0.66, "(a) SC\n$V=-0.1t$")
+axs[1][1].text(8.8, 0.66, "(b) SC/CDW\n$V=0$")
+axs[2][1].text(8.8, 0.66, "(c) CDW\n$V=0.1t$")
+axs[3][1].text(8.8, 0.66, "(d) CDW\n$V=0.5t$")
 
 fig.tight_layout()
 plt.savefig("plots/resolvent_overview_SC_CDW.pdf")
