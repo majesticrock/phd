@@ -6,13 +6,18 @@ import numpy as np
 # x/ylim                -   x and y limit of the zoomed region, expects tuples (lower limit, upper limit)
 # y_funcs               -   Functions generating the y_data from x_data. May only take 1 argument. Need to be in order
 #                               If it is None, the data is extracted from the plot
+# skip_lines            -   If some lines should be skipped, you can pass the corresponding indizes in an array
 # x/yticklabels         -   Default behaviour: Do not show labels in the zoom; can be changed however by specifying them
 # **kwargs              -   Is forwarded to the creation of the inset axes
-def create_zoom(ax, inset_xpos, inset_ypos, inset_width, inset_height, xlim=(0, .1), ylim=(0, .1), y_funcs=None, xticklabels=[], yticklabels=[], **kwargs):
+def create_zoom(ax, inset_xpos, inset_ypos, inset_width, inset_height, xlim=(0, .1), ylim=(0, .1), y_funcs=None, skip_lines=[], xticklabels=[], yticklabels=[], **kwargs):
     axins = ax.inset_axes([inset_xpos, inset_ypos, inset_width, inset_height], xlim=xlim, ylim=ylim, xticklabels=xticklabels, yticklabels=yticklabels, **kwargs)
     ax.indicate_inset_zoom(axins, edgecolor="black")
     
-    for i, line in enumerate(ax.lines):
+    i=0
+    for j, line in enumerate(ax.lines):
+        if j in skip_lines:
+            continue
+        
         if y_funcs is None:
             # Extract the data from the line
             x_data = line.get_xdata()
@@ -21,6 +26,7 @@ def create_zoom(ax, inset_xpos, inset_ypos, inset_width, inset_height, xlim=(0, 
         else:
             x_data = np.linspace(xlim[0], xlim[1], 100)
             new_line, = axins.plot(x_data, (y_funcs[i])(x_data))
+        i+=1
         
         # Create a new object for the inset plot
         # I do not know how this works, but it does
