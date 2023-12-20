@@ -13,21 +13,21 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
-params = [ [0., 4.1, 1.], [0., 3.9, 1.] ]
+params = [ [0., 4.1, 1.], [0., 3.9, 1.], [0., 4.5, 1.], [0., 3.5, 1.] ]
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
-nrows = 2
+nrows = 4
 ncols = 2
 # ax = axs[row][col]
-fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 6), sharey=True, sharex="col", gridspec_kw=dict(hspace=0, wspace=0))
+fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 10), sharey=True, sharex="col", gridspec_kw=dict(hspace=0, wspace=0))
 
 plotters = np.empty((nrows, ncols), dtype=ps.CURVEFAMILY)
 for i in range(nrows):
     for j in range(ncols):
         axs[i][j].set_ylim(0, .99)
         plotters[i][j] = ps.CURVEFAMILY(4, axis=axs[i][j])
-        plotters[i][j].set_individual_colors("nice2")
-        plotters[i][j].set_individual_dashes([(1,0), (6,6), (1,0), (6,6)])
+        plotters[i][j].set_individual_colors("nice")
+        plotters[i][j].set_individual_dashes([ [1,0], [3,6,3,0], [1.5, 2], [2,4,1.5,4,2,0] ])
 
 plot_lower_lim = 0#-0.05
 plot_upper_lim = 5.37
@@ -41,23 +41,26 @@ for j, folder in enumerate(folders):
         # the sc lattice uses a different V for the CDW-AFM border due to the changed coordination number
         params[0][1] = 6.1
         params[1][1] = 5.9
+        params[2][1] = 7.0
+        params[3][1] = 5.0
         
     for i, name in enumerate(naming_scheme_tuples(params)):
         resolvents = np.empty(len(name_suffices), dtype=cf.ContinuedFraction)
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, resolvents[k] = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
                                                             number_of_values=10000, xp_basis=True, imaginary_offset=1e-5, messages=False)
-            plotters[i][j].plot(w_lin, data, label=label)
+            plotters[i][j].plot_with_peak(w_lin, data, label=label)
             
         cont = np.sqrt(resolvents[0].roots[0])
-        zoomed_region = (cont - 0.02, cont) if j == 0 else (cont - 0.07, cont - 0.03) 
+        zoomed_region = (cont - 0.03, cont + 0.025) if j == 0 else (cont - 0.12, cont + 0.05) 
 
-        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.55), 
-                            y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents])
+        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.65), 
+                            y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents],
+                            skip_lines=[1, 3, 5, 7])
   
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         resolvents[0].mark_continuum(axs[i][j], None)
-        #res.mark_continuum(axins, None)
+        resolvents[0].mark_continuum(axins, None)
 
 
 legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
@@ -65,12 +68,14 @@ legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2,
 for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
 for i in range(nrows):
-    axs[i][0].set_ylabel(r"$\mathcal{A}(\omega + i0^+) [t^{-1}]$")
+    axs[i][0].set_ylabel(r"$\mathcal{A}(\omega) [t^{-1}]$")
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
-axs[0][1].text(11.5, 0.87, r"(a) AFM")
-axs[1][1].text(11.5, 0.87, r"(b) CDW")
+axs[0][1].text(11.5, 0.66, "(a) AFM\n$zV + 0.1t$")
+axs[1][1].text(11.5, 0.66, "(b) CDW\n$zV - 0.1t$")
+axs[2][1].text(11.5, 0.66, "(a) AFM\n$z(V + 0.125t)$")
+axs[3][1].text(11.5, 0.66, "(b) CDW\n$z(V - 0.125t)$")
 
 fig.tight_layout()
 plt.savefig("plots/resolvent_overview_AFM_CDW.pdf")
