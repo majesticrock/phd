@@ -293,6 +293,53 @@ class CURVEFAMILY():
     def set_axis( self, axis ):
         self.axis = axis
 
+    # Plotting a sharp peak with dashes can cause the dashes to overlap such that they form an (almost) solid line
+    # This method counteracts this behaviour by plotting first a line from the peak to x_min and than another line
+    # from the peak to x_max. The peak is plainly found by np.argmax
+    def plot_with_peak(self, x, y, increase = True, add_to_legend_indices = False, **kwargs):
+        plotter = None
+        if self.axis is None: # plot with plt
+            if self.plot_errorbars:
+                plotter = plt.errorbar
+            else:
+                plotter = plt.plot
+            if add_to_legend_indices:
+                self.legend_indices += [len(plt.gca().get_lines())]
+
+        else: # plot on a given axis
+            if self.plot_errorbars:
+                plotter = self.axis.errorbar
+            else:
+                plotter = self.axis.plot
+            if add_to_legend_indices:
+                self.legend_indices += [len(self.axis.get_lines())]
+        
+        if self.shared_kwargs is None: # guarantee that shared_kwargs is not empty (otherwise it doesn't work)
+            self.shared_kwargs = {"visible" : True}
+        
+        
+        # The parameter 'dashes' overrides the linestyle/ls parameter. So if it is not set (i.e. None), we do not want to pass it to the plot function
+        if self.get_dashes() is not None:
+            plot_args = dict(color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
+                            markevery = self.get_markevery( len(np.atleast_1d(x)) ), dashes=self.get_dashes(), **kwargs, **self.shared_kwargs)
+        else:
+            plot_args = dict(color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
+                    markevery = self.get_markevery( len(np.atleast_1d(x)) ))
+
+        peak = np.argmax(y)
+        
+        plotter( x[:peak+1][::-1], y[:peak+1][::-1], **plot_args)
+        plot_args["label"] = ""
+        plotter( x[peak:], y[peak:], **plot_args)
+        
+        self.increase_counter_if( increase )
+
+    def skip_to_next( self ):
+        self.curve_counter += 1
+
+    def set_axis( self, axis ):
+        self.axis = axis
+
 
 # =================================================================
 # ======================== COLORS AND COLOR MAPS ==================
