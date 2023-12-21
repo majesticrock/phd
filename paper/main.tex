@@ -398,7 +398,7 @@ For instance, assume the operator in the set is $f_{\vk}$, then the top left ele
 In the following, we will derive this relation.
 For that, consider the Fourier-transformed Green's function \eqref{eqn:standard_gf} with respect to two operators $A$ and $B^\dagger$ that are included in our operator set
 \begin{align}
-    G_{AB^\dagger} (z) &= - i \int_0^\infty \exp(izt) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t
+    G_{AB^\dagger} (z) &= - i \int_0^\infty \exp(i z t) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t
 \end{align}
 Since $A$ and $B$ are included in the operator set, we can rewrite them as dot products of the vector
 \begin{equation}
@@ -517,7 +517,7 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
     The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
     The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
     The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied to according to the text in the individual panels.
+    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
     The panels show the spectral functions in the (a) pure SC phase, (b) SC/CDW-coexistence, and (c) and (d) pure CDW phase, respectively.}
     \label{fig:resolvent_overview_SC}
 \end{figure*}
@@ -544,6 +544,10 @@ This means that all spectral functions need to be completely antisymmetrical, se
 For this reason, we will only show the $\omega \geq 0$ in our plots. 
 Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                           Classification                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Classification of the spectral functions}
 
 \begin{figure*}
@@ -552,7 +556,7 @@ Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in or
     \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
     The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
     The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 3000$, while $U$ is varied to according to the text in the individual panels.
+    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 3000$, while $U$ is varied according to the text in the individual panels.
     The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
     \label{fig:resolvent_overview_AFM}
 \end{figure*}
@@ -561,11 +565,28 @@ To begin, let us describe the spectral functions $\mathcal{A}_i (\omega) = - (1/
 \autoref{fig:resolvent_overview_SC} shows them at $U = -2.5t$ in the SC ($V=-0.1t$) and CDW ($V=0.1t$ and $V=0.5t$) phase, as well as in the SC-CDW coexistence at $V=0$.
 
 There are a variety of different features. The difference between the two lattices is mostly quantitative.
-First and foremost, in the SC phase, see panel (a), there is a sharp peak located at $\omega=0$ in $\mathcal{A}_\text{Phase}$,
-and another peak, only in $\spectral{Higgs}$, located at $\omega=2\Delta_\text{SC}$.
+First and foremost, in the SC phase, see panel (a), there is a sharp peak located at $\omega=0$ in $\mathcal{A}_\text{Phase}$ and a singularity in $\spectral{Higgs}$ located at $\omega=2\Delta_\text{SC}$.
 We identify them with the well-known Leggett and Higgs modes in superconductors.
 The former can be found at zero energy because our model describes a neutral superfluid wherein there is no coupling of the phase of the order parameter to the electromagnetic potential.
-Therefore, this phase may be chosen arbitrarily and changing it requires no energy which ultimately allows a Goldstone mode to exist in the first place. \textcolor{red}{Zitieren!}
+Therefore, this phase may be chosen arbitrarily, and changing it requires no energy which ultimately allows a Goldstone mode to exist in the first place. \textcolor{red}{Zitieren!}
+
+To classify the occurring peaks that lie outside the two-particle continuum, we turn towards the real part of the Green's function.
+We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
+The real part is related to the imaginary part via the Kramers-Kronig relations.
+Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$, and the peak has the weight $w_0 = \exp(b)$.
+Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e., $\delta'(\omega)$.
+The fits themselves can be found in appendix \autoref{sec:fit_greens_functions}.
+
+This analysis provides that the real part of $\greens{Phase}$ behaves as $1/\omega^2$ indicating that the peak in $\spectral{Phase}$ is the derivative of a $\delta$ distribution.
+Note, that it is located at $\omega=0$ of a perfectly asymmetrical bosonic spectral function and therefore must have 0 weight.
+This is given here, because $\int \delta'(\omega) \mathrm{d}\omega = 0$.
+
+\textcolor{red}{Ich spekuliere mal...}
+The singularity in $\spectral{Higgs}$ behaves as $1/\sqrt{\omega - 2 \Delta_\text{SC}}$.
+Previous studies on the dynamics of the order parameter found damped oscillations after a quench.
+These have the frequency $\Omega = 2 \Delta_\text{SC}$ and fell of as $1/\sqrt{t}$.
+An inverse Fourier transform of $\spectral{Higgs}$ yields precisely the same behavior, thereby reinforcing the validity of our results.
+
 In the CDW phase, both of these spectral functions become identical and form a sharp peak below the two-particle continuum.
 Following the Landau theory for continuous phase transitions, this is to be expected as the free energy is expanded in terms of the order parameter as
 \begin{equation}
@@ -573,24 +594,37 @@ Following the Landau theory for continuous phase transitions, this is to be expe
 \end{equation}
 with $r > 0$ and $u > 0$ if the system is outside of the superconducting phase. \textcolor{red}{Zitieren!}
 In this case, the only minimum is at $\Delta_\text{SC} = 0$. 
-That means that both possible modes have to overcome the same energy to be excited in the first place. \textcolor{red}{Passt die Beschreibung so?}
+That means that both possible modes have to overcome the same energy to be excited at all. \textcolor{red}{Passt die Beschreibung so?}
 
-At $V=0$, both the SC and the CDW phase coexist.
-Here, $\spectral{Higgs}$ and $\spectral{CDW}$ are identical. Both have a peak at $\omega = 0$ and another one at $\omega = 2\Delta$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+At $V=0$, both the SC and the CDW phase coexist. 
+Since the degeneracy of both phases is exact \textcolor{red}{Zitat}, there should not be any difference between $\spectral{Higgs}$ and $\spectral{CDW}$ as both spectral functions capture the amplitude fluctuations of their respective order parameters.
+This is precisely what can be seen in panel (b) of \autoref{fig:resolvent_overview_SC}.
+Both spectral functions have a peak at $\omega = 0$ and a singularity at the lower edge of the two-particle continuum $\omega = 2\Delta_\text{tot}$, with $\Delta_\text{tot} \coloneqq \sqrt{|\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}$.
+
+\textcolor{red}{Ich spekuliere mal...}
+In this phase, the mean-field single-particle energies are given by
+\begin{equation}
+    E_{\pm} = \pm \sqrt{\epsilon^2 + |\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}\,.
+\end{equation}
+This means that the proper order parameter is $\Delta_\text{tot}$.
+Here, $\Delta_\text{CDW}$ and $\Delta_\text{SC}$ can change arbitrarily without affecting the system's energy as long as $\Delta_\text{tot}$ remains constant.
+Thus, we associate the peak at $\omega=0$ with this shifting of order parameters.
+The singularity at the lower edge of the two-particle continuum can be interpreted in a similar manner as the Higgs mode in a pure superconductor.
+It captures the change of $\Delta_\text{tot}$ by changing either one of the composing order parameters.
+
+$\spectral{Phase}$ behaves just as it does in the pure SC phase. It has only a peak at $\omega = 0$ that can be associated with the change of the phase of $\Delta_\text{SC}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 $\spectral{CDW}$ shows a peak below the continuum only in the SC phase corresponding to the finite energy necessary to excite this kind of electronic density modulation.
-For moderate sized values of $V>0$, i.e., in the CDW phase, see panel (c) at $V=0.1t$, the aforementioned spectral function has a peak at $\omega=2\Delta$.
+For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (c) at $V=0.1t$, the aforementioned spectral function has a peak at $\omega=2\Delta_\text{CDW}$.
 This peak becomes hard and moves outside the two-particle continuum as $V$ is increased, see panel (d) at $V=0.5t$.
 
 $\spectral{AFM}$ is restricted to the continuum for both phases and both lattices.
 For the square lattice, however, there is a peak located at the upper edge of the two-particle continuum.
 
-To further classify the aforementioned peaks that lie outside the two-particle continuum,
-we turn towards the real part of the Green's function.
-We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
-The real part is related to the imaginary part via the Kramers-Kronig relations.
-Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$ and the peak has the weight $w_0 = \exp(b)$.
-Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e., $\delta'(\omega - \omega_0)$.
 
 The plots for the phase peak and the CDW peak in the SC phase can be found in appendix \autoref{sec:fit_greens_functions}.
 The SC peak in the CDW phase behaves similarly to the latter and is therefore not shown explicitly.
@@ -620,7 +654,7 @@ Using the same analysis as before, we conclude that each of these peaks is a $\d
     \centering
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw_position.pdf}
     \caption{The upper panels show double logarithmic plots of the positions $\omega_0$ of the SC peak in the CDW phases while the lower panels show their respective weights $w_0 = e^{b}$.
-    In the upper panel, the pink markers additionally show the peak position devided by the gap $\omega_0 / \Delta_\text{CDW}$.
+    In the upper panel, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
     The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
     \label{fig:sc_in_cdw_behavior}
@@ -630,7 +664,7 @@ With the prevalent peaks discussed, we turn towards their behavior as the system
 First and foremost, we investigate the peak in $\mathcal{A}_\text{Phase}(\omega)$ and $\mathcal{A}_\text{Higgs}(\omega)$ in the CDW phase.
 The evolution of its position $\omega_0$ and its weight $w_0$ as $V$ is varied can be viewed double logarithmically in \autoref{fig:sc_in_cdw_behavior}.
 For $V \ll 1$, the position grows with the square root of $V$. This behavior then transitions to a purely linear growth for large $V$.
-Deviding $\omega_0$ by the gap $\Delta_\text{CDW}$ results in a plateau for large $V$ while leaving the square root behavior at the beginning mostly unchanged.
+Dividing $\omega_0$ by the gap $\Delta_\text{CDW}$ results in a plateau for large $V$ while leaving the square root behavior at the beginning mostly unchanged.
 
 
 
