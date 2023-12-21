@@ -13,7 +13,7 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
-params = [ [0., 4.1, 1.], [0., 3.9, 1.], [0., 4.5, 1.], [0., 3.5, 1.] ]
+params = [ [0., 4.1, 1.], [0., 3.9, 1.], [0., 4.6, 1.], [0., 3.4, 1.] ]
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
 nrows = 4
@@ -41,8 +41,8 @@ for j, folder in enumerate(folders):
         # the sc lattice uses a different V for the CDW-AFM border due to the changed coordination number
         params[0][1] = 6.1
         params[1][1] = 5.9
-        params[2][1] = 7.0
-        params[3][1] = 5.0
+        params[2][1] = 7.
+        params[3][1] = 5.
         
     for i, name in enumerate(naming_scheme_tuples(params)):
         resolvents = np.empty(len(name_suffices), dtype=cf.ContinuedFraction)
@@ -72,10 +72,10 @@ for i in range(nrows):
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
-axs[0][1].text(11.5, 0.66, "(a) AFM\n$zV + 0.1t$")
-axs[1][1].text(11.5, 0.66, "(b) CDW\n$zV - 0.1t$")
-axs[2][1].text(11.5, 0.66, "(a) AFM\n$z(V + 0.125t)$")
-axs[3][1].text(11.5, 0.66, "(b) CDW\n$z(V - 0.125t)$")
+axs[0][1].text(11.3, 0.66, "(a) AFM\n$zV + 0.1t$")
+axs[1][1].text(11.3, 0.66, "(b) CDW\n$zV - 0.1t$")
+axs[2][1].text(11.3, 0.66, "(a) AFM\n$z(V + 0.2t)$")
+axs[3][1].text(11.3, 0.66, "(b) CDW\n$z(V - 0.2t)$")
 
 fig.tight_layout()
 plt.savefig("plots/resolvent_overview_AFM_CDW.pdf")
