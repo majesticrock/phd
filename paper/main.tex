@@ -510,18 +510,6 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
 
 \section{Results}\label{sec:results}
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
-    The panels show the spectral functions in the (a) pure SC phase, (b) SC/CDW-coexistence, and (c) and (d) pure CDW phase, respectively.}
-    \label{fig:resolvent_overview_SC}
-\end{figure*}
-
 In this section, we will be investigating four different diagonal Green's functions $G_{AA^\dagger}(\omega + i0^+)$, namely with
 \begin{subequations}
     \label{eqn:resolvent_bases}
@@ -552,13 +540,14 @@ Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in or
 
 \begin{figure*}
     \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
     \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
     The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
     The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 3000$, while $U$ is varied according to the text in the individual panels.
-    The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
-    \label{fig:resolvent_overview_AFM}
+    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
+    The panels show the spectral functions in the (a) pure SC phase, (b) SC/CDW-coexistence, and (c) and (d) pure CDW phase, respectively.}
+    \label{fig:resolvent_overview_SC}
 \end{figure*}
 
 To begin, let us describe the spectral functions $\mathcal{A}_i (\omega) = - (1/\pi) \Im [\mathcal{G}_i (\omega + i0^+)]$ with respect to the operators above in the various phases.
@@ -587,7 +576,7 @@ Previous studies on the dynamics of the order parameter found damped oscillation
 These have the frequency $\Omega = 2 \Delta_\text{SC}$ and fell of as $1/\sqrt{t}$.
 An inverse Fourier transform of $\spectral{Higgs}$ yields precisely the same behavior, thereby reinforcing the validity of our results.
 
-In the CDW phase, both of these spectral functions become identical and form a sharp peak below the two-particle continuum.
+In the CDW phase, see panels (c) and (d), both of $\spectral{Higgs}$ and $\spectral{Phase}$ become identical and form a $\delta$ peak below the two-particle continuum.
 Following the Landau theory for continuous phase transitions, this is to be expected as the free energy is expanded in terms of the order parameter as
 \begin{equation}
     f(\Delta_\text{SC}) \approx r |\Delta_\text{SC}|^2 + \frac{u}{2} |\Delta_\text{SC}|^4\,,
@@ -599,7 +588,7 @@ That means that both possible modes have to overcome the same energy to be excit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 At $V=0$, both the SC and the CDW phase coexist. 
-Since the degeneracy of both phases is exact \textcolor{red}{Zitat}, there should not be any difference between $\spectral{Higgs}$ and $\spectral{CDW}$ as both spectral functions capture the amplitude fluctuations of their respective order parameters.
+Since the degeneracy of both phases is exact due to the SO(4) symmetry \cite{yang90}, there should not be any difference between $\spectral{Higgs}$ and $\spectral{CDW}$ as both spectral functions capture the amplitude fluctuations of their respective order parameters.
 This is precisely what can be seen in panel (b) of \autoref{fig:resolvent_overview_SC}.
 Both spectral functions have a peak at $\omega = 0$ and a singularity at the lower edge of the two-particle continuum $\omega = 2\Delta_\text{tot}$, with $\Delta_\text{tot} \coloneqq \sqrt{|\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}$.
 
@@ -618,12 +607,16 @@ $\spectral{Phase}$ behaves just as it does in the pure SC phase. It has only a p
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-$\spectral{CDW}$ shows a peak below the continuum only in the SC phase corresponding to the finite energy necessary to excite this kind of electronic density modulation.
-For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (c) at $V=0.1t$, the aforementioned spectral function has a peak at $\omega=2\Delta_\text{CDW}$.
-This peak becomes hard and moves outside the two-particle continuum as $V$ is increased, see panel (d) at $V=0.5t$.
+In the SC phase, $\spectral{CDW}$ features a $\delta$ peak below the continuum corresponding to the finite energy necessary to excite this kind of electronic density modulation.
+For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (c) at $V=0.1t$, the aforementioned spectral function has a singularity at $\omega=2\Delta_\text{CDW}$.
+This mode becomes hard and moves outside the two-particle continuum as $V$ is increased, see panel (d) at $V=0.5t$.
+\textcolor{red}{Ich muss mal suchen, ob sowas schonmal beobachtet wurde.}
 
 $\spectral{AFM}$ is restricted to the continuum for both phases and both lattices.
-For the square lattice, however, there is a peak located at the upper edge of the two-particle continuum.
+For the square lattice, however, there is a singularity located at the upper edge of the two-particle continuum.
+
+
+
 
 
 The plots for the phase peak and the CDW peak in the SC phase can be found in appendix \autoref{sec:fit_greens_functions}.
@@ -638,6 +631,24 @@ Next, we will investigate the Higgs peak, this time around, turning toward the s
 We see in \autoref{fig:resolvent_overview_SC} that the Higgs and phase spectral functions become indistinguishable towards the upper half of the two-particle continuum.
 Therefore, we interpret the latter as a background to the Higgs peak itself and compute the difference between both spectral functions.
 Using the same methodology as before we obtain that the exponent is $a\approx-0.5$, indicating that the peak behaves as $1 / \sqrt{\omega - \omega_0}$.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The shaded area marks the two-particle continuum.
+    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 3000$, while $U$ is varied according to the text in the individual panels.
+    The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
+    \label{fig:resolvent_overview_AFM}
+\end{figure*}
+
+
 
 Lastly, we investigate the same spectral functions close to the AFM-CDW phase transition, depicted in \autoref{fig:resolvent_overview_AFM}.
 We choose $V=1t$ for both lattices and $U=zV \pm 0.1t$, where $z$ is the coordination number.
