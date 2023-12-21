@@ -47,7 +47,7 @@ for j, folder in enumerate(folders):
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         if i == 1:
             zoomed_region = (-0.01, 0.1)
-            axins = create_zoom(axs[i][j], 0.2, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.55), 
+            axins = create_zoom(axs[i][j], 0.25, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.55), 
                                 y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents],
                                 skip_lines=[1, 3, 5, 7])
             resolvents[0].mark_continuum(axins, None)
