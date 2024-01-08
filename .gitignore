@@ -17,6 +17,7 @@ python/lib/__pycache__
 cpp/ModeFinder/sources/Utility
 cpp/HubbardMeanField/auto_generated
 cpp/HubbardMeanField/small_auto_generated
+cpp/HubbardMeanField/small_auto_generated2
 cpp/main
 cpp/HubbardMeanField/doxy
 *.bin
