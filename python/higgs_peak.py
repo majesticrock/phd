@@ -8,7 +8,7 @@ colors = prop_cycle.by_key()['color']
 
 T = 0.
 U = -2.5
-V = -0.1
+V = 0.0
 
 use_XP = True
 
