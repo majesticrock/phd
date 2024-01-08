@@ -13,7 +13,7 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
-params = [ [0., 4.1, 1.], [0., 3.9, 1.], [0., 4.6, 1.], [0., 3.4, 1.] ]
+params = [ [0., 4.1, 1.], [0., 3.9, 1.], [0., 4.8, 1.], [0., 3.2, 1.] ]
 
 folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
 nrows = 4
@@ -41,8 +41,8 @@ for j, folder in enumerate(folders):
         # the sc lattice uses a different V for the CDW-AFM border due to the changed coordination number
         params[0][1] = 6.1
         params[1][1] = 5.9
-        params[2][1] = 7.
-        params[3][1] = 5.
+        params[2][1] = 7.2
+        params[3][1] = 4.8
         
     for i, name in enumerate(naming_scheme_tuples(params)):
         resolvents = np.empty(len(name_suffices), dtype=cf.ContinuedFraction)
@@ -52,9 +52,9 @@ for j, folder in enumerate(folders):
             plotters[i][j].plot_with_peak(w_lin, data, label=label)
             
         cont = np.sqrt(resolvents[0].roots[0])
-        zoomed_region = (cont - 0.03, cont + 0.025) if j == 0 else (cont - 0.12, cont + 0.05) 
+        zoomed_region = (cont - 0.035, cont + 0.025) if j == 0 else (cont - 0.12, cont + 0.05) 
 
-        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.3, 0.75, zoomed_region, ylim=(0, 0.65), 
+        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.29, 0.75, zoomed_region, ylim=(0, 0.65), 
                             y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents],
                             skip_lines=[1, 3, 5, 7])
   
@@ -72,10 +72,10 @@ for i in range(nrows):
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
-axs[0][1].text(11.3, 0.66, "(a) AFM\n$zV + 0.1t$")
-axs[1][1].text(11.3, 0.66, "(b) CDW\n$zV - 0.1t$")
-axs[2][1].text(11.3, 0.66, "(a) AFM\n$z(V + 0.2t)$")
-axs[3][1].text(11.3, 0.66, "(b) CDW\n$z(V - 0.2t)$")
+axs[0][1].text(10.6, 0.66, "(a) AFM\n$U = zV + 0.1t$")
+axs[1][1].text(10.6, 0.66, "(b) CDW\n$U = zV - 0.1t$")
+axs[2][1].text(10.6, 0.66, "(a) AFM\n$U = z(V + 0.2t)$")
+axs[3][1].text(10.6, 0.66, "(b) CDW\n$U = z(V - 0.2t)$")
 
 fig.tight_layout()
 plt.savefig("plots/resolvent_overview_AFM_CDW.pdf")
