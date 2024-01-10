@@ -34,7 +34,7 @@ class ContinuedFraction:
         # The lanczos coefficients have an oscillating behaviour at the beginnig
         # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
         # Therefore, we omit the first n (10) data points from our best fit search
-        ingore_first = 20
+        ingore_first = 40
         best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
 
         #artifacts = find_peaks(self.B[1:], prominence=5e2, width=1)
@@ -119,7 +119,7 @@ class ContinuedFraction:
             plotter(np.sqrt(self.roots[0]), np.sqrt(self.roots[1]), **args)
         else:
             plotter(self.roots[0], self.roots[1], **args)
-         
+        
     def continuum_edges(self):
         if not self.z_squared:
             return self.roots
