@@ -30,7 +30,7 @@ for i in range(nrows):
         plotters[i][j].set_individual_dashes([ [1,0], [3,6,3,0], [1.5, 2], [2,4,1.5,4,2,0] ])
 
 plot_lower_lim = 0#-0.05
-plot_upper_lim = 5.37
+plot_upper_lim = 5.35
 
 name_suffices = ["phase_SC", "higgs_SC", "CDW", "AFM"]
 labels = ["Phase", "Higgs", "CDW", "AFM"]
