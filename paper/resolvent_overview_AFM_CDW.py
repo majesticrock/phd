@@ -52,18 +52,19 @@ for j, folder in enumerate(folders):
             plotters[i][j].plot_with_peak(w_lin, data, label=label)
             
         cont = np.sqrt(resolvents[0].roots[0])
-        zoomed_region = (cont - 0.035, cont + 0.025) if j == 0 else (cont - 0.12, cont + 0.05) 
+        zommed_xlim = (cont - 0.035, cont + 0.025) if j == 0 else (cont - 0.12, cont + 0.05) 
 
-        axins = create_zoom(axs[i][j], 0.4, 0.2, 0.29, 0.75, zoomed_region, ylim=(0, 0.65), 
+        zoom_xpos = 0.4 if i < 2 or j == 0 else 0.07
+        axins = create_zoom(axs[i][j], zoom_xpos, 0.29, 0.275, 0.66, zommed_xlim, ylim=(0, 0.55), 
                             y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents],
-                            skip_lines=[1, 3, 5, 7])
+                            skip_lines=[1, 3, 5, 7], yticks=[0, 0.2, 0.4], mark_inset=False)
   
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         resolvents[0].mark_continuum(axs[i][j], None)
         resolvents[0].mark_continuum(axins, None)
 
 
-legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
+legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.3), ncol=2, shadow=True)
 
 for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
@@ -72,10 +73,14 @@ for i in range(nrows):
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
-axs[0][1].text(10.6, 0.66, "(a) AFM\n$U = zV + 0.1t$")
-axs[1][1].text(10.6, 0.66, "(b) CDW\n$U = zV - 0.1t$")
-axs[2][1].text(10.6, 0.66, "(a) AFM\n$U = z(V + 0.2t)$")
-axs[3][1].text(10.6, 0.66, "(b) CDW\n$U = z(V - 0.2t)$")
+axs[0][0].text(7.6, 0.6, "(a.1) AFM\n$U = 4.1t$")
+axs[1][0].text(7.6, 0.6, "(b.1) CDW\n$U = 3.9t$")
+axs[2][0].text(7.6, 0.6, "(c.1) AFM\n$U = 4.8t$")
+axs[3][0].text(7.6, 0.6, "(d.1) CDW\n$U = 3.2t$")
+axs[0][1].text(10.6, 0.6, "(a.2) AFM\n$U = 6.1t$")
+axs[1][1].text(10.6, 0.6, "(b.2) CDW\n$U = 5.9t$")
+axs[2][1].text(10.6, 0.6, "(c.2) AFM\n$U = 7.2t$")
+axs[3][1].text(10.6, 0.6, "(d.2) CDW\n$U = 4.8t$")
 
 fig.tight_layout()
 plt.savefig("plots/resolvent_overview_AFM_CDW.pdf")
