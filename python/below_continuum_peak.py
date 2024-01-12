@@ -5,18 +5,18 @@ import lib.continued_fraction as cf
 reversed = True
 
 T = 0.0
-U = "6.0005"
-V = 1.
+U = -2.5
+V = 0.0
 name = f"T={T}/U={U}/V={V}"
-folder = "data/modes/cube/dos_3k/"
+folder = "data/modes/cube/dos_3k_SC/"
 name_suffix = "CDW"
 fig, ax = plt.subplots()
 
 lb = cf.continuum_edges(f"{folder}{name}", name_suffix, True)[0]
-peak = rp.Peak(f"{folder}{name}", name_suffix, initial_search_bounds=(2., lb), imaginary_offset=1e-6)
+peak = rp.Peak(f"{folder}{name}", name_suffix, initial_search_bounds=(0., lb), imaginary_offset=1e-6)
 print(peak.peak_position)
 print(peak.improved_peak_position(xtol=1e-13))
-popt, pcov, w_space, y_data = peak.fit_real_part(range=0.01, begin_offset=1e-12, reversed=True)
+popt, pcov, w_space, y_data = peak.fit_real_part(range=0.01, begin_offset=1e-12, reversed=False)
 
 ax.text(0.05, 0.35, f"$a={popt[0]:.5f}$", transform = ax.transAxes)
 ax.text(0.05, 0.3, f"$b={popt[1]:.5f}$", transform = ax.transAxes)

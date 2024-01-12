@@ -111,6 +111,7 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
 
 \section{Introduction}\label{sec:introduction}
 
+\textcolor{red}{Intro auf die Phasen und Anregungen beziehen, danach Theorie auspacken}
 The Hubbard model has been studied in a plethora of previous studies. 
 Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
 encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
@@ -508,6 +509,18 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
+    The shaded area marks the two-particle continuum.
+    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
+    The panels show the spectral functions in the (a) SC phase and the (b and c) CDW phase, respectively.}
+    \label{fig:resolvent_overview_SC}
+\end{figure*}
+
 \section{Results}\label{sec:results}
 
 In this section, we will be investigating four different diagonal Green's functions $G_{AA^\dagger}(\omega + i0^+)$, namely with
@@ -538,18 +551,6 @@ Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in or
 
 \subsection{Classification of the spectral functions}
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
-    The panels show the spectral functions in the (a) pure SC phase, (b) SC/CDW-coexistence, and (c) and (d) pure CDW phase, respectively.}
-    \label{fig:resolvent_overview_SC}
-\end{figure*}
-
 To begin, let us describe the spectral functions $\mathcal{A}_i (\omega) = - (1/\pi) \Im [\mathcal{G}_i (\omega + i0^+)]$ with respect to the operators above in the various phases.
 \autoref{fig:resolvent_overview_SC} shows them at $U = -2.5t$ in the SC ($V=-0.1t$) and CDW ($V=0.1t$ and $V=0.5t$) phase, as well as in the SC-CDW coexistence at $V=0$.
 
@@ -559,7 +560,7 @@ We identify them with the well-known Leggett and Higgs modes in superconductors.
 The former can be found at zero energy because our model describes a neutral superfluid wherein there is no coupling of the phase of the order parameter to the electromagnetic potential.
 Therefore, this phase may be chosen arbitrarily, and changing it requires no energy which ultimately allows a Goldstone mode to exist in the first place. \textcolor{red}{Zitieren!}
 
-To classify the occurring peaks that lie outside the two-particle continuum, we turn towards the real part of the Green's function.
+To classify the occurring peaks that lie outside the two-particle continuum, we turn toward the real part of the Green's function.
 We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
 The real part is related to the imaginary part via the Kramers-Kronig relations.
 Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$, and the peak has the weight $w_0 = \exp(b)$.
@@ -570,13 +571,12 @@ This analysis provides that the real part of $\greens{Phase}$ near $\omega=0$ be
 Note, that it is located at $\omega=0$ of a perfectly asymmetrical bosonic spectral function and therefore must have 0 weight.
 This is given here, because $\int \delta'(\omega) \mathrm{d}\omega = 0$.
 
-\textcolor{red}{Ich spekuliere mal...}
 The singularity in $\spectral{Higgs}$ behaves as $1/\sqrt{\omega - 2 \Delta_\text{SC}}$.
 Previous studies on the dynamics of the order parameter found damped oscillations after a quench.
 These have the frequency $\Omega = 2 \Delta_\text{SC}$ and fall off as $1/\sqrt{t}$ \cite{Yuzbashyan06}.
 An inverse Fourier transform of $\spectral{Higgs}$ yields precisely the same behavior, thereby reinforcing the validity of our results.
 
-In the CDW phase, see panels (c) and (d), both of $\spectral{Higgs}$ and $\spectral{Phase}$ become identical and form a $\delta$ peak below the two-particle continuum.
+In the CDW phase, see panels (b) and (c), both of $\spectral{Higgs}$ and $\spectral{Phase}$ become identical and form a $\delta$ peak below the two-particle continuum.
 Following the Landau theory for continuous phase transitions, this is to be expected as the free energy is expanded in terms of the order parameter as
 \begin{equation}
     f(\Delta_\text{SC}) \approx r |\Delta_\text{SC}|^2 + \frac{u}{2} |\Delta_\text{SC}|^4\,,
@@ -585,38 +585,59 @@ with $r > 0$ and $u > 0$ if the system is outside of the superconducting phase. 
 In this case, the only minimum is at $\Delta_\text{SC} = 0$. 
 That means that both possible modes have to overcome the same energy to be excited at all. \textcolor{red}{Passt die Beschreibung so?}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-At $V=0$, both the SC and the CDW phase coexist. 
-Since the degeneracy of both phases is exact due to the SO(4) symmetry \cite{yang90}, 
-there should not be any difference between $\spectral{Higgs}$ and $\spectral{CDW}$ as both spectral functions capture the amplitude fluctuations of their respective order parameters.
-This is precisely what can be seen in panel (b) of \autoref{fig:resolvent_overview_SC}.
-Both spectral functions have a peak at $\omega = 0$ and a singularity at the lower edge of the two-particle continuum $\omega = 2\Delta_\text{tot}$, with $\Delta_\text{tot} \coloneqq \sqrt{|\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}$.
-
-\textcolor{red}{Ich spekuliere mal...}
-In this phase, the mean-field single-particle energies are given by
-\begin{equation}
-    E_{\pm} = \pm \sqrt{\epsilon^2 + |\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}\,.
-\end{equation}
-This means that the proper order parameter is $\Delta_\text{tot}$.
-Here, $\Delta_\text{CDW}$ and $\Delta_\text{SC}$ can change arbitrarily without affecting the system's energy as long as $\Delta_\text{tot}$ remains constant.
-Thus, we associate the peak at $\omega=0$ with this shifting of order parameters.
-The singularity at the lower edge of the two-particle continuum can be interpreted in a similar manner as the Higgs mode in a pure superconductor.
-It captures the change of $\Delta_\text{tot}$ by changing either one of the composing order parameters.
-
-$\spectral{Phase}$ behaves just as it does in the pure SC phase. It has only a peak at $\omega = 0$ that can be associated with the change of the phase of $\Delta_\text{SC}$.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 In the SC phase, $\spectral{CDW}$ features a $\delta$ peak below the continuum corresponding to the finite energy necessary to excite this kind of electronic density modulation.
-For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (c) at $V=0.1t$, the aforementioned spectral function has a singularity at $\omega=2\Delta_\text{CDW}$.
-This mode becomes hard and moves outside the two-particle continuum as $V$ is increased, see panel (d) at $V=0.5t$.
-\textcolor{red}{Ich muss mal suchen, ob sowas schonmal beobachtet wurde.}
+For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (b) at $V=0.1t$, the aforementioned spectral function has a singularity at $\omega=2\Delta_\text{CDW}$.
+This mode becomes hard and moves outside the two-particle continuum as $V$ is increased, see panel (c) at $V=0.5t$.
 
 $\spectral{AFM}$ is restricted to the continuum for both phases and both lattices.
 For the square lattice, however, there is a singularity located at the upper edge of the two-particle continuum.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_V0.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the peaks at $\omega=0$.
+    The shaded area marks the two-particle continuum.
+    For each plot, the parameters are set to $U=-2.5t$, $V=0$, and $N_\gamma = 3000$.
+    Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ may be chosen arbitrarily, we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$.}
+    \label{fig:resolvent_overview_V0}
+\end{figure*}
+
+At $V=0$, both the SC and the CDW phase coexist. 
+In this phase, the mean-field single-particle energies are given by
+\begin{equation}
+    E_{\pm} = \pm \sqrt{\epsilon^2 + |\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}\,.
+\end{equation}
+This means that the proper order parameter is $\Delta_\text{tot} \coloneqq \sqrt{|\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}$.
+Here, $\Delta_\text{CDW}$ and $\Delta_\text{SC}$ can change arbitrarily without affecting the system's energy as long as $\Delta_\text{tot}$ remains constant.
+Note that the degeneracy of both phases is exact due to the SO(4) symmetry \cite{yang90}. 
+
+In \autoref{fig:resolvent_overview_V0}, we show the spectral functions for $U=-2.5t$ and $V=0$.
+The different panels correspond to different choices for $\Delta_\text{CDW}$ and $\Delta_\text{SC}$.
+First, in panel (a), we set $\Delta_\text{CDW} = 0$.
+This results in a purely superconducting phase with the same features as in \autoref{fig:resolvent_overview_SC} panel (a).
+The peak in $\spectral{CDW}$ moves to a very small, yet finite, $\omega$.
+
+Secondly, panel (b) shows the spectral functions for $\Delta_\text{SC} = 0$, i.e., in a purely charge-ordered phase.
+Similar to before, there is not much change compared to \autoref{fig:resolvent_overview_SC} panel (b).
+The spectral functions $\spectral{Higgs}$ and $\spectral{Phase}$ are still identical, however, both exhibit a sharp peak at $\omega=0$.
+This peak is described by $\delta'(\omega)$.
+\textcolor{red}{Warum hat Higgs nun einen Peak bei 0, aber CDW hatte einen bei endlichem $\omega$? Das müsste ja bedeuten, dass ein Cooper-Paar energtisch kostenfrei ist, aber ein CDW-Exziton kostet uns etwas Energie.}
+
+Lastly, we chose $\Delta_\text{CDW} = \Delta_\text{SC}$ for panel (c).
+Now, $\spectral{Higgs}$ and $\spectral{CDW}$ are identical.
+Note, that this only occurs for this specific ratio of $\Delta_\text{CDW}$ and $\Delta_\text{SC}$, otherwise the occurring peaks differ in magnitude.
+Both spectral functions have a peak at $\omega = 0$, described by $\delta'(\omega)$, and a singularity at the lower edge of the two-particle continuum $\omega = 2\Delta_\text{tot}$.
+\textcolor{red}{TODO: Exponent}
+
+We associate the peak at $\omega=0$ with this shifting of order parameters, i.e., diminishing one and increasing the other while keeping $\Delta_\text{tot}$ constant.
+The singularity at the lower edge of the two-particle continuum can be interpreted similarly to the Higgs mode in a pure superconductor.
+It captures the change of $\Delta_\text{tot}$ by changing either one of the composing order parameters.
+
+$\spectral{Phase}$ behaves just as it does in the pure SC phase. It has only a peak at $\omega = 0$ that can be associated with the change of the phase of $\Delta_\text{SC}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -662,6 +683,22 @@ Dividing $\omega_0$ by the gap $\Delta_\text{CDW}$ results in a plateau for larg
 The peak weights $w_0$ fall off as $1/\sqrt{V}$ for $V \ll t$. 
 Afterward, it reaches a shallow minimum and rises slightly to reach a constant value.
 
+Specifically, we learn that for $V \ll t$, the peak position follows $\omega_0 = \alpha \sqrt{V}$ and its weight follows $w_0 = \beta / \sqrt{V}$, where $\alpha$ and $\beta$ are some constants.
+This allows us to write $w_0 = \beta / (\alpha \omega_0)$. Furthermore, we know that the spectral functions need to be perfectly antisymmetrical about $\omega = 0$, i.e. we can observe
+\begin{align}
+    \mathcal{A}_\text{Phase} (\omega \ll t) &= w_0 (\delta (\omega - \omega_0) - \delta (\omega + \omega_0)) \nonumber \\
+        &= - \frac{2\beta}{\alpha} \frac{\delta (\omega + \omega_0) - \delta (\omega - \omega_0)}{2\omega_0} \,.
+\end{align} 
+Taking the limit of $V \to 0$ corresponds to the limit $\omega_0 \to 0$, i.e., leading to an expression reminiscent of symmetric derivative
+\begin{equation}
+    \lim_{h \to 0} \frac{f(x + h) - f(x - h)}{2h} = f'(x)\,,
+\end{equation}
+where the equality holds for any differentiable $f$.
+Applying this to our case yields
+\begin{align}
+    \lim_{\omega_0 \to 0} \mathcal{A}_\text{Phase} (\omega \ll t) = - \frac{2 \beta}{\alpha} \delta'(\omega)\,.
+\end{align}
+This analysis reinforces our previous identification of the phase peak as $\delta' (\omega)$.
 
 \subsection{AFM-CDW transition}
 
