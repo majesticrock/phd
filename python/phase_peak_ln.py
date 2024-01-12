@@ -4,11 +4,11 @@ import lib.continued_fraction as cf
 
 T = 0.
 U = -2.5
-V = -0.1
+V = 0.0
 name = f"T={T}/U={U}/V={V}"
 
 use_xp = True
-folder = "data/modes/square/dos_3k/"
+folder = "data/modes/square/dos_3k_CDW/"
 name_suffix = "phase_SC"
 fig, ax = plt.subplots()
 

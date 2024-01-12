@@ -7,11 +7,17 @@ import numpy as np
 # y_funcs               -   Functions generating the y_data from x_data. May only take 1 argument. Need to be in order
 #                               If it is None, the data is extracted from the plot
 # skip_lines            -   If some lines should be skipped, you can pass the corresponding indizes in an array
-# x/yticklabels         -   Default behaviour: Do not show labels in the zoom; can be changed however by specifying them
+# x/yticklabels         -   Default behaviour: "None" matplotlib default behaviour
 # **kwargs              -   Is forwarded to the creation of the inset axes
-def create_zoom(ax, inset_xpos, inset_ypos, inset_width, inset_height, xlim=(0, .1), ylim=(0, .1), y_funcs=None, skip_lines=[], xticklabels=[], yticklabels=[], **kwargs):
-    axins = ax.inset_axes([inset_xpos, inset_ypos, inset_width, inset_height], xlim=xlim, ylim=ylim, xticklabels=xticklabels, yticklabels=yticklabels, **kwargs)
-    ax.indicate_inset_zoom(axins, edgecolor="black")
+def create_zoom(ax, inset_xpos, inset_ypos, inset_width, inset_height, xlim=(0, .1), ylim=(0, .1), y_funcs=None, skip_lines=[], mark_inset=True, xticks=None, yticks=None, xticklabels=None, yticklabels=None, **kwargs):
+    axins = ax.inset_axes([inset_xpos, inset_ypos, inset_width, inset_height], xlim=xlim, ylim=ylim, **kwargs)
+    if xticks is not None:
+        axins.set_xticks(xticks, xticklabels)
+    if yticks is not None:
+        axins.set_yticks(yticks, yticklabels)
+        
+    if mark_inset: 
+        ax.indicate_inset_zoom(axins, edgecolor="black")
     
     i=0
     for j, line in enumerate(ax.lines):
