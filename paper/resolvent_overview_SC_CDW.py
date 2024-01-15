@@ -26,7 +26,7 @@ for i in range(nrows):
         axs[i][j].set_ylim(0, .99)
         plotters[i][j] = ps.CURVEFAMILY(4, axis=axs[i][j])
         plotters[i][j].set_individual_colors("nice")
-        plotters[i][j].set_individual_dashes([ [1,0], [3,6,3,0], [1.5, 2], [2,4,1.5,4,2,0] ])
+        plotters[i][j].set_individual_dashes([ [1,0], [3,6,3,0], [1.5, 2], [3,5,1.5,5,3,0] ])
 
 plot_lower_lim = -0.05
 plot_upper_lim = 4.25

@@ -31,7 +31,7 @@ class Peak:
     def improved_peak_position(self, xtol=2e-12):
         offset_peak = 0.2
         search_bounds = (0 if self.peak_position - offset_peak < 0 else self.peak_position - offset_peak, 
-                 np.sqrt(self.resolvent.roots[0]) if self.peak_position + offset_peak > np.sqrt(self.resolvent.roots[0]) else self.peak_position + offset_peak)
+                        np.sqrt(self.resolvent.roots[0]) if self.peak_position + offset_peak > np.sqrt(self.resolvent.roots[0]) else self.peak_position + offset_peak)
 
         def min_func(x):
             return self.imaginary_part(x)
@@ -54,3 +54,15 @@ class Peak:
         self.fit_real_part(begin_offset=1e-9, range=0.02)
         print(self.popt)
         return np.exp(self.popt[1]) / 2
+
+# returns a tuple of numbers (peak position, peak weight)
+def analyze_peak(data_folder, name_suffix, initial_search_bounds=(0., "lower_edge"), imaginary_offset=1e-5):
+    peak = Peak(data_folder, name_suffix, initial_search_bounds, imaginary_offset=imaginary_offset)
+    peak_pos_value = np.copy(peak.peak_position)
+    peak_result = peak.improved_peak_position(xtol=1e-12)
+    # only an issue if the difference is too large;
+    if not peak_result["success"]:
+        print("We might not have found the peak for data_folder!\nWe found ", peak_pos_value, " and\n", peak_result)
+
+    popt, pcov, w_log, y_data = peak.fit_real_part(0.001, 1e-7)
+    return peak_result["x"], popt[1]
