@@ -49,7 +49,7 @@ for j, folder in enumerate(folders):
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, resolvents[k] = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
                                                             number_of_values=10000, xp_basis=True, imaginary_offset=1e-5, messages=False)
-            plotters[i][j].plot_with_peak(w_lin, data, label=label)
+            plotters[i][j].plot_with_peak(w_lin, data, label=r"$\mathcal{A}_\mathrm{" + label + r"} (\omega)$")
             
         cont = np.sqrt(resolvents[0].roots[0])
         zommed_xlim = (cont - 0.035, cont + 0.025) if j == 0 else (cont - 0.12, cont + 0.05) 
@@ -58,7 +58,6 @@ for j, folder in enumerate(folders):
         axins = create_zoom(axs[i][j], zoom_xpos, 0.29, 0.275, 0.66, zommed_xlim, ylim=(0, 0.55), 
                             y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents],
                             skip_lines=[1, 3, 5, 7], yticks=[0, 0.2, 0.4], mark_inset=False)
-  
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         resolvents[0].mark_continuum(axs[i][j], None)
         resolvents[0].mark_continuum(axins, None)
