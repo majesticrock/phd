@@ -73,7 +73,7 @@ for i in range(2):
 
     plotters[0][i].plot(v_data[cut:], peak_positions[cut:], label="Data Fit")
     plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Omitted data")
-    plotters[0][i].plot(v_data, peak_positions_div_delta, label=r"$\omega_0 / \Delta_\mathrm{CDW}$")
+    plotters[0][i].plot(v_data, peak_positions_div_delta, label=r"$\omega_0 / \Delta_\mathrm{SC}$")
     
     # V = 0, Delta_CDW = 0
     peak_pos_value, peak_weight = rp.analyze_peak(f"{folders[i][:-1]}_SC/T={Ts[0]}/U={Us[0]}/V=0.0", name_suffix)
@@ -83,9 +83,16 @@ for i in range(2):
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
+axs[1][0].set_ylim(axs[1][0].get_ylim()[0], axs[1][0].get_ylim()[1] + 0.17)
+axs[1][1].set_ylim(axs[1][1].get_ylim()[0], axs[1][1].get_ylim()[1] + 0.17)
 
-axs[1][0].set_xlabel(r"$\ln(|V| / t)$")
-axs[1][1].set_xlabel(r"$\ln(|V| / t)$")
+axs[0][0].text(0.8, 0.92, "(a.1)", transform = axs[0][0].transAxes)
+axs[0][1].text(0.8, 0.92, "(a.2)", transform = axs[0][1].transAxes)
+axs[1][0].text(0.8, 0.92, "(b.1)", transform = axs[1][0].transAxes)
+axs[1][1].text(0.8, 0.92, "(b.2)", transform = axs[1][1].transAxes)
+
+axs[1][0].set_xlabel(r"$\ln|V / t|$")
+axs[1][1].set_xlabel(r"$\ln|V / t|$")
 axs[1][0].set_ylabel(r"$b = \ln(w_0)$")
 axs[0][0].set_ylabel(r"$\ln(\omega_0 / t)$")
 axs[1][1].legend(loc="lower right")

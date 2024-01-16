@@ -1,7 +1,7 @@
 all: build/main.pdf
 
 PLTS_SCR=phase_diagram.py resolvent_overview_SC_CDW.py resolvent_overview_AFM_CDW.py peak_fits.py zero_peaks.py higgs_peak.py \
-	sc_peak_in_cdw.py cdw_peak_in_sc.py resolvent_overview_V0.py afm_cdw_peaks_overview.py
+	sc_peak_in_cdw.py cdw_peak_in_sc.py resolvent_overview_V0.py afm_cdw_peaks_overview.py afm_cdw_peaks_details.py
 
 PLTS_PDF=$(addprefix plots/, $(subst .py,.pdf,$(PLTS_SCR)))
 
