@@ -101,6 +101,11 @@ for i in range(2):
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
+axs[0][0].text(0.8, 0.92, "(a.1)", transform = axs[0][0].transAxes)
+axs[0][1].text(0.8, 0.92, "(a.2)", transform = axs[0][1].transAxes)
+axs[1][0].text(0.8, 0.92, "(b.1)", transform = axs[1][0].transAxes)
+axs[1][1].text(0.8, 0.92, "(b.2)", transform = axs[1][1].transAxes)
+
 axs[1][0].set_xlabel(r"$\ln(V / t)$")
 axs[1][1].set_xlabel(r"$\ln(V / t)$")
 axs[1][0].set_ylabel(r"$b = \ln(w_0)$")
