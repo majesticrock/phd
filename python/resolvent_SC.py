@@ -10,7 +10,7 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.5])
-Vs = np.array([-1.0])
+Vs = np.array([-0.34])
 
 use_XP = True
 
@@ -26,7 +26,7 @@ plotter.set_individual_colors("nice2")
 plotter.set_individual_linestyles(["-", "-.", "--", ":"])
 #plotter.set_individual_dashes()
 
-plot_lower_lim = 0
+plot_lower_lim = -0.05
 plot_upper_lim = 12
 
 name_suffix = "phase_SC"

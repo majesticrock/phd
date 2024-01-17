@@ -61,8 +61,8 @@ for i in range(2):
         plotters[2][i].plot(u_data, np.exp(weights))
     
     for j in range(nrows):
-        axs[j][i].axvspan(min(u_data), (min(u_data) + max(u_data)) / 2, alpha=0.3, color="blue")
-        axs[j][i].axvspan((min(u_data) + max(u_data)) / 2, max(u_data), alpha=0.3, color="orange")
+        axs[j][i].axvspan(min(u_data), (min(u_data) + max(u_data)) / 2, alpha=0.3, color="orange")
+        axs[j][i].axvspan((min(u_data) + max(u_data)) / 2, max(u_data), alpha=0.3, color="blue")
 
 axs[1][0].set_ylim(0, 0.022)
 axs[2][0].set_ylim(0, 0.11)
