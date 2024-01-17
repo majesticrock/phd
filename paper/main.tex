@@ -546,7 +546,7 @@ For this reason, we will only show the $\omega \geq 0$ in our plots.
 Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%                                           Classification                                                  %%%%%
+%%%%%                                              Classification                                               %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Classification of the spectral functions}
@@ -662,6 +662,11 @@ In the CDW phase, this behavior is reversed, i.e., the peak in $\spectral{CDW}$ 
 Using the same analysis as before, we conclude that each of these peaks is a $\delta$ peak.
 Moving further away from the phase transition, here $U=z(V+0.2t)$ in panels (c) and (d), the upper peak becomes soft as it shifts into the two-particle continuum. 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  SC-CDW                                                   %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{SC-CDW transition}
 
 \begin{figure*}
@@ -705,13 +710,39 @@ This analysis reinforces our previous identification of the phase peak as $\delt
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
-    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase while the lower panels (b) show their respective weights $w_0 = e^{b}$.
-    In the upper panels, the green markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{SC}$.
-    The dashed lines represent the value found for $U=-2.5t$ and $V=0$ while fixing $\Delta_\text{CDW}=0$.
+    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase, 
+    as well as the position relative to the lower edge of the continuum $\omega_-$.% and in units of $\Delta_\text{SC}$. 
+    The lower panels (b) show their respective weights $w_0 = e^{b}$.
+    The dashed lines represent the value of $\omega_0$ and $w_0$ computed for $U=-2.5t$ and $V=0$ while fixing $\Delta_\text{CDW}=0$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
-    The fits are linear, i.e., $y(V) = c \ln|V/t| + d$, and the parameters are printed on the individual panels.}
+    The $V$-axis is scaled logarithmically.
+    %The fits are linear, i.e., $y(V) = c \ln|V/t| + d$, and the parameters are printed on the individual panels. \textcolor{red}{ind möglicherweise auch gar nicht sinnvoll.}
+    The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
+    Choosing even smaller values results in $\mathcal{M}$ no longer being positive, i.e., the system is not in thermal equilibrium.}
     \label{fig:cdw_in_sc_behavior}
 \end{figure*}
+
+As a next step, we want to analyze the peak in $\spectral{CDW}$ that occurs if the system is in the SC phase ($V<0$).
+A plot of its position $\omega_0$ and weight $w_0$ can be seen in \autoref{fig:sc_in_cdw_behavior}.
+Both of them smoothly approach a finite value for $|V| \ll 1t$, marked by the dashed line.
+These values are obtained by computing the peaks position and weight for $V=0$ and setting $\Delta_\text{CDW}=0$, see \autoref{fig:resolvent_overview_V0} (a).
+
+Moving towards smaller $V$, the peaks move toward greater $\omega$, i.e., closer toward the two-particle continuum.
+Additionally, the weights drop off, first with increasing speed and then slowing down.
+They seem to converge toward some value, but we are unable to compute the Green's functions for additional, 
+even smaller $V$ because the matrix $\mM$ is not nonnegative anymore after $V\approx -0.28t$ (square lattice) or $V\approx -0.34t$ (simple cubic lattice).
+Note, that our proof for the nonnegativity is based on the system being in thermal equilibrium.
+Therefore, we conclude that beyond these $V$, the superconducting phase is not the true groundstate of the system.
+Specifically, the s-wave superconducting phase on the square lattice seems to be even smaller than first estimated using the $d_{x^2 -y^2}$ data from \cite{Micnas88b}.
+In recent research, there has been evidence for a phase seperated state for negative values of $V$,
+which would explain our results here \cite{Linner23}. 
+The magnitude of $V$ for which our calculation stops working is in the same order as in the referenced paper.
+Note however, that we did our computations at $T=0$ while the reference worked on finite temperature systems.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  AFM-CDW                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{AFM-CDW transition}
 
@@ -726,7 +757,26 @@ This analysis reinforces our previous identification of the phase peak as $\delt
     \label{fig:afm_cdw_peaks_overview}
 \end{figure*}
 
-TODO
+Lastly, we investigate how the modes behave a the system transitions between the CDW and AFM phases.
+Similar to the previous subsection, we plot the occurring peaks in $\spectral{CDW}$ and $\spectral{AFM}$ within the respective phase in \autoref{fig:afm_cdw_peaks_overview}.
+On the right side of each panel, i.e., for $U > zV$, the system is in the AFM phase (blue shading).
+On the left side, it is in the CDW phase (orange shading).
+In general, the peak in $\spectral{AFM}$ behaves exactly as the peak in $\spectral{CDW}$ if the phases are swapped.
+
+The panels (a) show the peaks' positions unmodified. They essentially move linearly as $U$ is varied.
+It is noteworthy, that the in the AFM phase, the peak in $\spectral{AFM}$ lies lower than the one in $\spectral{CDW}$.
+Naturally, this is reversed, if the system is in the CDW phase.
+This is to be expected, as creating an AFM excitation should be energetically more favorable if the system is already in said phase.
+
+Additionally, we plot in (b) the peaks' positions relative to the lower edge of the two-particle continuum.
+We see that the lower lying peak, i.e., the peak corresponding to the phase the system is in, 
+strays further away from the continuum as the system moves away from the phase boundary.
+The other peak, however, moves evercloser to the aforementioned continuum until they reach it.
+At this point, the weight of said peak also vanishes, see panels (c).
+This occurs around $U=4V \pm 0.4t$ for the square lattice and around $U=6V \pm 1t$ for the simple cubic lattice.
+
+On the square lattice, the weights of the peak in $\spectral{AFM}$ in the AFM phase (the same applies for CDW) grows as the system moves away from the phase transition.
+On the simple cubic lattice, however, the weights fall off very slightly.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
