@@ -9,13 +9,13 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-2.5])
-Vs = np.array([0.4])
+Us = np.array([7.1])
+Vs = np.array([1.])
 
 use_XP = True
 createZoom = False
 
-folder = "data/modes/square/dos_3k/"
+folder = "data/modes/cube/dos_3k/"
 name_suffix = "CDW"
 element_names = ["a", "a+b", "a+ib"]
 fig, ax = plt.subplots()

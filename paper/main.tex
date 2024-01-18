@@ -111,8 +111,9 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
 
 \section{Introduction}\label{sec:introduction}
 
-\textcolor{red}{Intro auf die Phasen und Anregungen beziehen, danach Theorie auspacken}
-The Hubbard model has been studied in a plethora of previous studies. 
+
+Collective excitations hold profound scientific interest as they unveil the intricate dynamics of correlated electron systems, offering key insights into the emergent properties of materials.
+On the theoretical side, the Hubbard model has been employed in a plethora of previous studies. 
 Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
 encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
 Shortly afterward, an exact SO(4) symmetry was discovered,
@@ -129,7 +130,8 @@ yielding damped or persistent oscillations depending on the magnitude of the que
 More recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
 
 In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
-\textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models, ggf nochmal suchen...}
+\textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models.
+Es gibt eines zum normalen Hubbard model \cite{Staudt00} und nen Haufen zum Bose-Hubbard-Model, aber das ist halt etwas anderes.}
 The 2D case already exhibits a wide range of possible phases, including CDW, AFM as well as $s$- and $d_{x^2 - y^2}$-wave superconductivity
 \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22}.
 
@@ -146,19 +148,17 @@ The former is located at zero energy as our model describes neutral superfluids.
 The latter is found at the lower edge of the two-particle continuum.
 
 The remainder of this paper is organized as follows:
-In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as our mean-field theory.
-A brief overview of the iterated equations of motion approach is presented in \autoref{sec:ieom}.
+In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as our mean-field theory for the ground state.
+We give a brief overview of the iterated equations of motion approach and derive a rigorous link to Green's functions in \autoref{sec:ieom}.
 Next, we show our results in \autoref{sec:results}.
 Lastly, in \autoref{sec:conclusion}, we will discuss our results.
-%In the appendix \textcolor{red}{(or in the supplemental material?)}, we will derive and explain our methods in detail.
 
 \section{Model and mean-field theory}\label{sec:model}
 
 \subsection{Model}
 
-\textcolor{red}{Schreiben wie cool das Hubbard Model ist}
-
-The Hamiltonian of the extended Hubbard model is given by
+In our study, we employ the extended Hubbard model because it encompasses various phases and thereby provides direct access to a rich spectrum of excitation spectra therein.
+Its Hamiltonian is given by
 \begin{equation}
     \label{eqn:full_hamiltonian}
     \begin{aligned}
@@ -464,6 +464,86 @@ In conclusion, the Green's function is given by
     \end{align}
 \end{subequations}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  Figures                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
+    The shaded area marks the two-particle continuum.
+    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
+    The panels show the spectral functions in the (a) SC phase and the (b and c) CDW phase, respectively.}
+    \label{fig:resolvent_overview_SC}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_V0.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the peaks at $\omega=0$.
+    The shaded area marks the two-particle continuum.
+    For each plot, the parameters are set to $U=-2.5t$, $V=0$, and $N_\gamma = 3000$.
+    Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ may be chosen arbitrarily, we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$.}
+    \label{fig:resolvent_overview_V0}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The shaded area marks the two-particle continuum.
+    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 3000$, while $U$ is varied according to the text in the individual panels.
+    The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
+    \label{fig:resolvent_overview_AFM}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw.pdf}
+    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase while the lower panels (b) show their respective weights $w_0 = e^{b}$.
+    In the upper panels, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$.
+    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
+    The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
+    \label{fig:sc_in_cdw_behavior}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
+    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase, 
+    as well as the position relative to the lower edge of the continuum $\omega_-$.% and in units of $\Delta_\text{SC}$. 
+    The lower panels (b) show their respective weights $w_0 = e^{b}$.
+    The dashed lines represent the value of $\omega_0$ and $w_0$ computed for $U=-2.5t$ and $V=0$ while fixing $\Delta_\text{CDW}=0$.
+    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
+    The $V$-axis is scaled logarithmically.
+    The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
+    Choosing even smaller values results in $\mathcal{M}$ no longer being positive, i.e., the system is not in thermal equilibrium.
+    \textcolor{red}{Der Fit im unteren Panel ist ein artanh(ln|V|), damit landet man bei sowas wie $(1-V^2)/(1+V^2)$.
+    Darüber muss ich noch etwas nachdenken.}}
+    \label{fig:cdw_in_sc_behavior}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_overview.pdf}
+    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{AFM}$ (blue lines) close to the corresponding phase transition $U = zV$.
+    The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum $\omega_-$, while the bottom panels (c) show their respective weights.
+    The shadings indicate the phase the system is in. Blue represents AFM while orange represents CDW.
+    The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
+    Note the difference in the scales for the two lattices.}
+    \label{fig:afm_cdw_peaks_overview}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  Figures                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
 This can be achieved using a Lanczos tridiagonalization and subsequently a continued fraction expansion in the form of
 
@@ -509,18 +589,6 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
-    The panels show the spectral functions in the (a) SC phase and the (b and c) CDW phase, respectively.}
-    \label{fig:resolvent_overview_SC}
-\end{figure*}
-
 \section{Results}\label{sec:results}
 
 In this section, we will be investigating four different diagonal Green's functions $G_{AA^\dagger}(\omega + i0^+)$, namely with
@@ -558,7 +626,7 @@ There are a variety of different features. The difference between the two lattic
 First and foremost, in the SC phase, see panel (a), there is a sharp peak located at $\omega=0$ in $\spectral{Phase}$ and a singularity in $\spectral{Higgs}$ located at $\omega=2\Delta_\text{SC}$.
 We identify them with the well-known Leggett and Higgs modes in superconductors.
 The former can be found at zero energy because our model describes a neutral superfluid wherein there is no coupling of the phase of the order parameter to the electromagnetic potential.
-Therefore, this phase may be chosen arbitrarily, and changing it requires no energy which ultimately allows a Goldstone mode to exist in the first place. \textcolor{red}{Zitieren!}
+Therefore, this phase may be chosen arbitrarily, and changing it requires no energy which ultimately allows a Goldstone mode to exist in the first place \cite{Goldstone1961,Anderson63}.
 
 To classify the occurring peaks that lie outside the two-particle continuum, we turn toward the real part of the Green's function.
 We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
@@ -581,7 +649,7 @@ Following the Landau theory for continuous phase transitions, this is to be expe
 \begin{equation}
     f(\Delta_\text{SC}) \approx r |\Delta_\text{SC}|^2 + \frac{u}{2} |\Delta_\text{SC}|^4\,,
 \end{equation}
-with $r > 0$ and $u > 0$ if the system is outside of the superconducting phase. \textcolor{red}{Zitieren!}
+with $r > 0$ and $u > 0$ if the system is outside of the superconducting phase. 
 In this case, the only minimum is at $\Delta_\text{SC} = 0$. 
 That means that both possible modes have to overcome the same energy to be excited at all. \textcolor{red}{Passt die Beschreibung so?}
 
@@ -594,19 +662,7 @@ For the square lattice, however, there is a singularity located at the upper edg
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_V0.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the peaks at $\omega=0$.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$, $V=0$, and $N_\gamma = 3000$.
-    Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ may be chosen arbitrarily, we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$.}
-    \label{fig:resolvent_overview_V0}
-\end{figure*}
-
-At $V=0$, both the SC and the CDW phase coexist. 
+At $V=0$, both the SC and the CDW orders coexist. 
 In this phase, the mean-field single-particle energies are given by
 \begin{equation}
     E_{\pm} = \pm \sqrt{\epsilon^2 + |\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}\,.
@@ -641,17 +697,6 @@ $\spectral{Phase}$ behaves just as it does in the pure SC phase. It has only a p
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 3000$, while $U$ is varied according to the text in the individual panels.
-    The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
-    \label{fig:resolvent_overview_AFM}
-\end{figure*}
-
 Lastly, we investigate the same spectral functions close to the AFM-CDW phase transition, depicted in \autoref{fig:resolvent_overview_AFM}.
 We choose $V=1t$ for both lattices and $U=zV \pm 0.1t$, where $z$ is the coordination number, see panels (a) and (b).
 Again, both SC-related spectral functions are identical in both the CDW and AFM phases.
@@ -668,16 +713,6 @@ Moving further away from the phase transition, here $U=z(V+0.2t)$ in panels (c) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{SC-CDW transition}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw.pdf}
-    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase while the lower panels (b) show their respective weights $w_0 = e^{b}$.
-    In the upper panels, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
-    The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
-    \label{fig:sc_in_cdw_behavior}
-\end{figure*}
 
 With the prevalent peaks discussed, we turn towards their behavior as the system approaches the phase transition at $V=0$ for $U=-2.5t$.
 First and foremost, we investigate the peak in $\spectral{Phase}$ and $\spectral{Higgs}$ in the CDW phase.
@@ -707,37 +742,23 @@ Applying this to our case yields
 \end{align}
 This analysis reinforces our previous identification of the phase peak as $\delta' (\omega)$.
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
-    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase, 
-    as well as the position relative to the lower edge of the continuum $\omega_-$.% and in units of $\Delta_\text{SC}$. 
-    The lower panels (b) show their respective weights $w_0 = e^{b}$.
-    The dashed lines represent the value of $\omega_0$ and $w_0$ computed for $U=-2.5t$ and $V=0$ while fixing $\Delta_\text{CDW}=0$.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
-    The $V$-axis is scaled logarithmically.
-    %The fits are linear, i.e., $y(V) = c \ln|V/t| + d$, and the parameters are printed on the individual panels. \textcolor{red}{ind möglicherweise auch gar nicht sinnvoll.}
-    The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
-    Choosing even smaller values results in $\mathcal{M}$ no longer being positive, i.e., the system is not in thermal equilibrium.}
-    \label{fig:cdw_in_sc_behavior}
-\end{figure*}
-
 As a next step, we want to analyze the peak in $\spectral{CDW}$ that occurs if the system is in the SC phase ($V<0$).
 A plot of its position $\omega_0$ and weight $w_0$ can be seen in \autoref{fig:sc_in_cdw_behavior}.
 Both of them smoothly approach a finite value for $|V| \ll 1t$, marked by the dashed line.
-These values are obtained by computing the peaks position and weight for $V=0$ and setting $\Delta_\text{CDW}=0$, see \autoref{fig:resolvent_overview_V0} (a).
+These values are obtained by computing the peaks' position and weight for $V=0$ and setting $\Delta_\text{CDW}=0$, see \autoref{fig:resolvent_overview_V0} (a).
 
-Moving towards smaller $V$, the peaks move toward greater $\omega$, i.e., closer toward the two-particle continuum.
+Moving towards smaller $V$, the peaks move toward greater $\omega$, i.e., closer to the two-particle continuum.
 Additionally, the weights drop off, first with increasing speed and then slowing down.
 They seem to converge toward some value, but we are unable to compute the Green's functions for additional, 
 even smaller $V$ because the matrix $\mM$ is not nonnegative anymore after $V\approx -0.28t$ (square lattice) or $V\approx -0.34t$ (simple cubic lattice).
 Note, that our proof for the nonnegativity is based on the system being in thermal equilibrium.
-Therefore, we conclude that beyond these $V$, the superconducting phase is not the true groundstate of the system.
+Therefore, we conclude that beyond these $V$, the superconducting phase is not the true ground state of the system.
 Specifically, the s-wave superconducting phase on the square lattice seems to be even smaller than first estimated using the $d_{x^2 -y^2}$ data from \cite{Micnas88b}.
-In recent research, there has been evidence for a phase seperated state for negative values of $V$,
-which would explain our results here \cite{Linner23}. 
+In recent research, there has been evidence for a phase-separated state for negative values of $V$ on a square lattice,
+which would explain our results here \cite{Linner23}.
+It would be reasonable to assume, that this phase occurs in both the 2- and 3-dimensional case.
 The magnitude of $V$ for which our calculation stops working is in the same order as in the referenced paper.
-Note however, that we did our computations at $T=0$ while the reference worked on finite temperature systems.
+Note, however, that we did our computations at $T=0$ while the reference worked on finite temperature systems.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -746,36 +767,25 @@ Note however, that we did our computations at $T=0$ while the reference worked o
 
 \subsection{AFM-CDW transition}
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_overview.pdf}
-    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{AFM}$ (blue lines) close to the corresponding phase transition $U = zV$.
-    The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum $\omega_-$, while the bottom panels (c) show their respective weights.
-    The shadings indicate the phase the system is in. Blue represents AFM while orange represents CDW.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
-    Note the difference in the scales for the two lattices.}
-    \label{fig:afm_cdw_peaks_overview}
-\end{figure*}
-
-Lastly, we investigate how the modes behave a the system transitions between the CDW and AFM phases.
+Lastly, we investigate how the modes behave as the system transitions between the CDW and AFM phases.
 Similar to the previous subsection, we plot the occurring peaks in $\spectral{CDW}$ and $\spectral{AFM}$ within the respective phase in \autoref{fig:afm_cdw_peaks_overview}.
 On the right side of each panel, i.e., for $U > zV$, the system is in the AFM phase (blue shading).
 On the left side, it is in the CDW phase (orange shading).
 In general, the peak in $\spectral{AFM}$ behaves exactly as the peak in $\spectral{CDW}$ if the phases are swapped.
 
-The panels (a) show the peaks' positions unmodified. They essentially move linearly as $U$ is varied.
-It is noteworthy, that the in the AFM phase, the peak in $\spectral{AFM}$ lies lower than the one in $\spectral{CDW}$.
+The panel (a) shows the peaks' positions unmodified. They essentially move linearly as $U$ is varied.
+It is noteworthy, that in the AFM phase, the peak in $\spectral{AFM}$ lies lower than the one in $\spectral{CDW}$.
 Naturally, this is reversed, if the system is in the CDW phase.
 This is to be expected, as creating an AFM excitation should be energetically more favorable if the system is already in said phase.
 
 Additionally, we plot in (b) the peaks' positions relative to the lower edge of the two-particle continuum.
-We see that the lower lying peak, i.e., the peak corresponding to the phase the system is in, 
+We see that the lower-lying peak, i.e., the peak corresponding to the phase the system is in, 
 strays further away from the continuum as the system moves away from the phase boundary.
-The other peak, however, moves evercloser to the aforementioned continuum until they reach it.
-At this point, the weight of said peak also vanishes, see panels (c).
-This occurs around $U=4V \pm 0.4t$ for the square lattice and around $U=6V \pm 1t$ for the simple cubic lattice.
+The other peak, however, moves ever closer to the aforementioned continuum until they reach it.
+At this point, the weight of said peak also vanishes, see panel (c).
+This occurs around $U=4V \pm 0.4t$ for the square lattice and around $U=6V \pm 1.1t$ for the simple cubic lattice.
 
-On the square lattice, the weights of the peak in $\spectral{AFM}$ in the AFM phase (the same applies for CDW) grows as the system moves away from the phase transition.
+On the square lattice, the weights of the peak in $\spectral{AFM}$ in the AFM phase (the same applies for CDW) grow as the system moves away from the phase transition.
 On the simple cubic lattice, however, the weights fall off very slightly.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -786,7 +796,13 @@ On the simple cubic lattice, however, the weights fall off very slightly.
 
 \section{Conclusion}\label{sec:conclusion}
 
-...
+Ideen für die Zukunft:
+
+Phase-separated state aufnehmen
+
+Ankopplung an das EM-Feld
+
+Mehrbandsysteme
 
 %==============================================================================
 % Acknowledgments 
