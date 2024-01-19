@@ -82,6 +82,5 @@ axs[1][0].set_ylabel(r"$w_0$")
 legend = axs[0][1].legend()
 fig.tight_layout()
 
-import os
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 #plt.show()
