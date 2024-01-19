@@ -8,7 +8,10 @@ class ContinuedFraction:
     # In Python there is no need to declare one's variables beforehand.
     # How foolish of me to assume otherwise
     
-    def __init__(self, data_folder, filename, z_squared=True, messages=True):
+    # The lanczos coefficients have an oscillating behaviour at the beginnig
+    # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
+    # Therefore, we omit the first n (40) data points from our best fit search
+    def __init__(self, data_folder, filename, z_squared=True, messages=True, ingore_first=40):
         self.z_squared = z_squared
         self.messages = messages
         file = f"{data_folder}/one_particle.dat.gz"
@@ -31,10 +34,6 @@ class ContinuedFraction:
         for i in range(0, len(self.A) - 1):
             deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
         
-        # The lanczos coefficients have an oscillating behaviour at the beginnig
-        # Thus there may be the best fit there by random chance, eventhough it isn't really converged yet
-        # Therefore, we omit the first n (10) data points from our best fit search
-        ingore_first = 40
         best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
 
         #artifacts = find_peaks(self.B[1:], prominence=5e2, width=1)
@@ -161,7 +160,7 @@ def continuum_edges(data_folder, name_suffix, xp_basis=True):
     
     return np.sqrt(res.roots)
 
-def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False, messages=True):
+def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, begin_offset=1e-6, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, reversed=False, messages=True, ingore_first=40):
     edges = continuum_edges(data_folder, name_suffix, xp_basis)    
     if lower_edge is None:
         lower_edge = edges[0]
@@ -181,17 +180,17 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
-            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, messages)
+            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, messages, ingore_first)
         else:
-            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True, messages)
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True, messages, ingore_first)
         
         data = res.continued_fraction( w_usage, withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
-        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True, messages)
+        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True, messages, ingore_first)
         
         for idx, element in enumerate(element_names):
-            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True, messages)
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True, messages, ingore_first)
             
             def dos(w):
                 if idx==0:
@@ -208,13 +207,13 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
             
     return NORM_FACTOR * data.imag, data.real, w_log.real, res
 
-def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, use_start=True, messages=True):
+def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, use_start=True, messages=True, ingore_first=40):
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
         if name_suffix == "AFM" or name_suffix == "CDW":
-            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, messages)
+            res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, messages, ingore_first)
         else:
-            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True, messages)
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True, messages, ingore_first)
         
         if upper_edge is None:
             upper_edge = np.sqrt(res.roots[1]) + 0.5
@@ -223,14 +222,14 @@ def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_bas
         data = res.continued_fraction( w_lin, withTerminator)
     else:
         element_names = ["a", "a+b", "a+ib"]
-        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True, messages)
+        res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element_names[0]}", True, messages, ingore_first)
         if upper_edge is None:
             upper_edge = np.sqrt(res.roots[1]) + 0.5
         w_lin = np.linspace(lower_edge, upper_edge, number_of_values, dtype=complex)[0 if use_start else 1:]
         w_lin += (imaginary_offset * 1j)
         
         for idx, element in enumerate(element_names):
-            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True, messages)
+            res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}_{element}", True, messages, ingore_first)
             
             def dos(w):
                 if idx==0:

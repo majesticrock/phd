@@ -55,6 +55,5 @@ axs[len(axs)-1][0].set_xlabel(r"$\ln((\omega - \omega_0) / t)$")
 axs[len(axs)-1][1].set_xlabel(r"$\ln((\omega - \omega_0) / t)$")
 fig.tight_layout()
 
-import os
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 #plt.show()

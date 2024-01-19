@@ -5,11 +5,11 @@ import lib.continued_fraction as cf
 reversed = True
 
 T = 0.0
-U = -2.5
-V = 0.0
+U = 6.2
+V = 1.0
 name = f"T={T}/U={U}/V={V}"
-folder = "data/modes/cube/dos_3k_SC/"
-name_suffix = "CDW"
+folder = "data/modes/cube/dos_3k/"
+name_suffix = "AFM"
 fig, ax = plt.subplots()
 
 lb = cf.continuum_edges(f"{folder}{name}", name_suffix, True)[0]

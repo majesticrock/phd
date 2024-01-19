@@ -114,6 +114,5 @@ axs[1][1].legend(loc="lower right")
 axs[0][1].legend(loc="lower right", ncol=2)
 fig.tight_layout()
 
-import os
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 #plt.show()
