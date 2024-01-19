@@ -82,4 +82,5 @@ axs[2][1].text(10.6, 0.6, "(c.2) AFM\n$U = 7.2t$")
 axs[3][1].text(10.6, 0.6, "(d.2) CDW\n$U = 4.8t$")
 
 fig.tight_layout()
-plt.savefig("plots/resolvent_overview_AFM_CDW.pdf")
+plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
+#plt.show()

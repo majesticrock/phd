@@ -50,6 +50,5 @@ axs[1][1].text(-2.8, 8.5, "(b) SC/CDW\n$V=0$")
 
 fig.tight_layout()
 
-import os
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 #plt.show()

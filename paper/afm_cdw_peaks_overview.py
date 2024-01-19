@@ -87,6 +87,5 @@ axs[2][0].set_ylabel(r"$w_0$")
 legend = axs[0][1].legend(loc='upper center')
 fig.tight_layout()
 
-import os
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 #plt.show()

@@ -70,4 +70,5 @@ axs[1][1].text(9.4, 0.6, "(b.2)\n$\Delta_\\mathrm{SC} = 0$")
 axs[2][1].text(9.4, 0.6, "(c.2)\n$\Delta_\\mathrm{SC} = \Delta_\\mathrm{CDW}$")
 
 fig.tight_layout()
-plt.savefig("plots/resolvent_overview_V0.pdf")
+plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
+#plt.show()

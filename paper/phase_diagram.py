@@ -62,4 +62,6 @@ axs[1].set_yticks([-2, -1, 0, 1, 2])
 
 axs[0].legend(loc="upper left")
 plt.tight_layout()
-plt.savefig("plots/phase_diagram.pdf")
+import os
+plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
+#plt.show()
