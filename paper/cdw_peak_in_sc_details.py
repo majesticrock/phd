@@ -79,11 +79,11 @@ for i in range(2):
     weights = np.log(np.exp(peak_weight) - np.exp(weights))
     
     popt, pcov = ez_linear_fit(v_data[:cut1], peak_positions[:cut1], plotters[0][i], x_space=np.linspace(min(v_data), max(v_data)), label="Fit")
-    axs[0][i].text(0.05, 0.7, f"$a={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
-    axs[0][i].text(0.05, 0.6, f"$b={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.7, f"$a={popt[0]:.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.6, f"$b={popt[1]:.4f}$", transform = axs[0][i].transAxes)
     popt, pcov = ez_linear_fit(v_data[:cut2], weights[:cut2],        plotters[1][i], x_space=np.linspace(min(v_data), max(v_data)), label="Fit")
-    axs[1][i].text(0.05, 0.7, f"$a={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[1][i].transAxes)
-    axs[1][i].text(0.05, 0.6, f"$b={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.05, 0.7, f"$a={popt[0]:.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.05, 0.6, f"$b={popt[1]:.4f}$", transform = axs[1][i].transAxes)
     
     plotters[0][i].plot(v_data[:cut1], peak_positions[:cut1], label="Fitted")
     plotters[0][i].plot(v_data[cut1:], peak_positions[cut1:], label="Omitted")
