@@ -41,8 +41,8 @@ for i in range(2):
         return a * x + b
 
     popt, pcov = curve_fit(func, w_log, diff_data)
-    axs[i].text(0.05, 0.4, f"$a={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[i].transAxes)
-    axs[i].text(0.05, 0.3, f"$b={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[i].transAxes)
+    axs[i].text(0.05, 0.4, f"$a={popt[0]:.4f}$", transform = axs[i].transAxes)
+    axs[i].text(0.05, 0.3, f"$b={popt[1]:.4f}$", transform = axs[i].transAxes)
     plotters[i].plot(w_log, func(w_log, *popt), label="Fit")
 
 axs[0].legend(loc="upper right")

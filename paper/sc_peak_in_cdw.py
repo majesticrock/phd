@@ -77,21 +77,21 @@ for i in range(2):
     plotters[1][i].plot(v_data[:cut], weights[:cut], label="Fitted data")
     plotters[1][i].plot(v_data[cut:], weights[cut:], label="Omitted data")
     
-    axs[1][i].text(0.05, 0.4, f"$c={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[1][i].transAxes)
-    axs[1][i].text(0.05, 0.3, f"$d={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.05, 0.4, f"$c={popt[0]:.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.05, 0.3, f"$d={popt[1]:.4f}$", transform = axs[1][i].transAxes)
     
     peak_positions = np.log(peak_positions)
     peak_positions_div_delta = np.log(peak_positions_div_delta)
     popt, pcov = curve_fit(rp.linear_function, v_data[:cut], peak_positions[:cut])
     x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
     plotters[0][i].plot(x_lin, rp.linear_function(x_lin, *popt), label="Fit 1")
-    axs[0][i].text(0.05, 0.9, f"$c_1={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
-    axs[0][i].text(0.05, 0.8, f"$d_1={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.9, f"$c_1={popt[0]:.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.8, f"$d_1={popt[1]:.4f}$", transform = axs[0][i].transAxes)
 
     cut2 = len(Vs) - 27
     popt, pcov = curve_fit(rp.linear_function, v_data[cut2:], peak_positions[cut2:])
-    axs[0][i].text(0.05, 0.7, f"$c_2={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = axs[0][i].transAxes)
-    axs[0][i].text(0.05, 0.6, f"$d_2={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.7, f"$c_2={popt[0]:.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.6, f"$d_2={popt[1]:.4f}$", transform = axs[0][i].transAxes)
     plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
     plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Data Fit 1")
     plotters[0][i].plot(v_data[cut2:], peak_positions[cut2:], label="Data Fit 2")
