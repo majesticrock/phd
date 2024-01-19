@@ -27,8 +27,8 @@ def plot_general_peak(plot_axs, T, U, V, name_suffix, initial_search_bounds, tex
         peak.improved_peak_position(xtol=1e-13)
         popt, pcov, w_space, y_data = peak.fit_real_part(range=0.05, begin_offset=1e-10, reversed=reversed)
 
-        plot_axs[i].text(0.05, 0.4, f"$a={popt[0]:.4f}\pm{np.sqrt(pcov[0][0]):.4f}$", transform = plot_axs[i].transAxes)
-        plot_axs[i].text(0.05, 0.3, f"$b={popt[1]:.4f}\pm{np.sqrt(pcov[1][1]):.4f}$", transform = plot_axs[i].transAxes)
+        plot_axs[i].text(0.05, 0.4, f"$a={popt[0]:.4f}$", transform = plot_axs[i].transAxes)
+        plot_axs[i].text(0.05, 0.3, f"$b={popt[1]:.4f}$", transform = plot_axs[i].transAxes)
         plotters[i].plot(w_space, y_data, label="Data")
         plotters[i].plot(w_space, rp.linear_function(w_space, *popt), label="Fit")
 
