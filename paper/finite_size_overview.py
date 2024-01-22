@@ -17,7 +17,7 @@ U = -2.5
 V = -0.1
 
 folders = ["../data/modes/square/", "../data/modes/cube/"]
-folder_extensions = ["dos_300/", "dos_900/", "dos_1500/", "dos_3k/"]
+folder_extensions = ["dos_300/", "dos_1500/", "dos_3k/", "dos_6k/"]
 nrows = 4
 ncols = 2
 # ax = axs[row][col]
@@ -44,7 +44,7 @@ for j, folder in enumerate(folders):
         resolvents = np.empty(len(name_suffices), dtype=cf.ContinuedFraction)
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, resolvents[k] = cf.resolvent_data(f"{folder}{folder_extension}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
-                                                            number_of_values=5000, xp_basis=True, imaginary_offset=1e-5, messages=False, ingore_first=10*i+5)
+                                                            number_of_values=10000, xp_basis=True, imaginary_offset=1e-5, messages=False, ingore_first=10*i+5)
             plotters[i][j].plot_with_peak(w_lin, data, label=r"$\mathcal{A}_\mathrm{" + label + r"} (\omega)$")
             
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
@@ -59,13 +59,13 @@ axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
 axs[0][0].text(4.4, 0.55, "(a.1)\n$N_\\mathrm{\\gamma} = 300$")
-axs[1][0].text(4.4, 0.55, "(b.1)\n$N_\\mathrm{\\gamma} = 900$")
-axs[2][0].text(4.4, 0.55, "(c.1)\n$N_\\mathrm{\\gamma} = 1500$")
-axs[3][0].text(4.4, 0.55, "(d.1)\n$N_\\mathrm{\\gamma} = 3000$")
+axs[1][0].text(4.4, 0.55, "(b.1)\n$N_\\mathrm{\\gamma} = 1500$")
+axs[2][0].text(4.4, 0.55, "(c.1)\n$N_\\mathrm{\\gamma} = 3000$")
+axs[3][0].text(4.4, 0.55, "(d.1)\n$N_\\mathrm{\\gamma} = 6000$")
 axs[0][1].text(7., 0.55, "(a.2)\n$N_\\mathrm{\\gamma} = 300$")
-axs[1][1].text(7., 0.55, "(b.2)\n$N_\\mathrm{\\gamma} = 900$")
-axs[2][1].text(7., 0.55, "(c.2)\n$N_\\mathrm{\\gamma} = 1500$")
-axs[3][1].text(7., 0.55, "(d.2)\n$N_\\mathrm{\\gamma} = 3000$")
+axs[1][1].text(7., 0.55, "(b.2)\n$N_\\mathrm{\\gamma} = 1500$")
+axs[2][1].text(7., 0.55, "(c.2)\n$N_\\mathrm{\\gamma} = 3000$")
+axs[3][1].text(7., 0.55, "(d.2)\n$N_\\mathrm{\\gamma} = 6000$")
 
 fig.tight_layout()
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

@@ -97,7 +97,7 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
     in the extended Hubbard model at zero temperature and half-filling.
     We employ the iterated equations of motion approach \cite{Kalthoff17,bleicker18} to compute the two-particle Green's functions and by extension, the corresponding spectral densities.
     This renders comprehensive analysis of the behavior of collective excitations possible as the model's parameters are changed across phase transitions.
-    We identify the well-known amplitude (Higgs) and phase (Leggett) modes within the superconducting phase and observe a similar excitation in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase.
+    We identify the well-known amplitude (Higgs) and phase (Anderson-Bogoliubov) modes within the superconducting phase and observe a similar excitation in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase.
     In the CDW phase, close to the phase transition to the AFM phase, we find a collective mode that does not change significantly and another mode that becomes soft as the phase boundary is approached.
 \end{abstract}
 
@@ -112,7 +112,8 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
 \section{Introduction}\label{sec:introduction}
 
 
-Collective excitations hold profound scientific interest as they unveil the intricate dynamics of correlated electron systems, offering key insights into the emergent properties of materials.
+Collective excitations hold profound scientific interest as they unveil the intricate dynamics of correlated electron systems, 
+offering key insights into the emergent properties of materials.
 On the theoretical side, the Hubbard model has been employed in a plethora of previous studies. 
 Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
 encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
@@ -143,7 +144,7 @@ Naturally, a truncation is necessary for most practical applications, however, t
 The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
 Additionally, we will show an explicit way to obtain various Green's functions from the aforementioned methodology.
 By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
-The prominent examples in the SC phase are the well-known phase (Leggett) and amplitude (Higgs) modes \cite{Varma02,Cea14,Measson14,Tsuji15,Krull16,Schwarz20,Fan22}.
+The prominent examples in the SC phase are the well-known phase (Anderson-Bogoliubov) and amplitude (Higgs) modes \cite{Kulik1981,Varma02,Cea14,Measson14,Tsuji15,Krull16,Schwarz20,Fan22}.
 The former is located at zero energy as our model describes neutral superfluids.
 The latter is found at the lower edge of the two-particle continuum.
 
@@ -157,7 +158,7 @@ Lastly, in \autoref{sec:conclusion}, we will discuss our results.
 
 \subsection{Model}
 
-In our study, we employ the extended Hubbard model because it encompasses various phases and thereby provides direct access to a rich spectrum of excitation spectra therein.
+In our study, we employ the extended Hubbard model as it encompasses assorted phases and thereby provides direct access to the rich excitation spectra therein.
 Its Hamiltonian is given by
 \begin{equation}
     \label{eqn:full_hamiltonian}
@@ -271,7 +272,7 @@ requiring merely a few hundred function evaluations to achieve the desired accur
 This procedure yields the ground state phase diagram at temperature $T=0$ shown in \autoref{fig:phase_diagram}.
 The CDW-AFM boundary is located at $U = zV$, where $z$ is the coordination.
 This holds for both the square lattice ($z=4$) and the simple cubic lattice ($z=6$) and can be seen by comparing \eqref{eqn:delta_cdw} and \eqref{eqn:delta_afm}:
-Crossing the aforementioned line, changes which one of the two prefactors is larger.
+Crossing the aforementioned line, changes which prefactor of the two order parameters is larger.
 
 Note, that the $d_{x^2 - y^2}$-superconducting state, which has been confirmed for the square lattice \cite{Micnas88b,Huang13}, cannot be described by our method. 
 This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vk)$.
@@ -329,6 +330,7 @@ then
 \begin{equation}
     ||A^\dagger|| = (A^\dagger | A^\dagger) = \langle [A, A^\dagger] \rangle = - ||A|| < 0\,.
 \end{equation}
+Nevertheless, this does not pose any issue in our calculations.
 We will compute $\mM$ by commutating with the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behavior rather than the one particle dynamics given by the mean-field approximation.
 
 We create our operator set on the basis of \eqref{eqn:equal_expecs}.
@@ -349,7 +351,7 @@ Next, we order these operators in a way reminiscent of the $x$- and $p$-terms in
 \begin{equation}
     X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger\,.
 \end{equation}
-Then, our set is given by $\mathcal{B}_{XP} \coloneqq \{ X_i, P_i \}$.
+Then, our set is given by $\mathcal{B}_{XP} \coloneqq \{ X_i, \ldots, P_i, \ldots \}$.
 If some operators would be 0 ($P_i$ for any $n$-type term) or duplicates (certain $X_i$ for $g$-type terms), we omit them.
 
 Due to this choice of set, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
@@ -375,7 +377,7 @@ To study the collective excitations, we investigate various retarded Green's fun
 and their Fourier-transformed
 \begin{equation}
     \label{eqn:standard_gf}
-    G_{AB}(\omega + i0^+) = -i \int_0^{\infty} e^{izt} \langle [A(t), B] \rangle \mathrm{d}t\,,
+    G_{AB}(z = \omega + i0^+) = -i \int_0^{\infty} e^{izt} \langle [A(t), B] \rangle \mathrm{d}t\,,
 \end{equation}
 where $\Theta(t)$ is the Heaviside function.
 Our previous choice of pseudo scalar product enables us to write down a matrix-valued Green's functions in terms of the aforementioned matrices
@@ -392,7 +394,7 @@ where we used the resolvent
 The entries of this matrix $\mathcal{G}(z)$ are the Fourier-transformed Green's functions mentioned in \eqref{eqn:standard_gf} with respect to the operators from the initially chosen set.
 For instance, assume the operator in the set is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
 \begin{align}
-    \mathcal{G}_{00}(z = \omega +i0^+) &=  G_{f_{\vk}(t) f_{\vk}^\dagger} (z) \nonumber \\
+    \mathcal{G}_{00}(z = \omega +i0^+) &=  G_{f_{\vk} f_{\vk}^\dagger} (z) \nonumber \\
         &= -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
 \end{align}
 
@@ -560,6 +562,7 @@ This can be achieved using a Lanczos tridiagonalization and subsequently a conti
 \end{widetext}
 
 where $a_i$ and $b_i$ are the Lanczos coefficients \cite{PettiforRecursion,ViswanathRecursion}.
+
 Obtaining a diagonal block of $\mathcal{G}$ is easily achieved by setting $\vec{b}(0) = \vec{a}(0)$.
 Obtaining an off-diagonal block requires linear combinations in the form of 
 \begin{align}
@@ -620,13 +623,17 @@ Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in or
 \subsection{Classification of the spectral functions}
 
 To begin, let us describe the spectral functions $\mathcal{A}_i (\omega) = - (1/\pi) \Im [\mathcal{G}_i (\omega + i0^+)]$ with respect to the operators above in the various phases.
-\autoref{fig:resolvent_overview_SC} shows them at $U = -2.5t$ in the SC ($V=-0.1t$) and CDW ($V=0.1t$ and $V=0.5t$) phase, as well as in the SC-CDW coexistence at $V=0$.
+\autoref{fig:resolvent_overview_SC} shows them at $U = -2.5t$ in the SC ($V=-0.1t$) and CDW ($V=0.1t$ and $V=0.5t$) phase.
 
 There are a variety of different features. The difference between the two lattices is mostly quantitative.
-First and foremost, in the SC phase, see panel (a), there is a sharp peak located at $\omega=0$ in $\spectral{Phase}$ and a singularity in $\spectral{Higgs}$ located at $\omega=2\Delta_\text{SC}$.
-We identify them with the well-known Leggett and Higgs modes in superconductors.
-The former can be found at zero energy because our model describes a neutral superfluid wherein there is no coupling of the phase of the order parameter to the electromagnetic potential.
-Therefore, this phase may be chosen arbitrarily, and changing it requires no energy which ultimately allows a Goldstone mode to exist in the first place \cite{Goldstone1961,Anderson63}.
+First and foremost, in the SC phase, see panel (a), 
+there is a sharp peak located at $\omega=0$ in $\spectral{Phase}$ and a singularity in $\spectral{Higgs}$ located at $\omega=2\Delta_\text{SC}$.
+We identify them with the well-known Anderson-Bogoliubov and Higgs modes in superconductors.
+Note, that the former must not have any weight though, because the spectral function is perfectly antisymmetrical.
+The peak itself can be found at zero energy because our model describes a neutral superfluid 
+wherein there is no coupling of the phase of the order parameter to the electromagnetic potential.
+Therefore, this phase may be chosen arbitrarily, and changing it requires no energy 
+which ultimately allows a Goldstone mode to exist in the first place \cite{Goldstone1961,Anderson63}.
 
 To classify the occurring peaks that lie outside the two-particle continuum, we turn towards the real part of the Green's function.
 We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
@@ -636,8 +643,8 @@ Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$
 The fits themselves can be found in appendix \autoref{sec:fit_greens_functions}.
 
 This analysis provides that the real part of $\greens{Phase}$ near $\omega=0$ behaves as $1/\omega^2$ indicating that the peak in $\spectral{Phase}$ is the derivative of a $\delta$ distribution.
-Note, that it is located at $\omega=0$ of a perfectly asymmetrical bosonic spectral function and therefore must have 0 weight.
-This is given here, because $\int \delta'(\omega) \mathrm{d}\omega = 0$.
+The weight of such a peak is given by the integral $\int \delta'(\omega) \mathrm{d}\omega = 0$.
+This confirms our previous expectation that this peak cannot have any weight.
 
 The singularity in $\spectral{Higgs}$ behaves as $1/\sqrt{\omega - 2 \Delta_\text{SC}}$.
 Previous studies on the dynamics of the order parameter found damped oscillations after a quench.
@@ -669,7 +676,7 @@ In this phase, the mean-field single-particle energies are given by
 \end{equation}
 This means that the proper order parameter is $\Delta_\text{tot} \coloneqq \sqrt{|\Delta_\text{CDW}|^2 + |\Delta_\text{SC}|^2}$.
 Here, $\Delta_\text{CDW}$ and $\Delta_\text{SC}$ can change arbitrarily without affecting the system's energy as long as $\Delta_\text{tot}$ remains constant.
-Note that the degeneracy of both phases is exact due to the SO(4) symmetry \cite{yang90}. 
+Note, that the degeneracy of both phases is exact due to the SO(4) symmetry \cite{yang90}. 
 
 In \autoref{fig:resolvent_overview_V0}, we show the spectral functions for $U=-2.5t$ and $V=0$.
 The different panels correspond to different choices for $\Delta_\text{CDW}$ and $\Delta_\text{SC}$.
@@ -840,7 +847,7 @@ This procedure yields
     \end{align}
 \end{widetext}
 
-This concludes our proof. Note, that the only assumption made, is that the expectation is to be taken with respect to the thermal equilibrium.
+This concludes our proof. Note, that the only assumption made, is that the expectation value is to be taken with respect to the thermal equilibrium.
 
 
 \section{Fits to the Green's functions}
@@ -901,7 +908,7 @@ Then, we define an approximate $\delta$ function
         \frac{1}{\Delta \gamma} & |\gamma| < \frac{\Delta \gamma}{2} \\ 0 & \text{otherwise}
     \end{cases}\,.
 \end{equation}
-Computing an integral yields
+Computing an integral numerically yields
 \begin{equation}
     \int f(\tilde{\gamma}) h(\tilde{\gamma} - \gamma_j) \mathrm{d} \tilde{\gamma} \approx \sum_i f(\gamma_i) h(\gamma_i - \gamma_j) \Delta \gamma = f(\gamma_j)\,,
 \end{equation}
@@ -936,6 +943,7 @@ Then, we can rewrite \eqref{eqn:green_derivation} as
 \begin{equation}
     G_{AB^\dagger}(z) = - (\Delta \gamma)^2 \vec{b}^\dagger (0) \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right] \vec{a}(0)\,.
 \end{equation}
+
 To give a practical example, let us compute $\greens{Higgs}$ from \eqref{eqn:resolvent_bases}.
 We order our operator set such that all $f_\gamma + f_\gamma^{\dagger}$ are upfront. 
 This requires the vector elements $\vec{a}$ and $\vec{b}$ to be
@@ -974,7 +982,7 @@ Taking the imaginary part reveals
     \Im [ G_{AA}^* (\omega) ] = - \Im [G_{AA} (\omega) ] = \Im [G_{AA} (-\omega)]\,.
 \end{align}
 This proves that the imaginary part of such a Fourier-transformed Green's function is antisymmetrical and therefore the same applies to the spectral functions.
-Note that this fully abides by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80}.
+Note, that this fully abides by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80}.
 
 
 
