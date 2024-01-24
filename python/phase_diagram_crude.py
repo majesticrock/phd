@@ -76,6 +76,10 @@ for i in range(0, len(file_names)):
     else:
         ax.contourf(Y, X, crudeData[i], 1, cmap=cmaps[i])
 
+with gzip.open(data_folder + "unkown_boundary.dat.gz", 'rt') as fp:
+    u_boundary = np.loadtxt(fp)
+ax.plot(u_boundary[0], u_boundary[1], "kx", label="Unknown boundary")
+
 from matplotlib.patches import Patch
 
 legend_elements = [Patch(facecolor='C0', label=r'CDW'),
