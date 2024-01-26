@@ -5,7 +5,7 @@ fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(6.4, 9))
 
 xlims = (-2, 2)
 ylims = (-2, 2)
-alpha = .75
+alpha = .6
 
 ############################################################################
 ############                  Square lattice                    ############

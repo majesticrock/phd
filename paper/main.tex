@@ -112,37 +112,33 @@ Otto-Hahn Stra\ss{}e 4, 44221 Dortmund, Germany}
 \section{Introduction}\label{sec:introduction}
 
 
-Collective excitations hold profound scientific interest as they unveil the intricate dynamics of correlated electron systems, 
-offering key insights into the emergent properties of materials.
+The study of collective excitations is of great scientific interest as it sheds light on the intricate dynamics of correlated electron systems, providing crucial insights into emergent material properties.
 On the theoretical side, the Hubbard model has been employed in a plethora of previous studies. 
 Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
 encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
-Shortly afterward, an exact SO(4) symmetry was discovered,
-which allows a degeneracy of superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
+Shortly afterward, an exact SO(4) symmetry was discovered, which allows a degeneracy of superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
 This coexistence can be argued by the existence of a particle-hole transformation on bipartite lattices, 
 that maps the attractive Hubbard model exactly onto the repulsive one, exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
 The previously mentioned SC and CDW phases map to different spin operators \cite{zitko15,lieb89}.
 
-Numerous studies have been performed on equilibrium systems. 
-These investigated the phases and various quantities therein of the said model including various additional interactions with and without doping 
+Numerous studies have investigated the phases and various quantities of the Hubbard model in equilibrium systems, including various additional interactions with and without doping.
 \cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
-For a long time, works on the dynamics of the superconducting gap parameter focused on its behavior after an instantaneous quench, 
+For a long time, research on the dynamics of the superconducting gap parameter focused on its behavior after an instantaneous quench, 
 yielding damped or persistent oscillations depending on the magnitude of the quench \cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Barankov06,Cui19}.
 More recent experimental and theoretical studies examined the driven systems in the hope of inducing superconductivity \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
 
 In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
-\textcolor{red}{Für den 3D Fall finde ich keine Phasendiagramme des extended Hubbard models.
-Es gibt eines zum normalen Hubbard model \cite{Staudt00} und nen Haufen zum Bose-Hubbard-Model, aber das ist halt etwas anderes.}
-The 2D case already exhibits a wide range of possible phases, including CDW, AFM as well as $s$- and $d_{x^2 - y^2}$-wave superconductivity
-\cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22}.
+The 2D case already exhibits a wide range of possible phases, including CDW, AFM, $s$- and $d_{x^2 - y^2}$-wave superconductivity, and phase-separated states \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22,Linner23}.
+We expand these well-known phase diagrams to the simple cubic lattice where we find a similar structure for CDW, AFM, and $s$-wave SC.
 
-In this article, we will first employ a mean-field approximation to the interaction terms 
+To study this system, we will first employ a mean-field approximation to the interaction terms 
 and then use the methodology from the so-called iterated equations of motion approach (iEoM),
 which has already seen success in the handling of interaction quenches \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
 Here, one commutes operators from a suitable operator basis with the Hamiltonian and adds the newly occurring terms to it.
 Naturally, a truncation is necessary for most practical applications, however, the approximation becomes better the more terms are included within the basis.
 The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
-Additionally, we will show an explicit way to obtain various Green's functions from the aforementioned methodology.
+
+Moreover, we demonstrate an explicit way to obtain various Green's functions from the aforementioned methodology.
 By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
 The prominent examples in the SC phase are the well-known phase (Anderson-Bogoliubov) and amplitude (Higgs) modes \cite{Kulik1981,Varma02,Cea14,Measson14,Tsuji15,Krull16,Schwarz20,Fan22}.
 The former is located at zero energy as our model describes neutral superfluids.
@@ -245,7 +241,7 @@ where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
     \caption{The lower left corner ($U<0$ and $V<0$) of the phase diagram obtained for the extended Hubbard model on 
     (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
     The blue shading indicates the region where the $s$-wave superconducting phase is the proper ground state of the system.
-    The green shading shows the region that we cannot access because it the discretization $N_\gamma$, which is required to accurately describe the system, is too large.
+    The green shading shows the region that we cannot access because the discretization $N_\gamma$, which is required to accurately describe the system, is too large.
     Lastly, the orange shading shows the region in which the dynamical matrix $\mM$ has negative eigenvalues, indicating that there are phases not captured by our methods.}
     \label{fig:phase_limits}
 \end{figure}
@@ -321,6 +317,19 @@ The former is referred to as a dynamical matrix while the latter is called a nor
 The advantage is that one can now handle simple matrices rather than operators acting on an enormous Hilbert space.
 The size of these matrices depends entirely on the set of operators.
 
+The matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
+We prove this statement in the appendix \autoref{sec:positive_M}.
+We can use this fact to further enhance our ground state phase diagram.
+If $\mM$ has even a single negative eigenvalue for any combination of parameters, we know that the system is not in thermal equilibrium, 
+i.e., our self-consistency did not capture the correct ground state phase.
+This does in fact happen for certain $U<0$ and $V<0$, see the orange shading in \autoref{fig:phase_limits}.
+For finite temperatures, on a square lattice, a phase-separated state as well as the coexistence of a phase-separated state with $s$-wave superconductivity has been found in this region \cite{Linner23}.
+The phase boundary that we propose here is qualitatively in good agreement with the one found in the aforementioned reference.
+We expect a similar set of phases to be present on the simple cubic lattice but cannot prove this statement at this point.
+
+Additionally, note that while the existence of a negative eigenvalue of $\mM$ proves that the system is not in thermal equilibrium, the absence of one does not prove the contrary.
+For example, we do not find any negative eigenvalues of $\mM$ in the $U>0$, $V<0$ region despite previous studies finding $d_{x^2 - y^2}$-wave superconductivity there \cite{Micnas88b,Huang13}.
+
 However, most Hamiltonians do not allow any such operator set to exist as the commutation usually introduces terms of higher order.
 For instance, commuting a bilinear term with a quartic Hamiltonian yields, quartic terms. Repeating the commutation yields hexartic ones and so on.
 Therefore, one repeats this commutation process and includes the occurring terms within a bigger set,
@@ -357,6 +366,10 @@ Naturally, we have to discretize $\gamma$,
 however, this allows us to obtain good results with drastically smaller matrices compared to a momentum-based operator set and obtain results for a three-dimensional system in the first place.
 Practically, we choose $N_\gamma = 3000$ equally spaced discretization points.
 A detailed explanation of the numerics is provided in the appendix \autoref{sec:numerical_ieom}.
+Herein lies the computational restriction of our method.
+If the gap $\Delta_\text{tot}$ is of the same order of magnitude as our discretization $\Delta \gamma$ our numerics become inaccurate.
+This manifests specifically whenever a spectral function has strong features at minuscule energies, e.g., the phase mode in the superconducting phase.
+In this case, the dynamical matrix $\mM$ picks up negative eigenvalues that vanish if $N_\gamma$ is increased so that $\Delta \gamma$ is sufficiently smaller than $\Delta_\text{tot}$.
 
 Next, we order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.,
 \begin{equation}
@@ -378,8 +391,6 @@ where the upper block refers to all $X_i$ and the lower block to all $P_i$.
 Furthermore, due to symmetry, the relations $\Im [\mathcal{K}_\pm] = \Re [\kappa] = 0$ and $\Re [\Lambda_\pm] = \Im [\mathcal{L}] = 0$ hold.
 Thus, if all occurring expectation values are real, both matrices have large empty blocks.
 This condition is fulfilled for all cases investigated in this article.
-Additionally, the matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
-We prove this statement in the appendix \autoref{sec:positive_M}.
 
 To study the collective excitations, we investigate various retarded Green's functions 
 \begin{equation}
@@ -519,7 +530,7 @@ In conclusion, the Green's function is given by
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw.pdf}
-    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase while the lower panels (b) show their respective weights $w_0 = e^{b}$.
+    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase while the lower panels (b) show their respective weights $W_0 = e^{b}$.
     In the upper panels, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
     The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
@@ -531,8 +542,8 @@ In conclusion, the Green's function is given by
     \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
     \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase, 
     as well as the position relative to the lower edge of the continuum $\omega_-$.% and in units of $\Delta_\text{SC}$. 
-    The lower panels (b) show their respective weights $w_0 = e^{b}$.
-    The dashed lines represent the value of $\omega_0$ and $w_0$ computed for $U=-2.5t$ and $V=0$ while fixing $\Delta_\text{CDW}=0$.
+    The lower panels (b) show their respective weights $W_0 = e^{b}$.
+    The dashed lines represent the value of $\omega_0$ and $W_0$ computed for $U=-2.5t$ and $V=0$ while fixing $\Delta_\text{CDW}=0$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
     The $V$-axis is scaled logarithmically.
     The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
@@ -649,7 +660,7 @@ which ultimately allows a Goldstone mode to exist in the first place \cite{Golds
 To classify the occurring peaks that lie outside the two-particle continuum, we turn towards the real part of the Green's function.
 We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
 The real part is related to the imaginary part via the Kramers-Kronig relations.
-Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$, and the peak has the weight $w_0 = \exp(b)$.
+Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$, and the peak has the weight $W_0 = \exp(b)$.
 Furthermore, an exponent of $a=-2$ corresponds to the derivative of the $\delta$ distribution, i.e., $\delta'(\omega)$.
 The fits themselves can be found in appendix \autoref{sec:fit_greens_functions}.
 
@@ -672,7 +683,7 @@ In this case, the only minimum is at $\Delta_\text{SC} = 0$.
 That means that both possible modes have to overcome the same energy to be excited at all. \textcolor{red}{Passt die Beschreibung so?}
 
 In the SC phase, $\spectral{CDW}$ features a $\delta$ peak below the continuum corresponding to the finite energy necessary to excite this kind of electronic density modulation.
-For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (b) at $V=0.1t$, the aforementioned spectral function has a singularity at $\omega=2\Delta_\text{CDW}$.
+For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (b) at $V=0.1t$, the aforementioned spectral function has a singularity at $\omega=2\Delta_\text{CDW}$.% that exhibits a square-root behavior.
 This mode becomes hard and moves outside the two-particle continuum as $V$ is increased, see panel (c) at $V=0.5t$.
 
 $\spectral{AFM}$ is restricted to the continuum for both phases and both lattices.
@@ -694,18 +705,18 @@ The different panels correspond to different choices for $\Delta_\text{CDW}$ and
 First, in panel (a), we set $\Delta_\text{CDW} = 0$.
 This results in a purely superconducting phase with the same features as in \autoref{fig:resolvent_overview_SC} panel (a).
 The peak in $\spectral{CDW}$ moves to a very small, yet finite, $\omega$.
+Within the two-particle continuum $\spectral{CDW}$ and $\spectral{Phase}$ are identical.
 
 Secondly, panel (b) shows the spectral functions for $\Delta_\text{SC} = 0$, i.e., in a purely charge-ordered phase.
 Similar to before, there is not much change compared to \autoref{fig:resolvent_overview_SC} panel (b).
 The spectral functions $\spectral{Higgs}$ and $\spectral{Phase}$ are still identical, however, both exhibit a sharp peak at $\omega=0$.
 This peak is described by $\delta'(\omega)$.
-\textcolor{red}{Warum hat Higgs nun einen Peak bei 0, aber CDW hatte einen bei endlichem $\omega$? Das müsste ja bedeuten, dass ein Cooper-Paar energtisch kostenfrei ist, aber ein CDW-Exziton kostet uns etwas Energie.}
 
 Lastly, we chose $\Delta_\text{CDW} = \Delta_\text{SC}$ for panel (c).
-Now, $\spectral{Higgs}$ and $\spectral{CDW}$ are identical.
-Note, that this only occurs for this specific ratio of $\Delta_\text{CDW}$ and $\Delta_\text{SC}$, otherwise the occurring peaks differ in magnitude.
+For this specific ratio of $\Delta_\text{CDW}$ and $\Delta_\text{SC}$, $\spectral{Higgs}$ and $\spectral{CDW}$ are identical.
+Choosing a different ratio yields qualitatively the same results, but the peaks differ in magnitude.
 Both spectral functions have a peak at $\omega = 0$, described by $\delta'(\omega)$, and a singularity at the lower edge of the two-particle continuum $\omega = 2\Delta_\text{tot}$.
-\textcolor{red}{TODO: Exponent}
+Each one of the singularities behaves as $1/\sqrt{\omega - 2 \Delta_\text{tot}}$.
 
 We associate the peak at $\omega=0$ with this shifting of order parameters, i.e., diminishing one and increasing the other while keeping $\Delta_\text{tot}$ constant.
 The singularity at the lower edge of the two-particle continuum can be interpreted similarly to the Higgs mode in a pure superconductor.
@@ -734,19 +745,19 @@ Moving further away from the phase transition, here $U=z(V+0.2t)$ in panels (c) 
 
 With the prevalent peaks discussed, we turn towards their behavior as the system approaches the phase transition at $V=0$ for $U=-2.5t$.
 First and foremost, we investigate the peak in $\spectral{Phase}$ and $\spectral{Higgs}$ in the CDW phase.
-The evolution of its position $\omega_0$ and its weight $w_0$ as $V$ is varied can be viewed double logarithmically in \autoref{fig:sc_in_cdw_behavior}.
+The evolution of its position $\omega_0$ and its weight $W_0$ as $V$ is varied can be viewed double logarithmically in \autoref{fig:sc_in_cdw_behavior}.
 For $V \ll t$, the position grows with the square root of $V$. This behavior then transitions to a purely linear growth for large $V$.
 Dividing $\omega_0$ by the gap $\Delta_\text{CDW}$ results in a plateau for large $V$ while leaving the square root behavior at the beginning mostly unchanged.
 
-The peak weights $w_0$ fall off as $1/\sqrt{V}$ for $V \ll t$. 
+The peak weights $W_0$ fall off as $1/\sqrt{V}$ for $V \ll t$. 
 Afterward, it reaches a shallow minimum and rises slightly to reach a constant value.
 
-Specifically, we learn that for $V \ll t$, the peak position follows $\omega_0 = \alpha \sqrt{V}$ and its weight follows $w_0 = \beta / \sqrt{V}$, 
+Specifically, we learn that for $V \ll t$, the peak position follows $\omega_0 = \alpha \sqrt{V}$ and its weight follows $W_0 = \beta / \sqrt{V}$, 
 where $\alpha$ and $\beta$ are some constants.
-This allows us to write $w_0 = \beta / (\alpha \omega_0)$. 
+This allows us to write $W_0 = \beta / (\alpha \omega_0)$. 
 Furthermore, we know that the spectral functions need to be perfectly antisymmetrical about $\omega = 0$, i.e., we can observe
 \begin{align}
-    \mathcal{A}_\text{Phase} (\omega \ll t) &= w_0 (\delta (\omega - \omega_0) - \delta (\omega + \omega_0)) \nonumber \\
+    \mathcal{A}_\text{Phase} (\omega \ll t) &= W_0 (\delta (\omega - \omega_0) - \delta (\omega + \omega_0)) \nonumber \\
         &= - \frac{2\beta}{\alpha} \frac{\delta (\omega + \omega_0) - \delta (\omega - \omega_0)}{2\omega_0} \,.
 \end{align} 
 Taking the limit of $V \to 0$ corresponds to the limit $\omega_0 \to 0$, i.e., leading to an expression reminiscent of symmetric derivative
@@ -761,7 +772,7 @@ Applying this to our case yields
 This analysis reinforces our previous identification of the phase peak as $\delta' (\omega)$.
 
 As a next step, we want to analyze the peak in $\spectral{CDW}$ that occurs if the system is in the SC phase ($V<0$).
-A plot of its position $\omega_0$ and weight $w_0$ can be seen in \autoref{fig:sc_in_cdw_behavior}.
+A plot of its position $\omega_0$ and weight $W_0$ can be seen in \autoref{fig:sc_in_cdw_behavior}.
 Both of them smoothly approach a finite value for $|V| \ll 1t$, marked by the dashed line.
 These values are obtained by computing the peaks' position and weight for $V=0$ and setting $\Delta_\text{CDW}=0$, see \autoref{fig:resolvent_overview_V0} (a).
 
@@ -801,7 +812,7 @@ We see that the lower-lying peak, i.e., the peak corresponding to the phase the 
 strays further away from the continuum as the system moves away from the phase boundary.
 The other peak, however, moves ever closer to the aforementioned continuum until they reach it.
 At this point, the weight of said peak also vanishes, see panel (c).
-This occurs around $U=4V \pm 0.4t$ for the square lattice and around $U=6V \pm 1.1t$ for the simple cubic lattice.
+This occurs around $U=4V \pm 0.42t$ for the square lattice and around $U=6V \pm 1.105t$ for the simple cubic lattice.
 
 On the square lattice, the weights of the peak in $\spectral{AFM}$ in the AFM phase (the same applies for CDW) grow as the system moves away from the phase transition.
 On the simple cubic lattice, however, the weights fall off very slightly.
@@ -873,15 +884,17 @@ This concludes our proof. Note, that the only assumption made, is that the expec
     \label{fig:zero_peaks}
 \end{figure*}
 
-\begin{figure}
+\begin{figure*}
     \centering
-    \includegraphics[width=.48\textwidth]{plots/higgs_peak.pdf}
-    \caption{Log-log plot of $\spectral{Higgs}$ near $\omega = \omega_0 = 2\Delta_\text{SC}$ in the SC phase at $U=-2.5t$ and $V=-0.1t$.
-    We additionally plot the difference between $\spectral{Higgs}$ and $\spectral{Phase}$ and fit it, as we interpret the latter as a background within the two-particle continuum.
-    The upper (lower) panel shows the results for the square (simple cubic) lattice.
-    The spectral function behaves as $1 / \sqrt{\omega - \omega_0}$.}
+    \includegraphics[width=.98\textwidth]{plots/higgs_peak.pdf}
+    \caption{Log-log plot of $\spectral{Higgs}$ (a, c) and $\spectral{CDW}$ (b) near $\omega = \omega_0 = 2\Delta_\text{SC}$ at $U=-2.5t$ and $V=0$.
+    The different panels depict the spectral functions for various ratios of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$.
+    We additionally plot the difference between $\spectral{i}$ and $\spectral{Phase}$ and fit it, as we interpret the latter as a background within the two-particle continuum.
+    The left (right) panel shows the results for the square (simple cubic) lattice.
+    The spectral function behaves as $1 / \sqrt{\omega - 2 \Delta_\text{tot}}$.
+    Note, that $\spectral{CDW}$ and $\spectral{Higgs}$ are identical for the choice in panel (c).}
     \label{fig:higgs_peak}
-\end{figure}
+\end{figure*}
 
 \begin{figure*}
     \centering
@@ -898,7 +911,7 @@ Firstly, the real part of $\greens{Phase}$ in the SC phase is shown in panel (a)
 It behaves as $1/\omega^2$ indicating that the peak we find in the spectral function at $\omega=0$ corresponds to the derivative of a $\delta$ distribution.
 The same results are obtained for the peak in $\spectral{Higgs}$ and $\spectral{CDW}$ in the coexistence phase.
 
-Continuing, we investigate the divergence at $\omega = 2\Delta$ found in $\spectral{Higgs}$ within the SC phase.
+Continuing, we investigate the divergence at $\omega = 2\Delta$ found in $\spectral{Higgs}$ and $\spectral{CDW}$ at $V=0$.
 It behaves as $1/\sqrt{\omega}$ as shown in \autoref{fig:higgs_peak}.
 
 Lastly, we show all the remaining peaks in \autoref{fig:peak_fits}.
