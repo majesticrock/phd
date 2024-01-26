@@ -56,7 +56,7 @@ class Peak:
         return np.exp(self.popt[1]) / 2
 
 # returns a tuple of numbers (peak position, peak weight)
-def analyze_peak(data_folder, name_suffix, initial_search_bounds=(0., "lower_edge"), imaginary_offset=1e-5):
+def analyze_peak(data_folder, name_suffix, initial_search_bounds=(0., "lower_edge"), imaginary_offset=1e-6, range=0.001, begin_offset=1e-10, reversed=False):
     peak = Peak(data_folder, name_suffix, initial_search_bounds, imaginary_offset=imaginary_offset)
     peak_pos_value = np.copy(peak.peak_position)
     peak_result = peak.improved_peak_position(xtol=1e-12)
@@ -64,5 +64,6 @@ def analyze_peak(data_folder, name_suffix, initial_search_bounds=(0., "lower_edg
     if not peak_result["success"]:
         print("We might not have found the peak for data_folder!\nWe found ", peak_pos_value, " and\n", peak_result)
 
-    popt, pcov, w_log, y_data = peak.fit_real_part(0.001, 1e-7)
+    popt, pcov, w_log, y_data = peak.fit_real_part(range, begin_offset, reversed)
+    if abs(popt[0] + 1) > 0.01: print(popt)
     return peak_result["x"], popt[1]
