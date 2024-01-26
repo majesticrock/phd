@@ -109,7 +109,7 @@ axs[1][1].text(0.88, 0.88, "(b.2)", transform = axs[1][1].transAxes)
 
 axs[1][0].set_xlabel(r"$\ln|V / t|$")
 axs[1][1].set_xlabel(r"$\ln|V / t|$")
-axs[1][0].set_ylabel(r"$w_0$")
+axs[1][0].set_ylabel(r"$W_0$")
 axs[0][0].set_ylabel(r"$\omega_0$")
 axs[1][1].legend(loc="lower right")
 axs[0][1].legend(loc="lower right")
