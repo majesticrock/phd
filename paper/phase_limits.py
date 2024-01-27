@@ -5,13 +5,14 @@ fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(6.4, 9))
 
 xlims = (-5, 0)
 ylims = (-0.5, 0)
-alpha = .75
+alpha = .6
+folder = "T0"
 
 ############################################################################
 ############                  Square lattice                    ############
 ############################################################################
 import gzip
-with gzip.open(f"../data/phases/square/T0/unkown_boundary.dat.gz", 'rt') as fp:
+with gzip.open(f"../data/phases/square/{folder}/unkown_boundary.dat.gz", 'rt') as fp:
     u_boundary = np.loadtxt(fp)
 
 axs[0].fill_between(u_boundary[0], u_boundary[1], np.full(len(u_boundary[0]), ylims[1]), label="$s$-wave", alpha=alpha)
@@ -23,7 +24,7 @@ axs[0].axvline(u_boundary[0][-1], color="k", linestyle="--")
 ############################################################################
 ############                  Cubic lattice                     ############
 ############################################################################
-with gzip.open(f"../data/phases/cube/T0/unkown_boundary.dat.gz", 'rt') as fp:
+with gzip.open(f"../data/phases/cube/{folder}/unkown_boundary.dat.gz", 'rt') as fp:
     u_boundary = np.loadtxt(fp)
 
 axs[1].fill_between(u_boundary[0], u_boundary[1], np.full(len(u_boundary[0]), ylims[1]), label="$s$-wave", alpha=alpha)
