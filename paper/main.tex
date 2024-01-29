@@ -540,16 +540,13 @@ In conclusion, the Green's function is given by
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
-    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase, 
-    as well as the position relative to the lower edge of the continuum $\omega_-$.% and in units of $\Delta_\text{SC}$. 
-    The lower panels (b) show their respective weights $W_0 = e^{b}$.
-    The dashed lines represent the value of $\omega_0$ and $W_0$ computed for $U=-2.5t$ and $V=0$ while fixing $\Delta_\text{CDW}=0$.
+    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase relative to the position of the peak at $V=0$ with $\Delta_\text{CDW} = 0$.
+    The lower panels (b) show their respective weights $W_0 = e^{b}$ relative to the peak's weight at $V=0$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
     The $V$-axis is scaled logarithmically.
     The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
     Choosing even smaller values results in $\mathcal{M}$ no longer being positive, i.e., the system is not in thermal equilibrium.
-    \textcolor{red}{Der Fit im unteren Panel ist ein artanh(ln|V|), damit landet man bei sowas wie $(1-V^2)/(1+V^2)$.
-    Darüber muss ich noch etwas nachdenken.}}
+    The fits are $y(x) = a (\tanh (bx - c) + 1)$.}
     \label{fig:cdw_in_sc_behavior}
 \end{figure*}
 
@@ -562,6 +559,17 @@ In conclusion, the Green's function is given by
     The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
     Note the difference in the scales for the two lattices.}
     \label{fig:afm_cdw_peaks_overview}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_details.pdf}
+    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{AFM}$ relative to the lower edge of the two-particle continuum $\omega_-$.
+    The parameter range depicted here places the system within the CDW phase.
+    The lower panels (b) depict their respective weights $W_0$.
+    The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
+    All fits are linear, i.e., $y=ax + b$.}
+    \label{fig:afm_cdw_peaks_details}
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -771,20 +779,29 @@ Applying this to our case yields
 \end{align}
 This analysis reinforces our previous identification of the phase peak as $\delta' (\omega)$.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 As a next step, we want to analyze the peak in $\spectral{CDW}$ that occurs if the system is in the SC phase ($V<0$).
 A plot of its position $\omega_0$ and weight $W_0$ can be seen in \autoref{fig:sc_in_cdw_behavior}.
-Both of them smoothly approach a finite value for $|V| \ll 1t$, marked by the dashed line.
-These values are obtained by computing the peaks' position and weight for $V=0$ and setting $\Delta_\text{CDW}=0$, see \autoref{fig:resolvent_overview_V0} (a).
+The quantities are given relative to the respect quantity of the peak in $\spectral{CDW}$ at $V=0$ with $\Delta_\text{CDW} = 0$, see \autoref{fig:resolvent_overview_V0} (a).
+Both of them smoothly approach $0$ for $|V| \ll 1t$.
+This indicates that the peak steadily evolves to the limiting case $V=0$.
 
-Moving towards smaller $V$, the peaks move towards greater $\omega$, i.e., closer to the two-particle continuum.
+Moving towards larger $|V|$, the peaks move towards greater $\omega$, i.e., closer to the two-particle continuum.
 Additionally, the weights drop off, first with increasing speed and then slowing down.
-They seem to converge towards some value, but we are unable to compute the Green's functions for additional, 
-even smaller $V$ because the matrix $\mM$ is not nonnegative anymore after $V\approx -0.28t$ (square lattice) or $V\approx -0.34t$ (simple cubic lattice).
+A fit of the form $y(x) = a (\tanh (bx - c) + 1)$, with $x=\ln|V/t|$ works well for both the peaks' positions and weights.
+Transforming back to the non-logarithmic scale yields
+\begin{equation}
+    y(V) = a \left( \frac{ \xi - \frac{1}{\xi} }{ \xi + \frac{1}{\xi} } \right)\,,\quad \xi \coloneqq e^{-c} |V/t|^b\,.
+\end{equation}
+The fit parameters are printed in the respective panels of \autoref{fig:sc_in_cdw_behavior}.
+This indicates that the peak weights drop off fairly quickly as the system moves away from the phase transition while the peak positions shift towards higher energies.
+It also suggests that there might be a finite saturation value, but we are unable to compute the Green's functions for additional, even larger $|V|$, 
+because the matrix $\mM$ is not nonnegative anymore after $V\approx -0.28t$ (square lattice) or $V\approx -0.34t$ (simple cubic lattice).
 Note, that our proof for the nonnegativity is based on the system being in thermal equilibrium.
-Therefore, we conclude that beyond these $V$, the superconducting phase is not the true ground state of the system.
-Specifically, the s-wave superconducting phase on the square lattice seems to be even smaller than first estimated using the $d_{x^2 -y^2}$ data from \cite{Micnas88b}.
-In recent research, there has been evidence for a phase-separated state for negative values of $V$ on a square lattice,
-which would explain our results here \cite{Linner23}.
+Therefore, we conclude that beyond these values of $V$, the superconducting phase is not the true ground state of the system, see \autoref{fig:phase_limits}.
+Specifically, the $s$-wave superconducting phase on the square lattice seems to be even smaller than first estimated using the $d_{x^2 -y^2}$ data from \cite{Micnas88b}.
+In recent research, there has been evidence for a phase-separated state for negative values of $V$ on a square lattice, which would explain our results here \cite{Linner23}.
 It would be reasonable to assume, that this phase occurs in both the 2- and 3-dimensional case.
 The magnitude of $V$ for which our calculation stops working is in the same order as in the referenced paper.
 Note, however, that we did our computations at $T=0$ while the reference worked on finite temperature systems.
@@ -812,10 +829,16 @@ We see that the lower-lying peak, i.e., the peak corresponding to the phase the 
 strays further away from the continuum as the system moves away from the phase boundary.
 The other peak, however, moves ever closer to the aforementioned continuum until they reach it.
 At this point, the weight of said peak also vanishes, see panel (c).
-This occurs around $U=4V \pm 0.42t$ for the square lattice and around $U=6V \pm 1.105t$ for the simple cubic lattice.
+This occurs around $U \approx 4V \pm 0.424t$ for the square lattice and around $U \approx 6V \pm 1.105t$ for the simple cubic lattice.
 
 On the square lattice, the weights of the peak in $\spectral{AFM}$ in the AFM phase (the same applies for CDW) grow as the system moves away from the phase transition.
 On the simple cubic lattice, however, the weights fall off very slightly.
+
+In \autoref{fig:afm_cdw_peaks_details}, we revisit panels (b) and (c) from the previous figure.
+This time around the scaling is double-logarithmic and we consider $U$ relative to the phase transition.
+We restrict the analysis to $\spectral{AFM}$ in the CDW phase as the reverse case yields precisely the same data.
+This yields that the peak positions $\omega_0$ (a) behave quadratically as they move into the two-particle continuum,
+while their weights $W_0$ (b) drop off linearly.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

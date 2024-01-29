@@ -29,7 +29,8 @@ Vs = np.array(["0.00001", "0.000013", "0.000015", "0.000017", "0.00002", "0.0000
                 "0.01", "0.013", "0.015", "0.017", "0.02", "0.025", 
                 "0.03", "0.04", "0.05", "0.06", "0.07", "0.08", "0.09", 
                 
-                "0.1", "0.13", "0.15", "0.2", "0.25", "0.3", "0.35", "0.4", "0.45", "0.5", "0.6", "0.7", "0.8", "0.9", 
+                "0.1", "0.13", "0.15", "0.2", "0.25", "0.3", "0.35", "0.4", 
+                "0.45", "0.5", "0.6", "0.7", "0.8", "0.9", 
                 "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0", 
                 "2.5", "3.0", "3.5", "4.0", "6.0", "8.0", "10.0", "15.0", "25.0", "50.0"])
 v_data = np.log(np.array([float(v) for v in Vs]))
@@ -65,7 +66,7 @@ for i in range(2):
         lower = 0 if float(V) < 1 else float(V)
         upper = 13 * float(V) + 2 if 13 * float(V) + 2 < cont_edges[0] else cont_edges[0]
         
-        peak_positions[counter], weights[counter] = rp.analyze_peak(f"{folders[i]}{name}", name_suffix, (lower, upper))
+        peak_positions[counter], weights[counter] = rp.analyze_peak(f"{folders[i]}{name}", name_suffix, (lower, upper), begin_offset=1e-7)
         peak_positions_div_delta[counter] = peak_positions[counter] / extract_key(f"{folders[i]}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
         counter += 1
 

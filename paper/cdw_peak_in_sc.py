@@ -12,6 +12,7 @@ from lib.iterate_containers import *
 from lib.extract_key import *
 import lib.resolvent_peak as rp
 import lib.plot_settings as ps
+from lib.ez_fit import *
 
 from scipy.optimize import curve_fit
 
@@ -34,63 +35,55 @@ folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffix = "higgs_CDW"
-fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 8.2), sharex="col", sharey="row", gridspec_kw=dict(hspace=0, wspace=0))
+fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 6.4), sharex="col", sharey="row", gridspec_kw=dict(hspace=0, wspace=0))
 
 plotters = np.empty((2,2), dtype=ps.CURVEFAMILY)
-
+peak_fit_params = {"range": 1e-4, "begin_offset": 1e-10, "imaginary_offset": 1e-7, "peak_position_tol": 1e-14}
 
 for i in range(2):
-    counter = 0
-    plotters[0][i] = ps.CURVEFAMILY(3, axis=axs[0][i])
-    plotters[0][i].set_individual_colors("nice")
-    plotters[0][i].set_individual_linestyles(["", "", "-"])
-    plotters[0][i].set_individual_markerstyles(["x", "v", ""])
-    
-    plotters[1][i] = ps.CURVEFAMILY(2, axis=axs[1][i])
-    plotters[1][i].set_individual_colors("nice")
-    plotters[1][i].set_individual_linestyles(["", "-"])
-    plotters[1][i].set_individual_markerstyles(["x", ""])
-    
+    for j in range(2):
+        plotters[j][i] = ps.CURVEFAMILY(2, axis=axs[j][i])
+        plotters[j][i].set_individual_colors("nice")
+        plotters[j][i].set_individual_linestyles(["-", ""])
+        plotters[j][i].set_individual_markerstyles(["", "x"])
+
     if i == 1:
         Vs = np.append(Vs, ["-0.3", "-0.34"])
-    v_data = np.log(np.array([np.abs(float(v)) for v in Vs]))
+    v_data = np.array([float(v) for v in Vs])
     weights = np.zeros(len(Vs))
     peak_positions = np.zeros(len(Vs))
-    peak_positions_rel = np.zeros(len(Vs))
-    peak_positions_div_delta = np.zeros(len(Vs))
     
+    counter = 0
     for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}/V={V}"
-        peak_positions[counter], weights[counter] = rp.analyze_peak(f"{folders[i]}{name}", name_suffix)
-        peak_positions_div_delta[counter] = peak_positions[counter] / extract_key(f"{folders[i]}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
-        peak_positions_rel[counter] = 2 * extract_key(f"{folders[i]}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap") - peak_positions[counter]
+        peak_positions[counter], weights[counter] = rp.find_weight(f"{folders[i]}{name}", name_suffix, **peak_fit_params)
         counter += 1
-
-    plotters[1][i].plot(v_data, np.exp(weights), label="Data")
-    plotters[0][i].plot(v_data, (peak_positions), label=r"$\omega_0$")
-    plotters[0][i].plot(v_data, (peak_positions_rel), label=r"$\omega_- - \omega_0$")
-    #plotters[0][i].plot(v_data, (peak_positions_div_delta), label=r"$\omega_0 / \Delta_\mathrm{SC}$")
-    
-    def func(x, a, b, c, d):
-        return a * (np.tanh(b * (x + c)) + d)
-    
-    popt, pcov = curve_fit(func, v_data, np.exp(weights), p0=(4.5, -0.1, 6, 1))
-    print(popt)
-    lin = np.linspace(min(v_data), max(v_data))
-    plotters[1][i].plot(lin, func(lin, *popt), label="Fit")
     
     # V = 0, Delta_CDW = 0
-    peak_pos_value, peak_weight = rp.analyze_peak(f"{folders[i][:-1]}_SC/T={Ts[0]}/U={Us[0]}/V=0.0", name_suffix)
-    axs[0][i].axhline((peak_pos_value), color="black", linestyle="--")#, label="Value for $V=0$")
-    #peak_positions_div_delta[counter] = np.copy(peak_pos_value) / extract_key(f"{folders[i][:-1]}_SC/{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
-    axs[1][i].axhline(np.exp(peak_weight), color="black", linestyle="--")#, label="Value for $V=0$")
+    peak_pos_value, peak_weight = rp.find_weight(f"{folders[i][:-1]}_SC/T={Ts[0]}/U={Us[0]}/V=0.0", name_suffix, **peak_fit_params)
+    peak_positions = (peak_positions - peak_pos_value)
+    weights = (np.exp(peak_weight) - np.exp(weights))
+    
+    def test_func(x, a, b, c):
+        return a * np.tanh(b * x - c) + a
+    v_data = np.log(np.abs(v_data))
+    
+    # Plot and fit omega_0
+    popt, pcov = ez_general_fit(v_data, peak_positions, test_func, plotters[0][i], ez_lin_space(v_data), label="Fit")
+    plotters[0][i].plot(v_data, peak_positions, label="Fitted data")
+    axs[0][i].text(0.05, 0.9, f"$a={popt[0]:.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.8, f"$b={popt[1]:.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.05, 0.7, f"$c={popt[2]:.4f}$", transform = axs[0][i].transAxes)
+    
+    # Plot and fit W_0
+    popt, pcov = ez_general_fit(v_data, weights, test_func, plotters[1][i], ez_lin_space(v_data), label="Fit")
+    plotters[1][i].plot(v_data, weights, label="Fitted data")
+    axs[1][i].text(0.05, 0.9, f"$a={popt[0]:.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.05, 0.8, f"$b={popt[1]:.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.05, 0.7, f"$c={popt[2]:.4f}$", transform = axs[1][i].transAxes)
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
-#axs[0][0].set_ylim(axs[0][0].get_ylim()[0], axs[0][0].get_ylim()[1] + 0.17)
-#axs[0][1].set_ylim(axs[0][1].get_ylim()[0], axs[0][1].get_ylim()[1] + 0.17)
-#axs[1][0].set_ylim(axs[1][0].get_ylim()[0], axs[1][0].get_ylim()[1] + 0.17)
-#axs[1][1].set_ylim(axs[1][1].get_ylim()[0], axs[1][1].get_ylim()[1] + 0.17)
 
 axs[0][0].text(0.88, 0.88, "(a.1)", transform = axs[0][0].transAxes)
 axs[0][1].text(0.88, 0.88, "(a.2)", transform = axs[0][1].transAxes)
@@ -99,10 +92,10 @@ axs[1][1].text(0.88, 0.88, "(b.2)", transform = axs[1][1].transAxes)
 
 axs[1][0].set_xlabel(r"$\ln|V / t|$")
 axs[1][1].set_xlabel(r"$\ln|V / t|$")
-axs[1][0].set_ylabel(r"$W_0$")
-axs[0][0].set_ylabel(r"$\omega_0 / t$")
-axs[1][1].legend(loc="lower left")
-axs[0][1].legend(loc="upper left")
+axs[0][0].set_ylabel(r"$\ln(\omega_0 - \omega_0(V = 0)) / t$")
+axs[1][0].set_ylabel(r"$\ln(W_0(V=0) - W_0)$")
+axs[0][1].legend(loc="lower right")
+axs[1][1].legend(loc="lower right")
 fig.tight_layout()
 
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
