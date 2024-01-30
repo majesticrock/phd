@@ -540,13 +540,17 @@ In conclusion, the Green's function is given by
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
-    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase relative to the position of the peak at $V=0$ with $\Delta_\text{CDW} = 0$.
-    The lower panels (b) show their respective weights $W_0 = e^{b}$ relative to the peak's weight at $V=0$.
+    \caption{The panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase.
+    Below that, in panels (b), their respective weights are depicted.
+    The dashed lines in both rows show the position or weight computed for $V=0$ with $\Delta_\text{CDW} = 0$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
-    The $V$-axis is scaled logarithmically.
     The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
     Choosing even smaller values results in $\mathcal{M}$ no longer being positive, i.e., the system is not in thermal equilibrium.
-    The fits are $y(x) = a (\tanh (bx - c) + 1)$.}
+    \newline
+    The lower panels (c) and (d) present the data again, but with logarithmic scaling on the $V$-axis.
+    Additionally, the peak positions and weights are given relative to their value at $V=0$.
+    These data are fitted by $y(x) = a (\tanh (bx - c) + 1)$ with the parameters printed in the individual panel.
+    The panels (a) and (b) feature the same fitting result.}
     \label{fig:cdw_in_sc_behavior}
 \end{figure*}
 
@@ -565,9 +569,11 @@ In conclusion, the Green's function is given by
     \centering
     \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_details.pdf}
     \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{AFM}$ relative to the lower edge of the two-particle continuum $\omega_-$.
-    The parameter range depicted here places the system within the CDW phase.
     The lower panels (b) depict their respective weights $W_0$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
+    $U_0$ denotes the highest value of $U$ for which there is no peak below the two-particle continuum.
+    For the square lattice it is $U_0 = 3.5775t$ and for the simple cubic lattice it is $U_0 = 4.89t$.
+    The parameter range depicted here places the system within the CDW phase.
     All fits are linear, i.e., $y=ax + b$.}
     \label{fig:afm_cdw_peaks_details}
 \end{figure*}
@@ -688,7 +694,7 @@ Following the Landau theory for continuous phase transitions, this is to be expe
 \end{equation}
 with $r > 0$ and $u > 0$ if the system is outside of the superconducting phase. 
 In this case, the only minimum is at $\Delta_\text{SC} = 0$. 
-That means that both possible modes have to overcome the same energy to be excited at all. \textcolor{red}{Passt die Beschreibung so?}
+That means that both possible modes have to overcome the same energy to be excited at all. 
 
 In the SC phase, $\spectral{CDW}$ features a $\delta$ peak below the continuum corresponding to the finite energy necessary to excite this kind of electronic density modulation.
 For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (b) at $V=0.1t$, the aforementioned spectral function has a singularity at $\omega=2\Delta_\text{CDW}$.% that exhibits a square-root behavior.
@@ -783,13 +789,14 @@ This analysis reinforces our previous identification of the phase peak as $\delt
 
 As a next step, we want to analyze the peak in $\spectral{CDW}$ that occurs if the system is in the SC phase ($V<0$).
 A plot of its position $\omega_0$ and weight $W_0$ can be seen in \autoref{fig:sc_in_cdw_behavior}.
-The quantities are given relative to the respect quantity of the peak in $\spectral{CDW}$ at $V=0$ with $\Delta_\text{CDW} = 0$, see \autoref{fig:resolvent_overview_V0} (a).
-Both of them smoothly approach $0$ for $|V| \ll 1t$.
+First and foremost, the upper panels (a) and (b) depict the peak positions and weights, respectively.
+The former drops off and the latter grows as $V$ moves to 0, however, both of them smoothly approach a finite value.
+It is the same, as the one that is obtained for $V=0$ while setting $\Delta_\text{CDW}$ to 0, see \autoref{fig:resolvent_overview_V0} (a).
 This indicates that the peak steadily evolves to the limiting case $V=0$.
 
 Moving towards larger $|V|$, the peaks move towards greater $\omega$, i.e., closer to the two-particle continuum.
-Additionally, the weights drop off, first with increasing speed and then slowing down.
-A fit of the form $y(x) = a (\tanh (bx - c) + 1)$, with $x=\ln|V/t|$ works well for both the peaks' positions and weights.
+Additionally, the weights drop off, first with increasing speed and then slowing down, see panels (c) and (d) for a logarithmic scaling.
+A fit of the form $y(x) = a (\tanh (bx - c) + 1)$, with $x=\ln|V/t|$ works well for both the peak positions and weights.
 Transforming back to the non-logarithmic scale yields
 \begin{equation}
     y(V) = a \left( \frac{ \xi - \frac{1}{\xi} }{ \xi + \frac{1}{\xi} } \right)\,,\quad \xi \coloneqq e^{-c} |V/t|^b\,.
@@ -819,24 +826,25 @@ On the right side of each panel, i.e., for $U > zV$, the system is in the AFM ph
 On the left side, it is in the CDW phase (orange shading).
 In general, the peak in $\spectral{AFM}$ behaves exactly as the peak in $\spectral{CDW}$ if the phases are swapped.
 
-The panel (a) shows the peaks' positions unmodified. They essentially move linearly as $U$ is varied.
+The panel (a) shows the peak positions unmodified. They essentially move linearly as $U$ is varied.
 It is noteworthy, that in the AFM phase, the peak in $\spectral{AFM}$ lies lower than the one in $\spectral{CDW}$.
 Naturally, this is reversed, if the system is in the CDW phase.
 This is to be expected, as creating an AFM excitation should be energetically more favorable if the system is already in said phase.
 
-Additionally, we plot in (b) the peaks' positions relative to the lower edge of the two-particle continuum.
+Additionally, we plot in (b) the peak positions relative to the lower edge of the two-particle continuum.
 We see that the lower-lying peak, i.e., the peak corresponding to the phase the system is in, 
 strays further away from the continuum as the system moves away from the phase boundary.
 The other peak, however, moves ever closer to the aforementioned continuum until they reach it.
 At this point, the weight of said peak also vanishes, see panel (c).
-This occurs around $U \approx 4V \pm 0.424t$ for the square lattice and around $U \approx 6V \pm 1.105t$ for the simple cubic lattice.
+This occurs around $U \approx 4V \pm 0.4245t$ for the square lattice and around $U \approx 6V \pm 1.11t$ for the simple cubic lattice.
 
-On the square lattice, the weights of the peak in $\spectral{AFM}$ in the AFM phase (the same applies for CDW) grow as the system moves away from the phase transition.
+On the square lattice, the weights of the peaks in $\spectral{AFM}$ in the AFM phase (the same applies to $\spectral{CDW}$ in the CDW phase) grow as the system moves away from the phase transition.
 On the simple cubic lattice, however, the weights fall off very slightly.
 
 In \autoref{fig:afm_cdw_peaks_details}, we revisit panels (b) and (c) from the previous figure.
-This time around the scaling is double-logarithmic and we consider $U$ relative to the phase transition.
 We restrict the analysis to $\spectral{AFM}$ in the CDW phase as the reverse case yields precisely the same data.
+This time around the scaling is double-logarithmic and we consider $U$ relative to those values at which we cannot find a peak in $\spectral{AFM}$.
+This occurs around $U_0 = 3.5755t$ on the square lattice and around $U_0 = 4.89t$ on the simple cubic lattice.
 This yields that the peak positions $\omega_0$ (a) behave quadratically as they move into the two-particle continuum,
 while their weights $W_0$ (b) drop off linearly.
 
@@ -848,13 +856,43 @@ while their weights $W_0$ (b) drop off linearly.
 
 \section{Conclusion}\label{sec:conclusion}
 
-Ideen für die Zukunft:
 
-Phase-separated state aufnehmen
+We have conducted an analysis of the mean-field phase diagram of the extended Hubbard model in 2D and 3D. 
+Specifically, both systems provide a similar structure of $s$-wave SC, CDW, and AFM.
+Furthermore, we were able to identify an area in which our analysis is incomplete.
+In 2D, this region coincides with a phase-separated state that has already been observed in recent research \cite{Linner23}.
 
-Ankopplung an das EM-Feld
+We have also developed a novel method to obtain Fourier transformed Green's functions and analyzed various such functions. 
+We have found collective excitations within the spectral functions $\spectral{Higgs}$, $\spectral{Phase}$, $\spectral{CDW}$, and $\spectral{AFM}$ 
+and examined their behavior as the system approaches phase transitions. 
+In particular, we identified the peak and singularity found in the first two as the well-known phase and amplitude modes in neutral superconductors 
+and thereby provided a technique to obtain them starting from a microscopic description.
 
-Mehrbandsysteme
+We observed the behavior of the peak in the SC-related spectral functions.
+It moves towards 0 energy and attains more weight as the system moves from the CDW phase towards the SC phase. 
+The peak's relative position to the two-particle continuum and its weight plateau as the system moves away from the phase transition.
+
+In the SC phase close to the CDW phase, the peak in $\spectral{CDW}$ is located at a finite energy and and has a finite weight. 
+It moves towards higher energy and its weight drops off as the system moves away from the phase transition. 
+
+Around the AFM-CDW phase transition, both $\spectral{AFM}$ and $\spectral{CDW}$ feature a peak. 
+The peak of the former in the AFM phase lies at lower energies than the latter one and vice-versa. 
+Moving away from the phase transition, the higher-lying peak becomes soft as it moves into the two-particle continuum. 
+The peak position relative to the two-particle continuum approaches $0$ quadratically with $U$, and its weight approaches $0$ linearly.
+
+Furthermore, we have found a peak in $\spectral{CDW}$ that appears at large values of $V$, 
+which is most likely the same as the one found close to the CDW-AFM phase transition. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Some possible ideas for future research include incorporating phase-separated states into the mean-field theory.
+This would enable us to peer deeper into the negative $V$ regime of the phase diagrams and provide more analysis of the collective excitations that occur therein.
+
+Moreover, one can fathom to include a coupling of the electronic system to the electromagnetic field.
+This should move the position of the phase mode close to the plasma frequency as explained by the Anderson-Higgs mechanism.
+
+Additionally, one could describe multi-band systems with even richer phases and collective excitations. 
+
 
 %==============================================================================
 % Acknowledgments 

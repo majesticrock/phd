@@ -53,12 +53,12 @@ for i in range(2):
     plotters[0][i] = ps.CURVEFAMILY(6, axis=axs[0][i])
     plotters[0][i].set_individual_colors("nice")
     plotters[0][i].set_individual_linestyles(["-", "-", "", "", "", ""])
-    plotters[0][i].set_individual_markerstyles(["", "", "x", "x", "v", "1"])
+    plotters[0][i].set_individual_markerstyles(["", "", "^", "^", "v", "1"])
     
     plotters[1][i] = ps.CURVEFAMILY(3, axis=axs[1][i])
     plotters[1][i].set_individual_colors("nice")
     plotters[1][i].set_individual_linestyles(["-", "", ""])
-    plotters[1][i].set_individual_markerstyles(["", "x", "v"])
+    plotters[1][i].set_individual_markerstyles(["", "^", "v"])
     
     for T, U, V in iterate_containers(Ts, Us, Vs):
         name = f"T={T}/U={U}/V={V}"
@@ -76,7 +76,7 @@ for i in range(2):
     
     plotters[1][i].plot(v_lin, rp.linear_function(v_lin, *popt), label="Fit")
     plotters[1][i].plot(v_data[:cut], weights[:cut], label="Fitted data")
-    plotters[1][i].plot(v_data[cut:], weights[cut:], label="Omitted data")
+    plotters[1][i].plot(v_data[cut:], weights[cut:], label="Omitted data", markerfacecolor="None")
     
     axs[1][i].text(0.05, 0.4, f"$c={popt[0]:.4f}$", transform = axs[1][i].transAxes)
     axs[1][i].text(0.05, 0.3, f"$d={popt[1]:.4f}$", transform = axs[1][i].transAxes)
@@ -96,7 +96,7 @@ for i in range(2):
     plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
     plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Data Fit 1")
     plotters[0][i].plot(v_data[cut2:], peak_positions[cut2:], label="Data Fit 2")
-    plotters[0][i].plot(v_data[cut:cut2], peak_positions[cut:cut2], label="Omitted data")
+    plotters[0][i].plot(v_data[cut:cut2], peak_positions[cut:cut2], label="Omitted data", markerfacecolor="None")
     plotters[0][i].plot(v_data, peak_positions_div_delta, label=r"$\omega_0 / \Delta_\mathrm{CDW}$")
 
 axs[0][0].title.set_text("Square")
