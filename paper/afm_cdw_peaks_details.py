@@ -88,7 +88,7 @@ axs[1][1].text(0.89, 0.7, "(b.2)", transform = axs[1][1].transAxes)
 
 axs[nrows-1][0].set_xlabel(r"$\ln((U - U_0) / t)$")
 axs[nrows-1][1].set_xlabel(r"$\ln((U - U_0) / t)$")
-axs[0][0].set_ylabel(r"$(\omega_- - \omega_0) / t$")
+axs[0][0].set_ylabel(r"$(\omega_- - \omega_0) [t]$")
 axs[1][0].set_ylabel(r"$W_0$")
 legend = axs[0][1].legend(loc='lower right')
 fig.tight_layout()
