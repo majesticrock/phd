@@ -130,14 +130,14 @@ for i in range(ncols):
 
 axs[1][0].set_ylim(axs[1][0].get_ylim()[0], axs[1][0].get_ylim()[1] + 1.1)
 
-axs[1][0].set_xlabel(r"$V / t$")
-axs[1][1].set_xlabel(r"$V / t$")
+axs[1][0].set_xlabel(r"$V [t]$")
+axs[1][1].set_xlabel(r"$V [t]$")
 axs[3][0].set_xlabel(r"$\ln|V / t|$")
 axs[3][1].set_xlabel(r"$\ln|V / t|$")
 
-axs[0][0].set_ylabel(r"$\omega_0 / t$")
+axs[0][0].set_ylabel(r"$\omega_0 [t]$")
 axs[1][0].set_ylabel(r"$W_0$")
-axs[2][0].set_ylabel(r"$(\omega_0 - \omega_0^{V = 0}) / t$")
+axs[2][0].set_ylabel(r"$(\omega_0 - \omega_0^{V = 0}) [t]$")
 axs[3][0].set_ylabel(r"$W_0^{V = 0} - W_0$")
 
 #axs[0][1].legend(loc="lower right")

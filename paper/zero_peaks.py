@@ -37,7 +37,7 @@ for j, V, g_name, name_suffix in [(0, -0.1, "Phase", "phase_SC"), (1, 0.0, "Higg
         plotters[i].plot(w_log, func_ln(w_log, *popt), label=f"Fit")
         axs[j][i].text(0.05, 0.4, f"$a={popt[0]:.4f}$", transform = axs[j][i].transAxes)
         axs[j][i].text(0.05, 0.29, f"$b={popt[1]:.4f}$", transform = axs[j][i].transAxes)
-    axs[j][0].set_ylabel(rf"$\ln(\Re[\mathcal{{G}}_\mathrm{{{g_name}}}](\omega))$")
+    axs[j][0].set_ylabel(rf"$\ln(\Re[\mathcal{{G}}_\mathrm{{{g_name}}}](\omega) \cdot t)$")
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")

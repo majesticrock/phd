@@ -1,5 +1,5 @@
 font.size : 14
-font.family : serif
+#font.family : serif
 font.serif : Latin Modern Math
 
 axes.xmargin : 0.005
