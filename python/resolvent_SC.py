@@ -10,11 +10,11 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.5])
-Vs = np.array([2.0])
+Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/square/dos_3k/"
+folder = "data/modes/cube/dos_3k/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
@@ -26,8 +26,8 @@ plotter.set_individual_colors("nice2")
 plotter.set_individual_linestyles(["-", "-.", "--", ":"])
 #plotter.set_individual_dashes()
 
-plot_lower_lim = 10
-plot_upper_lim = 40
+plot_lower_lim = -0.05
+plot_upper_lim = 12
 
 name_suffix = "phase_SC"
 for name in naming_scheme(Ts, Us, Vs):
@@ -58,8 +58,8 @@ legend = plt.legend()
 ax.add_artist(legend)
 
 ax.set_xlim(plot_lower_lim, plot_upper_lim)
-ax.set_xlabel(r"$z / t$")
-ax.set_ylabel(r"Spectral density / a.u.")
+ax.set_xlabel(r"$\omega [t]$")
+ax.set_ylabel(r"$\mathcal{A} (\omega) [t^{-1}]$")
 fig.tight_layout()
 
 import os

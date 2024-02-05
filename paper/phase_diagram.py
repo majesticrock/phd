@@ -56,9 +56,9 @@ axs[1].set_ylim(ylims[0], ylims[1])
 axs[0].text(xlims[1] - np.abs(xlims[1] - xlims[0]) * 0.15, ylims[1] - np.abs(ylims[1] - ylims[0]) * 0.15, "(a)")
 axs[1].text(xlims[1] - np.abs(xlims[1] - xlims[0]) * 0.15, ylims[1] - np.abs(ylims[1] - ylims[0]) * 0.15, "(b)")
 
-axs[1].set_xlabel("$U / t$")
-axs[0].set_ylabel("$V / t$")
-axs[1].set_ylabel("$V / t$")
+axs[1].set_xlabel("$U [t]$")
+axs[0].set_ylabel("$V [t]$")
+axs[1].set_ylabel("$V [t]$")
 
 #axs[1].set_xticks([-2, -1, 0, 1, 2])
 #axs[0].set_yticks([-2, -1, 0, 1, 2])

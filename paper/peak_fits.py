@@ -36,16 +36,16 @@ def plot_general_peak(plot_axs, T, U, V, name_suffix, initial_search_bounds, tex
 
 # CDW in SC
 plot_general_peak(axs[0], T=0.0, U=-2.5, V=-0.1, name_suffix="CDW", initial_search_bounds=(0.3, 0.8), reversed=False, text="SC: ")
-axs[0][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{CDW}](\omega))$")
+axs[0][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{CDW}](\omega) \cdot t)$")
 # SC in CDW
 plot_general_peak(axs[1], T=0.0, U=-2.5, V=0.1, name_suffix="higgs_SC", initial_search_bounds=(0.5, 1.5), reversed=False, text="CDW: ")
-axs[1][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{Higgs}](\omega))$")
+axs[1][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{Higgs}](\omega) \cdot t)$")
 #AFM in CDW
 plot_general_peak(axs[2], T=0.0, U=[3.9, 5.9], V=1.0, name_suffix="AFM", initial_search_bounds=(2., "lower_edge"), reversed=True, text="CDW: ")
-axs[2][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{AFM}](\omega))$")
+axs[2][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{AFM}](\omega) \cdot t)$")
 #AFM in AFM
 plot_general_peak(axs[3], T=0.0, U=[4.1, 6.1], V=1.0, name_suffix="AFM", initial_search_bounds=(2., "lower_edge"), reversed=True, text="AFM: ")
-axs[3][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{AFM}](\omega))$")
+axs[3][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{AFM}](\omega) \cdot t)$")
 
 
 legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
