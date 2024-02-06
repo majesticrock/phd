@@ -10,8 +10,8 @@ if(len(sys.argv) > 1):
     data_folder = "data/" + sys.argv[1] + "/"
     name = sys.argv[1]
 else:
-    name = "T0"#"T0_L200"
-    data_folder = f"data/phases/square/{name}/"
+    name = "test"#"T0_L200"
+    data_folder = f"data/phases/cube/{name}/"
 
 swapAxis = False
 
@@ -25,7 +25,7 @@ def pair_sort(pair_arr, sortBy):
                 pair_arr[sortBy][i], pair_arr[sortBy][j] = pair_arr[sortBy][j], pair_arr[sortBy][i]
                 pair_arr[1 - sortBy][i], pair_arr[1 - sortBy][j] = pair_arr[1 - sortBy][j], pair_arr[1 - sortBy][i]
 
-file_names = np.array(["cdw", "afm", "sc", "xi_sc"])
+file_names = np.array(["cdw", "afm", "sc", "xi_sc", "ps"])
 crudeData = []
 
 for fname in file_names:
@@ -67,6 +67,7 @@ cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('
 cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C1', 0.5)]))
 cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C2', 0.5)]))
 cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C3', 0.5)]))
+cmaps.append(colors.ListedColormap([colors.to_rgba('white', 0), colors.to_rgba('C4', 0.5)]))
 
 fig, ax = plt.subplots()
 
@@ -85,9 +86,8 @@ from matplotlib.patches import Patch
 legend_elements = [Patch(facecolor='C0', label=r'CDW'),
             Patch(facecolor='C1', label=r'AFM'),
             Patch(facecolor='C2', label=r'$s$'),
-            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$')]
-            #Line2D([0], [0], label='Micnas', color='k', linestyle="--")]
-            #,Patch(facecolor='C4', label=r'$\tilde{s}$')]
+            Patch(facecolor='C3', label=r'$d_{x^2 - y^2}$'),
+            Patch(facecolor='C4', label=r'PS')]
 ax.legend(handles=legend_elements, loc='upper left')
 
 plt.xlabel(r"$" + labels[1] + "/t$")
