@@ -1,7 +1,6 @@
 import numpy as np
 import gzip
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
 
 NORM_FACTOR = -(1. / np.pi) 
 class ContinuedFraction:
