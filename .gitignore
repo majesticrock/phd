@@ -30,6 +30,7 @@ cpp/HubbardMeanField/sources/SymbolicOperators
 
 #ignore data that is subject to change
 data/**/test/
+data/**/test2/
 
 *.aux
 *.blg
