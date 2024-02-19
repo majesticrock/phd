@@ -209,7 +209,7 @@ def resolvent_data_log_z(data_folder, name_suffix, lower_edge=None, range=None, 
 def resolvent_data(data_folder, name_suffix, lower_edge, upper_edge=None, xp_basis=True, number_of_values=20000, imaginary_offset=1e-6, withTerminator=True, use_start=True, messages=True, ingore_first=40):
     data = np.zeros(number_of_values, dtype=complex)
     if xp_basis:
-        if name_suffix == "AFM" or name_suffix == "CDW":
+        if name_suffix == "AFM" or name_suffix == "CDW" or name_suffix == "AFM_trans":
             res = ContinuedFraction(data_folder, f"resolvent_higgs_{name_suffix}", True, messages, ingore_first)
         else:
             res = ContinuedFraction(data_folder, f"resolvent_{name_suffix}", True, messages, ingore_first)
