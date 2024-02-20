@@ -14,20 +14,20 @@ Vs = np.array([0.0])
 
 use_XP = True
 
-folder = "data/modes/square/dos_3k_SC/"
+folder = "data/modes/square/test2/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
 #ax.set_yscale("log")
-ax.set_ylim(-0.05, 1.)
+ax.set_ylim(-0.5, 1.)
 
 plotter = ps.CURVEFAMILY(6, axis=ax)
 plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 #plotter.set_individual_dashes()
 
-plot_lower_lim = -1.2
-plot_upper_lim = 1.2
+plot_lower_lim = -0.2
+plot_upper_lim = 0.2
 
 name_suffix = "phase_SC"
 for name in naming_scheme(Ts, Us, Vs):
