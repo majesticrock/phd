@@ -8,11 +8,11 @@ V = 0.0
 name = f"T={T}/U={U}/V={V}"
 
 use_xp = True
-folder = "data/modes/square/dos_3k_CDW/"
-name_suffix = "phase_SC"
+folder = "data/modes/square/dos_3k_SC/"
+name_suffix = "higgs_CDW"
 fig, ax = plt.subplots()
 
-plot_lower_lim = 0.0005
+plot_lower_lim = 0.08
 plot_upper_lim = plot_lower_lim + 0.2
 data_imag, data, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, xp_basis=use_xp, imaginary_offset=0)
 
@@ -21,7 +21,7 @@ def func_ln(x, a, b):
     return a * x + b
 
 try:
-    w_log = np.log(w_lin.real)
+    w_log = np.log((w_lin.real))
     ax.plot(w_log, np.log(data), "-", label="Data")
     popt, pcov = curve_fit(func_ln, w_log, np.log(data))
     ax.plot(w_log, func_ln(w_log, *popt), "--", label=r"$a \ln( z ) + b$")

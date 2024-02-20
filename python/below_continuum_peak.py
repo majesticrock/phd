@@ -6,9 +6,9 @@ reversed = True
 
 T = 0.0
 U = -2.5
-V = "0.0"
+V = 0.0
 name = f"T={T}/U={U}/V={V}"
-folder = "data/modes/square/dos_3k_SC/"
+folder = "data/modes/square/dos_3k/"
 name_suffix = "higgs_CDW"
 fig, ax = plt.subplots()
 
