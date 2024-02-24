@@ -4,11 +4,11 @@ import gzip
 
 T = 0.
 U = -2.5
-V = -0.6
+V = 0.0
 
 use_XP = True
 
-folder = "data/modes/cube/test/"
+folder = "data/modes/square/test/"
 name_suffix = "higgs_SC"
 name = f"T={T}/U={U}/V={V}/"
 element_names = ["a", "a+b", "a+ib"]
