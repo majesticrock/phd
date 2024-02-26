@@ -14,7 +14,7 @@ from lib.create_zoom import *
 
 params = [ [0., -2.5, -0.1], [0., -2.5, 0.1], [0., -2.5, 0.5] ]
 
-folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
+folders = ["../data/modes/square/dos_3000/", "../data/modes/cube/dos_3000/"]
 nrows = 3
 ncols = 2
 # ax = axs[row][col]
