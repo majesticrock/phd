@@ -35,7 +35,7 @@ Vs = np.array(["0.00001", "0.000013", "0.000015", "0.000017", "0.00002", "0.0000
                 "2.5", "3.0", "3.5", "4.0", "6.0", "8.0", "10.0", "15.0", "25.0", "50.0"])
 v_data = np.log(np.array([float(v) for v in Vs]))
 
-folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
+folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_3000/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffix = "phase_SC"

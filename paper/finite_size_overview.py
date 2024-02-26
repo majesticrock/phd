@@ -17,7 +17,7 @@ U = -2.5
 V = -0.1
 
 folders = ["../data/modes/square/", "../data/modes/cube/"]
-folder_extensions = ["dos_300/", "dos_1500/", "dos_3k/", "dos_6k/"]
+folder_extensions = ["dos_300/", "dos_1500/", "dos_3000/", "dos_6000/"]
 nrows = 4
 ncols = 2
 # ax = axs[row][col]

@@ -17,7 +17,7 @@ T = 0.
 U = -2.5
 V = 0.0
 
-folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
+folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_3000/"]
 
 fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 4.8), sharex=True, sharey=True, gridspec_kw=dict(hspace=0, wspace=0))
 
@@ -29,7 +29,7 @@ for j, V, g_name, name_suffix in [(0, -0.1, "Phase", "phase_SC"), (1, 0.0, "Higg
         plotters[i].set_individual_dashes()
 
         name = f"T={T}/U={U}/V={V}"
-        data_imag, data, w_log, res = cf.resolvent_data_log_z(f"{folders[i]}{name}", name_suffix, lower_edge=0, begin_offset=3e-3, range=0.2, xp_basis=True, imaginary_offset=0, number_of_values=1000, messages=False)
+        data_imag, data, w_log, res = cf.resolvent_data_log_z(f"{folders[i]}{name}", name_suffix, lower_edge=0, begin_offset=1e-2, range=0.2, xp_basis=True, imaginary_offset=0, number_of_values=1000, messages=False)
 
         data = np.log(data)
         plotters[i].plot(w_log, data, label=f"Data")
