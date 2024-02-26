@@ -14,7 +14,7 @@ Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/square/dos_2000/"
+folder = "data/modes/square/test/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
