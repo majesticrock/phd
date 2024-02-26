@@ -21,7 +21,7 @@ Us = np.array([np.concatenate((-Us_square[::-1], Us_square)), np.concatenate((-U
 Vs = np.array([1.0])
 
 
-folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
+folders = ["../data/modes/square/dos_3000/", "../data/modes/cube/dos_3000/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffices = ["AFM", "CDW"]
