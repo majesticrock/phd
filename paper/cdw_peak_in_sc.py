@@ -17,8 +17,8 @@ from lib.ez_fit import *
 
 Ts = np.array([0.])
 Us = np.array([-2.5])
-Vs = np.array([ "-0.000001", "-0.0000013", "-0.0000015", "-0.0000017", "-0.000002", "-0.0000025", 
-                "-0.000003", "-0.000004", "-0.000005", "-0.000006", "-0.000007", "-0.000008", "-0.000009", # last index = 12
+Vs = np.array([ #"-0.000001", "-0.0000013", "-0.0000015", "-0.0000017", "-0.000002", "-0.0000025", 
+                #"-0.000003", "-0.000004", "-0.000005", "-0.000006", "-0.000007", "-0.000008", "-0.000009", # last index = 12
                 "-0.00001", "-0.000013", "-0.000015", "-0.000017", "-0.00002", "-0.000025", 
                 "-0.00003", "-0.00004", "-0.00005", "-0.00006", "-0.00007", "-0.00008", "-0.00009",  # last index = 25
                 "-0.0001", "-0.00013", "-0.00015", "-0.00017", "-0.0002", "-0.00025", "-0.0003", # last index = 32
@@ -31,14 +31,16 @@ Vs = np.array([ "-0.000001", "-0.0000013", "-0.0000015", "-0.0000017", "-0.00000
                 ])
 
 # Data points not to plot for the non-log plot
-omit_non_log = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
-                13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-                27, 28, 29, 30, 31, 32, 33, 
-                35, 36, 37, 
-                39, 40, 41, 42, 43,
-                45, 47, 48, 50, 52, 54]
+omit_non_log = [1, 
+                #2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
+                #13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+                #27, 28, 29, 30, 31, 32, 33, 
+                #35, 36, 37, 
+                #39, 40, 41, 42, 43,
+                #45, 47, 48, 50, 52, 54
+                ]
 
-folders = ["../data/modes/square/dos_3k/", "../data/modes/cube/dos_3k/"]
+folders = ["../data/modes/square/dos_6k/", "../data/modes/cube/dos_3k/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffix = "higgs_CDW"
@@ -81,43 +83,43 @@ for i in range(2):
         peak_positions[counter], weights[counter] = rp.find_weight(f"{folders[i]}{name}", name_suffix, **peak_fit_params)
         counter += 1
     
-    # V = 0, Delta_CDW = 0
-    peak_pos_value, peak_weight = rp.find_weight(f"{folders[i][:-1]}_SC/T={Ts[0]}/U={Us[0]}/V=0.0", name_suffix, **peak_fit_params)
+    ## V = 0, Delta_CDW = 0
+    #peak_pos_value, peak_weight = rp.find_weight(f"{folders[i][:-1]}_SC/T={Ts[0]}/U={Us[0]}/V=0.0", name_suffix, **peak_fit_params)
     original_data = np.array([peak_positions, np.exp(weights)])
     original_v = np.copy(v_data)
-    
-    peak_positions = (peak_positions - peak_pos_value)
-    weights = (np.exp(peak_weight) - np.exp(weights))
+    #
+    #peak_positions = (peak_positions - peak_pos_value)
+    #weights = (np.exp(peak_weight) - np.exp(weights))
     
     def test_func(x, a, b, c):
         return a * np.tanh(b * x - c) + a
     v_data = np.log(np.abs(v_data))
     
     # Plot and fit omega_0
-    popt, pcov = ez_general_fit(v_data, peak_positions, test_func, plotters[2][i], ez_lin_space(v_data), label="Fit")
-    plotters[2][i].plot(v_data, peak_positions, label="Data")
-    axs[2][i].text(0.05, 0.88, f"$a={popt[0]:.4f}$", transform = axs[2][i].transAxes)
-    axs[2][i].text(0.05, 0.77, f"$b={popt[1]:.4f}$", transform = axs[2][i].transAxes)
-    axs[2][i].text(0.05, 0.66, f"$c={popt[2]:.4f}$", transform = axs[2][i].transAxes)
+    #popt, pcov = ez_general_fit(v_data, peak_positions, test_func, plotters[2][i], ez_lin_space(v_data), label="Fit")
+    plotters[2][i].plot(v_data, np.log(peak_positions), label="Data")
+    #axs[2][i].text(0.05, 0.88, f"$a={popt[0]:.4f}$", transform = axs[2][i].transAxes)
+    #axs[2][i].text(0.05, 0.77, f"$b={popt[1]:.4f}$", transform = axs[2][i].transAxes)
+    #axs[2][i].text(0.05, 0.66, f"$c={popt[2]:.4f}$", transform = axs[2][i].transAxes)
     
     v_lin = ez_lin_space(original_v)
     v_log = np.log(np.abs(v_lin))
     original_v = np.delete(original_v, omit_non_log)
     
-    plotters[0][i].plot(v_lin, test_func(v_log, *popt) + peak_pos_value, label="Fit")
+    #plotters[0][i].plot(v_lin, test_func(v_log, *popt) + peak_pos_value, label="Fit")
     plotters[0][i].plot(original_v, np.delete(original_data[0], omit_non_log), label="Data")
-    axs[0][i].axhline(peak_pos_value, color="k", ls="--")
+    #axs[0][i].axhline(peak_pos_value, color="k", ls="--")
     
     # Plot and fit W_0
-    popt, pcov = ez_general_fit(v_data, weights, test_func, plotters[3][i], ez_lin_space(v_data), label="Fit")
+    #popt, pcov = ez_general_fit(v_data, weights, test_func, plotters[3][i], ez_lin_space(v_data), label="Fit")
     plotters[3][i].plot(v_data, weights, label="Data")
-    axs[3][i].text(0.05, 0.88, f"$a={popt[0]:.4f}$", transform = axs[3][i].transAxes)
-    axs[3][i].text(0.05, 0.77, f"$b={popt[1]:.4f}$", transform = axs[3][i].transAxes)
-    axs[3][i].text(0.05, 0.66, f"$c={popt[2]:.4f}$", transform = axs[3][i].transAxes)
+    #axs[3][i].text(0.05, 0.88, f"$a={popt[0]:.4f}$", transform = axs[3][i].transAxes)
+    #axs[3][i].text(0.05, 0.77, f"$b={popt[1]:.4f}$", transform = axs[3][i].transAxes)
+    #axs[3][i].text(0.05, 0.66, f"$c={popt[2]:.4f}$", transform = axs[3][i].transAxes)
     
-    plotters[1][i].plot(v_lin, -test_func(v_log, *popt) + np.exp(peak_weight), label="Fit")
+    #plotters[1][i].plot(v_lin, -test_func(v_log, *popt) + np.exp(peak_weight), label="Fit")
     plotters[1][i].plot(original_v, np.delete(original_data[1], omit_non_log), label="Data")
-    axs[1][i].axhline(np.exp(peak_weight), color="k", ls="--")
+    #axs[1][i].axhline(np.exp(peak_weight), color="k", ls="--")
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
