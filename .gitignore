@@ -18,6 +18,10 @@ cpp/ModeFinder/sources/Utility
 cpp/HubbardMeanField/auto_generated
 cpp/HubbardMeanField/small_auto_generated
 cpp/HubbardMeanField/small_auto_generated2
+cpp/HubbardMeanField/cube_auto_generated
+cpp/HubbardMeanField/square_auto_generated
+cpp/HubbardMeanField/small_cube_auto_generated
+cpp/HubbardMeanField/small_square_auto_generated
 cpp/main
 cpp/HubbardMeanField/doxy
 *.bin
