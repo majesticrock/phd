@@ -9,12 +9,12 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([-2.5])
-Vs = np.array([-0.1])
+Us = np.array([4.0])
+Vs = np.array([0.75])
 
 use_XP = True
 
-folder = "data/modes/square/dos_1500/"
+folder = "data/modes/square/dos_900/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
