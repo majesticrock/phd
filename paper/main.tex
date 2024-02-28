@@ -93,12 +93,14 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-    We investigate the superconducting (SC), charge-density wave (CDW), and antiferromagnetic (AFM) phases 
-    in the extended Hubbard model at zero temperature and half-filling.
-    We employ the iterated equations of motion approach \cite{Kalthoff17,bleicker18} to compute the two-particle Green's functions and their spectral densities.
-    This renders a comprehensive analysis of the behavior of collective excitations possible as the model's parameters are changed across phase transitions.
-    We identify the well-known amplitude (Higgs) and phase (Anderson-Bogoliubov) modes within the superconducting phase and observe a similar excitation in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase.
-    In the CDW phase, close to the phase transition to the AFM phase, we find a collective mode that does not change significantly and another mode that becomes soft as the phase boundary is approached.
+    We investigate the superconducting (SC), charge-density wave (CDW), and antiferromagnetic (AFM) phases in the extended Hubbard model at zero temperature and half-filling. 
+    We employ the iterated equations of motion approach to compute the two-particle Green's functions and their spectral densities. 
+    This renders a comprehensive analysis of the behavior of collective excitations possible as the model's parameters are changed across phase transitions. 
+    We identify the well-known amplitude (Higgs) and phase (Anderson-Bogoliubov) modes within the superconducting phase 
+    and observe a similar excitation (Cooperon) in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase. 
+    \textcolor{red}{In the CDW phase, close to the phase transition to the AFM phase, 
+    we find a collective mode (exciton) that does not change significantly and another mode (magnon) that moves into the two-particle continuum. 
+    In the AFM phase we identify both longitudinal and transversal magnons.}
 \end{abstract}
 
 \maketitle
@@ -123,12 +125,12 @@ The previously mentioned SC and CDW phases map to different spin operators \cite
 
 Numerous studies have investigated the phases and various quantities of the Hubbard model in equilibrium systems, including various additional interactions with and without doping.
 \cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
-Recent studies on the dynamics of the superconducting gap parameter examined quenches, yielding oscillations \cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Barankov06,Cui19}, 
-and driven systems in the hope of inducing superconductivity \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
+\textcolor{red}{Recent studies on the dynamics of the superconducting gap parameter examined quenches, yielding oscillations \cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Barankov06,Cui19}, 
+and driven systems in the hope of inducing superconductivity \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.}
 
 In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
-Specifically, we investigate competing phases, i.e., the behavior of various collective modes around phase transitions.
-To this end, the 2D case already provides a wide range of possible phases, including CDW, AFM, $s$- and $d_{x^2 - y^2}$-wave superconductivity, and phase-separated states \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22,Linner23}.
+\textcolor{red}{Specifically, we investigate competing phases, i.e., the behavior of various collective modes around phase transitions.
+To this end, the 2D case already provides a wide range of possible phases, including CDW, AFM, $s$- and $d_{x^2 - y^2}$-wave superconductivity, and phase-separated states \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22,Linner23}.}
 We expand these well-known phase diagrams to the simple cubic lattice where we find a similar structure for CDW, AFM, and $s$-wave SC.
 
 To study this system, we will first employ a mean-field approximation to the interaction terms 
@@ -141,13 +143,10 @@ The functionality of this method has been compared to the density matrix formali
 Moreover, we demonstrate an explicit way to obtain various Green's functions from the aforementioned methodology.
 By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
 The prominent examples in the SC phase are the well-known phase (Anderson-Bogoliubov) and amplitude (Higgs) modes.
-The former occurs in neutral superfluids at $0$ energy and has been found in the past \cite{Maiti2015,Sun2020,Fan22}.
+\textcolor{red}{The former occurs in neutral superfluids at $0$ energy and has been found in the past \cite{Bogoljubov1958,Anderson58,Brieskorn74,Schmid1975,simanek1975,schoen1976propagating,Maiti2015,Sun2020,Fan22}.
 We will obtain this mode as well based on a microscopic description that excludes long-range electromagnetic interactions.
-The inclusion of this kind of interaction shifts this mode towards the plasma frequency \cite{Kulik1981}. TODO: Schön
-
-The amplitude mode ... \cite{Varma02,Cea14,Measson14,Tsuji15,Krull16,Schwarz20}
-The latter is found at the lower edge of the two-particle continuum.
-
+The inclusion of this kind of interaction would shift this mode towards the plasma frequency \cite{Anderson58,schoen1976propagating,Kulik1981}.}
+\textcolor{red}{The amplitude mode, on the other hand, is located at the lower edge of the quasiparticle continuum as it represents the energy required to form or break a Cooper pair \cite{Schmid1975,Varma02,Cea14,Measson14,Tsuji15,Krull16,Schwarz20}}
 
 The remainder of this paper is organized as follows:
 In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as our mean-field theory for the ground state.
@@ -159,7 +158,7 @@ Lastly, in \autoref{sec:conclusion}, we will discuss our results.
 
 \subsection{Model}
 
-In our study, we employ the extended Hubbard model as it encompasses the relevant phases and thereby provides direct access to the rich excitation spectra therein.
+In our study, we employ the extended Hubbard model at half-filling as it encompasses the relevant phases and thereby provides direct access to the rich excitation spectra therein.
 Its Hamiltonian is given by
 \begin{equation}
     \label{eqn:full_hamiltonian}
@@ -178,6 +177,13 @@ Applying a Fourier transform into $k$ space yields the single-particle dispersio
     \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha)\,,\quad k_\alpha \in [-\pi, \pi)\,,
 \end{equation}
 with the system's dimension $D$ and the dimensionless momentum $\vk$.
+
+\textcolor{red}{We will investigate this model for various sets of parameters allowing us access to an assortment of phases.
+Namely, the model exhibits antiferromagnetism for positive $U$ and moderately sized $V$.
+At larger $V$ the intersite repulsion takes over and favors a charge-ordered phase.
+In the $U<0$ region, the same phase occurs for any $V>0$.
+Choosing $V=0$ leads to a coexistence of $s$-wave superconductivity and said CDW \cite{yang90}, while moderately sized $V<0$ yield a purely $s$-wave superconducting phase \cite{Micnas88b}.
+In this article, we will explore the AFM-CDW as well as the CDW-SC phase transitions.}
 
 \subsection{Static mean-field theory}
 
@@ -236,20 +242,25 @@ where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
     The CDW-AFM boundary lies at $U = zV$, where $z$ is the coordination number. 
     For $U<0$ and $V=0$, there is a coexistence of CDW and $s$-wave SC.
     The boundary for the $d_{x^2 - y^2}$-wave SC (dashed line) for the square lattice has been taken from Ref. \cite{Micnas88b}, 
-    as it is not accessible using our formalism.}
+    as it is not accessible using our formalism.
+    \textcolor{red}{The red shading shows the region in which the dynamical matrix $\mM$, see equation \eqref{eqn:heisenberg}, has negative eigenvalues, 
+    indicating that there are phases not captured by our methods.
+    In accordance with literature, we expect to find a phase-separated state \cite{Linner23}.
+    Lastly, the red shading shows the region that we cannot access because the discretization $N_\gamma$, 
+    which is required to accurately describe the system, is too large.}}
     \label{fig:phase_diagram}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=.48\textwidth]{plots/phase_limits.pdf}
-    \caption{The lower left corner ($U<0$ and $V<0$) of the phase diagram obtained for the extended Hubbard model on 
-    (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
-    The blue shading indicates the region where the $s$-wave superconducting phase is the proper ground state of the system.
-    The green shading shows the region that we cannot access because the discretization $N_\gamma$, which is required to accurately describe the system, is too large.
-    Lastly, the orange shading shows the region in which the dynamical matrix $\mM$ has negative eigenvalues, indicating that there are phases not captured by our methods.}
-    \label{fig:phase_limits}
-\end{figure}
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=.48\textwidth]{plots/phase_limits.pdf}
+%    \caption{The lower left corner ($U<0$ and $V<0$) of the phase diagram obtained for the extended Hubbard model on 
+%    (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
+%    The blue shading indicates the region where the $s$-wave superconducting phase is the proper ground state of the system.
+%    The green shading shows the region that we cannot access because the discretization $N_\gamma$, which is required to accurately describe the system, is too large.
+%    Lastly, the orange shading shows the region in which the dynamical matrix $\mM$ has negative eigenvalues, indicating that there are phases not captured by our methods.}
+%    \label{fig:phase_limits}
+%\end{figure}
 
 We observe that the entire Hamiltonian and thus all expectation values only depend on
 \begin{equation}
@@ -327,7 +338,7 @@ We prove this statement in the appendix \ref{sec:positive_M}.
 We can use this fact to further enhance our ground state phase diagram.
 If $\mM$ has even a single negative eigenvalue for any combination of parameters, we know that the system is not in thermal equilibrium, 
 i.e., our self-consistency did not capture the correct ground state phase.
-This does in fact happen for certain $U<0$ and $V<0$, see the orange shading in \autoref{fig:phase_limits}.
+This does in fact happen for certain $U<0$ and $V<0$, see the orange shading in \autoref{fig:phase_diagram}.
 For finite temperatures, on a square lattice, a phase-separated state as well as the coexistence of a phase-separated state with $s$-wave superconductivity has been found in this region \cite{Linner23}.
 The phase boundary that we propose here is qualitatively in good agreement with the one found in the aforementioned reference.
 We expect a similar set of phases to be present on the simple cubic lattice but cannot prove this statement at this point.
@@ -340,7 +351,7 @@ For instance, commuting a bilinear term with a quartic Hamiltonian yields, quart
 Therefore, one repeats this commutation process and includes the occurring terms within a bigger set,
 hoping to get better results as the set size increases.
 
-In this article, we will be using the symplectic product\textcolor{red}{, also referred to as the operator pseudo scalar product,}
+In this article, we will be using the \textcolor{red}{symplectic product,}
 \begin{equation}
 \label{eqn:scalar_product}
     (A | B) \coloneqq  \langle [A^\dagger, B] \rangle\,,
@@ -366,7 +377,11 @@ It consists of operators of the type
 \end{equation}
 where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
 Operators with different indices are put into the set individually, e.g., $n_{\gamma \up}$, and $n_{\gamma \down}$ are distinct operators in our set.
-\textcolor{red}{Additionally, we will include $\tau_{k} \coloneqq c_{k \uparrow}^\dagger c_{k \downarrow}$ and its Hermitian conjugate.
+\textcolor{red}{Additionally, we will include 
+\begin{equation}
+    \tau_{k} \coloneqq c_{k \uparrow}^\dagger c_{k \downarrow}
+\end{equation}
+and its Hermitian conjugate.
 This will allow us to describe transversal magnons later on.}
 
 Naturally, we have to discretize $\gamma$, 
@@ -375,8 +390,11 @@ Practically, we choose $N_\gamma = 3000$ equally spaced discretization points.
 A detailed explanation of the numerics is provided in the appendix \ref{sec:numerical_ieom}.
 \textcolor{red}{Computationally, our method is limited by the number of terms included in our operator set as well in the magnitude of $N_\gamma$.}
 If the gap $\Delta_\text{tot}$ is of the same order of magnitude as our discretization $\Delta \gamma$ our numerics become inaccurate.
-This manifests specifically whenever a spectral function has strong features at minuscule energies, e.g., the phase mode in the superconducting phase.
+This manifests specifically if a spectral function has strong features at minuscule energies, e.g., the phase mode in the superconducting phase.
 In this case, the dynamical matrix $\mM$ picks up negative eigenvalues that vanish if $N_\gamma$ is increased so that $\Delta \gamma$ is sufficiently smaller than $\Delta_\text{tot}$.
+This happens if the paremeters are chosen from the purple shaded area in \autoref{fig:phase_diagram}.
+\textcolor{red}{This issue only arises in the SC phase, nevertheless, we expect similar inaccuracies in the AFM region for small $U$.
+However, we did not perfom any computations in that region, hence this does not pose an issue to our analysis.}
 
 Next, we order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.,
 \begin{equation}
@@ -421,11 +439,11 @@ where we used the resolvent
     \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}\,.
 \end{equation}
 The entries of this matrix $\mathcal{G}(z)$ are the Fourier-transformed Green's functions mentioned in \eqref{eqn:standard_gf} with respect to the operators from the initially chosen set.
-For instance, assume the operator in the set is $f_{\vk}$, then the top left element of $\mathcal{G}$ is the Green's function 
+\textcolor{red}{That means, if we index each operator in our set $A_i$, the matrix element $(i,j)$ of $\mathcal{G}$ is the Green's function
 \begin{align}
-    \mathcal{G}_{00}(z = \omega +i0^+) &=  G_{f_{\vk} f_{\vk}^\dagger} (z) \nonumber \\
-        &= -i \int_0^{\infty} \langle [f_{\vk}(t), f_{\vk}^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
-\end{align}
+    \mathcal{G}_{ij}(z = \omega +i0^+) &=  G_{A_i A_j^\dagger} (z) \nonumber \\
+        &= -i \int_0^{\infty} \langle [A_i(t), A_j^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
+\end{align}}
 
 In the following, we will derive this relation.
 For that, consider the Fourier-transformed Green's function \eqref{eqn:standard_gf} with respect to two operators $A$ and $B^\dagger$ that are included in our operator set
@@ -440,7 +458,7 @@ Since $A$ and $B$ are included in the operator set, we can rewrite them as dot p
     \end{pmatrix}\,,
 \end{equation}
 and some other complex-valued vector $\vec{a}$ which has its coefficients set in such a way,
-that $\vec{a} \cdot \vec{A}$ is equal to the desired operator. 
+that \textcolor{red}{$\vec{A} \cdot \vec{a}$} is equal to the desired operator. 
 For instance, $\vec{a} \equiv \vec{e}_1$ in order to represent $A_1$.
 
 Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differential equation \eqref{eqn:heisenberg} to obtain
@@ -813,7 +831,7 @@ This indicates that the peak weights drop off fairly quickly as the system moves
 It also suggests that there might be a finite saturation value, but we are unable to compute the Green's functions for additional, even larger $|V|$, 
 because the matrix $\mM$ is not nonnegative anymore after $V\approx -0.28t$ (square lattice) or $V\approx -0.34t$ (simple cubic lattice).
 Note, that our proof for the nonnegativity is based on the system being in thermal equilibrium.
-Therefore, we conclude that beyond these values of $V$, the superconducting phase is not the true ground state of the system, see \autoref{fig:phase_limits}.
+Therefore, we conclude that beyond these values of $V$, the superconducting phase is not the true ground state of the system, see the red shading in \autoref{fig:phase_diagram}.
 Specifically, the $s$-wave superconducting phase on the square lattice seems to be even smaller than first estimated using the $d_{x^2 -y^2}$ data from \cite{Micnas88b}.
 In recent research, there has been evidence for a phase-separated state for negative values of $V$ on a square lattice, which would explain our results here \cite{Linner23}.
 It would be reasonable to assume, that this phase occurs in both the 2- and 3-dimensional case.
