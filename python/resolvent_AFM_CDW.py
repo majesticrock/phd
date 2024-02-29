@@ -2,62 +2,59 @@ import numpy as np
 import matplotlib.pyplot as plt
 import lib.continued_fraction as cf
 from lib.iterate_containers import naming_scheme
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes, mark_inset
+import lib.plot_settings as ps
 # Calculates the resolvent in w^2
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([4.9])
-Vs = np.array([1.])
+Us = np.array([6.05])
+Vs = np.array([1.2])
 
 use_XP = True
-createZoom = False
 
-folder = "data/modes/cube/dos_3k/"
-name_suffix = "CDW"
-element_names = ["a", "a+b", "a+ib"]
+folder = "data/modes/square/dos_900/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
-ax.set_yscale("log")
-#ax.set_ylim(0, .3)
+#ax.set_yscale("symlog")
+ax.set_ylim(-0.05, 1.)
 
-plot_lower_lim = 5.5
-plot_upper_lim = 5.7
+plotter = ps.CURVEFAMILY(6, axis=ax)
+plotter.set_individual_colors("nice")
+plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
+#plotter.set_individual_dashes()
 
-if createZoom:
-    axins = inset_axes(ax, width='50%', height='30%', loc='center right')
-    # Plot the zoomed-in region
-    axins.set_xlim(2.75, 2.85)
-    axins.set_ylim(0, 1)
-    plt.yticks(visible=False)
-    plt.xticks(visible=False)
-    # Mark the area in the main plot with a rectangle and a connecting line
-    mark_inset(ax, axins, loc1=2, loc2=4, fc="none", ec="0.5")
+plot_lower_lim = -0.01
+plot_upper_lim = 7
 
+name_suffix = "CDW"
 for name in naming_scheme(Ts, Us, Vs):
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=200000, xp_basis=use_XP)
-    ax.plot(w_lin, data, label=name_suffix)
-    if createZoom:
-        axins.plot(w_lin, data)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+                                                    number_of_values=200000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
+    plotter.plot(w_lin, data, label=name_suffix)
 
 name_suffix = "AFM"
 for name in naming_scheme(Ts, Us, Vs):
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, number_of_values=200000, xp_basis=use_XP)
-    ax.plot(w_lin, data, linestyle="--", label=name_suffix)
-    if createZoom:
-        axins.plot(w_lin, data)
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+                                                    number_of_values=200000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
+    plotter.plot(w_lin, data, label=name_suffix)
+
+name_suffix = "higgs_AFM_trans"
+for name in naming_scheme(Ts, Us, Vs):
+    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
+    plotter.plot(w_lin, data, label=name_suffix)
+
 
 res.mark_continuum(ax)
-if createZoom:
-    res.mark_continuum(axins)
-legend = ax.legend()
+legend = plt.legend()
+ax.add_artist(legend)
 
 ax.set_xlim(plot_lower_lim, plot_upper_lim)
-ax.set_xlabel(r"$z / t$")
-ax.set_ylabel(r"Spectral density / a.u.")
+ax.set_xlabel(r"$\omega [t]$")
+ax.set_ylabel(r"$\mathcal{A} (\omega) [t^{-1}]$")
 fig.tight_layout()
 
 import os
