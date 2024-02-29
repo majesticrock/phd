@@ -13,13 +13,18 @@ from lib.extract_key import *
 import lib.resolvent_peak as rp
 import lib.plot_settings as ps
 
+Us_square = np.array([0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.24, 1.25])
+Us_cube = np.array([0.0001, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.295, 0.299])
+
+#for U in Us_cube:
+#    print(f"0 {4.8 - U} 0.8")
+#    print(f"0 {4.8 + U} 0.8")
 
 Ts = np.array([0.])
 Us_square = np.array([0.0001, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275, 0.3, 0.325, 0.35, 0.375, 0.4, 0.41, 0.42, 0.423])   # there is a peak at 0.424, but our numerical tools start breaking 
 Us_cube = np.array([0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.105])
 Us = np.array([np.concatenate((-Us_square[::-1], Us_square)), np.concatenate((-Us_cube[::-1], Us_cube))], dtype=object)
 Vs = np.array([1.0])
-
 
 folders = ["../data/modes/square/dos_3000/", "../data/modes/cube/dos_3000/"]
 element_names = ["a", "a+b", "a+ib"]
