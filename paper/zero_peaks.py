@@ -17,7 +17,7 @@ T = 0.
 U = -2.5
 V = 0.0
 
-folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_3000/"]
+folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 
 fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 4.8), sharex=True, sharey=True, gridspec_kw=dict(hspace=0, wspace=0))
 
