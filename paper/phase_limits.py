@@ -6,7 +6,7 @@ fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(6.4, 9))
 xlims = (-5, 0)
 ylims = (-0.5, 0)
 alpha = .6
-folder = "T0"
+folder = "test"
 
 ############################################################################
 ############                  Square lattice                    ############

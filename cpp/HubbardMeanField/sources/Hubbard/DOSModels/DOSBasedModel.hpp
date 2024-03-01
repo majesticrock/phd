@@ -33,13 +33,13 @@ namespace Hubbard::DOSModels {
 	template <typename DataType, class DOS>
 	class DOSBasedModel : public BaseModel<DataType>
 	{
-	private:
+	protected:
 		using ParameterVector = typename BaseModel<DataType>::ParameterVector;
 		static std::mutex dos_mutex;
 		const global_floating_type DELTA_GAMMA;
 		constexpr static int NUMBER_OF_PARAMETERS = 9;
 
-		void init() {
+		virtual void init() override {
 			this->hamilton = SpinorMatrix::Zero(this->SPINOR_SIZE, this->SPINOR_SIZE);
 			this->rho = SpinorMatrix::Zero(this->SPINOR_SIZE, this->SPINOR_SIZE);
 
@@ -86,7 +86,6 @@ namespace Hubbard::DOSModels {
 			//F(8) = -this->rho(0, 4).real() - this->rho(1, 5).real() + this->rho(2, 6).real() + this->rho(3, 7).real(); // PS
 		};
 
-	protected:
 		using _scalar_integrator = typename DOS::Integrator<global_floating_type>;
 		typename DOS::Integrator<ComplexParameterVector> _self_consistency_integrator;
 
@@ -136,8 +135,10 @@ namespace Hubbard::DOSModels {
 			F -= x;
 		};
 	public:
+		static constexpr SystemType SYSTEM_TYPE = static_cast<SystemType>(DOS::DIMENSION);
+
 		DOSBasedModel(const ModelParameters& _params)
-			: BaseModel<DataType>(_params, static_cast<SystemType>(DOS::DIMENSION)),
+			: BaseModel<DataType>(_params, SYSTEM_TYPE),
 			SET_DELTA_GAMMA
 			_self_consistency_integrator(ComplexParameterVector::Zero(NUMBER_OF_PARAMETERS))
 		{
@@ -146,7 +147,7 @@ namespace Hubbard::DOSModels {
 
 		template<typename StartingValuesDataType>
 		DOSBasedModel(const ModelParameters& _params, const ModelAttributes<StartingValuesDataType>& startingValues)
-			: BaseModel<DataType>(_params, startingValues), 
+			: BaseModel<DataType>(_params, startingValues),
 			SET_DELTA_GAMMA
 			_self_consistency_integrator(ComplexParameterVector::Zero(NUMBER_OF_PARAMETERS))
 		{

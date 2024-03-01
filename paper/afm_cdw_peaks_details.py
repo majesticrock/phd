@@ -24,8 +24,6 @@ Us_cube   = np.array([ 0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
 Us = np.array([Us_square, Us_cube], dtype=object)
 Vs = np.array([1.0])
 
-for U in Us_cube:
-    print(f"0 {4.8 - Us}")
 
 folders = ["../data/modes/square/dos_3000/", "../data/modes/cube/dos_3000/"]
 element_names = ["a", "a+b", "a+ib"]
