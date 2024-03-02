@@ -13,9 +13,10 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
-params = [ [0., 4.1, 1.], [0., 3.9, 1.], [0., 4.8, 1.], [0., 3.2, 1.] ]
+params = [  [ [0., 4.85, 1.2], [0., 4.75, 1.2], [0., 4.85, 1.2], [0., 4.75, 1.2] ],
+            [ [0., 4.85, 0.8], [0., 4.75, 0.8], [0., 4.85, 0.8], [0., 4.75, 0.8] ]]
 
-folders = ["../data/modes/square/dos_3000/", "../data/modes/cube/dos_3000/"]
+folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 nrows = 4
 ncols = 2
 # ax = axs[row][col]
@@ -37,14 +38,8 @@ labels = ["Phase", "Higgs", "CDW", "AFM"]
 
 for j, folder in enumerate(folders):
     usage_upper_lim = 2 * plot_upper_lim if j == 0 else 2.8 * plot_upper_lim
-    if j == 1: 
-        # the sc lattice uses a different V for the CDW-AFM border due to the changed coordination number
-        params[0][1] = 6.1
-        params[1][1] = 5.9
-        params[2][1] = 7.2
-        params[3][1] = 4.8
         
-    for i, name in enumerate(naming_scheme_tuples(params)):
+    for i, name in enumerate(naming_scheme_tuples(params[j])):
         resolvents = np.empty(len(name_suffices), dtype=cf.ContinuedFraction)
         for k, (name_suffix, label) in enumerate(zip(name_suffices, labels)):
             data, data_real, w_lin, resolvents[k] = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, usage_upper_lim, 
