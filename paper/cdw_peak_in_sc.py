@@ -37,17 +37,19 @@ name_suffix = "higgs_CDW"
 ncols=2
 nrows=2
 
-fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 8.2), sharex="col", gridspec_kw=dict(hspace=0, wspace=0))
+fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 8.2), sharex="col", sharey="row", gridspec_kw=dict(hspace=0, wspace=0))
 
 plotters = np.empty((nrows,ncols), dtype=ps.CURVEFAMILY)
 peak_fit_params = {"range": 1e-4, "begin_offset": 1e-10, "imaginary_offset": 1e-7, "peak_position_tol": 1e-14}
 
+cutoffs = [[5, 12], [10, 15]]
+
 for j in range(nrows):
     for i in range(ncols):
-        plotters[j][i] = ps.CURVEFAMILY(2, axis=axs[j][i])
+        plotters[j][i] = ps.CURVEFAMILY(3, axis=axs[j][i])
         plotters[j][i].set_individual_colors("nice")
-        plotters[j][i].set_individual_linestyles(["-", ""])
-        plotters[j][i].set_individual_markerstyles(["", "^"])
+        plotters[j][i].set_individual_linestyles(["-", "", ""])
+        plotters[j][i].set_individual_markerstyles(["", "^", "v"])
 
 for i in range(2):
     #if i == 1:
@@ -65,23 +67,27 @@ for i in range(2):
     v_data = np.log(np.abs(v_data))
     peak_positions = np.log(peak_positions)
     # Plot and fit omega_0
-    popt, pcov = ez_linear_fit(v_data, peak_positions, plotters[0][i], ez_lin_space(v_data), label="Fit")
-    plotters[0][i].plot(v_data, peak_positions, label="Data")
-    axs[0][i].text(0.05, 0.88, f"$a={popt[0]:.4f}$", transform = axs[0][i].transAxes)
-    axs[0][i].text(0.05, 0.77, f"$b={popt[1]:.4f}$", transform = axs[0][i].transAxes)
+    cut = len(v_data) - cutoffs[0][i]
+    popt, pcov = ez_linear_fit(v_data[:cut], peak_positions[:cut], plotters[0][i], ez_lin_space(v_data), label="Fit")
+    plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Fitted data")
+    plotters[0][i].plot(v_data[cut:], peak_positions[cut:], label="Omitted data", markerfacecolor="None")
+    axs[0][i].text(0.15, 0.88, f"$a={popt[0]:.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.15, 0.77, f"$b={popt[1]:.4f}$", transform = axs[0][i].transAxes)
     
     # Plot and fit W_0
-    popt, pcov = ez_linear_fit(v_data, weights, plotters[1][i], ez_lin_space(v_data), label="Fit")
-    plotters[1][i].plot(v_data, weights, label="Data")
-    axs[1][i].text(0.05, 0.88, f"$a={popt[0]:.4f}$", transform = axs[1][i].transAxes)
-    axs[1][i].text(0.05, 0.77, f"$b={popt[1]:.4f}$", transform = axs[1][i].transAxes)
+    cut = len(v_data) - cutoffs[1][i]
+    popt, pcov = ez_linear_fit(v_data[:cut], weights[:cut], plotters[1][i], ez_lin_space(v_data), label="Fit")
+    plotters[1][i].plot(v_data[:cut], weights[:cut], label="Data")
+    plotters[1][i].plot(v_data[cut:], weights[cut:], label="Omitted data", markerfacecolor="None")
+    axs[1][i].text(0.15, 0.88, f"$a={popt[0]:.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.15, 0.77, f"$b={popt[1]:.4f}$", transform = axs[1][i].transAxes)
 
 axs[0][0].title.set_text("Square")
 axs[0][1].title.set_text("Simple cubic")
 
 for i in range(ncols):
-    axs[0][i].text(0.88, 0.85 - 0.09*i, f"(a.{i+1})", transform = axs[0][i].transAxes)
-    axs[1][i].text(0.88, 0.85 - 0.09*i, f"(b.{i+1})", transform = axs[1][i].transAxes)
+    axs[0][i].text(0.88, 0.75, f"(a.{i+1})", transform = axs[0][i].transAxes)
+    axs[1][i].text(0.88, 0.75, f"(b.{i+1})", transform = axs[1][i].transAxes)
 
 axs[1][0].set_ylim(axs[1][0].get_ylim()[0], axs[1][0].get_ylim()[1] + 1.1)
 
@@ -92,7 +98,7 @@ axs[0][0].set_ylabel(r"$\ln (\omega_0 / t) $")
 axs[1][0].set_ylabel(r"$\ln(W_0)$")
 
 #axs[0][1].legend(loc="lower right")
-axs[1][1].legend(loc="upper left")
+axs[1][1].legend(loc="lower left")
 fig.tight_layout()
 
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

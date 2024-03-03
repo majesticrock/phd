@@ -10,7 +10,7 @@ import lib.continued_fraction as cf
 import lib.plot_settings as ps
 import lib.resolvent_peak as rp
 
-folders = ["../data/modes/square/dos_3000/", "../data/modes/cube/dos_3000/"]
+folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 
 fig, axs = plt.subplots(nrows=4, ncols=2, figsize=(12.8, 9.6), sharey="row", sharex=True, gridspec_kw=dict(hspace=0, wspace=0))
 def plot_general_peak(plot_axs, T, U, V, name_suffix, initial_search_bounds, text="", reversed=False):
@@ -21,7 +21,7 @@ def plot_general_peak(plot_axs, T, U, V, name_suffix, initial_search_bounds, tex
         plotters[i].set_individual_colors("nice2")
         plotters[i].set_individual_dashes()
 
-        name = f"T={T}/U={U[i] if hasattr(U, '__len__') else U}/V={V}"
+        name = f"T={T}/U={U[i] if hasattr(U, '__len__') else U}/V={V[i] if hasattr(V, '__len__') else V}"
         peak = rp.Peak(f"{folders[i]}{name}", name_suffix, initial_search_bounds=initial_search_bounds)
 
         peak.improved_peak_position(xtol=1e-13)
@@ -32,7 +32,7 @@ def plot_general_peak(plot_axs, T, U, V, name_suffix, initial_search_bounds, tex
         plotters[i].plot(w_space, y_data, label="Data")
         plotters[i].plot(w_space, rp.linear_function(w_space, *popt), label="Fit")
 
-        plot_axs[i].text(0.5, 0.7, f"{text}$U={U[i] if hasattr(U, '__len__') else U}, V={V}$", transform = plot_axs[i].transAxes)
+        plot_axs[i].text(0.5, 0.7, f"{text}$U={U}, V={V[i] if hasattr(V, '__len__') else V}$", transform = plot_axs[i].transAxes)
 
 # CDW in SC
 plot_general_peak(axs[0], T=0.0, U=-2.5, V=-0.1, name_suffix="CDW", initial_search_bounds=(0.3, 0.8), reversed=False, text="SC: ")
@@ -41,10 +41,10 @@ axs[0][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{CDW}](\omega) \cdot t)$")
 plot_general_peak(axs[1], T=0.0, U=-2.5, V=0.1, name_suffix="higgs_SC", initial_search_bounds=(0.5, 1.5), reversed=False, text="CDW: ")
 axs[1][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{Higgs}](\omega) \cdot t)$")
 #AFM in CDW
-plot_general_peak(axs[2], T=0.0, U=[3.9, 5.9], V=1.0, name_suffix="AFM", initial_search_bounds=(2., "lower_edge"), reversed=True, text="CDW: ")
+plot_general_peak(axs[2], T=0.0, U=4.75, V=[1.2, 0.8], name_suffix="AFM", initial_search_bounds=(2., "lower_edge"), reversed=True, text="CDW: ")
 axs[2][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{AFM}](\omega) \cdot t)$")
 #AFM in AFM
-plot_general_peak(axs[3], T=0.0, U=[4.1, 6.1], V=1.0, name_suffix="AFM", initial_search_bounds=(2., "lower_edge"), reversed=True, text="AFM: ")
+plot_general_peak(axs[3], T=0.0, U=4.85, V=[1.2, 0.8], name_suffix="AFM", initial_search_bounds=(2., "lower_edge"), reversed=True, text="AFM: ")
 axs[3][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{AFM}](\omega) \cdot t)$")
 
 

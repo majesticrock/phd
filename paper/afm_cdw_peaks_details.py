@@ -15,17 +15,15 @@ import lib.plot_settings as ps
 from lib.ez_fit import *
 
 Ts = np.array([0.])
-Us_square = np.array([ 0.0001, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 
-                0.225, 0.25, 0.275, 0.3, 0.325, 0.35, 0.375, 0.4, 0.41, 0.413, 0.415, 0.417, 0.418, 0.419, 0.42, 0.421, 0.422, 0.423, 0.424]) # there is a peak at 0.424, but our numerical tools start breaking 
-Us_cube   = np.array([ 0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 
-                0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.03, 1.05, 1.06, 1.07, 1.08, 1.085, 1.09, 1.095, 1.1, 1.102, 1.105])
-# New square: 0.413, 0.415, 0.417, 0.418, 0.419
-# New cube:   1.102, 1.095, 1.085
+Us_square = np.array([0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.24, 1.25])
+# new: 1.27 1.3 1.32 1.35 1.37 1.4 1.42 1.45 1.47 1.5
+Us_cube = np.array([0.0001, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.295, 0.299])
+# new 0.3 0.302 0.305 0.307 0.31 0.312 0.315 0.317 0.32 0.322 0.325
 Us = np.array([Us_square, Us_cube], dtype=object)
-Vs = np.array([1.0])
+Vs = np.array([0.])
 
 
-folders = ["../data/modes/square/dos_3000/", "../data/modes/cube/dos_3000/"]
+folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffix = "AFM"
@@ -42,16 +40,14 @@ for i in range(2):
         plotters[j][i].set_individual_colors("nice")
         plotters[j][i].set_individual_linestyles(["-", "", ""])
         plotters[j][i].set_individual_markerstyles(["", "^", "v"])
-    if i == 0:
-        u_data = 4.0 - Us[0]
-    else:
-        u_data = 6.0 - Us[1]
+    u_data = 4.8 - Us[i]
     
     weights = np.zeros(len(u_data))
     peak_positions = np.zeros(len(u_data))
     peak_positions_to_cont = np.zeros(len(u_data))
     counter = 0
     for T, U, V in iterate_containers(Ts, u_data, Vs):
+        V = 1.2 if i == 0 else 0.8
         name = f"T={T}/U={round(U, 4)}/V={V}"
         cont_edges = cf.continuum_edges(f"{folders[i]}{name}", f"higgs_{name_suffix}", True)
         lower = 0 if float(V) < 1 else float(V)
@@ -61,7 +57,7 @@ for i in range(2):
         peak_positions_to_cont[counter] = cont_edges[0] - peak_positions[counter]
         counter += 1
     
-    u_log = np.log(u_data - (3.5755 if i == 0 else 4.89))
+    u_log = np.log(u_data - min(u_data) + 0.02)
     peak_positions_to_cont = np.log(peak_positions_to_cont)
     
     cut = 15
