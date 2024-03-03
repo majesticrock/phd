@@ -70,7 +70,7 @@ for i in range(2):
         peak_positions_div_delta[counter] = peak_positions[counter] / extract_key(f"{folders[i]}{name}/resolvent_{name_suffix}.dat.gz", "Total Gap")
         counter += 1
 
-    cut = 40
+    cut = 38
     popt, pcov = curve_fit(rp.linear_function, v_data[:cut], weights[:cut])
     v_lin = np.linspace(v_data.min(), v_data.max(), 500)
     

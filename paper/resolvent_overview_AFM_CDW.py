@@ -13,8 +13,8 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
-params = [  [ [0., 4.85, 1.2], [0., 4.75, 1.2], [0., 4.85, 1.2], [0., 4.75, 1.2] ],
-            [ [0., 4.85, 0.8], [0., 4.75, 0.8], [0., 4.85, 0.8], [0., 4.75, 0.8] ]]
+params = [  [ [0., 4.85, 1.2], [0., 4.75, 1.2], [0., 6.2, 1.2], [0., 3.4, 1.2] ],
+            [ [0., 4.85, 0.8], [0., 4.75, 0.8], [0., 6.2, 0.8], [0., 3.4, 0.8] ]]
 
 folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 nrows = 4
