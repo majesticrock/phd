@@ -9,7 +9,7 @@ prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
-Us = np.array([6.05])
+Us = np.array([6.2])
 Vs = np.array([1.2])
 
 use_XP = True
