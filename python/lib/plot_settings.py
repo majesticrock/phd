@@ -377,7 +377,7 @@ color_maps = { "cmptugreen": cmptugreen, "cmptuorange": cmptuorange }
 color_ranges = { "default": [], "nice": [], "nice2" : [] }
 color_ranges["default"] = np.array(( "black", "blue", "red", "limegreen", "orange", "purple", "deepskyblue", "magenta", "lime", "yellow" ))
 color_ranges["nice"] = np.array(( "blue", "orange", "black", "limegreen", "deepskyblue", "magenta" ))
-color_ranges["nice2"] = np.array(( "navy", "darkorange", "lime", "red" ))
+color_ranges["GPT"] = np.array(( "#4169E1", "#7CFC00", "black", "#FFD700", "#800080", "#DC143C" ))
 
 linestyle_ranges = { "default": [] }
 linestyle_ranges["default"] = np.array(( "solid", "dotted", "dashed", "dashdot", "solid", "dotted", "dashed", "dashdot", "solid", "dotted" ))
