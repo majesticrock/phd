@@ -100,7 +100,7 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
     and observe a similar excitation (Cooperon) in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase. 
     \textcolor{red}{In the CDW phase, close to the phase transition to the AFM phase, 
     we find a collective mode (exciton) that does not change significantly and another mode (magnon) that moves into the two-particle continuum. 
-    In the AFM phase we identify both longitudinal and transversal magnons.}
+    In the AFM phase, we identify both longitudinal and transversal magnons.}
 \end{abstract}
 
 \maketitle
@@ -146,7 +146,7 @@ The prominent examples in the SC phase are the well-known phase (Anderson-Bogoli
 \textcolor{red}{The former occurs in neutral superfluids at $0$ energy and has been found in the past \cite{Bogoljubov1958,Anderson58,Brieskorn74,Schmid1975,simanek1975,schoen1976propagating,Maiti2015,Sun2020,Fan22}.
 We will obtain this mode as well based on a microscopic description that excludes long-range electromagnetic interactions.
 The inclusion of this kind of interaction would shift this mode towards the plasma frequency \cite{Anderson58,schoen1976propagating,Kulik1981}.}
-\textcolor{red}{The amplitude mode, on the other hand, is located at the lower edge of the quasiparticle continuum as it represents the energy required to form or break a Cooper pair \cite{Schmid1975,Varma02,Cea14,Measson14,Tsuji15,Krull16,Schwarz20}}
+\textcolor{red}{The amplitude mode, on the other hand, is located at the lower edge of the quasiparticle continuum as it represents the energy required to form or break a Cooper pair \cite{Schmid1975,Varma02,Cea14,Measson14,Tsuji15,Krull16,Mueller2019,Schwarz20}}
 
 The remainder of this paper is organized as follows:
 In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as our mean-field theory for the ground state.
@@ -192,8 +192,8 @@ We define
 \begin{equation}
     \label{eqn:operators}
     \begin{aligned}
-        n_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk\sigma}\,,      &f_k     &\coloneqq  c_{-\vk\down} c_{\vk\up}\,, \\
-        g_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk+\vQ\sigma}\,,  &\eta_k  &\coloneqq  c_{-\vk-\vQ\down} c_{\vk\up}\,,
+        n_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk\sigma}      &f_k     &\coloneqq  c_{-\vk\down} c_{\vk\up} \\
+        g_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk+\vQ\sigma}  &\eta_k  &\coloneqq  c_{-\vk-\vQ\down} c_{\vk\up}
     \end{aligned}
 \end{equation}
 where $\vQ \coloneqq  (\pi, ...)$ defines the nesting vector for the CDW and AFM phases, see Ref. \cite{sentef17}.
@@ -245,7 +245,7 @@ where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
     as it is not accessible using our formalism.
     \textcolor{red}{The red shading shows the region in which the dynamical matrix $\mM$, see equation \eqref{eqn:heisenberg}, has negative eigenvalues, 
     indicating that there are phases not captured by our methods.
-    In accordance with literature, we expect to find a phase-separated state \cite{Linner23}.
+    In accordance with the literature, we expect to find a phase-separated state \cite{Linner23}.
     Lastly, the red shading shows the region that we cannot access because the discretization $N_\gamma$, 
     which is required to accurately describe the system, is too large.}}
     \label{fig:phase_diagram}
@@ -377,7 +377,7 @@ It consists of operators of the type
 \end{equation}
 where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
 Operators with different indices are put into the set individually, e.g., $n_{\gamma \up}$, and $n_{\gamma \down}$ are distinct operators in our set.
-\textcolor{red}{Additionally, we will include 
+\textcolor{red}{Additionally, we will include an analogous expression for
 \begin{equation}
     \tau_{k} \coloneqq c_{k \uparrow}^\dagger c_{k \downarrow}
 \end{equation}
@@ -386,15 +386,15 @@ This will allow us to describe transversal magnons later on.}
 
 Naturally, we have to discretize $\gamma$, 
 however, this allows us to obtain good results with drastically smaller matrices compared to a momentum-based operator set and obtain results for a three-dimensional system in the first place.
-Practically, we choose $N_\gamma = 3000$ equally spaced discretization points.
+Practically, we choose $N_\gamma = 6000$ equally spaced discretization points.
 A detailed explanation of the numerics is provided in the appendix \ref{sec:numerical_ieom}.
 \textcolor{red}{Computationally, our method is limited by the number of terms included in our operator set as well in the magnitude of $N_\gamma$.}
 If the gap $\Delta_\text{tot}$ is of the same order of magnitude as our discretization $\Delta \gamma$ our numerics become inaccurate.
 This manifests specifically if a spectral function has strong features at minuscule energies, e.g., the phase mode in the superconducting phase.
 In this case, the dynamical matrix $\mM$ picks up negative eigenvalues that vanish if $N_\gamma$ is increased so that $\Delta \gamma$ is sufficiently smaller than $\Delta_\text{tot}$.
-This happens if the paremeters are chosen from the purple shaded area in \autoref{fig:phase_diagram}.
+This happens if the parameters are chosen from the purple shaded area in \autoref{fig:phase_diagram}.
 \textcolor{red}{This issue only arises in the SC phase, nevertheless, we expect similar inaccuracies in the AFM region for small $U$.
-However, we did not perfom any computations in that region, hence this does not pose an issue to our analysis.}
+However, we did not perform any computations in that region, hence this does not pose an issue to our analysis.}
 
 Next, we order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.,
 \begin{equation}
@@ -524,7 +524,7 @@ In conclusion, the Green's function is given by
     The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
     The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
     The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 3000$, while $V$ is varied according to the text in the individual panels.
+    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 6000$, while $V$ is varied according to the text in the individual panels.
     The panels show the spectral functions in the (a) SC phase and the (b and c) CDW phase, respectively.}
     \label{fig:resolvent_overview_SC}
 \end{figure*}
@@ -536,7 +536,7 @@ In conclusion, the Green's function is given by
     The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
     The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the peaks at $\omega=0$.
     The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$, $V=0$, and $N_\gamma = 3000$.
+    For each plot, the parameters are set to $U=-2.5t$, $V=0$, and $N_\gamma = 6000$.
     Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ may be chosen arbitrarily, we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$.}
     \label{fig:resolvent_overview_V0}
 \end{figure*}
@@ -547,7 +547,7 @@ In conclusion, the Green's function is given by
     \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
     The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
     The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 3000$, while $U$ is varied according to the text in the individual panels.
+    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 6000$, while $U$ is varied according to the text in the individual panels.
     The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
     \label{fig:resolvent_overview_AFM}
 \end{figure*}
@@ -572,7 +572,7 @@ In conclusion, the Green's function is given by
     The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
     Choosing even smaller values results in $\mathcal{M}$ no longer being positive, i.e., the system is not in thermal equilibrium.
     \newline
-    The lower panels (c) and (d) present the data again, but with logarithmic scaling on the $V$-axis.
+    The lower panels (c) and (d) present the data again but with logarithmic scaling on the $V$-axis.
     Additionally, the peak positions and weights are given relative to their value at $V=0$.
     These data are fitted by $y(x) = a (\tanh (bx - c) + 1)$ with the parameters printed in the individual panel.
     The panels (a) and (b) feature the same fitting result.}
@@ -597,7 +597,7 @@ In conclusion, the Green's function is given by
     The lower panels (b) depict their respective weights $W_0$.
     The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
     $U_0$ denotes the highest value of $U$ for which there is no peak below the two-particle continuum.
-    For the square lattice it is $U_0 = 3.5775t$ and for the simple cubic lattice it is $U_0 = 4.89t$.
+    For the square lattice, it is $U_0 = 3.5775t$ and for the simple cubic lattice, it is $U_0 = 4.89t$.
     The parameter range depicted here places the system within the CDW phase.
     All fits are linear, i.e., $y=ax + b$.}
     \label{fig:afm_cdw_peaks_details}
@@ -663,7 +663,8 @@ In this section, we will be investigating four different diagonal Green's functi
             = \int \dgamma \left( f_{\gamma} + f_{\gamma}^\dagger \right) \,,\\
         A_\text{Phase} &= \frac{i}{\sqrt{N}} \sum_{\vk} \left( f_{\vk} - f_{\vk}^\dagger \right) = \int \dgamma \left( f_{\gamma} - f_{\gamma}^\dagger \right) \,,\\
         A_\text{CDW}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} + g_{\vk \down} \right) = \int \dgamma \left( g_{\gamma \up} + g_{\gamma \down} \right) \,,\\
-        A_\text{AFM}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) = \int \dgamma \left( g_{\gamma \up} - g_{\gamma \down} \right) \,,
+        A_\text{l.AFM}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( g_{\vk \up} - g_{\vk \down} \right) = \int \dgamma \left( g_{\gamma \up} - g_{\gamma \down} \right) \,, \\
+        A_\text{t.AFM}   &= \frac{1}{\sqrt{N}} \sum_{\vk} \left( \tau_{\vk} + \tau_{\vk}^\dagger \right) = \int \dgamma \left( \tau_{\gamma \up} + \tau_{\gamma \down} \right) \,,
     \end{align}
 \end{subequations}
 where $N$ is the number of lattice sites in the system. 
@@ -887,7 +888,7 @@ Specifically, both systems provide a similar structure of $s$-wave SC, CDW, and 
 Furthermore, we were able to identify an area in which our analysis is incomplete.
 In 2D, this region coincides with a phase-separated state that has already been observed in recent research \cite{Linner23}.
 
-We have also developed a novel method to obtain Fourier transformed Green's functions and analyzed various such functions. 
+We have also developed a novel method to obtain Fourier-transformed Green's functions and analyzed various such functions. 
 We have found collective excitations within the spectral functions $\spectral{Higgs}$, $\spectral{Phase}$, $\spectral{CDW}$, and $\spectral{AFM}$ 
 and examined their behavior as the system approaches phase transitions. 
 In particular, we identified the peak and singularity found in the first two as the well-known phase and amplitude modes in neutral superconductors 
@@ -913,7 +914,7 @@ which is most likely the same as the one found close to the CDW-AFM phase transi
 Some possible ideas for future research include incorporating phase-separated states into the mean-field theory.
 This would enable us to peer deeper into the negative $V$ regime of the phase diagrams and provide more analysis of the collective excitations that occur therein.
 
-Moreover, one can fathom to include a coupling of the electronic system to the electromagnetic field.
+Moreover, one can fathom including a coupling of the electronic system to the electromagnetic field.
 This should move the position of the phase mode close to the plasma frequency as explained by the Anderson-Higgs mechanism.
 
 Additionally, one could describe multi-band systems with even richer phases and collective excitations. 
