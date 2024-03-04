@@ -55,8 +55,8 @@ axs[0][1].text(-4.6, 1.15, "(a.2)\n$\Delta_\\mathrm{CDW} = 0$")
 axs[1][1].text(-4.6, 1.15, "(b.2)\n$\Delta_\\mathrm{SC} = 0$")
 axs[2][1].text(-4.6, 1.15, "(c.2)\n$\Delta_\\mathrm{SC} = \Delta_\\mathrm{CDW}$")
 
-axs[0][0].title.set_text("Square")
-axs[0][1].title.set_text("Simple cubic")
+axs[0][0].title.set_text("Square lattice")
+axs[0][1].title.set_text("Simple cubic lattice")
 legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.3))
 
 axs[nrows-1][0].set_xlabel(r"$\ln((\omega - 2 \Delta_\mathrm{tot}) / t)$")
