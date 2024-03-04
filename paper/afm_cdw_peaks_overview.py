@@ -13,13 +13,13 @@ from lib.extract_key import *
 import lib.resolvent_peak as rp
 import lib.plot_settings as ps
 
-Us_square = np.array([0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.24, 1.25])
-#, 1.27, 1.3, 1.32, 1.35, 1.37, 1.4, 1.42, 1.45, 1.47, 1.5
+Us_square = np.array([  0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 
+                        0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.428])#, 1.43, 1.432, 1.434, 1.436, 1.438, 1.44, 1.45, 1.47, 1.5
 
-Us_cube = np.array([0.0001, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.295, 0.299])
-#, 0.3, 0.302, 0.305, 0.307, 0.31, 0.312, 0.315, 0.317, 0.32, 0.322, 0.325
+Us_cube = np.array([0.0001, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 0.11, 0.12, 0.13, 0.14, 0.15, 
+                    0.16, 0.17, 0.18, 0.19, 0.2, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.29, 0.3, 0.31, 0.321])#, 0.322, 0.325
 
-#for p in [1.27, 1.3, 1.32, 1.35, 1.37, 1.4, 1.42, 1.45, 1.47, 1.5]:
+#for p in [0.321]:
 #    print(f"0 {round(4.8 + p, 4)} 1.2")
 
 Ts = np.array([0.])
@@ -33,6 +33,9 @@ name_suffices = ["AFM", "CDW"]
 nrows=3
 fig, axs = plt.subplots(nrows=nrows, ncols=2, figsize=(12.8, 6.4), sharex="col", gridspec_kw=dict(hspace=0))
 plotters = np.empty((nrows,2), dtype=ps.CURVEFAMILY)
+
+peak_fit_params = [ {"range": 1e-7, "begin_offset": 1e-10, "imaginary_offset": 5e-7},
+                    {"range": 1e-8, "begin_offset": 1e-12, "imaginary_offset": 1e-8}]
 
 for i in range(2):
     for j in range(nrows):
@@ -55,8 +58,8 @@ for i in range(2):
             lower = 0 if float(V) < 1 else float(V)
             upper = 13 * float(V) + 2 if 13 * float(V) + 2 < cont_edges[0] else cont_edges[0]
 
-            peak_positions[counter], weights[counter] = rp.analyze_peak(f"{folders[i]}{name}", f"higgs_{name_suffix}", (lower, upper), 
-                                                                        range=1e-7, begin_offset=1e-10, reversed=True, imaginary_offset=5e-7)
+            peak_positions[counter], weights[counter] = rp.analyze_peak(f"{folders[i]}{name}", f"higgs_{name_suffix}", (lower, upper), peak_position_tol=1e-14, 
+                                                                        reversed=True, **(peak_fit_params[1 if counter > len(u_data) - 6 or counter < 5 else 0]))
             peak_positions_to_cont[counter] = cont_edges[0] - peak_positions[counter]
             counter += 1
         
@@ -73,8 +76,8 @@ for i in range(2):
 #axs[1][1].set_ylim(0, 0.11)
 #axs[2][1].set_ylim(0, 0.18)
 
-axs[0][0].title.set_text("Square")
-axs[0][1].title.set_text("Simple cubic")
+axs[0][0].title.set_text("Square lattice")
+axs[0][1].title.set_text("Simple cubic lattice")
 
 axs[0][0].text(0.9, 0.6, "(a.1)", transform = axs[0][0].transAxes)
 axs[0][1].text(0.9, 0.6, "(a.2)", transform = axs[0][1].transAxes)

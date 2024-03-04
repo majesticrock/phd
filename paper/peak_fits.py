@@ -49,8 +49,8 @@ axs[3][0].set_ylabel(r"$\ln(\Re[\mathcal{G}_\mathrm{AFM}](\omega) \cdot t)$")
 
 
 legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.25), ncol=2, shadow=True)
-axs[0][0].title.set_text("Square")
-axs[0][1].title.set_text("Simple cubic")
+axs[0][0].title.set_text("Square lattice")
+axs[0][1].title.set_text("Simple cubic lattice")
 axs[len(axs)-1][0].set_xlabel(r"$\ln((\omega - \omega_0) / t)$")
 axs[len(axs)-1][1].set_xlabel(r"$\ln((\omega - \omega_0) / t)$")
 fig.tight_layout()

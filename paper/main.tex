@@ -57,6 +57,7 @@
 \newcommand{\down}{\downarrow}
 \newcommand{\kplusQ}{\vk+\vQ}
 \newcommand{\kminusQ}{-\vk-\vQ}
+\newcommand{\im}{\mathrm{i}}
 
 \newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}}
 \newcommand{\dgamma}{\mathrm{d}\gamma}
@@ -316,6 +317,7 @@ We start with some operator set $\mathcal{B}$ that is complete with respect to c
 i.e., any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
 We can then express any time-dependent operator from this set as
 \begin{equation}
+    \label{eqn:time_dependent_operator}
     a(t) = \sum_j c_j(t) A_j\,,
 \end{equation}
 where $c_j(t)$ captures the entire time dependence. 
@@ -323,9 +325,9 @@ Inserting this into the Heisenberg equation of motion and applying an operator s
 \begin{equation}
     \label{eqn:heisenberg}
     \begin{aligned}
-        \ddt a(t) = \sum_j \ddt c_j(t) A_j &= i \sum_j c_j(t) [H, A_j] \\
-        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{\coloneqq \mN_{ij}} \ddt c_j(t) &= i \sum_j \underbrace{(A_i | [H, A_j])}_{\coloneqq \mM_{ij}} c_j(t) \\
-        \Rightarrow \mN \ddt \vec{c}(t) &= i \mM \vec{c}(t)\,.
+        \ddt a(t) = \sum_j \ddt c_j(t) A_j &= \im \sum_j c_j(t) [H, A_j] \\
+        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{\coloneqq \mN_{ij}} \ddt c_j(t) &= \im \sum_j \underbrace{(A_i | [H, A_j])}_{\coloneqq \mM_{ij}} c_j(t) \\
+        \Rightarrow \mN \ddt \vec{c}(t) &= \im \mM \vec{c}(t)\,.
     \end{aligned}
 \end{equation}
 The matrices $\mN$ and $\mM$ contain all the dynamics and energetic properties of the system.
@@ -419,18 +421,18 @@ This condition is fulfilled for all cases investigated in this article \textcolo
 
 To study the collective excitations, we investigate various retarded Green's functions 
 \begin{equation}
-    G_{AB}^\text{ret} (t) = - i \langle [A(t), B] \rangle \Theta(t)\,,
+    G_{AB}^\text{ret} (t) = - \im \langle [A(t), B] \rangle \Theta(t)\,,
 \end{equation}
 and their Fourier-transformed
 \begin{equation}
     \label{eqn:standard_gf}
-    G_{AB}(z = \omega + i0^+) = -i \int_0^{\infty} e^{izt} \langle [A(t), B] \rangle \mathrm{d}t\,,
+    G_{AB}(z = \omega + \im 0^+) = -\im \int_0^{\infty} e^{\im z t} \langle [A(t), B] \rangle \mathrm{d}t\,,
 \end{equation}
 where $\Theta(t)$ is the Heaviside function.
 Our previous choice of pseudo scalar product enables us to write down a matrix-valued Green's functions in terms of the aforementioned matrices
 \begin{align}
     \label{eqn:green_function}
-    \mathcal{G}(z &= \omega + i0^+) = \mN \frac{1}{-z \mN - \mM} \mN \\
+    \mathcal{G}(z &= \omega + \im 0^+) = \mN \frac{1}{-z \mN - \mM} \mN \\
         &\coloneqq  -\mN \mathcal{R}(z) \mN\,,
 \end{align}
 where we used the resolvent
@@ -439,45 +441,36 @@ where we used the resolvent
     \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}\,.
 \end{equation}
 The entries of this matrix $\mathcal{G}(z)$ are the Fourier-transformed Green's functions mentioned in \eqref{eqn:standard_gf} with respect to the operators from the initially chosen set.
-\textcolor{red}{That means, if we index each operator in our set $A_i$, the matrix element $(i,j)$ of $\mathcal{G}$ is the Green's function
+\textcolor{red}{That means, if we index each operator in our set $A_i$, the matrix element $(j,i)$ of $\mathcal{G}$ is the Green's function
 \begin{align}
-    \mathcal{G}_{ij}(z = \omega +i0^+) &=  G_{A_i A_j^\dagger} (z) \nonumber \\
-        &= -i \int_0^{\infty} \langle [A_i(t), A_j^\dagger(0)] \rangle e^{izt} \mathrm{d}t\,.
+    \mathcal{G}_{ji}(z = \omega +\im 0^+) &=  G_{A_j A_i^\dagger} (z) \nonumber \\
+        &= -\im \int_0^{\infty} \langle [A_j(t), A_i^\dagger(0)] \rangle e^{\im z t} \mathrm{d}t\,.
 \end{align}}
 
 In the following, we will derive this relation.
-For that, consider the Fourier-transformed Green's function \eqref{eqn:standard_gf} with respect to two operators $A$ and $B^\dagger$ that are included in our operator set
+\textcolor{red}{For that, consider the Fourier-transformed Green's function above.
+We rewrite both operators in the same manner as in \eqref{eqn:time_dependent_operator} to obtain
 \begin{align}
-    G_{AB^\dagger} (z) &= - i \int_0^\infty \exp(i z t) \langle [ A(t), B^\dagger(0) ] \rangle \mathrm{d}t
+    G_{AB^\dagger} (z) &= \im \int_0^\infty e^{\im z t} \langle [ A_i^\dagger(0), A_j(t) ] \rangle \mathrm{d}t \nonumber \\
+        &= \im \int_0^\infty e^{\im z t} \langle [ \sum_m a_{j,m}^*(0) A_m^\dagger, \sum_n a_{i,n}(t) A_n ] \rangle \mathrm{d}t \nonumber \\
+        &= \im \int_0^\infty \sum_{mn} e^{\im z t} a_{j,m}^*(0) \underbrace{\langle [ A_m^\dagger, A_n ] \rangle}_{\equiv \mN_{mn}} a_{i,n}(t) \mathrm{d}t \nonumber \\
+        &= \im \int_0^\infty e^{\im z t} \vec{a}_{j}^\dagger (0) \mN \vec{a}_{i}(t) \mathrm{d}t\,.
 \end{align}
-Since $A$ and $B$ are included in the operator set, we can rewrite them as dot products of the vector
-\begin{equation}
-    \vec{A} \coloneqq  \left( A_1, A_2, \dots, A_N \right)\,, \quad
-    \vec{A}^\dagger \coloneqq  \begin{pmatrix}
-        A_1^\dagger \\ A_2^\dagger \\ \vdots \\ A_N^\dagger
-    \end{pmatrix}\,,
-\end{equation}
-and some other complex-valued vector $\vec{a}$ which has its coefficients set in such a way,
-that \textcolor{red}{$\vec{A} \cdot \vec{a}$} is equal to the desired operator. 
-For instance, $\vec{a} \equiv \vec{e}_1$ in order to represent $A_1$.
-
 Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differential equation \eqref{eqn:heisenberg} to obtain
 \begin{equation}
-    \vec{c}(t) = \exp \left( i \mN^{-1} \mM t \right) \vec{c}(0)\,.
+    \vec{a}_{i}(t) = \exp \left( \im \mN^{-1} \mM t \right) \vec{a}_{i}(0)\,.
 \end{equation}
 This allows us to finally obtain
 \begin{align}
     \label{eqn:green_derivation}
-    G_{AB^\dagger} (z) &= i \int_0^\infty \exp(izt) \langle [ (\vec{A \cdot} \vec{b}(0))^\dagger, \vec{A} \cdot \vec{a}(t) ] \rangle\ \mathrm{d}t \nonumber \\
-        &= i \int_0^\infty \exp(izt) \vec{b}^\dagger(0) \underbrace{\langle [ \vec{A}^\dagger, \vec{A} ] \rangle}_{\equiv \mN} \vec{a}(t) \mathrm{d}t \nonumber \\
-        &= i  \int_0^\infty \vec{b}^\dagger(0) \mN \exp \left( i \left(\mN^{-1} \mM + z \right) t \right) \vec{a}(0) \mathrm{d}t  \nonumber \\
-        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}(0) \nonumber \\
-        &= - \vec{b}^\dagger(0) \left[ \mN \frac{1}{ \underbrace{\mM + z \mN}}_{\equiv \mathcal{R}(z)} \mN \right] \vec{a}(0)\,,
+    G_{AB^\dagger} (z) &= \im  \int_0^\infty \vec{a}_{j}^\dagger (0) \mN \exp \left( \im \left(\mN^{-1} \mM + z \right) t \right) \vec{a}_{i}(0) \mathrm{d}t  \nonumber \\
+        &= - \vec{a}_{j}^\dagger (0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}_{i}(0) \nonumber \\
+        &= - \vec{a}_{j}^\dagger (0) \left[ \mN \frac{1}{ \underbrace{\mM + z \mN}}_{\equiv \mathcal{R}(z)} \mN \right] \vec{a}_{i}(0)\,,
 \end{align}
-where $\vec{a}(0)$ and $\vec{b}(0)$ are chosen such, that their product with $\vec{A}$ yields $A(0)$ and $B(0)$, respectively.
-The task at hand is finding the resolvent as $\mathcal{R}$.
+where $\vec{a}_i(0)$ and $\vec{a}_j^\dagger (0)$ need to be chosen such, that $A_i = \sum_n a_{i,n} A_n$ and $A_j^\dagger = \sum_n a_{j,n}^* A_n^\dagger$ hold.
+The task at hand is finding the resolvent as $\mathcal{R}$.}
 
-To do that, we embrace this matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real.
+To do that, we embrace this matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real \textcolor{red}{so that $\kappa_ij = \Lambda_{\pm,ij} = 0$ holds}.
 Then, with $\mathcal{R}|_X$ denoting the block of a matrix $\mathcal{R}$ corresponding to the $X$-operators, we can calculate
 \begin{align}
     r_X (z) &\coloneqq \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
@@ -496,10 +489,24 @@ Since $\mathcal{M}$ is positive semidefinite and block diagonal, its blocks $\ma
 Therefore, $\check{N}$ is also positive semidefinite and we can define its square root.
 We obtain
 \begin{equation}
+    \label{eqn:rx}
     r_X (z) = -\check{N}^{-1/2} \frac{1}{z^2 - \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}} \check{N}^{-1/2}\,.
 \end{equation}
 The matrix $\check{M} \coloneqq \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
-If $\check{N}$ has a singular part, the inverse can be replaced by the pseudo-inverse.
+If $\check{N}$ has a singular part, the inverse can be replaced by the Moore-Penrose pseudo-inverse.
+\textcolor{red}{A possible way to compute this is to diagonalize $\check{N} = \mathcal{V} \mathcal{D} \mathcal{V}^\dagger$, with a diagonal matrix $\mathcal{D}$ and a unitary transformation matrix $\mathcal{V}$.
+Now, the pseudo-inverse can be defined as
+\begin{equation}
+    \check{N}^+ \coloneqq \mathcal{V} \mathcal{D}^+ \mathcal{V}^\dagger
+\end{equation}
+with
+\begin{equation}
+    (\mathcal{D}^+)_{ij} = \begin{cases}
+        1/\mathcal{D}_{ij} & \mathcal{D}_{ij} \neq 0 \\ 0 & \text{otherwise}
+    \end{cases}\,.
+\end{equation}
+Note, that this definition yields the standard inverse for invertible matrices.}
+
 The same calculation can be repeated by exchanging $X$ with $P$, yielding the relation for the remaining block.
 Then, the definitions of the matrices above change in the following way
 \begin{equation}
@@ -509,130 +516,16 @@ In conclusion, the Green's function is given by
 \begin{subequations}
     \begin{align}
         G_{AB^\dagger} \vert_P (z) &= - \left[ \vec{b}^\dagger (0) \right]_P \mathcal{L}^\dagger r_X (z) \mathcal{L} \left[ \vec{a}(0) \right]_P\,, \\
-        G_{AB^\dagger} \vert_X (z) &= - \left[ \vec{b}^\dagger (0) \right]_X \mathcal{L} r_P (z) \mathcal{L}^\dagger \left[ \vec{a}(0) \right]_X\,.
+        G_{AB^\dagger} \vert_X (z) &= - \left[ \vec{b}^\dagger (0) \right]_X \mathcal{L} r_P (z) \mathcal{L}^\dagger \left[ \vec{a}(0) \right]_X\,,
     \end{align}
 \end{subequations}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%                                                  Figures                                                  %%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 6000$, while $V$ is varied according to the text in the individual panels.
-    The panels show the spectral functions in the (a) SC phase and the (b and c) CDW phase, respectively.}
-    \label{fig:resolvent_overview_SC}
-\end{figure*}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_V0.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the peaks at $\omega=0$.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$, $V=0$, and $N_\gamma = 6000$.
-    Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ may be chosen arbitrarily, we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$.}
-    \label{fig:resolvent_overview_V0}
-\end{figure*}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in \eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $V=1t$ and $N_\gamma = 6000$, while $U$ is varied according to the text in the individual panels.
-    The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
-    \label{fig:resolvent_overview_AFM}
-\end{figure*}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw.pdf}
-    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase while the lower panels (b) show their respective weights $W_0 = e^{b}$.
-    In the upper panels, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
-    The fits are linear, i.e., $y(V) = c \ln(V/t) + d$, and the parameters are printed on the individual panels.}
-    \label{fig:sc_in_cdw_behavior}
-\end{figure*}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
-    \caption{The panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ in the SC phase.
-    Below that, in panels (b), their respective weights are depicted.
-    The dashed lines in both rows show the position or weight computed for $V=0$ with $\Delta_\text{CDW} = 0$.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
-    The left-most values are $V=-0.28t$ for the square lattice and $V=-0.34t$ for the simple cubic lattice.
-    Choosing even smaller values results in $\mathcal{M}$ no longer being positive, i.e., the system is not in thermal equilibrium.
-    \newline
-    The lower panels (c) and (d) present the data again but with logarithmic scaling on the $V$-axis.
-    Additionally, the peak positions and weights are given relative to their value at $V=0$.
-    These data are fitted by $y(x) = a (\tanh (bx - c) + 1)$ with the parameters printed in the individual panel.
-    The panels (a) and (b) feature the same fitting result.}
-    \label{fig:cdw_in_sc_behavior}
-\end{figure*}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_overview.pdf}
-    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{AFM}$ (blue lines) close to the corresponding phase transition $U = zV$.
-    The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum $\omega_-$, while the bottom panels (c) show their respective weights.
-    The shadings indicate the phase the system is in. Blue represents AFM while orange represents CDW.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
-    Note the difference in the scales for the two lattices.}
-    \label{fig:afm_cdw_peaks_overview}
-\end{figure*}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_details.pdf}
-    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{AFM}$ relative to the lower edge of the two-particle continuum $\omega_-$.
-    The lower panels (b) depict their respective weights $W_0$.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $V=-1t$.
-    $U_0$ denotes the highest value of $U$ for which there is no peak below the two-particle continuum.
-    For the square lattice, it is $U_0 = 3.5775t$ and for the simple cubic lattice, it is $U_0 = 4.89t$.
-    The parameter range depicted here places the system within the CDW phase.
-    All fits are linear, i.e., $y=ax + b$.}
-    \label{fig:afm_cdw_peaks_details}
-\end{figure*}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%                                                  Figures                                                  %%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textcolor{red}{where $r_X (z)$ is given in \eqref{eqn:rx} and 
+\begin{equation}
+    r_P (z) = -\check{N}_P^{-1/2} \frac{1}{z^2 - \check{M}_P} \check{N}_P^{-1/2}\,.
+\end{equation}}
 
 Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
-This can be achieved using a Lanczos tridiagonalization and subsequently a continued fraction expansion in the form of
-
-\begin{widetext}
-\begin{equation}
-    \left( z^2 - \begin{pmatrix}
-        a_0 & b_1 & 0 & 0 & \cdots \\
-        b_1 & a_1 & b_2 & 0 & \cdots \\
-        0 & b_2 & a_2 & b_3 & \cdots \\
-        0 & 0 & b_3 & a_3 & \cdots \\
-        \vdots & \vdots & \vdots & \vdots & \ddots
-    \end{pmatrix} \right)_{00}^{-1} = \dfrac{1}{z^2 - a_0 - \dfrac{b_1^2}{z^2 - a_1 - \dfrac{b_2^2}{ z^2 - a_2 - \hdots}}}\,\,
-\end{equation}
-\end{widetext}
-
-where $a_i$ and $b_i$ are the Lanczos coefficients \cite{PettiforRecursion,ViswanathRecursion}.
-
-Obtaining a diagonal block of $\mathcal{G}$ is easily achieved by setting $\vec{b}(0) = \vec{a}(0)$.
-Obtaining an off-diagonal block requires linear combinations in the form of 
-\begin{align}
-    \vec{a}^\dagger \mathcal{G} \vec{b} &= \frac{1}{4} \Big\{ 
-        \underbrace{\left[ (\vec{a} + \vec{b})^\dagger \mathcal{G} (\vec{a} + \vec{b}) - (\vec{a} - \vec{b})^\dagger \mathcal{G} (\vec{a} - \vec{b}) \right]}_{ = 2 \vec{a}^\dagger \mathcal{G} \vec{b} + 2 \vec{b}^\dagger \mathcal{G} \vec{a}} \\
-    &-i \underbrace{\left[ (\vec{a} + i \vec{b})^\dagger \mathcal{G} (\vec{a} + i \vec{b}) - (\vec{a} - i \vec{b})^\dagger \mathcal{G} (\vec{a} - i \vec{b}) \right]}_{= 2i \vec{a}^\dagger \mathcal{G} \vec{b} - 2i \vec{b}^\dagger \mathcal{G} \vec{a}} \Big\}\,, \nonumber
-\end{align}
-i.e., one computes the four diagonal blocks and then simply adds them as described above.
-
+This can be achieved using a Lanczos tridiagonalization and subsequently, a continued fraction expansion in terms of the Lanczos coefficients $a_i$ and $b_i$ \cite{PettiforRecursion,ViswanathRecursion}.
 In the single-band case, the coefficients approach the limit
 \begin{equation}
     \label{eqn:inf_lanczos}
@@ -647,6 +540,85 @@ where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and 
 It is to be noted, that the coefficients start to drop off from this limit as more and more Lanczos iterations are performed \cite{ViswanathRecursion}.
 Therefore, we terminate the continued fraction with the aforementioned terminator at the coefficient pair that has the least deviation from $a_\infty$ and $b_\infty$.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  Figures                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
+    \caption{Spectral functions with respect to the operators listed in Eq.~\eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
+    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
+    The shaded area marks the two-particle continuum.
+    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 6000$, while $V$ is varied, see the legend.
+    The panels show the spectral functions in the (a) SC phase and the (b and c) CDW phase, respectively.}
+    \label{fig:resolvent_overview_SC}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_V0.pdf}
+    \caption{\textcolor{red}{Same as \autoref{fig:resolvent_overview_SC}, except that we set $V=0$, i.e, SC and CDW order coexist.}
+    Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ may be chosen arbitrarily, we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$.}
+    \label{fig:resolvent_overview_V0}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
+    \caption{\textcolor{red}{Same as \autoref{fig:resolvent_overview_SC}, except that we are now looking at the system near the AFM-CDW phase transition.
+    For the square lattice, we set $V=1.2t$ and for the simple cubic lattice, we set $V=0.8t$. This choice yields the phase boundary at $U=4.8t$ for both lattices.}
+    The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
+    \label{fig:resolvent_overview_AFM}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw.pdf}
+    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase while the lower panels (b) show their respective weights $W_0$.
+    In the upper panels, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$.
+    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
+    \textcolor{red}{The fits are linear, i.e., $y(V) = e^d V^c$, and the parameters are printed on the individual panels.}}
+    \label{fig:sc_in_cdw_behavior}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
+    \caption{\textcolor{red}{Same as \autoref{fig:sc_in_cdw_behavior} but for the peak in $\spectral{CDW}$ within the SC phase, i.e., $V<0$.}}
+    \label{fig:cdw_in_sc_behavior}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_overview.pdf}
+    \caption{\textcolor{red}{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{l.AFM}$ (blue lines) close to the corresponding phase transition $U = 4.8t$.
+    Again, we chose $V=1.2t$ for the square lattice (left column) and $V=0.8t$ for the simple cubic lattice (right column) respectively.
+    The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum $\omega_-$, while the bottom panels (c) show their respective weights.}
+    The shadings indicate the phase the system is in. Blue represents AFM while orange represents CDW.
+    Note the difference in the scales for the two lattices.}
+    \label{fig:afm_cdw_peaks_overview}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_details.pdf}
+    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{l.AFM}$ relative to the lower edge of the two-particle continuum $\omega_-$.
+    The lower panels (b) depict their respective weights $W_0$.
+    Again, we chose $V=1.2t$ for the square lattice (left column) and $V=0.8t$ for the simple cubic lattice (right column) respectively.
+    $U_0$ denotes the highest value of $U$ for which there is no peak below the two-particle continuum.
+    For the square lattice, it is $U_0 \approx 3.372t$ and for the simple cubic lattice, it is $U_0 \approx 4.479t$.
+    The parameter range depicted here places the system within the CDW phase.
+    The fits are of the same fashion as in \autoref{fig:sc_in_cdw_behavior}.}
+    \label{fig:afm_cdw_peaks_details}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                  Figures                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%                                                  Results                                                  %%%%%
@@ -655,7 +627,7 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
 
 \section{Results}\label{sec:results}
 
-In this section, we will be investigating four different diagonal Green's functions $G_{AA^\dagger}(\omega + i0^+)$, namely with
+In this section, we will be investigating four different diagonal Green's functions $G_{AA^\dagger}(\omega + \im 0^+)$, namely with
 \begin{subequations}
     \label{eqn:resolvent_bases}
     \begin{align}
@@ -671,10 +643,11 @@ where $N$ is the number of lattice sites in the system.
 Each one of these operators generates a different kind of collective mode.
 The first operator captures the amplitude mode of the $s$-wave superconducting state, while the second one catches the phase mode \cite{Fan22}.
 The remaining two capture the collective behavior of the CDW and AFM states, respectively.
-In the following, we will refer to the Green's functions generated by these operators as $\mathcal{G}_{i}(\omega) = G_{A_i A_i^\dagger}(\omega)$.
+In the following, we will refer to the Green's functions generated by these operators as \textcolor{red}{$\mathcal{G}_{\alpha}(\omega) = G_{A_\alpha A_\alpha^\dagger}(\omega)$ 
+with $\alpha \in \{ \text{Higgs}, \text{Phase}, \text{CDW}, \text{l.AFM}, \text{t.AFM} \}$.}
 
 Note, that all of the aforementioned operators are Hermitian. 
-This means that all spectral functions need to be completely antisymmetrical, see appendix \ref{sec:antisymmetry_spectral}.
+This means that all spectral functions need to be completely antisymmetrical \cite{rickayzen80}.%, see appendix \ref{sec:antisymmetry_spectral}.
 For this reason, we will only show the $\omega \geq 0$ in our plots. 
 Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
 
@@ -684,20 +657,20 @@ Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in or
 
 \subsection{Classification of the spectral functions}
 
-To begin, let us describe the spectral functions $\mathcal{A}_i (\omega) = - (1/\pi) \Im [\mathcal{G}_i (\omega + i0^+)]$ with respect to the operators above in the various phases.
+To begin, let us describe the spectral functions $\mathcal{A}_\alpha (\omega) = - (1/\pi) \Im [\mathcal{G}_\alpha (\omega + \im 0^+)]$ with respect to the operators above in the various phases.
 \autoref{fig:resolvent_overview_SC} shows them at $U = -2.5t$ in the SC ($V=-0.1t$) and CDW ($V=0.1t$ and $V=0.5t$) phase.
 
 There are a variety of different features. The difference between the two lattices is mostly quantitative.
 First and foremost, in the SC phase, see panel (a), 
 there is a sharp peak located at $\omega=0$ in $\spectral{Phase}$ and a singularity in $\spectral{Higgs}$ located at $\omega=2\Delta_\text{SC}$.
-We identify them with the well-known Anderson-Bogoliubov and Higgs modes in superconductors.
+We identify them with the well-known Anderson-Bogoliubov and Higgs modes in superconductors \cite{Bogoljubov1958,Anderson58,Brieskorn74,Schmid1975,simanek1975,schoen1976propagating,Kulik1981,Maiti2015,Sun2020,Fan22,Schmid1975,Varma02,Cea14,Measson14,Tsuji15,Krull16,Mueller2019,Schwarz20}.
 Note, that the former must not have any weight though, because the spectral function is perfectly antisymmetrical.
 The peak itself can be found at zero energy because our model describes a neutral superfluid 
 wherein there is no coupling of the phase of the order parameter to the electromagnetic potential.
 Therefore, this phase may be chosen arbitrarily, and changing it requires no energy 
 which ultimately allows a Goldstone mode to exist in the first place \cite{Goldstone1961,Anderson63}.
 
-To classify the occurring peaks that lie outside the two-particle continuum, we turn towards the real part of the Green's function.
+To characterize the occurring peaks that lie outside the two-particle continuum, we turn towards the real part of the Green's function.
 We plot it in close proximity to the peaks with a double logarithmic scale and fit the result linearly $y = ax + b$ to obtain its power-law behavior.
 The real part is related to the imaginary part via the Kramers-Kronig relations.
 Specifically, if the imaginary part is a $\delta$ distribution, the real part will be proportional to $1/\omega$, i.e., $a=-1$, and the peak has the weight $W_0 = \exp(b)$.
@@ -710,24 +683,28 @@ This confirms our previous expectation that this peak cannot have any weight.
 
 The singularity in $\spectral{Higgs}$ behaves as $1/\sqrt{\omega - 2 \Delta_\text{SC}}$.
 Previous studies on the dynamics of the order parameter found damped oscillations after a quench.
-These have the frequency $\Omega = 2 \Delta_\text{SC}$ and fall off as $1/\sqrt{t}$ \cite{Yuzbashyan06}.
+These have the frequency $\Omega = 2 \Delta_\text{SC}$ and fall off as $1/\sqrt{t}$ \cite{Volkov73,Kulik1981,Yuzbashyan06}.
 An inverse Fourier transform of $\spectral{Higgs}$ yields precisely the same behavior, thereby reinforcing the validity of our results.
 
 In the CDW phase, see panels (b) and (c), both of $\spectral{Higgs}$ and $\spectral{Phase}$ become identical and form a $\delta$ peak below the two-particle continuum.
+\textcolor{red}{In this case, both modes describe the condensation of a Cooperon, i.e., a bound state of two electrons.}
 Following the Landau theory for continuous phase transitions, this is to be expected as the free energy is expanded in terms of the order parameter as
 \begin{equation}
     f(\Delta_\text{SC}) \approx r |\Delta_\text{SC}|^2 + \frac{u}{2} |\Delta_\text{SC}|^4\,,
 \end{equation}
 with $r > 0$ and $u > 0$ if the system is outside of the superconducting phase. 
-In this case, the only minimum is at $\Delta_\text{SC} = 0$. 
+In this case, the only minimum is at $\Delta_\text{SC} = 0$ \cite{Coleman2015}. 
 That means that both possible modes have to overcome the same energy to be excited at all. 
 
 In the SC phase, $\spectral{CDW}$ features a $\delta$ peak below the continuum corresponding to the finite energy necessary to excite this kind of electronic density modulation.
+\textcolor{red}{This mode corresponds to the creation of an exciton.}
 For moderate-sized values of $V>0$, i.e., in the CDW phase, see panel (b) at $V=0.1t$, the aforementioned spectral function has a singularity at $\omega=2\Delta_\text{CDW}$.% that exhibits a square-root behavior.
-This mode becomes hard and moves outside the two-particle continuum as $V$ is increased, see panel (c) at $V=0.5t$.
+\textcolor{red}{This mode moves out of the two-particle continuum as $V$ is increased and becomes a proper $\delta$ peak, see panel (c) at $V=0.5t$.}
 
-$\spectral{AFM}$ is restricted to the continuum for both phases and both lattices.
-For the square lattice, however, there is a singularity located at the upper edge of the two-particle continuum.
+\textcolor{red}{$\spectral{t.AFM}$ and $\spectral{l.AFM}$ are identical and restricted to the continuum for both phases and both lattices.
+The former statement can be understood by the same argument why $\spectral{Phase}$ and $\spectral{Higgs}$ are identical outside of the SC phase:
+If no AFM order is present, the same amount of energy is required to create any such excitation, in this case, a magnon.}
+For the square lattice, there is a singularity located at the upper edge of the two-particle continuum.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -744,8 +721,7 @@ In \autoref{fig:resolvent_overview_V0}, we show the spectral functions for $U=-2
 The different panels correspond to different choices for $\Delta_\text{CDW}$ and $\Delta_\text{SC}$.
 First, in panel (a), we set $\Delta_\text{CDW} = 0$.
 This results in a purely superconducting phase with the same features as in \autoref{fig:resolvent_overview_SC} panel (a).
-The peak in $\spectral{CDW}$ moves to a very small, yet finite, $\omega$.
-Within the two-particle continuum $\spectral{CDW}$ and $\spectral{Phase}$ are identical.
+\textcolor{red}{The peak in $\spectral{CDW}$ moves to $\omega=0$. In fact, $\spectral{CDW}$ and $\spectral{Phase}$ are identical.}
 
 Secondly, panel (b) shows the spectral functions for $\Delta_\text{SC} = 0$, i.e., in a purely charge-ordered phase.
 Similar to before, there is not much change compared to \autoref{fig:resolvent_overview_SC} panel (b).
@@ -757,24 +733,34 @@ For this specific ratio of $\Delta_\text{CDW}$ and $\Delta_\text{SC}$, $\spectra
 Choosing a different ratio yields qualitatively the same results, but the peaks differ in magnitude.
 Both spectral functions have a peak at $\omega = 0$, described by $\delta'(\omega)$, and a singularity at the lower edge of the two-particle continuum $\omega = 2\Delta_\text{tot}$.
 Each one of the singularities behaves as $1/\sqrt{\omega - 2 \Delta_\text{tot}}$.
+\textcolor{red}{Essentially, varying the ratio of the two gap parameters smoothly switches $\spectral{Higgs}$ and $\spectral{CDW}$.}
 
-We associate the peak at $\omega=0$ with this shifting of order parameters, i.e., diminishing one and increasing the other while keeping $\Delta_\text{tot}$ constant.
-The singularity at the lower edge of the two-particle continuum can be interpreted similarly to the Higgs mode in a pure superconductor.
-It captures the change of $\Delta_\text{tot}$ by changing either one of the composing order parameters.
+\textcolor{red}{We associate the peak in the amplitude-related spectral functions at $\omega=0$ with this shifting of order parameters, i.e., diminishing one and increasing the other while keeping $\Delta_\text{tot}$ constant.
+Specifically, in the pure SC phase, we find this peak only in $\spectral{CDW}$.
+This can be understood as follows: The operator $A_\text{CDW}$ in \eqref{eqn:resolvent_bases} creates an exciton and thereby increases $|\Delta_\text{CDW}|$.
+This can in essence be achieved without any external energy by lowering $\Delta_\text{SC}$.
+However, the converse is not true: Since $\Delta_\text{CDW}$ is already 0, creating another Cooper pair by virtue of $A_\text{Higgs}$ will always increase $\Delta_\text{tot}$ and therefore requires a minimum energy of $2 \Delta_\text{tot}$.
+The same argument can be made for the pure CDW phase.
+If, however, both orders are present, the system can shift between them arbitrarily by creating either kind of excitation.
+Hence, in this case, we find a peak at $\omega=0$ in both spectral functions.}
 
 $\spectral{Phase}$ behaves just as it does in the pure SC phase. It has only a peak at $\omega = 0$ that can be associated with the change of the phase of $\Delta_\text{SC}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Lastly, we investigate the same spectral functions close to the AFM-CDW phase transition, depicted in \autoref{fig:resolvent_overview_AFM}.
-We choose $V=1t$ for both lattices and $U=zV \pm 0.1t$, where $z$ is the coordination number, see panels (a) and (b).
+\textcolor{red}{We choose $V=1.2t$ for the square lattice and $V=0.8t$ for the simple cubic lattice.
+This yields that the phase transition is located at $U=4.8t$ for both cases. 
+The panels (a) and (b) show the system close to the phase transition at $U=4.8t \pm 0.1t$.}
 Again, both SC-related spectral functions are identical in both the CDW and AFM phases.
 Within the continuum their weight is shifted towards the upper edge and on the square lattice only, there is a peak above the continuum.
-In the AFM phase, both $\spectral{AFM}$ and $\spectral{CDW}$ have a peak close, but yet below, the two-particle continuum.
+In the AFM phase, both $\spectral{l.AFM}$ and $\spectral{CDW}$ have a peak close, but yet below, the two-particle continuum.
 The peak of the former is at a lower energy than the peak of the latter.
 In the CDW phase, this behavior is reversed, i.e., the peak in $\spectral{CDW}$ lies lower.
 Using the same analysis as before, we conclude that each of these peaks is a $\delta$ peak.
-Moving further away from the phase transition, here $U=z(V+0.2t)$ in panels (c) and (d), the upper peak becomes soft as it shifts into the two-particle continuum. 
+\textcolor{red}{Moving further away from the phase transition, here $U=4.8t \pm 1.4t$ in panels (c) and (d), the upper peak moves into the two-particle continuum while the other one persists.
+Both close and far away from the phase transition, but only in the AFM phase, $\spectral{t.AFM}$ exhibits a $\delta'$ peak at $\omega=0$.
+This represents a transversal magnon and is the Goldstone boson for the AFM phase.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -816,22 +802,11 @@ This analysis reinforces our previous identification of the phase peak as $\delt
 As a next step, we want to analyze the peak in $\spectral{CDW}$ that occurs if the system is in the SC phase ($V<0$).
 A plot of its position $\omega_0$ and weight $W_0$ can be seen in \autoref{fig:sc_in_cdw_behavior}.
 First and foremost, the upper panels (a) and (b) depict the peak positions and weights, respectively.
-The former drops off and the latter grows as $V$ moves to 0, however, both of them smoothly approach a finite value.
-It is the same, as the one that is obtained for $V=0$ while setting $\Delta_\text{CDW}$ to 0, see \autoref{fig:resolvent_overview_V0} (a).
-This indicates that the peak steadily evolves to the limiting case $V=0$.
+\textcolor{red}{For $|V| \ll t$, the behavior of both the weight and the position of the peak is the same as for the previously discussed peak in $\spectral{SC}$ within the CDW phase.}
 
-Moving towards larger $|V|$, the peaks move towards greater $\omega$, i.e., closer to the two-particle continuum.
-Additionally, the weights drop off, first with increasing speed and then slowing down, see panels (c) and (d) for a logarithmic scaling.
-A fit of the form $y(x) = a (\tanh (bx - c) + 1)$, with $x=\ln|V/t|$ works well for both the peak positions and weights.
-Transforming back to the non-logarithmic scale yields
-\begin{equation}
-    y(V) = a \left( \frac{ \xi - \frac{1}{\xi} }{ \xi + \frac{1}{\xi} } \right)\,,\quad \xi \coloneqq e^{-c} |V/t|^b\,.
-\end{equation}
-The fit parameters are printed in the respective panels of \autoref{fig:sc_in_cdw_behavior}.
-This indicates that the peak weights drop off fairly quickly as the system moves away from the phase transition while the peak positions shift towards higher energies.
-It also suggests that there might be a finite saturation value, but we are unable to compute the Green's functions for additional, even larger $|V|$, 
-because the matrix $\mM$ is not nonnegative anymore after $V\approx -0.28t$ (square lattice) or $V\approx -0.34t$ (simple cubic lattice).
-Note, that our proof for the nonnegativity is based on the system being in thermal equilibrium.
+\textcolor{red}{Moving towards larger $|V|$, the growth of the peak position slows down, while the weights start to drop off rapidly.
+However, we are unable to compute the Green's functions for additional, even larger $|V|$ because the matrix $\mM$ is not nonnegative anymore after $V\approx -0.28t$ (square lattice) or $V\approx -0.34t$ (simple cubic lattice).
+Note, that our proof for the nonnegativity is based on the system being in thermal equilibrium.}
 Therefore, we conclude that beyond these values of $V$, the superconducting phase is not the true ground state of the system, see the red shading in \autoref{fig:phase_diagram}.
 Specifically, the $s$-wave superconducting phase on the square lattice seems to be even smaller than first estimated using the $d_{x^2 -y^2}$ data from \cite{Micnas88b}.
 In recent research, there has been evidence for a phase-separated state for negative values of $V$ on a square lattice, which would explain our results here \cite{Linner23}.
@@ -862,7 +837,7 @@ We see that the lower-lying peak, i.e., the peak corresponding to the phase the 
 strays further away from the continuum as the system moves away from the phase boundary.
 The other peak, however, moves ever closer to the aforementioned continuum until they reach it.
 At this point, the weight of said peak also vanishes, see panel (c).
-This occurs around $U \approx 4V \pm 0.4245t$ for the square lattice and around $U \approx 6V \pm 1.11t$ for the simple cubic lattice.
+This occurs around $U \approx 4.8t \pm 1.428t$ for the square lattice and around $U \approx 4.8t \pm 0.321t$ for the simple cubic lattice.
 
 On the square lattice, the weights of the peaks in $\spectral{AFM}$ in the AFM phase (the same applies to $\spectral{CDW}$ in the CDW phase) grow as the system moves away from the phase transition.
 On the simple cubic lattice, however, the weights fall off very slightly.
@@ -1071,29 +1046,6 @@ Using this, we can expand the relation for the Green's function
         &\approx - \int \dgamma \int \dgamma' \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right](\gamma, \gamma')\,.
 \end{align}
 The first line is an approximation of the integral in the second line, as each matrix element corresponds to a specific value for $\gamma$.
-
-\section{Antisymmetry of the spectral functions}
-\label{sec:antisymmetry_spectral}
-
-Consider any Hermitian operator $A$. 
-We compute the Fourier-transformed Green's function for positive and negative $\omega$
-\begin{align}
-    G_{AA}(\omega) &= -i \int_0^\infty e^{i \omega t} \langle [A(t), A] \rangle \mathrm{d}t\,, \nonumber \\
-    G_{AA}(- \omega) &= -i \int_0^\infty e^{-i \omega t} \langle [A(t), A] \rangle \mathrm{d}t\,.
-\end{align}
-We also compute the complex conjugate of the former
-\begin{align}
-    G_{AA}^* (\omega) &= i \int_0^\infty e^{-i \omega t} \langle [A(t), A] \rangle^* \mathrm{d}t \nonumber \\
-        &= i \int_0^\infty e^{-i \omega t} \langle [A^\dagger, A^\dagger(t)] \rangle \\
-        &= -i \int_0^\infty e^{-i \omega t} \langle [A(t), A] \rangle \\
-        &= G_{AA}(- \omega)
-\end{align}
-Taking the imaginary part reveals
-\begin{align}
-    \Im [ G_{AA}^* (\omega) ] = - \Im [G_{AA} (\omega) ] = \Im [G_{AA} (-\omega)]\,.
-\end{align}
-This proves that the imaginary part of such a Fourier-transformed Green's function is antisymmetrical and therefore the same applies to the spectral functions.
-Note, that this fully abides by the sum rule $\int_{-\infty}^\infty \mathcal{A}_{A^\dagger A} (\omega) \mathrm{d}\omega = \langle [A^\dagger, A] \rangle = 0$ \cite{rickayzen80}.
 
 
 
