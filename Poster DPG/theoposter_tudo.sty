@@ -1,0 +1,160 @@
+%% theoposter.sty
+%% Simon Weis 2015-08
+%% Johannes Hielscher 2015-08
+%% Jan A. Koziol, Robert F. B. Weigel, Anja Langheld 2022-04
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{theoposter}[2022/04/28 theoposter -- Theo 1 Poster Package for pdflatex]
+
+\newif\if@posterLazy \@posterLazytrue	% Switch for packages which exceed bare necessity, and are rather here for laziness (and may cause headache and/or collisions)
+\newif\if@posterCompresshead \@posterCompressheadtrue	% enter draft mode for printing, out of paranoia
+\newif\if@posterEng \@posterEngtrue	% enter draft mode for printing, out of paranoia
+\newif\if@posterHyperrefdraft \@posterHyperrefdraftfalse	% enter draft mode for printing, out of paranoia
+\newif\if@posterScr \@posterScrfalse	% Do we want to use KOMA comfort?
+\newif\if@posterDebug \@posterDebugfalse	% Do we want to draw ``debug-mode'' frames around all adjustbox{}es?
+\DeclareOption{lazy}{ \@posterLazytrue }	% the default (in order not to break with API)
+\DeclareOption{essentials}{ \@posterLazyfalse }	% “I want to specify my language and font for myself, please!”
+\DeclareOption{official}{ \@posterCompressheadfalse }
+\DeclareOption{german}{ \@posterEngfalse }
+\DeclareOption{english}{ \@posterEngtrue }
+\DeclareOption{hyperrefdraft}{ \@posterHyperrefdrafttrue }
+\DeclareOption{koma}{ \@posterScrtrue }
+\DeclareOption{debug}{ \@posterDebugtrue }
+\ProcessOptions\relax
+
+\RequirePackage{amsmath}
+\RequirePackage{epstopdf}
+
+% no padding
+\RequirePackage{geometry}
+\geometry{a0paper, left=0cm, right=0cm, bottom=0cm, top=0cm, dvips}
+
+% require inputencoding
+\RequirePackage[utf8]{inputenc}
+
+\if@posterLazy
+% set language
+\if@posterEng
+\RequirePackage[english]{babel}
+\else
+\RequirePackage[ngerman]{babel}
+\fi
+
+% require fontencoding
+\RequirePackage[T1]{fontenc}
+
+% filenames can contain periods
+\RequirePackage{grffile}
+\fi
+
+%provides tikzpicture environment, used for posterbox 
+\RequirePackage{tikz}
+\usetikzlibrary{arrows, shapes, calc}
+
+% show images
+\RequirePackage{graphicx}
+
+% colour management
+\RequirePackage{xcolor}
+%% colors from TUDoBeamerTheme by Maximilian Linhoff
+%% from https://github.com/maxnoe/TUDoBeamerTheme/blob/main/beamerthemetudo.sty
+\xdefinecolor{darkmode}{HTML}{222326}
+\xdefinecolor{tugreen}{HTML}{83B818}
+\colorlet{tulightgreen}{tugreen!20!white}
+\colorlet{tudarkgreen}{tugreen!60!black}
+\xdefinecolor{tuorange}{HTML}{D98207}
+\xdefinecolor{tuyellow}{RGB}{242, 189, 0}
+\xdefinecolor{tucitron}{RGB}{249, 219, 0}
+\definecolor{white}{HTML}{FFFFFF}
+
+%% encapsulation of all kind of boxes in a common interface
+\RequirePackage{adjustbox}
+
+\if@posterScr
+%%\titlefont is sufficiently semantic to be considered good style within the poster and box titles
+\RequirePackage{scrextend}
+\else
+\providecommand{\titlefont}{\sffamily\bfseries}
+\fi
+
+%% Defaults
+\if@posterLazy
+\RequirePackage{txfonts}
+\renewcommand\familydefault{\sfdefault}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{0ex}
+
+%% easy column separation
+\RequirePackage{multicol}
+
+%% better lines in tables
+\RequirePackage{booktabs}
+
+%% Flattersatz instead of Blocksatz
+\RequirePackage[document]{ragged2e}
+
+%% hyperref comfort, url, and email
+\if@posterHyperrefdraft
+\RequirePackage[draft]{hyperref}
+\else
+\RequirePackage{hyperref}
+\fi
+\RequirePackage{url}
+\newcommand\email[1]{\texttt{\href{mailto:#1}{#1}}}
+
+%% fun with QR codes
+\RequirePackage{qrcode}
+\newcommand\qrlinkdesc[2]{\begin{adjustbox}{minipage=8cm}\centering \qrcode{#1}\\\vspace{3mm} \texttt{\footnotesize\href{#1}{#2}} \end{adjustbox}}	% almost wrote '\tiny\url' :D
+\newcommand\qrmail[1]{\qrlinkdesc{mailto:#1}{#1}}
+\newcommand\qrdoi[1]{\qrlinkdesc{https://dx.doi.org/#1}{#1}}
+\fi
+
+%% line widths of the content boxes
+\newlength{\posterlinewidth}
+\setlength{\posterlinewidth}{2pt}
+
+
+%% \posterhead{title}{authors}{affiliations}
+\newcommand{\posterhead}[3]{%
+	\coordinate (tlgreenrectangle) at (\paperwidth-2cm,0.5);
+	\coordinate (brgreenrectangle) at (\paperwidth,-\paperheight);
+	\draw [draw=tugreen, fill=tugreen] (tlgreenrectangle) rectangle (brgreenrectangle);
+	\if@posterCompresshead
+	\node [anchor = north west] (logo) at (3cm,-2.5cm) {\includegraphics[height=6cm]{\if@posterEng./tud_logos/tud_logo.pdf\else./tud_logos/tud_logo.pdf\fi}};
+	%\node [anchor = west] at ($(logo.east)+(2cm,0)$) {\includegraphics[height=8cm]{./logos/theo1-haus-blue-on-transparent.pdf}};
+	\coordinate (ctitle) at ($(.5\textwidth,-12cm) $);
+	\else
+	\coordinate (ctitle) at ($(.5\textwidth,-20cm) $);
+	\node [anchor = north west] at (6.94cm,-4.52cm) {{\begin{adjustbox}{minipage=27.86cm}\includegraphics[width=\linewidth]{./logos/fau_logo.pdf}\end{adjustbox}}};
+	\coordinate (tlfaufacsci) at (48.19cm,-4.5cm);
+	\if@posterEng
+	\node [anchor = north west] at (tlfaufacsci) {{\begin{adjustbox}{minipage=27.69cm}\includegraphics[width=\linewidth]{./logos/fau_facsci.pdf}\end{adjustbox}}};
+	\else
+	\node [anchor = north west] at (tlfaufacsci) {{\begin{adjustbox}{minipage=28.02cm}\includegraphics[width=\linewidth]{./logos/fau_natfak.pdf}\end{adjustbox}}};
+	\fi
+	\fi
+	%% center title text
+	\node [anchor = north] (title) at (ctitle) {\begin{adjustbox}{minipage=\textwidth}\centering \color{tugreen}\begin{veryHuge} \textbf{#1}\par \end{veryHuge}\par \end{adjustbox} };
+	%% authors 
+	\node [anchor = north] (authors)  at ($(title.south)-(0,2cm)$) {\begin{adjustbox}{minipage=\textwidth}\centering \color{black}\LARGE #2 \end{adjustbox}};
+	%% affiliations
+	\node [anchor = north] (affiliations) at ($(authors.south)-(0,1cm)$) {\begin{adjustbox}{minipage=\textwidth}\centering \color{black}\large #3 \end{adjustbox}};
+}
+
+%%	\posterbox{pos_x}{pos_y}{width}{title}{content}	% box with title and border
+\newcommand{\posterbox}[5]{
+	\node [anchor = north west, text width=#3] at (#1, -#2) {%
+		\adjustbox{margin=1mm 0.3mm 1mm 1.7mm, scale=1.5, center=#3, bgcolor=tugreen, margin=0cm}{\textbf{\strut\hfill\titlefont\color{white}#4\hfill\strut}}\\%[-1cm]
+		\begin{adjustbox}{frame={{\the\posterlinewidth} {-\the\posterlinewidth} 0pt}, minipage=#3, margin={0pt 0pt 0pt {-\the\posterlinewidth}} }%
+			\begin{adjustbox}{minipage=\dimexpr#3-2em, margin=1em, bgcolor=white}%
+				#5%
+			\end{adjustbox}%
+		\end{adjustbox}%
+	};%
+}
+
+% Debug mode tools
+\newcommand*\posterDebugOn{\adjustboxset{cfbox=tugreen!50!white 0.5pt 0pt -0.5pt}}	% You may couple this with a \ifdraft if you want
+\if@posterDebug\posterDebugOn\fi	% Option post-processing
+
+% vim: foldenable foldmethod=marker
