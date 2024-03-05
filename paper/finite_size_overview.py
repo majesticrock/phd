@@ -55,8 +55,8 @@ for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
 for i in range(nrows):
     axs[i][0].set_ylabel(r"$\mathcal{A}(\omega) [t^{-1}]$")
-axs[0][0].title.set_text("Square")
-axs[0][1].title.set_text("Simple cubic")
+axs[0][0].title.set_text("Square lattice")
+axs[0][1].title.set_text("Simple cubic lattice")
 
 axs[0][0].text(4.4, 0.55, "(a.1)\n$N_\\mathrm{\\gamma} = 300$")
 axs[1][0].text(4.4, 0.55, "(b.1)\n$N_\\mathrm{\\gamma} = 1500$")

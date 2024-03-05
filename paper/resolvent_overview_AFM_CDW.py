@@ -78,10 +78,10 @@ axs[0][1].text(10.6, 0.6, "(a.2) AFM\n$U = 6.2t$")
 axs[1][1].text(10.6, 0.6, "(b.2) CDW\n$U = 3.4t$")
 axs[1][0].text(7.6, 0.6, "(b.1) CDW\n$U = 4.75t$")
 
-axs[2][0].text(7.6, 0.6, "(c.1) AFM\n$U = 4.85t$")
+axs[2][0].text(7.6, 0.6, "(c.1) AFM\n$U = 6.2t$")
 axs[2][1].text(10.6, 0.6, "(c.2) AFM\n$U = 6.2t$")
 
-if nrows > 3: axs[3][0].text(7.6, 0.6, "(d.1) CDW\n$U = 4.75t$")
+if nrows > 3: axs[3][0].text(7.6, 0.6, "(d.1) CDW\n$U = 3.4t$")
 if nrows > 3: axs[3][1].text(10.6, 0.6, "(d.2) CDW\n$U = 3.4t$")
 
 fig.tight_layout()
