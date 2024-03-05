@@ -73,8 +73,8 @@ for i in range(2):
 #axs[1][1].set_ylim(0, 0.11)
 #axs[2][1].set_ylim(0, 0.18)
 
-axs[0][0].title.set_text("Square")
-axs[0][1].title.set_text("Simple cubic")
+axs[0][0].title.set_text("Square lattice")
+axs[0][1].title.set_text("Simple cubic lattice")
 
 axs[0][0].text(0.9, 0.6, "(a.1)", transform = axs[0][0].transAxes)
 axs[0][1].text(0.9, 0.6, "(a.2)", transform = axs[0][1].transAxes)

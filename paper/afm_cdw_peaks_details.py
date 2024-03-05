@@ -78,8 +78,8 @@ for i in range(2):
     axs[0][i].text(0.05, 0.7, f"b = {popt1[1]:.4f}", transform = axs[0][i].transAxes)
     axs[1][i].text(0.05, 0.7, f"b = {popt2[1]:.4f}", transform = axs[1][i].transAxes)
 
-axs[0][0].title.set_text("Square")
-axs[0][1].title.set_text("Simple cubic")
+axs[0][0].title.set_text("Square lattice")
+axs[0][1].title.set_text("Simple cubic lattice")
 
 axs[0][0].text(0.89, 0.7, "(a.1)", transform = axs[0][0].transAxes)
 axs[0][1].text(0.89, 0.7, "(a.2)", transform = axs[0][1].transAxes)
@@ -88,8 +88,8 @@ axs[1][1].text(0.89, 0.7, "(b.2)", transform = axs[1][1].transAxes)
 
 axs[nrows-1][0].set_xlabel(r"$\ln((U - U_0) / t)$")
 axs[nrows-1][1].set_xlabel(r"$\ln((U - U_0) / t)$")
-axs[0][0].set_ylabel(r"$(\omega_- - \omega_0) [t]$")
-axs[1][0].set_ylabel(r"$W_0$")
+axs[0][0].set_ylabel(r"$\ln ((\omega_- - \omega_0) / t)$")
+axs[1][0].set_ylabel(r"$\ln(W_0)$")
 legend = axs[0][1].legend(loc='lower right')
 fig.tight_layout()
 
