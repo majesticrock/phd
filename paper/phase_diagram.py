@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(6.4, 9))
-folder = "u_bound_1"
+folder = "T0"
 
 xlims = (-4, 4)
 ylims = (-2, 2)
