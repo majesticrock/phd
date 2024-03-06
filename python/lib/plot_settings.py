@@ -280,12 +280,13 @@ class CURVEFAMILY():
         
         # The parameter 'dashes' overrides the linestyle/ls parameter. So if it is not set (i.e. None), we do not want to pass it to the plot function
         if self.get_dashes() is not None:
-            plotter( x, y, color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
+            ret_val = plotter( x, y, color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
                     markevery = self.get_markevery( len(np.atleast_1d(x)) ), dashes=self.get_dashes(), **kwargs, **self.shared_kwargs )
         else:
-            plotter( x, y, color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
+            ret_val = plotter( x, y, color = self.get_color(), ls = self.get_linestyle(), marker = self.get_markerstyle(), 
                     markevery = self.get_markevery( len(np.atleast_1d(x)) ), **kwargs, **self.shared_kwargs )
         self.increase_counter_if( increase )
+        return ret_val
 
     def skip_to_next( self ):
         self.curve_counter += 1
@@ -330,9 +331,10 @@ class CURVEFAMILY():
         
         plotter( x[:peak+1][::-1], y[:peak+1][::-1], **plot_args)
         plot_args["label"] = ""
-        plotter( x[peak:], y[peak:], **plot_args)
+        ret_val = plotter( x[peak:], y[peak:], **plot_args)
         
         self.increase_counter_if( increase )
+        return ret_val
 
     def skip_to_next( self ):
         self.curve_counter += 1
@@ -378,7 +380,7 @@ color_ranges = { "default": [], "nice": [], "nice2" : [], "GPT" : [] }
 color_ranges["default"] = np.array(( "black", "blue", "red", "limegreen", "orange", "purple", "deepskyblue", "magenta", "lime", "yellow" ))
 color_ranges["nice"] = np.array(( "blue", "orange", "black", "limegreen", "deepskyblue", "magenta" ))
 color_ranges["nice2"] = np.array(( "navy", "darkorange", "lime", "red" ))
-color_ranges["GPT"] = np.array(( "#4169E1", "#7CFC00", "black", "#FFD700", "#800080", "#DC143C" ))
+color_ranges["GPT"] = np.array(( "#4169E1", "limegreen", "black", "orange", "#800080", "#DC143C" ))
 
 linestyle_ranges = { "default": [] }
 linestyle_ranges["default"] = np.array(( "solid", "dotted", "dashed", "dashdot", "solid", "dotted", "dashed", "dashdot", "solid", "dotted" ))
