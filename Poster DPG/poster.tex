@@ -30,6 +30,9 @@
 \newcommand{\greens}[1]{\mathcal{G}_\text{#1} (\omega)}
 \newcommand{\spectral}[1]{\mathcal{A}_\text{#1}  (\omega)}
 
+\newcommand{\boxwidth}{38cm}
+\newcommand{\boxmargin}{2cm} % (82cm - 2 * boxwidth) / 3
+\newcommand{\firstbox}{25.5cm}
 
 % For more tikz
 \usetikzlibrary{arrows.meta}
@@ -44,7 +47,7 @@
         Collective excitations in competing phases \\ in two and three dimensions
         }
 		{ % authors % set a normal space after an abbreviation, instead of an inter-sentence space
-            \underline{Joshua Alt\"user}\textsuperscript{1},
+            \underline{Joshua Alth\"user}\textsuperscript{1},
             Götz S.\ Uhrig\textsuperscript{1},
         }	% underline the name of the presenting author
 		{ % affiliations
@@ -53,7 +56,7 @@
 \newcommand*\TikZ{Ti\textit{k}Z\xspace}
 
 
-\posterbox{2cm}{26cm}{38cm}{Introduction}
+\posterbox{\boxmargin}{\dimexpr\firstbox}{\boxwidth}{Introduction}
 {%
 \begin{itemize}
     \item Study of collective behavior of many particles rather than individual ones
@@ -61,13 +64,14 @@
     \item Governs many structural, magnetic, and electronic phenomena
 \end{itemize}
 
-\highlightOne{ Investigated phases } \\
+\highlightOne{ Phases of interest } \\
 \begin{itemize}
-    \item $s$-wave superconductivity (SC), Charge-density wave (CDW), and antiferromagnetism (AFM) (nesting vector $\vec{Q} = (\pi, \ldots)$)
+    \item $s$-wave superconductivity (SC), charge-density wave (CDW), and antiferromagnetism (AFM)
+    \item Nesting vectors (lattice constant $=1$): $\vec{Q} = (\pi, \pi)$ (square lattice), $\vec{Q} = (\pi, \pi, \pi)$ (sc lattice)
 \end{itemize}
 
 \begin{minipage}{0.64\textwidth}
-    \highlightOne{ Investigated excitations } \\
+    \highlightOne{ Observables of excitations of interest } \\
     \begin{itemize}
         \item (CDW) Exciton: $1/N \sum_{k} \left( g_{\vec{k}\uparrow} + g_{\vec{k}\downarrow} \right),\qquad g_{\vec{k}\sigma}$
         \item (AFM) Longitudinal magnon: $1/N \sum_{k} \left( g_{\vec{k}\uparrow} - g_{\vec{k}\downarrow} \right)$
@@ -91,42 +95,11 @@
 \end{minipage}
 }
 
-\posterbox{2cm}{46cm}{38cm}{Method: Iterated equations of motion (iEoM) \cite{Kalthoff17,Bleicker18}}
-{%
-\highlightOne{ Key ideas }
-\begin{itemize}
-\item Consider a time-dependent operator $\hat{a}(t) = \sum_j c_j(t) \hat{A}_j$ and the symplectic product $(\hat{A} | \hat{B}) \coloneqq \langle [\hat{A}^\dagger, \hat{B}] \rangle$
-\item Write the Heisenberg EoM as matrix-vector EoM
-\begin{equation*}
-    \label{eqn:heisenberg}
-    \begin{aligned}
-        \ddt \hat{a}(t) = \sum_j \ddt c_j(t) \hat{A}_j &= i \sum_j c_j(t) [H, \hat{A}_j] \\
-        \Rightarrow \sum_j \underbrace{(\hat{A}_i | \hat{A}_j)}_{\coloneqq \mN_{ij}} \ddt c_j(t) &= i \sum_j \underbrace{(\hat{A}_i | [\hat{H}, \hat{A}_j])}_{\coloneqq \mM_{ij}} c_j(t) \\
-        \Rightarrow \mN \ddt \vec{c}(t) &= i \mM \vec{c}(t)\,.
-    \end{aligned}
-\end{equation*}
-\item Generalized eigenvalue problem $\omega \mN \vec{v} = \mM \vec{v}$, real solutions if either $\mM$ or $\mN$ is nonnegative.
-\begin{itemize}
-    \item $\mM$ is nonnegative is thermal equilibrium
-\end{itemize}
-\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\highlightOne{ Green's functions }
-\begin{itemize}
-    \item Elements of the matrix $\greens{ } \coloneqq \mN [-(\omega + \im 0^+) \mN - \mM]^{-1} \mN$ are Fourier-transformed Green's functions
-    \item Specifically
-    \begin{equation*}
-        \mathcal{G}_{ij}(\omega) = G_{\hat{A}_i \hat{A}_j^\dagger} (\omega) = -\im \int_0^{\infty} \langle [A_i(t), A_j^\dagger(0)] \rangle e^{\im (\omega + \im 0^+) t} \mathrm{d}t
-    \end{equation*}
-    \item Lengthy calculations yield a quadratic form
-    \begin{equation*}
-        \frac{1}{-(\omega + \im 0^+) \mN - \mM} \to \check{N}^{-1/2} \frac{1}{(\omega + \im 0^+)^2 - \check{M}} \check{N}^{-1/2}
-    \end{equation*}
-    \item Matrix inverse by tridiagonalization and subsequent continued fraction expansion with square-root terminator
-\end{itemize}
-}
-
-\posterbox{2cm}{74.8cm}{38cm}{Model}
+\posterbox{\boxmargin}{\dimexpr\firstbox + 19.2cm}{\boxwidth}{Model}
 {%
 \begin{minipage}{0.59\textwidth}
     \highlightOne{ Hamiltonian: Extended Hubbard model }
@@ -141,42 +114,86 @@
     \end{equation*}
     \begin{itemize}
         \item Half-filling, on both a square and a simple cubic lattice, temperature $T=0$
+        \item A simple model exhibiting a rich phase diagram
     \end{itemize}
     \highlightOne{ Static mean-field theory }
     \begin{itemize}
         \item Used to deal with the interaction terms and to obtain expectation values for iEoM
         \item Terms depend on $\hat{\gamma}(\vec{k}) \coloneqq \frac{1}{D} \sum_{\alpha=1}^D \cos(k_\alpha)$ \\
-        $\Rightarrow$ DOS based description $\rho \coloneqq \frac{1}{N} \sum_{\vec{k}} \delta(\gamma - \hat{\gamma}(\vec{k}))$
+        $\Rightarrow$ density of states $\rho(\gamma) \coloneqq \frac{1}{N} \sum_{\vec{k}} \delta(\gamma - \hat{\gamma}(\vec{k}))$
         \begin{align*}
-            \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{zV}{N}\right) \sum_{\sigma} \int \langle g_{\sigma} (\gamma) \rangle \dgamma\\\ 
-            \Delta_\text{SC} &= \frac{U}{N} \int \langle f(\gamma) \rangle \dgamma\\
-            \Delta_\text{AFM} &= \frac{U}{2N} \int \left( \langle g_{\uparrow} (\gamma) \rangle - \langle g_{\downarrow} (\gamma) \rangle \right) \dgamma\\ 
-            \Delta_n &= \frac{V}{N} \sum_{\sigma} \int \gamma \langle n_{\sigma} (\gamma) \rangle \dgamma
+            \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{zV}{N}\right) \sum_{\sigma} \int \rho(\gamma) \langle g_{\sigma} (\gamma) \rangle \dgamma\\\ 
+            \Delta_\text{SC} &= \frac{U}{N} \int \rho(\gamma) \langle f(\gamma) \rangle \dgamma\\
+            \Delta_\text{AFM} &= \frac{U}{2N} \int \rho(\gamma) \left( \langle g_{\uparrow} (\gamma) \rangle - \langle g_{\downarrow} (\gamma) \rangle \right) \dgamma\\ 
+            \Delta_n &= \frac{V}{N} \sum_{\sigma} \int \rho(\gamma) \gamma \langle n_{\sigma} (\gamma) \rangle \dgamma
         \end{align*}
-        \item The iEoM utilize the same description
         \item Allows us to tackle both 2D and 3D systems
     \end{itemize}
 \end{minipage}
 \hfill
 \begin{minipage}{0.4\textwidth}
     \includegraphics[width=\textwidth]{plots/phase_diagram.pdf}
-    \center{\textcolor{tudarkgreen}{Mean-field phase diagram of the extended Hubbard model. 
+    \center{\textcolor{tudarkgreen}{Mean-field phase diagram of the extended Hubbard model at $T=0$. 
     (a) Square lattice (b) simple cubic lattice. $d_{x^2-y^2}$ from Ref. \cite{Micnas88b}.}}
 \end{minipage}
-
 
 \highlightOne{ Phase diagram }
 \begin{itemize}
     \item Mostly the same for both lattices, $d_{x^2 -y^2}$-wave SC for $V<0$ on the square lattice is inaccessible to us
     \item Red region: Mean-field self-consistency converges to $s$-wave SC, but $\mM$ is not nonnegative $\Rightarrow$ not the true groundstate.
     Literature suggests a phase-separated state. \cite{Linner23}
-    \item Purple region: Inaccuracies due to finite discretization dominate; here the gap is of the same order of magnitude as our gap
+    \item Striped region: Inaccuracies due to finite discretization dominate; here the gap is of the same order of magnitude as our gap
 \end{itemize}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\posterbox{\boxmargin}{\dimexpr\firstbox + 53.2cm}{\boxwidth}{Method: Iterated equations of motion (iEoM) \cite{Kalthoff17,Bleicker18}}
+{%
+\highlightOne{ Key ideas }
+\begin{itemize}
+    \item Objective: capture collective excitations
+\item Consider a time-dependent operator $\hat{a}(t) = \sum_j c_j(t) \hat{A}_j$ and the symplectic product $(\hat{A} | \hat{B}) \coloneqq \langle [\hat{A}^\dagger, \hat{B}] \rangle$
+\item Write the Heisenberg EoM as matrix-vector EoM (w.r.t. to full interaction Hamiltonian)
+\begin{equation*}
+    \label{eqn:heisenberg}
+    \begin{aligned}
+        \ddt \hat{a}(t) = \sum_j \ddt c_j(t) \hat{A}_j &= \im \sum_j c_j(t) [H, \hat{A}_j] \\
+        \Rightarrow \sum_j \underbrace{(\hat{A}_i | \hat{A}_j)}_{\coloneqq \mN_{ij}} \ddt c_j(t) &= \im \sum_j \underbrace{(\hat{A}_i | [\hat{H}, \hat{A}_j])}_{\coloneqq \mM_{ij}} c_j(t) \\
+        \Rightarrow \mN \ddt \vec{c}(t) &= \im \mM \vec{c}(t)\,.
+    \end{aligned}
+\end{equation*}
+\item Generalized eigenvalue problem $\omega \mN \vec{v} = \mM \vec{v}$, real solutions if either $\mM$ or $\mN$ is nonnegative.
+\begin{itemize}
+    \item[$\rightarrow$] $\mM$ is nonnegative is thermal equilibrium
+\end{itemize}
+\end{itemize}
 
-\posterbox{42cm}{26cm}{38cm}{Spectral functions}
+\highlightOne{ Green's functions }
+\begin{itemize}
+    \item Elements of the matrix $\greens{ } \coloneqq \mN [-(\omega + \im 0^+) \mN - \mM]^{-1} \mN$ are Fourier-transformed Green's functions
+    \item Specifically
+    \begin{equation*}
+        \mathcal{G}_{ij}(\omega) = G_{\hat{A}_i \hat{A}_j^\dagger} (\omega) = -\im \int_0^{\infty} \langle [A_i(t), A_j^\dagger(0)] \rangle e^{\im (\omega + \im 0^+) t} \mathrm{d}t
+    \end{equation*}
+    \item The matrices $\mN$ and $\mM$, and therefore also $\mathcal{G}(\omega)$, exhibit a block structure
+    \item Lengthy calculations yield a quadratic form for the two blocks, denoted $|_X$ and $|_P$
+    \begin{align*}
+        \mathcal{G}(z = \omega + \im 0^+) &= \mathcal{N} \frac{1}{-z \mN - \mM} \mathcal{N} \\
+        \to \mathcal{G}|_X (z) = - \mathcal{L}^\dagger \check{N}_X^{-1/2} \frac{1}{z^2 - \check{M}_X} \check{N}_X^{-1/2} \mathcal{L}\,&,\qquad
+        \mathcal{G}|_P (z) = - \mathcal{L} \check{N}_P^{-1/2} \frac{1}{z^2 - \check{M}_P} \check{N}_P^{-1/2} \mathcal{L}^\dagger
+    \end{align*}
+    \item Matrix inverse by tridiagonalization and subsequent continued fraction expansion with square-root terminator
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\posterbox{ \boxwidth + \boxmargin + \boxmargin}{\dimexpr\firstbox}{\boxwidth}{Spectral functions}
 {%
 \highlightOne{Close to SC-CDW phase transition} \\
 \begin{minipage}{0.65\textwidth}
@@ -185,6 +202,7 @@
 \hfill
 \begin{minipage}{0.34\textwidth}
     \begin{itemize}
+        \item $U=-2.5t$
         \item SC phase:
         \begin{itemize}
             \item Peak at $0$: Anderson-Bogoliubov mode, $\propto \delta'(\omega)$
@@ -208,6 +226,7 @@
 \hfill
 \begin{minipage}{0.34\textwidth}
     \begin{itemize}
+        \item Coexistence is the result of an SO(4) symmetry of the Hubbard model at half-filling \cite{yang90}
         \item The ratio $\Delta_\text{CDW} / \Delta_\text{SC}$ may be chosen arbitrarily as long as $\Delta_\text{tot} \coloneqq \sqrt{\Delta_\text{CDW}^2 + \Delta_\text{SC}^2} = \text{const}$
         \item Anderson-Bogoliubov mode always exits
         \item For $\Delta_\text{CDW} = 0$, the Higgs mode exists at $\omega = 2\Delta_\text{tot}$, while the CDW spectral function has a peak at $\omega=0$
@@ -219,11 +238,11 @@
 \highlightOne{Close to AFM-CDW phase transition} \\
 \begin{minipage}{0.65\textwidth}
     \includegraphics[width=\textwidth]{plots/resolvent_overview_AFM_CDW.pdf} % NV sketch
-    \center{\textcolor{tudarkgreen}{Spectral functions for various collective excitations.}}
 \end{minipage}
 \hfill
 \begin{minipage}{0.34\textwidth}
     \begin{itemize}
+        \item $V=1.2t$ (square lattice) and $V=0.8t$ (simple cubic lattice) $\Rightarrow$ phase transition at $U=4.8t$
         \item AFM phase: Transversal AFM spectral function has a peak at $0$
         \item Longitudinal AFM spectral function behaves just like the CDW spectral function
         \item Close to the phase transition: Both have a peak below the continuum
@@ -232,7 +251,11 @@
 \end{minipage}
 }
 
-\posterbox{42cm}{78cm}{38cm}{Behavior of the peaks}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\posterbox{ \boxwidth + \boxmargin + \boxmargin}{\dimexpr\firstbox + 52cm}{\boxwidth}{Behavior of the peaks}
 {%
 \begin{minipage}{0.49\textwidth}
     \includegraphics[width=\textwidth]{plots/sc_peak_in_cdw.pdf} % NV sketch
@@ -262,11 +285,13 @@
         \item At the same time, the weights also vanish
     \end{itemize}
 \end{minipage}
-
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\posterbox{2cm}{110.35cm}{38cm}{Possible outlook}
+\posterbox{\boxmargin}{109.7cm}{\boxwidth}{Possible outlook}
 {%
 \begin{itemize}
 \item Incorporating phase-separated states into the mean-field theory
@@ -274,11 +299,12 @@
     \item thereby providing deeper analysis of the negative $V$ regime of phase diagrams and collective excitations
 \end{itemize}
 \item Coupling the electronic system to the electromagnetic field to include the Anderson-Higgs mechanism for superconductors
+\item Incorporating different fillings
 \item Describing multi-band systems with even richer phases and collective excitations
 \end{itemize}
 }
 
-\posterbox{42cm}{111cm}{38cm}{References}
+\posterbox{\boxwidth + \boxmargin + \boxmargin}{110.4cm}{\boxwidth}{References}
 {%
 \begingroup
 \renewcommand{\section}[2]{}	% for removing the bibliography title
@@ -288,6 +314,7 @@
     \bibitem{Bleicker18} P. Bleicker and G. S. Uhrig, Phys. Rev. A 98, 033602 (2018).
     \bibitem{Micnas88b} R. Micnas, J. Ranninger, S. Robaszkiewicz, and S. Tabor, Phys. Rev. B 37, 9410 (1988).
     \bibitem{Linner23} E. Linnér, C. Dutreix, S. Biermann, and E. A. Stepanov, Phys. Rev. B 108, 205156 (2023).
+    \bibitem{yang90} C. N. Yang and S. Zhang, Modern Physics Letters B 04, 759 (1990).
     %\end{multicols}          
 \end{thebibliography}
 \endgroup
