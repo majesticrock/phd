@@ -75,10 +75,8 @@ for i in range(2):
     plotters[0][i].plot(u_log[:cut], peak_positions_to_cont[:cut], label=f"Omitted data", markerfacecolor="None")
     plotters[1][i].plot(u_log[:cut], weights[:cut], markerfacecolor="None")
     
-    axs[0][i].text(0.05, 0.8, f"c = {popt1[0]:.4f}", transform = axs[0][i].transAxes)
-    axs[1][i].text(0.05, 0.8, f"c = {popt2[0]:.4f}", transform = axs[1][i].transAxes)
-    axs[0][i].text(0.05, 0.7, f"d = {popt1[1]:.4f}", transform = axs[0][i].transAxes)
-    axs[1][i].text(0.05, 0.7, f"d = {popt2[1]:.4f}", transform = axs[1][i].transAxes)
+    axs[0][i].text(0.05, 0.8, f"$c = {popt1[0]:.4f}$\n$d = {popt1[1]:.4f}$", transform = axs[0][i].transAxes)
+    axs[1][i].text(0.05, 0.8, f"$c = {popt2[0]:.4f}$\n$d = {popt2[1]:.4f}$", transform = axs[1][i].transAxes)
 
 axs[0][0].title.set_text("Square lattice")
 axs[0][1].title.set_text("Simple cubic lattice")

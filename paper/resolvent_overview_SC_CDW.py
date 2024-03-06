@@ -64,12 +64,12 @@ for i in range(nrows):
 axs[0][0].set_title("Square lattice", pad=22)
 axs[0][1].set_title("Simple cubic lattice", pad=22)
 
-axs[0][0].text(5.7, 0.6, "(a.1) SC\n$V=-0.1t$")
-axs[1][0].text(5.7, 0.6, "(b.1) CDW\n$V=0.1t$")
-axs[2][0].text(5.7, 0.6, "(c.1) CDW\n$V=0.5t$")
-axs[0][1].text(8.6, 0.6, "(a.2) SC\n$V=-0.1t$")
-axs[1][1].text(8.6, 0.6, "(b.2) CDW\n$V=0.1t$")
-axs[2][1].text(8.6, 0.6, "(c.2) CDW\n$V=0.5t$")
+axs[0][0].text(0.7, 0.6, "(a.1) SC\n$V=-0.1t$", transform = axs[0][0].transAxes)
+axs[1][0].text(0.7, 0.6, "(b.1) CDW\n$V=0.1t$", transform = axs[1][0].transAxes)
+axs[2][0].text(0.7, 0.6, "(c.1) CDW\n$V=0.5t$", transform = axs[2][0].transAxes)
+axs[0][1].text(0.7, 0.6, "(a.2) SC\n$V=-0.1t$", transform = axs[0][1].transAxes)
+axs[1][1].text(0.7, 0.6, "(b.2) CDW\n$V=0.1t$", transform = axs[1][1].transAxes)
+axs[2][1].text(0.7, 0.6, "(c.2) CDW\n$V=0.5t$", transform = axs[2][1].transAxes)
 
 fig.tight_layout()
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
