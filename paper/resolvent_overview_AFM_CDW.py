@@ -72,14 +72,12 @@ for i in range(nrows):
 axs[0][0].set_title("Square lattice", pad=22)
 axs[0][1].set_title("Simple cubic lattice", pad=22)
 
-axs[0][0].text(7.6, 0.6, "(a.1) AFM\n$U = 4.85t$")
-axs[0][1].text(10.6, 0.6, "(a.2) AFM\n$U = 6.2t$")
-
-axs[1][1].text(10.6, 0.6, "(b.2) CDW\n$U = 3.4t$")
-axs[1][0].text(7.6, 0.6, "(b.1) CDW\n$U = 4.75t$")
-
-axs[2][0].text(7.6, 0.6, "(c.1) AFM\n$U = 6.2t$")
-axs[2][1].text(10.6, 0.6, "(c.2) AFM\n$U = 6.2t$")
+axs[0][0].text(0.7, 0.6, "(a.1) AFM\n$U = 4.85t$", transform = axs[0][0].transAxes)
+axs[0][1].text(0.7, 0.6, "(a.2) AFM\n$U = 4.85t$", transform = axs[0][1].transAxes)
+axs[1][1].text(0.7, 0.6, "(b.2) CDW\n$U = 4.75t$", transform = axs[1][1].transAxes)
+axs[1][0].text(0.7, 0.6, "(b.1) CDW\n$U = 4.75t$", transform = axs[1][0].transAxes)
+axs[2][0].text(0.7, 0.6, "(c.1) AFM\n$U = 6.2t$" , transform = axs[2][0].transAxes)
+axs[2][1].text(0.7, 0.6, "(c.2) AFM\n$U = 6.2t$" , transform = axs[2][1].transAxes)
 
 if nrows > 3: axs[3][0].text(7.6, 0.6, "(d.1) CDW\n$U = 3.4t$")
 if nrows > 3: axs[3][1].text(10.6, 0.6, "(d.2) CDW\n$U = 3.4t$")

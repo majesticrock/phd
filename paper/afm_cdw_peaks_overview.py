@@ -40,7 +40,7 @@ peak_fit_params = [ {"range": 1e-7, "begin_offset": 1e-10, "imaginary_offset": 5
 for i in range(2):
     for j in range(nrows):
         plotters[j][i] = ps.CURVEFAMILY(6, axis=axs[j][i])
-        plotters[j][i].set_individual_colors("nice")
+        plotters[j][i].set_individual_colors(["orange", "C2"])
         plotters[j][i].set_individual_linestyles(["-", "-"])
         plotters[j][i].set_individual_markerstyles(["v", "^"])
 
@@ -69,7 +69,7 @@ for i in range(2):
     
     for j in range(nrows):
         axs[j][i].axvspan(min(u_data), (min(u_data) + max(u_data)) / 2, alpha=0.3, color="orange")
-        axs[j][i].axvspan((min(u_data) + max(u_data)) / 2, max(u_data), alpha=0.3, color="blue")
+        axs[j][i].axvspan((min(u_data) + max(u_data)) / 2, max(u_data), alpha=0.3, color="C2")
 
 #axs[1][0].set_ylim(0, 0.022)
 #axs[2][0].set_ylim(0, 0.11)

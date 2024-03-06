@@ -68,6 +68,8 @@
 \newcommand{\greens}[1]{\mathcal{G}_\text{#1} (\omega)}
 \newcommand{\spectral}[1]{\mathcal{A}_\text{#1}  (\omega)}
 
+\def\hmath$#1${\texorpdfstring{{\rmfamily\textit{#1}}}{#1}}
+
 \begin{document} 
 
 % Preliminary title
@@ -247,8 +249,8 @@ where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
     \textcolor{red}{The red shading shows the region in which the dynamical matrix $\mM$, see equation \eqref{eqn:heisenberg}, has negative eigenvalues, 
     indicating that there are phases not captured by our methods.
     In accordance with the literature, we expect to find a phase-separated state \cite{Linner23}.
-    Lastly, the red shading shows the region that we cannot access because the discretization $N_\gamma$, 
-    which is required to accurately describe the system, is too large.}}
+    Lastly, the striped area shows the region that we cannot access because the discretization $N_\gamma$, 
+    which is required to accurately describe the system, is too large. However, we expect to find a superconducting state here.}}
     \label{fig:phase_diagram}
 \end{figure}
 
@@ -394,7 +396,7 @@ A detailed explanation of the numerics is provided in the appendix \ref{sec:nume
 If the gap $\Delta_\text{tot}$ is of the same order of magnitude as our discretization $\Delta \gamma$ our numerics become inaccurate.
 This manifests specifically if a spectral function has strong features at minuscule energies, e.g., the phase mode in the superconducting phase.
 In this case, the dynamical matrix $\mM$ picks up negative eigenvalues that vanish if $N_\gamma$ is increased so that $\Delta \gamma$ is sufficiently smaller than $\Delta_\text{tot}$.
-This happens if the parameters are chosen from the purple shaded area in \autoref{fig:phase_diagram}.
+This happens if the parameters are chosen from the striped area in \autoref{fig:phase_diagram}.
 \textcolor{red}{This issue only arises in the SC phase, nevertheless, we expect similar inaccuracies in the AFM region for small $U$.
 However, we did not perform any computations in that region, hence this does not pose an issue to our analysis.}
 
@@ -597,7 +599,7 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
     \caption{\textcolor{red}{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{l.AFM}$ (blue lines) close to the corresponding phase transition $U = 4.8t$.
     Again, we chose $V=1.2t$ for the square lattice (left column) and $V=0.8t$ for the simple cubic lattice (right column) respectively.
     The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum $\omega_-$, while the bottom panels (c) show their respective weights.}
-    The shadings indicate the phase the system is in. Blue represents AFM while orange represents CDW.
+    The shadings indicate the phase the system is in. Green represents AFM while orange represents CDW.
     Note the difference in the scales for the two lattices.}
     \label{fig:afm_cdw_peaks_overview}
 \end{figure*}
@@ -650,6 +652,7 @@ Note, that all of the aforementioned operators are Hermitian.
 This means that all spectral functions need to be completely antisymmetrical \cite{rickayzen80}.%, see appendix \ref{sec:antisymmetry_spectral}.
 For this reason, we will only show the $\omega \geq 0$ in our plots. 
 Additionally, we will add a small imaginary part of $10^{-5}t$ to $\omega$ in order to visualize the occurring $\delta$ peaks.
+\textcolor{red}{Furthermore, we provide a brief analysis of the effect of choosing different numbers of discretization points $N_\gamma$ in appendix \ref{sec:finite_size}.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%                                              Classification                                               %%%%%
@@ -913,26 +916,8 @@ For any $\vec{x} \in \mathbb{C}^N$, consider
         &= \langle \left[ \sum_i x_i^* A_i^\dagger, \left[ H, \sum_j x_j A_j \right] \right]  \rangle \nonumber \\
         &= \langle [B^\dagger, [H, B]] \rangle\,,\quad B \coloneqq  \sum_j x_j A_j\,.
 \end{align}
-For $\mM$ to be positive semidefinite the expression above must not be negative.
-Therefore, we need to show, that any diagonal element of $\mM$ is nonnegative.
-To do this, we expand the commutators and the thermal expectation value $\langle O \rangle = \frac{1}{Z} \Trace [\exp(-\beta H_\text{MF}) O]$, 
-where $\beta$ is the inverse temperature and $Z$ the partition function.
-This procedure yields
-
-\begin{widetext}
-    \begin{align}
-        \langle [B^\dagger, [H, B]] \rangle &= \frac{1}{Z} \Trace [\exp(-\beta H) [B^\dagger, [H, B]]] \nonumber \\
-            &= \frac{1}{Z} \sum_j e^{-\beta \epsilon_j} \bra{\psi_j} [B^\dagger, [H, B]] \ket{\psi_j} \nonumber \\
-            &= \frac{1}{Z} \sum_j e^{-\beta \epsilon_j} \left[ \bra{\psi_j} B^\dagger (H - \epsilon_j) B \ket{\psi_j} + \bra{\psi_j} B (H - \epsilon_j) B^\dagger \ket{\psi_j} \right] \nonumber \\
-            &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} (\epsilon_i - \epsilon_j) \bra{\psi_i} B^\dagger \ket{\psi_j} \right] \nonumber \\
-            &= \frac{1}{Z} \sum_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) \underbrace{ \left[ \bra{\psi_j} B^\dagger \ket{\psi_i} \bra{\psi_i} B \ket{\psi_j} + \bra{\psi_j} B \ket{\psi_i} \bra{\psi_i} B^\dagger \ket{\psi_j} \right]}_{\coloneqq C_{ij} = C_{ji} \geq 0} \nonumber \\
-            &= \frac{1}{2Z} \left[ \sum_{ij} C_{ij} e^{-\beta \epsilon_j} (\epsilon_i - \epsilon_j) - \sum_{ij} C_{ij} e^{-\beta \epsilon_i} (\epsilon_i - \epsilon_j) \right] \nonumber \\
-            &= \frac{1}{2Z} \sum_{ij} C_{ij} \left( e^{-\beta \epsilon_j} - e^{-\beta \epsilon_i} \right) \left( \epsilon_i - \epsilon_j \right) \geq 0 \,.
-    \end{align}
-\end{widetext}
-
-This concludes our proof. Note, that the only assumption made, is that the expectation value is to be taken with respect to the thermal equilibrium.
-
+For $\mM$ to be positive semidefinite the expression above must not be negative,
+\textcolor{red}{which has already been proven in Refs. \cite{Dyson1978,mermin66}.}
 
 \section{Fits to the Green's functions}
 \label{sec:fit_greens_functions}
@@ -946,42 +931,21 @@ This concludes our proof. Note, that the only assumption made, is that the expec
     \label{fig:zero_peaks}
 \end{figure*}
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=.98\textwidth]{plots/higgs_peak.pdf}
-    \caption{Log-log plot of $\spectral{Higgs}$ (a, c) and $\spectral{CDW}$ (b) near $\omega = \omega_0 = 2\Delta_\text{SC}$ at $U=-2.5t$ and $V=0$.
-    The different panels depict the spectral functions for various ratios of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$.
-    We additionally plot the difference between $\spectral{i}$ and $\spectral{Phase}$ and fit it, as we interpret the latter as a background within the two-particle continuum.
-    The left (right) panel shows the results for the square (simple cubic) lattice.
-    The spectral function behaves as $1 / \sqrt{\omega - 2 \Delta_\text{tot}}$.
-    Note, that $\spectral{CDW}$ and $\spectral{Higgs}$ are identical for the choice in panel (c).}
-    \label{fig:higgs_peak}
-\end{figure*}
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=0.98\textwidth]{plots/peak_fits.pdf}
-    \caption{Log-log plot of the real part of various Green's functions, the labels indicate its type and the text in the panels indicate the phase.
-        The results for both lattice types are shown but are qualitatively identical.
-        The power-law exponent is $a=-1$ in all cases, indicating that these peaks are $\delta$ distributions.}
-        \label{fig:peak_fits}
-\end{figure*}
-
-In this appendix section, we show fits to the real and imaginary parts of various Green's functions in the different phases.
+In this appendix section, we discuss fits to the real and imaginary parts of various Green's functions in the different phases.
 All fits are linear of the type $y = ax + b$ in double logarithmic plots, i.e., $a$ describes the power-law behavior of the functions.
-Firstly, the real part of $\greens{Phase}$ in the SC phase is shown in panel (a) of \autoref{fig:zero_peaks}.
+An example plot of the real part of $\greens{Phase}$ in the SC phase is shown in panel (a) of \autoref{fig:zero_peaks}.
 It behaves as $1/\omega^2$ indicating that the peak we find in the spectral function at $\omega=0$ corresponds to the derivative of a $\delta$ distribution.
-The same results are obtained for the peak in $\spectral{Higgs}$ and $\spectral{CDW}$ in the coexistence phase.
+The same results are obtained for the peak in $\spectral{Higgs}$ and $\spectral{CDW}$ in the coexistence phase as well as in $\spectral{t.AFM}$ within the AFM phase.
 
-Continuing, we investigate the divergence at $\omega = 2\Delta$ found in $\spectral{Higgs}$ and $\spectral{CDW}$ at $V=0$.
-It behaves as $1/\sqrt{\omega}$ as shown in \autoref{fig:higgs_peak}.
+Continuing, we investigate the divergence at $\omega = 2\Delta$ found in $\spectral{Higgs}$ and $\spectral{CDW}$ at $V=0$. It behaves as $1/\sqrt{\omega}$.
 
-Lastly, we show all the remaining peaks in \autoref{fig:peak_fits}.
+Lastly, all remaining peaks below the two-particle continuum behave identical.
 The real part of each one of them behaves as $1/\omega$ in close vicinity to the peak position.
 This indicates that the peaks are $\delta$ distributions.
-The peaks of $\spectral{AFM}$ and $\spectral{CDW}$ close the the phase transition are identical when swapped, i.e., $\spectral{AFM}$ in the CDW phase is the same as $\spectral{CDW}$ in the AFM phase.
+The peaks of $\spectral{AFM}$ and $\spectral{CDW}$ close the the phase transition are identical when swapped, 
+i.e., $\spectral{AFM}$ in the CDW phase is the same as $\spectral{CDW}$ in the AFM phase.
 
-\section{Numerical treatment of the iEoM matrices}
+\section{Numerical treatment of the iEoM matrices in \hmath $\gamma$-space}
 \label{sec:numerical_ieom}
 
 We would like to use operators like \eqref{eqn:ieom_basis_operator} to span our operator set.
@@ -1030,6 +994,15 @@ Then, we can rewrite \eqref{eqn:green_derivation} as
     G_{AB^\dagger}(z) = - (\Delta \gamma)^2 \vec{b}^\dagger (0) \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right] \vec{a}(0)\,.
 \end{equation}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.48\textwidth]{plots/finite_size.pdf}
+    \caption{Effect of changing the number of discretization points $N_\gamma$ on the absolute position of the peak in $\spectral{Phase}$ for $U=-2.5t$ and $V=-0.1t$.
+    On the simple cubic lattice, the peak already lies properly at $\omega=0$.
+    On the square lattice, its position approaches $0$ with $\sqrt{1/N_\gamma}$.}
+    \label{fig:finite_size}
+\end{figure}
+
 To give a practical example, let us compute $\greens{Higgs}$ from \eqref{eqn:resolvent_bases}.
 We order our operator set such that all $f_\gamma + f_\gamma^{\dagger}$ are upfront. 
 This requires the vector elements $\vec{a}$ and $\vec{b}$ to be
@@ -1047,7 +1020,16 @@ Using this, we can expand the relation for the Green's function
 \end{align}
 The first line is an approximation of the integral in the second line, as each matrix element corresponds to a specific value for $\gamma$.
 
+\section{Dependence of the results on the discretization}
+\label{sec:finite_size}
 
+Most of our data barely depends on the number of discretization points $N_\gamma$ at all.
+However, specifically features that lie at very small energies, e.g., the peak in $\spectral{Phase}$ within the SC phase, can be difficult to properly resolve.
+We show this effect in \autoref{fig:finite_size}.
+Neglecting minor fluctuations, this peak is properly located at $\omega=0$ for the simple cubic lattice.
+On the square lattice, however, it follows a $\sqrt{1/N_\gamma}$ behavior, i.e., also approaching $0$.
+This behavior can be observed for the other peaks at $\omega=0$ as well.
+How far away they are from $0$, or whether they are at all, depends on the spectral function as well as on the system parameters.
 
 \bibliography{sn-bibliography}
 %\bibliography{../../A_bibinput/liter10.bib}
