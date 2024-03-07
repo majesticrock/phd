@@ -27,9 +27,9 @@ axs[0].fill_between([0, xlims[1]], [0, xlims[1] / 4], [ylims[0], ylims[0]], alph
 # unknown regions
 axs[0].fill_between(u_boundary[0], u_boundary[1], np.full(len(u_boundary[0]), ylims[0]), label="Likely PS", alpha=alpha)
 axs[0].fill_between([u_boundary[0][-1], 0], [0, 0], [ylims[0], ylims[0]], label=r"$\Delta$ too small", 
-                    alpha=alpha, facecolor="C0", edgecolor="black", hatch="///", linewidth=0.0)
+                    alpha=alpha, facecolor="C0", edgecolor="black", hatch="///", linewidth=2.0)
 axs[0].plot(u_boundary[0], u_boundary[1], "k-")
-axs[0].axvline(u_boundary[0][-1], ymin=0, ymax=0.5, color="k", linestyle=":")
+#axs[0].axvline(u_boundary[0][-1], ymin=0, ymax=0.5, color="k", linestyle=":")
 
 #Plot boundaries
 micnas_d = np.loadtxt("../data/micnas_d_wave.csv").transpose()
@@ -56,9 +56,9 @@ axs[1].fill_between([0, xlims[1]], [0, xlims[1] / 6], [ylims[0], ylims[0]], alph
 # unknown regions
 axs[1].fill_between(u_boundary[0], u_boundary[1], np.full(len(u_boundary[0]), ylims[0]), label="Likely PS", alpha=alpha)
 axs[1].fill_between([u_boundary[0][-1], 0], [0, 0], [ylims[0], ylims[0]], label=r"$\Delta$ too small", 
-                    alpha=alpha, facecolor="C0", edgecolor="black", hatch="///", linewidth=0.0)
+                    alpha=alpha, facecolor="C0", edgecolor="black", hatch="///", linewidth=2.0)
 axs[1].plot(u_boundary[0], u_boundary[1], "k-")
-axs[1].axvline(u_boundary[0][-1], ymin=0, ymax=0.5, color="k", linestyle=":")
+#axs[1].axvline(u_boundary[0][-1], ymin=0, ymax=0.5, color="k", linestyle="-")
 
 #Plot boundaries
 axs[1].plot(np.array([0, xlims[1]]), np.array([0, xlims[1]]) / 6,  "k-")
