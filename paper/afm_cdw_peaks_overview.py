@@ -40,7 +40,7 @@ peak_fit_params = [ {"range": 1e-7, "begin_offset": 1e-10, "imaginary_offset": 5
 for i in range(2):
     for j in range(nrows):
         plotters[j][i] = ps.CURVEFAMILY(6, axis=axs[j][i])
-        plotters[j][i].set_individual_colors(["orange", "C2"])
+        plotters[j][i].set_individual_colors(["C1", "C2"])
         plotters[j][i].set_individual_linestyles(["-", "-"])
         plotters[j][i].set_individual_markerstyles(["v", "^"])
 
@@ -63,28 +63,20 @@ for i in range(2):
             peak_positions_to_cont[counter] = cont_edges[0] - peak_positions[counter]
             counter += 1
         
-        plotters[0][i].plot(u_data, peak_positions, label=f"Data - $\\mathcal{{A}}_\\mathrm{{{name_suffix}}} (\\omega)$")
+        plotters[0][i].plot(u_data, peak_positions, label=f"$\\mathcal{{A}}_\\mathrm{{{name_suffix}}} (\\omega)$")
         plotters[1][i].plot(u_data, peak_positions_to_cont)
         plotters[2][i].plot(u_data, np.exp(weights))
     
     for j in range(nrows):
-        axs[j][i].axvspan(min(u_data), (min(u_data) + max(u_data)) / 2, alpha=0.3, color="orange")
+        axs[j][i].axvspan(min(u_data), (min(u_data) + max(u_data)) / 2, alpha=0.3, color="C1")
         axs[j][i].axvspan((min(u_data) + max(u_data)) / 2, max(u_data), alpha=0.3, color="C2")
 
-#axs[1][0].set_ylim(0, 0.022)
-#axs[2][0].set_ylim(0, 0.11)
-#axs[1][1].set_ylim(0, 0.11)
-#axs[2][1].set_ylim(0, 0.18)
+axs[0][0].set_title("Square lattice"      )
+axs[0][1].set_title("Simple cubic lattice")
 
-axs[0][0].title.set_text("Square lattice")
-axs[0][1].title.set_text("Simple cubic lattice")
-
-axs[0][0].text(0.9, 0.6, "(a.1)", transform = axs[0][0].transAxes)
-axs[0][1].text(0.9, 0.6, "(a.2)", transform = axs[0][1].transAxes)
-axs[1][0].text(0.9, 0.6, "(b.1)", transform = axs[1][0].transAxes)
-axs[1][1].text(0.9, 0.6, "(b.2)", transform = axs[1][1].transAxes)
-axs[2][0].text(0.9, 0.6, "(c.1)", transform = axs[2][0].transAxes)
-axs[2][1].text(0.9, 0.6, "(c.2)", transform = axs[2][1].transAxes)
+for i in range(2):
+    axs[0][i].text(0.87, 0.5, f"(a.{i+1})", transform = axs[0][i].transAxes)
+    axs[1][i].text(0.87, 0.5, f"(b.{i+1})", transform = axs[1][i].transAxes)
 
 axs[nrows-1][0].set_xlabel(r"$U [t]$")
 axs[nrows-1][1].set_xlabel(r"$U [t]$")

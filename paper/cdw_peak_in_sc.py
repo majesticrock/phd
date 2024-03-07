@@ -71,21 +71,21 @@ for i in range(2):
     popt, pcov = ez_linear_fit(v_data[:cut], peak_positions[:cut], plotters[0][i], ez_lin_space(v_data), label="Fit")
     plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Fitted data")
     plotters[0][i].plot(v_data[cut:], peak_positions[cut:], label="Omitted data", markerfacecolor="None")
-    axs[0][i].text(0.15, 0.8, f"$c={popt[0]:.4f}$\n$d={popt[1]:.4f}$", transform = axs[0][i].transAxes)
+    axs[0][i].text(0.15, 0.78, f"$c={popt[0]:.4f}$\n$d={popt[1]:.4f}$", transform = axs[0][i].transAxes)
     
     # Plot and fit W_0
     cut = len(v_data) - cutoffs[1][i]
     popt, pcov = ez_linear_fit(v_data[:cut], weights[:cut], plotters[1][i], ez_lin_space(v_data), label="Fit")
     plotters[1][i].plot(v_data[:cut], weights[:cut], label="Data")
     plotters[1][i].plot(v_data[cut:], weights[cut:], label="Omitted data", markerfacecolor="None")
-    axs[1][i].text(0.15, 0.8, f"$c={popt[0]:.4f}$\n$d={popt[1]:.4f}$", transform = axs[1][i].transAxes)
+    axs[1][i].text(0.15, 0.78, f"$c={popt[0]:.4f}$\n$d={popt[1]:.4f}$", transform = axs[1][i].transAxes)
 
-axs[0][0].title.set_text("Square lattice")
-axs[0][1].title.set_text("Simple cubic lattice")
+axs[0][0].set_title("Square lattice"      , pad=13)
+axs[0][1].set_title("Simple cubic lattice", pad=13)
 
-for i in range(ncols):
-    axs[0][i].text(0.88, 0.75, f"(a.{i+1})", transform = axs[0][i].transAxes)
-    axs[1][i].text(0.88, 0.75, f"(b.{i+1})", transform = axs[1][i].transAxes)
+for i in range(2):
+    axs[0][i].text(0.87, 0.75, f"(a.{i+1})", transform = axs[0][i].transAxes)
+    axs[1][i].text(0.87, 0.75, f"(b.{i+1})", transform = axs[1][i].transAxes)
 
 axs[1][0].set_ylim(axs[1][0].get_ylim()[0], axs[1][0].get_ylim()[1] + 1.1)
 
