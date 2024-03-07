@@ -100,7 +100,7 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
     We employ the iterated equations of motion approach to compute the two-particle Green's functions and their spectral densities. 
     This renders a comprehensive analysis of the behavior of collective excitations possible as the model's parameters are changed across phase transitions. 
     We identify the well-known amplitude (Higgs) and phase (Anderson-Bogoliubov) modes within the superconducting phase 
-    and observe a similar excitation (Cooperon) in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase. 
+    and observe a similar excitation (cooperon) in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase. 
     \textcolor{red}{In the CDW phase, close to the phase transition to the AFM phase, 
     we find a collective mode (exciton) that does not change significantly and another mode (magnon) that moves into the two-particle continuum. 
     In the AFM phase, we identify both longitudinal and transversal magnons.}
@@ -253,17 +253,6 @@ where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
     which is required to accurately describe the system, is too large. However, we expect to find a superconducting state here.}}
     \label{fig:phase_diagram}
 \end{figure}
-
-%\begin{figure}
-%    \centering
-%    \includegraphics[width=.48\textwidth]{plots/phase_limits.pdf}
-%    \caption{The lower left corner ($U<0$ and $V<0$) of the phase diagram obtained for the extended Hubbard model on 
-%    (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
-%    The blue shading indicates the region where the $s$-wave superconducting phase is the proper ground state of the system.
-%    The green shading shows the region that we cannot access because the discretization $N_\gamma$, which is required to accurately describe the system, is too large.
-%    Lastly, the orange shading shows the region in which the dynamical matrix $\mM$ has negative eigenvalues, indicating that there are phases not captured by our methods.}
-%    \label{fig:phase_limits}
-%\end{figure}
 
 We observe that the entire Hamiltonian and thus all expectation values only depend on
 \begin{equation}
@@ -596,7 +585,7 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_overview.pdf}
-    \caption{\textcolor{red}{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{l.AFM}$ (blue lines) close to the corresponding phase transition $U = 4.8t$.
+    \caption{\textcolor{red}{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{l.AFM}$ (green lines) close to the corresponding phase transition $U = 4.8t$.
     Again, we chose $V=1.2t$ for the square lattice (left column) and $V=0.8t$ for the simple cubic lattice (right column) respectively.
     The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum $\omega_-$, while the bottom panels (c) show their respective weights.}
     The shadings indicate the phase the system is in. Green represents AFM while orange represents CDW.
@@ -690,7 +679,7 @@ These have the frequency $\Omega = 2 \Delta_\text{SC}$ and fall off as $1/\sqrt{
 An inverse Fourier transform of $\spectral{Higgs}$ yields precisely the same behavior, thereby reinforcing the validity of our results.
 
 In the CDW phase, see panels (b) and (c), both of $\spectral{Higgs}$ and $\spectral{Phase}$ become identical and form a $\delta$ peak below the two-particle continuum.
-\textcolor{red}{In this case, both modes describe the condensation of a Cooperon, i.e., a bound state of two electrons.}
+\textcolor{red}{In this case, both modes describe the condensation of a cooperon, i.e., a bound state of two electrons.}
 Following the Landau theory for continuous phase transitions, this is to be expected as the free energy is expanded in terms of the order parameter as
 \begin{equation}
     f(\Delta_\text{SC}) \approx r |\Delta_\text{SC}|^2 + \frac{u}{2} |\Delta_\text{SC}|^4\,,
@@ -825,13 +814,13 @@ Note, however, that we did our computations at $T=0$ while the reference worked 
 \subsection{AFM-CDW transition}
 
 Lastly, we investigate how the modes behave as the system transitions between the CDW and AFM phases.
-Similar to the previous subsection, we plot the occurring peaks in $\spectral{CDW}$ and $\spectral{AFM}$ within the respective phase in \autoref{fig:afm_cdw_peaks_overview}.
-On the right side of each panel, i.e., for $U > zV$, the system is in the AFM phase (blue shading).
+Similar to the previous subsection, we plot the occurring peaks in $\spectral{CDW}$ and $\spectral{l.AFM}$ within the respective phase in \autoref{fig:afm_cdw_peaks_overview}.
+On the right side of each panel, i.e., for $U > zV$, the system is in the AFM phase (green shading).
 On the left side, it is in the CDW phase (orange shading).
-In general, the peak in $\spectral{AFM}$ behaves exactly as the peak in $\spectral{CDW}$ if the phases are swapped.
+In general, the peak in $\spectral{l.AFM}$ behaves exactly as the peak in $\spectral{CDW}$ if the phases are swapped.
 
 The panel (a) shows the peak positions unmodified. They essentially move linearly as $U$ is varied.
-It is noteworthy, that in the AFM phase, the peak in $\spectral{AFM}$ lies lower than the one in $\spectral{CDW}$.
+It is noteworthy, that in the AFM phase, the peak in $\spectral{l.AFM}$ lies lower than the one in $\spectral{CDW}$.
 Naturally, this is reversed, if the system is in the CDW phase.
 This is to be expected, as creating an AFM excitation should be energetically more favorable if the system is already in said phase.
 
@@ -842,15 +831,15 @@ The other peak, however, moves ever closer to the aforementioned continuum until
 At this point, the weight of said peak also vanishes, see panel (c).
 This occurs around $U \approx 4.8t \pm 1.428t$ for the square lattice and around $U \approx 4.8t \pm 0.321t$ for the simple cubic lattice.
 
-On the square lattice, the weights of the peaks in $\spectral{AFM}$ in the AFM phase (the same applies to $\spectral{CDW}$ in the CDW phase) grow as the system moves away from the phase transition.
+On the square lattice, the weights of the peaks in $\spectral{l.AFM}$ in the AFM phase (the same applies to $\spectral{CDW}$ in the CDW phase) grow as the system moves away from the phase transition.
 On the simple cubic lattice, however, the weights fall off very slightly.
 
 In \autoref{fig:afm_cdw_peaks_details}, we revisit panels (b) and (c) from the previous figure.
-We restrict the analysis to $\spectral{AFM}$ in the CDW phase as the reverse case yields precisely the same data.
-This time around the scaling is double-logarithmic and we consider $U$ relative to those values at which we cannot find a peak in $\spectral{AFM}$.
-This occurs around $U_0 = 3.5755t$ on the square lattice and around $U_0 = 4.89t$ on the simple cubic lattice.
-This yields that the peak positions $\omega_0$ (a) behave quadratically as they move into the two-particle continuum,
-while their weights $W_0$ (b) drop off linearly.
+We restrict the analysis to $\spectral{l.AFM}$ in the CDW phase as the reverse case yields precisely the same data.
+This time around the scaling is double-logarithmic and we consider $U$ relative to those values at which we cannot find a peak in $\spectral{l.AFM}$.
+This occurs around $U_0 = 3.372t$ on the square lattice and around $U_0 = 4.479t$ on the simple cubic lattice.
+This yields that the peak positions $\omega_0$ (a) behave quadratically as they move into the two-particle continuum, i.e., $\omega_0 \propto (U-U_0)^2$,
+while their weights $W_0$ (b) drop off linearly, i.e., $W_0 \propto (U-U_0)$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -867,32 +856,36 @@ Furthermore, we were able to identify an area in which our analysis is incomplet
 In 2D, this region coincides with a phase-separated state that has already been observed in recent research \cite{Linner23}.
 
 We have also developed a novel method to obtain Fourier-transformed Green's functions and analyzed various such functions. 
-We have found collective excitations within the spectral functions $\spectral{Higgs}$, $\spectral{Phase}$, $\spectral{CDW}$, and $\spectral{AFM}$ 
+We have found collective excitations within the spectral functions $\spectral{Higgs}$, $\spectral{Phase}$, $\spectral{CDW}$, $\spectral{l.AFM}$, and $\spectral{t.AFM}$ 
 and examined their behavior as the system approaches phase transitions. 
 In particular, we identified the peak and singularity found in the first two as the well-known phase and amplitude modes in neutral superconductors 
 and thereby provided a technique to obtain them starting from a microscopic description.
 
-We observed the behavior of the peak in the SC-related spectral functions.
+We observed the behavior of the peak in the SC-related spectral functions, \textcolor{red}{corresponding to a cooperon}.
 It moves towards 0 energy and attains more weight as the system moves from the CDW phase towards the SC phase. 
 The peak's relative position to the two-particle continuum and its weight plateau as the system moves away from the phase transition.
 
-In the SC phase close to the CDW phase, the peak in $\spectral{CDW}$ is located at a finite energy and and has a finite weight. 
-It moves towards higher energy and its weight drops off as the system moves away from the phase transition. 
+In the SC phase close to the CDW phase, the peak in $\spectral{CDW}$, \textcolor{red}{corresponding to an exciton}, is located at a finite energy and and has a finite weight. 
+\textcolor{red}{It behaves in the same manner as the previously discussed peak}.
 
-Around the AFM-CDW phase transition, both $\spectral{AFM}$ and $\spectral{CDW}$ feature a peak. 
+Around the AFM-CDW phase transition, both $\spectral{l.AFM}$ and $\spectral{CDW}$ feature a peak. 
+\textcolor{red}{The former corresponds to a longitudinal magnon, while the latter represents an exciton.}
 The peak of the former in the AFM phase lies at lower energies than the latter one and vice-versa. 
-Moving away from the phase transition, the higher-lying peak becomes soft as it moves into the two-particle continuum. 
+Moving away from the phase transition, the higher-lying peak moves into the two-particle continuum. 
 The peak position relative to the two-particle continuum approaches $0$ quadratically with $U$, and its weight approaches $0$ linearly.
 
 Furthermore, we have found a peak in $\spectral{CDW}$ that appears at large values of $V$, 
 which is most likely the same as the one found close to the CDW-AFM phase transition. 
+\textcolor{red}{It is also reasonable to assume, that this peak is always located outside of the two-particle continuum, even for small values of $V$.
+In this case however, it would lie very close to the continuum, which we cannot resolve due to the limited accuracy of our numerics.
+Therefore, it appears as a singularity at $2\Delta$.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Some possible ideas for future research include incorporating phase-separated states into the mean-field theory.
 This would enable us to peer deeper into the negative $V$ regime of the phase diagrams and provide more analysis of the collective excitations that occur therein.
 
-Moreover, one can fathom including a coupling of the electronic system to the electromagnetic field.
+\textcolor{red}{Specifically for the SC related quantities, one can fathom including a coupling of the electronic system to the electromagnetic field.}
 This should move the position of the phase mode close to the plasma frequency as explained by the Anderson-Higgs mechanism.
 
 Additionally, one could describe multi-band systems with even richer phases and collective excitations. 
@@ -942,8 +935,8 @@ Continuing, we investigate the divergence at $\omega = 2\Delta$ found in $\spect
 Lastly, all remaining peaks below the two-particle continuum behave identical.
 The real part of each one of them behaves as $1/\omega$ in close vicinity to the peak position.
 This indicates that the peaks are $\delta$ distributions.
-The peaks of $\spectral{AFM}$ and $\spectral{CDW}$ close the the phase transition are identical when swapped, 
-i.e., $\spectral{AFM}$ in the CDW phase is the same as $\spectral{CDW}$ in the AFM phase.
+The peaks of $\spectral{l.AFM}$ and $\spectral{CDW}$ close the the phase transition are identical when swapped, 
+i.e., $\spectral{l.AFM}$ in the CDW phase is the same as $\spectral{CDW}$ in the AFM phase.
 
 \section{Numerical treatment of the iEoM matrices in \hmath $\gamma$-space}
 \label{sec:numerical_ieom}
