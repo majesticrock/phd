@@ -83,31 +83,31 @@ for i in range(2):
     peak_positions_div_delta = np.log(peak_positions_div_delta)
     popt1, pcov1 = curve_fit(rp.linear_function, v_data[:cut], peak_positions[:cut])
     x_lin = np.linspace(np.min(v_data), np.max(v_data), 2000)
-    fit1, = plotters[0][i].plot(x_lin, rp.linear_function(x_lin, *popt), label="Fit 1")
+    fit1, = plotters[0][i].plot(x_lin, rp.linear_function(x_lin, *popt1), label="Fit 1")
 
     cut2 = len(Vs) - 27
     popt2, pcov2 = curve_fit(rp.linear_function, v_data[cut2:], peak_positions[cut2:])
-    axs[0][i].text(0.05, 0.6, f"$c_1={popt[0]:.4f}$\n$d_1={popt[1]:.4f}$\n$c_2={popt2[0]:.4f}$\n$d_2={popt2[1]:.4f}$", transform = axs[0][i].transAxes)
-    fit2, = plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt), label="Fit 2")
+    axs[0][i].text(0.05, 0.54, f"$c_1={popt[0]:.4f}$\n$d_1={popt[1]:.4f}$\n$c_2={popt2[0]:.4f}$\n$d_2={popt2[1]:.4f}$", transform = axs[0][i].transAxes)
+    fit2, = plotters[0][i].plot(x_lin,  rp.linear_function(x_lin, *popt2), label="Fit 2")
     data1, = plotters[0][i].plot(v_data[:cut], peak_positions[:cut], label="Data Fit 1")
     data2, = plotters[0][i].plot(v_data[cut2:], peak_positions[cut2:], label="Data Fit 2")
     omitted, = plotters[0][i].plot(v_data[cut:cut2], peak_positions[cut:cut2], label="Omitted data", markerfacecolor="None")
     div_delta, = plotters[0][i].plot(v_data, peak_positions_div_delta, label=r"$\omega_0 / \Delta_\mathrm{CDW}$")
 
-axs[0][0].title.set_text("Square lattice")
-axs[0][1].title.set_text("Simple cubic lattice")
+axs[0][0].set_title("Square lattice"      , pad=13)
+axs[0][1].set_title("Simple cubic lattice", pad=13)
 
 for i in range(2):
-    axs[0][i].text(0.88, 0.75, f"(a.{i+1})", transform = axs[0][i].transAxes)
-    axs[1][i].text(0.88, 0.75, f"(b.{i+1})", transform = axs[1][i].transAxes)
+    axs[0][i].text(0.87, 0.75, f"(a.{i+1})", transform = axs[0][i].transAxes)
+    axs[1][i].text(0.87, 0.75, f"(b.{i+1})", transform = axs[1][i].transAxes)
 
 axs[1][0].set_xlabel(r"$\ln(V / t)$")
 axs[1][1].set_xlabel(r"$\ln(V / t)$")
 axs[1][0].set_ylabel(r"$\ln(W_0)$")
 axs[0][0].set_ylabel(r"$\ln(\omega_0 / t)$")
-axs[1][1].legend(loc="lower right")
-axs[0][0].legend(handles=[fit1, fit2, div_delta], loc="lower right")
-axs[0][1].legend(handles=[data1, data2, omitted], loc="lower right")
+axs[1][1].legend(loc="lower right", ncol=3, columnspacing=1)
+axs[0][0].legend(handles=[fit1, fit2, div_delta], loc="lower right", bbox_to_anchor=(1.02, -0.04))
+axs[0][1].legend(handles=[data1, data2, omitted], loc="lower right", bbox_to_anchor=(1.02, -0.04))
 #axs[0][1].legend(loc="lower right", ncol=2)
 fig.tight_layout()
 

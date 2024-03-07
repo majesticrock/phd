@@ -13,6 +13,12 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
+poster_plot = False
+if poster_plot:
+    legend_args = { "bbox_to_anchor" : (-0.05, 1.19), "columnspacing" : 1, "fontsize" : 22 }
+else:
+    legend_args = { "bbox_to_anchor" : (0., 1.15)}
+    
 params = [  [ [0., 4.85, 1.2], [0., 4.75, 1.2], [0., 6.2, 1.2], [0., 3.4, 1.2] ],
             [ [0., 4.85, 0.8], [0., 4.75, 0.8], [0., 6.2, 0.8], [0., 3.4, 0.8] ]]
 
@@ -49,35 +55,35 @@ for j, folder in enumerate(folders):
             
         cont = np.sqrt(resolvents[0].roots[0])
         if i < 2:
-            zoomed_xlim = np.array([cont - 0.035, cont + 0.025]) if j == 1 else np.array([cont - 0.09, cont + 0.05]) 
+            zoomed_xlim = np.array([cont - 0.025, cont + 0.015]) if j == 1 else np.array([cont - 0.06, cont + 0.05]) 
         else:
             zoomed_xlim = np.array([cont - 0.07, cont + 0.025]) if j == 1 else np.array([cont - 0.14, cont + 0.05]) 
-            
+        
+        inset_ticks = {"yticks" : [0, 0.2, 0.4]} if i >= 2 or j == 0 else {"yticks" : [0, 0.2, 0.4], "xticks" : [3.05, 3.07]}
+        
         zoom_xpos = 0.4 if i < 2 or j == 1 else 0.1
         axins = create_zoom(axs[i][j], zoom_xpos, 0.29, 0.275, 0.66, zoomed_xlim, ylim=(0, 0.55), 
                             y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents],
-                            skip_lines=[1, 3, 5, 7, 9], yticks=[0, 0.2, 0.4], mark_inset=False)
+                            skip_lines=[1, 3, 5, 7, 9], mark_inset=False, **inset_ticks)
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
         resolvents[0].mark_continuum(axs[i][j], None)
         resolvents[0].mark_continuum(axins, None)
 
+legend = axs[0][1].legend(loc='upper center', ncol=5, shadow=True, **legend_args)
 
-legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.3), ncol=2, shadow=True)
-
-legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.15), ncol=5, shadow=True)
 for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
 for i in range(nrows):
     axs[i][0].set_ylabel(r"$\mathcal{A}(\omega) [t^{-1}]$")
-axs[0][0].set_title("Square lattice", pad=22)
-axs[0][1].set_title("Simple cubic lattice", pad=22)
+axs[0][0].set_title("Square lattice", pad=22 if not poster_plot else 25)
+axs[0][1].set_title("Simple cubic lattice", pad=22 if not poster_plot else 25)
 
-axs[0][0].text(0.7, 0.6, "(a.1) AFM\n$U = 4.85t$", transform = axs[0][0].transAxes)
-axs[0][1].text(0.7, 0.6, "(a.2) AFM\n$U = 4.85t$", transform = axs[0][1].transAxes)
-axs[1][1].text(0.7, 0.6, "(b.2) CDW\n$U = 4.75t$", transform = axs[1][1].transAxes)
-axs[1][0].text(0.7, 0.6, "(b.1) CDW\n$U = 4.75t$", transform = axs[1][0].transAxes)
-axs[2][0].text(0.7, 0.6, "(c.1) AFM\n$U = 6.2t$" , transform = axs[2][0].transAxes)
-axs[2][1].text(0.7, 0.6, "(c.2) AFM\n$U = 6.2t$" , transform = axs[2][1].transAxes)
+axs[0][0].text(0.93, 0.59, "(a.1) AFM\n$U = 4.85t$", transform = axs[0][0].transAxes, ma="right", ha="right")
+axs[0][1].text(0.93, 0.59, "(a.2) AFM\n$U = 4.85t$", transform = axs[0][1].transAxes, ma="right", ha="right")
+axs[1][1].text(0.93, 0.59, "(b.2) CDW\n$U = 4.75t$", transform = axs[1][1].transAxes, ma="right", ha="right")
+axs[1][0].text(0.93, 0.59, "(b.1) CDW\n$U = 4.75t$", transform = axs[1][0].transAxes, ma="right", ha="right")
+axs[2][0].text(0.93, 0.59, "(c.1) AFM\n$U = 6.2t$" , transform = axs[2][0].transAxes, ma="right", ha="right")
+axs[2][1].text(0.93, 0.59, "(c.2) AFM\n$U = 6.2t$" , transform = axs[2][1].transAxes, ma="right", ha="right")
 
 if nrows > 3: axs[3][0].text(7.6, 0.6, "(d.1) CDW\n$U = 3.4t$")
 if nrows > 3: axs[3][1].text(10.6, 0.6, "(d.2) CDW\n$U = 3.4t$")

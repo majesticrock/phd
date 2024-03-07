@@ -12,8 +12,13 @@ from lib.iterate_containers import naming_scheme_tuples
 import lib.plot_settings as ps
 from lib.create_zoom import *
 
-params = [ [0., -2.5, -0.1], [0., -2.5, 0.1], [0., -2.5, 0.5] ]
+poster_plot = False
+if poster_plot:
+    legend_args = { "bbox_to_anchor" : (-0.05, 1.19), "columnspacing" : 1, "fontsize" : 22 }
+else:
+    legend_args = { "bbox_to_anchor" : (0., 1.15)}
 
+params = [ [0., -2.5, -0.1], [0., -2.5, 0.1], [0., -2.5, 0.5] ]
 folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 nrows = 3
 ncols = 2
@@ -56,20 +61,21 @@ for j, folder in enumerate(folders):
         resolvents[0].mark_continuum(axs[i][j], None)
         
 
-legend = axs[0][1].legend(loc='upper center', bbox_to_anchor=(0., 1.15), ncol=5, shadow=True)
+legend = axs[0][1].legend(loc='upper center', ncol=5, shadow=True, **legend_args)
+
 for i in range(ncols):
     axs[nrows - 1][i].set_xlabel(r"$\omega [t]$")
 for i in range(nrows):
     axs[i][0].set_ylabel(r"$\mathcal{A}(\omega) [t^{-1}]$")
-axs[0][0].set_title("Square lattice", pad=22)
-axs[0][1].set_title("Simple cubic lattice", pad=22)
+axs[0][0].set_title("Square lattice", pad=22 if not poster_plot else 25)
+axs[0][1].set_title("Simple cubic lattice", pad=22 if not poster_plot else 25)
 
-axs[0][0].text(0.7, 0.6, "(a.1) SC\n$V=-0.1t$", transform = axs[0][0].transAxes)
-axs[1][0].text(0.7, 0.6, "(b.1) CDW\n$V=0.1t$", transform = axs[1][0].transAxes)
-axs[2][0].text(0.7, 0.6, "(c.1) CDW\n$V=0.5t$", transform = axs[2][0].transAxes)
-axs[0][1].text(0.7, 0.6, "(a.2) SC\n$V=-0.1t$", transform = axs[0][1].transAxes)
-axs[1][1].text(0.7, 0.6, "(b.2) CDW\n$V=0.1t$", transform = axs[1][1].transAxes)
-axs[2][1].text(0.7, 0.6, "(c.2) CDW\n$V=0.5t$", transform = axs[2][1].transAxes)
+axs[0][0].text(0.93, 0.59, "(a.1) SC\n$V=-0.1t$", transform = axs[0][0].transAxes, ma="right", ha="right")
+axs[1][0].text(0.93, 0.59, "(b.1) CDW\n$V=0.1t$", transform = axs[1][0].transAxes, ma="right", ha="right")
+axs[2][0].text(0.93, 0.59, "(c.1) CDW\n$V=0.5t$", transform = axs[2][0].transAxes, ma="right", ha="right")
+axs[0][1].text(0.93, 0.59, "(a.2) SC\n$V=-0.1t$", transform = axs[0][1].transAxes, ma="right", ha="right")
+axs[1][1].text(0.93, 0.59, "(b.2) CDW\n$V=0.1t$", transform = axs[1][1].transAxes, ma="right", ha="right")
+axs[2][1].text(0.93, 0.59, "(c.2) CDW\n$V=0.5t$", transform = axs[2][1].transAxes, ma="right", ha="right")
 
 fig.tight_layout()
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
