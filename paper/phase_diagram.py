@@ -79,7 +79,7 @@ axs[1].set_xlabel("$U [t]$")
 axs[0].set_ylabel("$V [t]$")
 axs[1].set_ylabel("$V [t]$")
 
-axs[0].legend(loc="upper right", ncol=2)
+axs[0].legend(loc="upper right", ncol=2, columnspacing=1)
 plt.tight_layout()
 import os
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
