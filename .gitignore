@@ -28,6 +28,7 @@ cpp/HubbardMeanField/doxy
 
 
 cpp/HubbardMeanField/sources/SymbolicOperators
+cpp/HubbardMeanField/sources/Utility
 
 #include literature
 !literature/*.pdf
