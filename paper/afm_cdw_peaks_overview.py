@@ -29,7 +29,7 @@ Vs = np.array([1.0])
 folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 element_names = ["a", "a+b", "a+ib"]
 
-name_suffices = ["AFM", "CDW"]
+name_suffices = ["CDW", "AFM"]
 nrows=3
 fig, axs = plt.subplots(nrows=nrows, ncols=2, figsize=(12.8, 6.4), sharex="col", gridspec_kw=dict(hspace=0))
 plotters = np.empty((nrows,2), dtype=ps.CURVEFAMILY)
