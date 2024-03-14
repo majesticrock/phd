@@ -10,7 +10,7 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.5])
-Vs = np.array([-0.1])
+Vs = np.array([0.])
 
 use_XP = True
 
