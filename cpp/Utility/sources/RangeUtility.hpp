@@ -10,4 +10,9 @@ namespace Utility{
             std::copy_n(target.begin(), original_size, std::back_inserter(target));
         }
     }
+
+    template<class Vector>
+    void append_vector(Vector& target, const Vector& source){
+        target.insert(target.end(), source.begin(), source.end());
+    }
 }
