@@ -351,238 +351,326 @@ deal with expectations values which do not depend only on $\widehat{\gamma}(\vk)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Iterated equations of motion and Green's functions}\label{sec:ieom}
+\section{Iterated equations of motion and Green's functions}
+\label{sec:ieom}
 
-So far we have discussed the static mean-field equations that essentially describe the static ground state.
-These results will be used to compute the quantities, namely expectation values, necessary for the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
-With it, we can describe two-particle quantities like the various collective excitations of the system.
+So far we discussed the static mean-field equations that describe the ground state.
+These results are used to compute the quantities, namely the expectation values, necessary for the iterated equations of motion approach \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
+On this basis, we can describe two-particle quantities such as the various collective excitations of the system.
 
-We start with some operator set $\mathcal{B}$ that is complete with respect to commutation with a Hamiltonian $H$, 
-i.e., any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
-We can then express any time-dependent operator from this set as
+We start with an operator set $\mathcal{B}$ that ideally is complete with respect to commutation with 
+the Hamiltonian $H$, i.e., any commutator $[H, A]$ for any $A \in \mathcal{B}$ can be represented by linear combinations of operators in $\mathcal{B}$.
+Then, we can express any time-dependent operator in this set by
 \begin{equation}
     \label{eqn:time_dependent_operator}
-    a(t) = \sum_j c_j(t) A_j\,,
+    A(t) = \sum_n a_n(t) A_n,
 \end{equation}
-where $c_j(t)$ captures the entire time dependence. 
-Inserting this into the Heisenberg equation of motion and applying an operator scalar product $(A_i|\cdot)$ to both sides of the equation yields
-\begin{equation}
-    \label{eqn:heisenberg}
-    \begin{aligned}
-        \ddt a(t) = \sum_j \ddt c_j(t) A_j &= \im \sum_j c_j(t) [H, A_j] \\
-        \Rightarrow \sum_j \underbrace{(A_i | A_j)}_{\coloneqq \mN_{ij}} \ddt c_j(t) &= \im \sum_j \underbrace{(A_i | [H, A_j])}_{\coloneqq \mM_{ij}} c_j(t) \\
-        \Rightarrow \mN \ddt \vec{c}(t) &= \im \mM \vec{c}(t)\,.
-    \end{aligned}
-\end{equation}
-The matrices $\mN$ and $\mM$ contain all the dynamics and energetic properties of the system.
-The former is referred to as a dynamical matrix while the latter is called a norm matrix.
-The advantage is that one can now handle simple matrices rather than operators acting on an enormous Hilbert space.
-The size of these matrices depends entirely on the set of operators.
+where the coefficients $c_j(t)$ capture the entire time dependence. 
+Inserting this into the Heisenberg equation of motion and applying a sort of operator scalar product $(A_i|\cdot)$ 
+on both sides of the equation yields
+\bs
+\begin{align}
+        \ddt A(t) = \sum_n \ddt a_n(t) A_n &= \im \sum_n a_n(t) [H, A_n] \\
+        \Rightarrow \sum_n \underbrace{(A_i | A_n)}_{\coloneqq \mN_{in}} \ddt a_n(t) &= 
+				\im \sum_n \underbrace{(A_i | [H, A_n])}_{\coloneqq \mM_{in}} a_n(t) \\
+        \Rightarrow \mN \ddt \vec{a}(t) &= \im \mM \vec{a}(t).
+				    \label{eqn:heisenberg}
+\end{align}
+\es
+where $\vec{a}:=(a_1, a_2, a_3,\ldots)^\top$.
+The matrices $\mN$ and $\mM$ contain all the energetic and dynamic properties of the system.
+The former is referred to as norm matrix while the latter is called the dynamic matrix.
+The advantage is that one can now handle simple matrices rather than operators 
+acting on an enormous Hilbert space.
+The dimension of these matrices depends on the number of operators in the set $\mathcal{B}$.
 
-The matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
-We prove this statement in the appendix \ref{sec:positive_M}.
-We can use this fact to further enhance our ground state phase diagram.
-If $\mM$ has even a single negative eigenvalue for any combination of parameters, we know that the system is not in thermal equilibrium, 
-i.e., our self-consistency did not capture the correct ground state phase.
-This does in fact happen for certain $U<0$ and $V<0$, see the orange shading in \autoref{fig:phase_diagram}.
-For finite temperatures, on a square lattice, a phase-separated state as well as the coexistence of a phase-separated state with $s$-wave superconductivity has been found in this region \cite{Linner23}.
-The phase boundary that we propose here is qualitatively in good agreement with the one found in the aforementioned reference.
-We expect a similar set of phases to be present on the simple cubic lattice but cannot prove this statement at this point.
+The dynamical matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
+We derive this statement in  App.\ \ref{sec:positive_M}.
+We use this fact to further enhance our ground state phase diagram.
+If $\mM$ has even a single negative eigenvalue for a combination of parameters, 
+we know that the assumed phase does not represent a true ground state.
+Physically, this means that there are ``excitations'' which in fact lower the energy. 
+Thus, the assumed ground state is not the lowest state and therefore unstable.
+This happens for certain values $U<0$ and $V<0$, see the red shading in Fig.\ \ref{fig:phase_diagram}.
+For finite temperatures on the square lattice, a phase-separated state as well as the coexistence of a phase-separated state with $s$-wave superconductivity has been found in this region \cite{Linner23}.
+The phase boundary that we propose here agrees qualitatively well with the one found in the aforementioned reference.
+We expect a similar set of phases to be present on the simple cubic lattice. \red{This is indicated by
+the negative eigenvalues of the corresponding dynamical matrix. Stimmt das so, Joshua?} \blue{ja. Ich überlege gerade, ob dieser Absatz evtl. mehr Sinn nach dem Einführen des symplektischen Produktes hat?}
 
-Additionally, note that while the existence of a negative eigenvalue of $\mM$ proves that the system is not in thermal equilibrium, the absence of one does not prove the contrary.
-For example, we do not find any negative eigenvalues of $\mM$ in the $U>0$, $V<0$ region despite previous studies finding $d_{x^2 - y^2}$-wave superconductivity there \cite{Micnas88b,Huang13}.
+While the existence of a negative eigenvalue of $\mM$ proves that the assumed phase is
+not in thermal equilibrium, the absence of negative eigenvalues does not imply absolute stability,
+but only local stability with respect to the considered operators.
+For example, we do not find any negative eigenvalues of $\mM$ in the $U>0$, $V<0$ region despite previous studies indicating $d_{x^2 - y^2}$-wave superconductivity \cite{Micnas88b,Huang13}.
 
-However, most Hamiltonians do not allow any such operator set to exist as the commutation usually introduces terms of higher order.
-For instance, commuting a bilinear term with a quartic Hamiltonian yields, quartic terms. Repeating the commutation yields hexartic ones and so on.
-Therefore, one repeats this commutation process and includes the occurring terms within a bigger set,
-hoping to get better results as the set size increases.
+In practice, however, generic Hamiltonians do not allow for
+a complete operator set $\mathcal{B}$ to exist because the commutations usually introduce terms which are not 
+yet in $\mathcal{B}$, e.g., because they are of higher order.
+For instance, commuting a bilinear term with a quartic Hamiltonian yields quartic terms. 
+Iterating the commutation yields hexatic ones and so on.
+One can include such additional terms and generically the results will improve the more
+terms are considered in $\mathcal{B}$. In practice, one has to restrict the operators
+to a suitable class of terms, thereby truncating certain terms. Here, we will restrict ourselves
+to bilinear operators to capture the leading effects of collective behavior.
 
-In this article, we will be using the \textcolor{\markEdited}{symplectic product,}
+Furthermore, we use the symplectic product as operator product
 \begin{equation}
 \label{eqn:scalar_product}
     (A | B) \coloneqq  \langle [A^\dagger, B] \rangle\,,
 \end{equation}
-where the expectation values are taken with respect to the thermal equilibrium of the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}.
-Note, that this is not a proper scalar product, as a norm defined using it can also be negative.
-For example, assume that for some operator $A$
+where the expectation values are taken with respect to the assumed phase of the mean-field Hamiltonian 
+\eqref{eqn:mf_hamiltonian}.
+Note that this is not a proper scalar product since it is not positive semidefinite.
+For example, let us assume that for some operator $A$
+\bs
 \begin{equation}
-    ||A|| = (A | A) = \langle [A^\dagger, A] \rangle > 0\,,
+(A | A) = \langle [A^\dagger, A] \rangle > 0,
 \end{equation}
 then
 \begin{equation}
-    ||A^\dagger|| = (A^\dagger | A^\dagger) = \langle [A, A^\dagger] \rangle = - ||A|| < 0\,.
+(A^\dagger | A^\dagger) = \langle [A, A^\dagger] \rangle = - (A | A)  < 0.
 \end{equation}
-Nevertheless, this does not pose any issue in our calculations.
-We will compute $\mM$ by commutating with the full Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} enabling us to capture collective behavior rather than the one particle dynamics given by the mean-field approximation.
+\es
+This does not pose a serious issue in our calculations but must be kept in mind.
+In particular, it implies that the norm matrix is \emph{not positive} as one might have expected.
+We emphasize, that the dynamical matrix  $\mM$ is computed
+by commuting with the \emph{full} Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} 
+enabling us to capture collective behavior 
+rather than using only the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}
+which captures the one-particle dynamics, but misses
+the two-body dynamics.
 
-\textcolor{\markEdited}{To treat the square and simple cubic lattice on equal footing, we utilize the fact \eqref{eqn:equal_expecs} to create our operator set in $\gamma$-space.}
-It consists of operators of the type
+In order to treat the square and the simple cubic lattice on equal footing, we exploit 
+\eqref{eqn:equal_expecs} to define the operator set in $\gamma$ space
 \begin{equation}
     \label{eqn:ieom_basis_operator}
-    A_\gamma \coloneqq \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \hat{\gamma}( \vk )) A_{\vk}\,,
+    A_\gamma \coloneqq \frac{1}{\sqrt{N}} \sum_{\vk} \delta (\gamma - \widehat{\gamma}( \vk )) A_{\vk},
 \end{equation}
-where $A_{\vk}$ represents each type of operator in \eqref{eqn:operators} and their Hermitian conjugates.
-Operators with different indices are put into the set individually, e.g., $n_{\gamma \up}$, and $n_{\gamma \down}$ are distinct operators in our set.
-\textcolor{\markEdited}{Additionally, we will include an analogous expression for
+where $A_{\vk}$ represents each type of operator defined in Eqs.~\eqref{eqn:operators} or
+their Hermitian conjugates if the operators are not Hermitian themselves.
+Operators with different indices are treated separately, e.g., $n_{\gamma \up}$ and $n_{\gamma \down}$ 
+are distinct operators in the studied set $\mathcal{B}$.
+Additionally, we consider an analogous expression for the operator
 \begin{equation}
     \tau_{k} \coloneqq c_{k \uparrow}^\dagger c_{k \downarrow}
 \end{equation}
 and its Hermitian conjugate.
-This will allow us to describe transversal magnons later on.}
+This will allow us to describe transversal magnons, i.e., perpendicular 
+deviations from the staggered magnetization in the AFM phase.
 
-Naturally, we have to discretize $\gamma$, 
-however, this allows us to obtain good results with drastically smaller matrices compared to a momentum-based operator set and obtain results for a three-dimensional system in the first place.
-Practically, we choose $N_\gamma = 6000$ equally spaced discretization points.
-A detailed explanation of the numerics is provided in the appendix \ref{sec:numerical_ieom}.
-\textcolor{\markEdited}{Computationally, our method is limited by the number of terms included in our operator set as well in the magnitude of $N_\gamma$.}
-If the gap $\Delta_\text{tot}$ is of the same order of magnitude as our discretization $\Delta \gamma$ our numerics become inaccurate.
-This manifests specifically if a spectral function has strong features at minuscule energies, e.g., the phase mode in the superconducting phase.
-In this case, the dynamical matrix $\mM$ picks up negative eigenvalues that vanish if $N_\gamma$ is increased so that $\Delta \gamma$ is sufficiently smaller than $\Delta_\text{tot}$.
-This happens if the parameters are chosen from the striped area in \autoref{fig:phase_diagram}.
-\textcolor{\markEdited}{This issue only arises in the SC phase, nevertheless, we expect similar inaccuracies in the AFM region for small $U$.
-However, we did not perform any computations in that region, hence this does not pose an issue to our analysis.}
 
-Next, we order these operators in a way reminiscent of the $x$- and $p$-terms in the harmonic oscillator, i.e.,
+For the numerical treatment, we have to discretize $\gamma$.
+Still, this allows us to obtain accurate results with drastically smaller matrices 
+compared to an operator set based on a discretization of wave vectors.
+This is crucial for dealing with three-dimensional lattices.
+Practically, we choose $N_\gamma = 6000$ equally spaced sampling points.
+A detailed explanation of the numerics is provided in the App.\ \ref{sec:numerical_ieom}.
+Computationally, our method is limited by the number of terms included in our operator set 
+as well as by the value of $N_\gamma$.
+If the gap $\Delta_\text{tot}$ is of the same order of magnitude as the discretization $t \Delta \gamma$ the numerics become inaccurate.
+This manifests specifically if a spectral function has strong features at minute energies, e.g., 
+the phase mode in the superconducting phase.
+In this case, the dynamical matrix $\mM$ spuriously displays negative eigenvalues that vanish if 
+$N_\gamma$ is increased so that $\Delta \gamma$ is sufficiently smaller than $\Delta_\text{tot}$.
+This happens if the parameters are chosen from the striped region in Fig.\ \ref{fig:phase_diagram}.
+We observe that this issue only arises in the SC phase;
+nevertheless, we expect similar inaccuracies in the AFM region for small values of $U$.
+
+In the next step, we rearrange these operators in a way reminiscent of the $x$ and $p$ operators
+of a harmonic oscillator
 \begin{equation}
-    X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger\,.
+    X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger.
 \end{equation}
-Then, our set is given by $\mathcal{B}_{XP} \coloneqq \{ X_i, \ldots, P_i, \ldots \}$.
-If some operators would be 0 ($P_i$ for any Hermitian term) or duplicates (certain $X_i$ for $g$-type terms, e.g, $g_{k\sigma} = g_{k+Q\sigma}^\dagger$), we omit them.
+Then, the studied operator set is given by $\mathcal{B}_{XP} \coloneqq \{ X_i, \ldots, P_i, \ldots \}$.
+If some operators would be 0, e.g., $P_i$ for any Hermitian $A_i$, or duplicate, e.g., certain $X_i$ for $g$-type terms where $g_{k\sigma} = g_{k+Q\sigma}^\dagger$, we omit these redundant operators.
 
-Due to this choice of set, the matrices occurring in \eqref{eqn:heisenberg} have a special block structure
+Due to this particular choice of operators, the matrices occurring in \eqref{eqn:heisenberg} acquire a block structure
 \begin{equation}
     \label{eqn:xp_set}
     \mM = \begin{pmatrix}
         \mathcal{K}_+ & \kappa \\ \kappa^\dagger & \mathcal{K}_-
     \end{pmatrix}\,,\quad \mN = \begin{pmatrix}
         \Lambda_+ & \mathcal{L} \\ \mathcal{L}^\dagger & \Lambda_-
-    \end{pmatrix}\,,
+    \end{pmatrix},
 \end{equation}
-where the upper block refers to all $X_i$ and the lower block to all $P_i$.
+where the upper block refers to all $X_i$ operators and the lower block to all $P_i$ operators.
 Furthermore, due to symmetry, the relations $\Im [\mathcal{K}_\pm] = \Re [\kappa] = 0$ and $\Re [\Lambda_\pm] = \Im [\mathcal{L}] = 0$ hold.
-Thus, if all occurring expectation values are real, both matrices have large empty blocks.
-This condition is fulfilled for all cases investigated in this article \textcolor{\markEdited}{because our model has inversion symmetry as well as time-reversal symmetry.}
+Since the mean-field Hamiltonian is real, all ensuing expectation values are real
+and we can conclude both matrices have large empty blocks with zero elements: $\kappa=0$ and $\Lambda_\pm=0$.
+This condition is fulfilled for all cases investigated in this article because the model displays
+inversion symmetry and time-reversal symmetry \red{or at least the combination of both in the AFM phase}.
 
-To study the collective excitations, we investigate various retarded Green's functions 
+To study the collective excitations quantitatively, we investigate various retarded Green's functions 
+\bs
 \begin{equation}
     G_{AB}^\text{ret} (t) = - \im \langle [A(t), B] \rangle \Theta(t)\,,
 \end{equation}
-and their Fourier-transformed
+where $\Theta(t)$ is the Heaviside function and their Fourier transforms
 \begin{equation}
     \label{eqn:standard_gf}
-    G_{AB}(z = \omega + \im 0^+) = -\im \int_0^{\infty} e^{\im z t} \langle [A(t), B] \rangle \mathrm{d}t\,,
+    G_{AB}(z = \omega + \im 0^+) = -\im \int_0^{\infty} e^{\im z t} \langle [A(t), B] \rangle \mathrm{d}t.
 \end{equation}
-where $\Theta(t)$ is the Heaviside function.
-Our previous choice of pseudo scalar product enables us to write down a matrix-valued Green's functions in terms of the aforementioned matrices
+\es
+The choice of the symplectic operator product enables us to write down the
+matrix-valued Green's functions in terms of the introduced norm and dynamical matrix
+\bs
 \begin{align}
     \label{eqn:green_function}
     \mathcal{G}(z &= \omega + \im 0^+) = \mN \frac{1}{-z \mN - \mM} \mN \\
-        &\coloneqq  -\mN \mathcal{R}(z) \mN\,,
+        &\coloneqq  -\mN \mathcal{R}(z) \mN,
 \end{align}
-where we used the resolvent
+where we introduced the resolvent
 \begin{equation}
     \label{eqn:resolvent}
-    \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}\,.
+    \mathcal{R}(z) \coloneqq  \frac{1}{z \mN + \mM}.
 \end{equation}
-The entries of this matrix $\mathcal{G}(z)$ are the Fourier-transformed Green's functions mentioned in \eqref{eqn:standard_gf} with respect to the operators from the initially chosen set.
-\textcolor{\markEdited}{That means, if we index each operator in our set $A_i$, the matrix element $(j,i)$ of $\mathcal{G}$ is the Green's function
+\es
+The entries of this matrix $\mathcal{G}(z)$ are the Fourier-transformed Green's functions given in 
+\eqref{eqn:standard_gf} with respect to the studied operators. For simplicity, we formulate the
+relation between the Green's functions and the matrices for the operators $A_j$. Eventually, we 
+use the block representation resulting for the operators $X_i$ and $P_i$. \red{Wird das klar?}
+The matrix element $(j,i)$ refers to
+\bs
 \begin{align}
-    \mathcal{G}_{ji}(z = \omega +\im 0^+) &=  G_{A_j A_i^\dagger} (z) \nonumber \\
-        &= -\im \int_0^{\infty} \langle [A_j(t), A_i^\dagger(0)] \rangle e^{\im z t} \mathrm{d}t\,.
-\end{align}}
-
-In the following, we will derive this relation.
-\textcolor{\markEdited}{For that, consider the Fourier-transformed Green's function above.
-We rewrite both operators in the same manner as in \eqref{eqn:time_dependent_operator} to obtain
-\begin{align}
-    G_{A_j A_i^\dagger} (z) &= \im \int_0^\infty e^{\im z t} \langle [ A_i^\dagger(0), A_j(t) ] \rangle \mathrm{d}t \nonumber \\
-        &= \im \int_0^\infty e^{\im z t} \langle [ \sum_m a_{i,m}^*(0) A_m^\dagger, \sum_n a_{j,n}(t) A_n ] \rangle \mathrm{d}t \nonumber \\
-        &= \im \int_0^\infty \sum_{mn} e^{\im z t} a_{i,m}^*(0) \underbrace{\langle [ A_m^\dagger, A_n ] \rangle}_{\equiv \mN_{mn}} a_{j,n}(t) \mathrm{d}t \nonumber \\
-        &= \im \int_0^\infty e^{\im z t} \vec{a}_{i}^\dagger (0) \mN \vec{a}_{j}(t) \mathrm{d}t\,.
+    \mathcal{G}_{ji}(z = \omega +\im 0^+) &=  G_{A_j A_i^\dagger} (z) \\
+        &= -\im \int_0^{\infty} \langle [A_j(t), A_i^\dagger(0)] \rangle e^{\im z t} \mathrm{d}t.
 \end{align}
-Furthermore, assuming, that $\mN$ is invertible, we can easily solve the differential equation \eqref{eqn:heisenberg} to obtain
+\es
+
+Performing the  Fourier transformation yields
+\bs
+\begin{align}
+    G_{A_j A_i^\dagger} (z) &= \im \int_0^\infty e^{\im z t} \langle [ A_i^\dagger(0), A_j(t) ] \rangle \mathrm{d}t \
+		\\
+        &= \im \int_0^\infty e^{\im z t} 
+				\langle [ \sum_m a_{i,m}^*(0) A_m^\dagger, \sum_n a_{j,n}(t) A_n ] \rangle \mathrm{d}t 
+		\\
+        &= \im \int_0^\infty \sum_{mn} e^{\im z t} a_{i,m}^*(0) \underbrace{\langle [ A_m^\dagger, A_n ] \rangle}_{\equiv \mN_{mn}} a_{j,n}(t) \mathrm{d}t 
+    \\
+        &= \im \int_0^\infty e^{\im z t} \vec{a}_{i}^\dagger (0) \mN \vec{a}_{j}(t) \mathrm{d}t,
+\end{align}
+\es
+where $\vec{a}_j(0)$ and $\vec{a}_i^\dagger (0)$ embody the initial conditions $A_j = \sum_n a_{j,n} A_n$ 
+and $A_i^\dagger = \sum_n a_{i,n}^* A_n^\dagger$.
+Assuming that $\mN$ is invertible we solve the differential equation \eqref{eqn:heisenberg} 
 \begin{equation}
-    \vec{a}_{j}(t) = \exp \left( \im \mN^{-1} \mM t \right) \vec{a}_{j}(0)\,.
+    \vec{a}_{j}(t) = \exp \left( \im \mN^{-1} \mM t \right) \vec{a}_{j}(0).
 \end{equation}
-This allows us to finally obtain
+Then, the final result reads
+\bs
 \begin{align}
     \label{eqn:green_derivation}
-    G_{A_j A_i^\dagger} (z) &= \im  \int_0^\infty \vec{a}_{i}^\dagger (0) \mN \exp \left( \im \left(\mN^{-1} \mM + z \right) t \right) \vec{a}_{j}(0) \mathrm{d}t  \nonumber \\
-        &= - \vec{a}_{i}^\dagger (0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}_{j}(0) \nonumber \\
-        &= - \vec{a}_{i}^\dagger (0) \left[ \mN \frac{1}{ \underbrace{\mM + z \mN}}_{\equiv \mathcal{R}(z)} \mN \right] \vec{a}_{j}(0)\,,
+    G_{A_j A_i^\dagger} (z) &= \im  \int_0^\infty \vec{a}_{i}^\dagger (0) \mN 
+		\exp \left( \im \left(\mN^{-1} \mM + z \right) t \right) \vec{a}_{j}(0) \mathrm{d}t 
+		\\
+        &= - \vec{a}_{i}^\dagger (0) \left[ \mN \frac{1}{\mN^{-1} \mM + z} \right] \vec{a}_{j}(0) 
+				\\
+        &= - \vec{a}_{i}^\dagger (0) \left[ 
+				\mN \mathcal{R}(z) \mN \right] \vec{a}_{j}(0)
 \end{align}
-where $\vec{a}_j(0)$ and $\vec{a}_i^\dagger (0)$ need to be chosen such, that $A_j = \sum_n a_{j,n} A_n$ and $A_i^\dagger = \sum_n a_{i,n}^* A_n^\dagger$ hold.
-The task at hand is finding the resolvent as $\mathcal{R}$.}
+\es
+with the resolvent $\mathcal{R}(z)$ from \eqref{eqn:resolvent}.
+Obviously, the key task is computing the resolvent $\mathcal{R}$ efficiently.
 
-To do that, we embrace this matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real \textcolor{\markEdited}{so that $\kappa_{ij} = \Lambda_{\pm,ij} = 0$ holds}.
-Then, with $\mathcal{R}|_X$ denoting the block of a matrix $\mathcal{R}$ corresponding to the $X$-operators, we can calculate
+To this end, we exploit the matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real so that $\kappa_{ij} = \Lambda_{\pm,ij} = 0$ holds. \red{Stimmt das so?}
+Then, with $r_X(z)\coloneqq\mathcal{R}|_{XX}$ denoting the upper left block of a matrix $\mathcal{R}$ which 
+refers to the $X$-operators, we can calculate
+\bs
 \begin{align}
-    r_X (z) &\coloneqq \mathcal{R}(z)|_X = \left. \frac{1}{\mM + z \mN} \right\vert_X \nonumber \\
-        &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + \frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_X \nonumber \\
-        &= \left. \frac{1}{\mM} \sum_{j=0}^\infty \left( -z \mN \frac{1}{\mM} \right)^j \right\vert_X \,.
+    r_X (z) & = \left. \frac{1}{\mM + z \mN} \right\vert_{XX} \\
+        &= \left[ \frac{1}{\mM} - \frac{1}{\mM} z \mN \frac{1}{\mM} + 
+				\frac{1}{\mM} z \mN \frac{1}{\mM} z \mN \frac{1}{\mM} - \cdots \right]_{XX}  \\
+        &= \left. \frac{1}{\mM} \sum_{j=0}^\infty \left( -z \mN \frac{1}{\mM} \right)^j \right\vert_{XX} .
 \end{align}
-We may omit every second element of the sum, as we want to obtain the upper left block of the matrix, and $\mN$ always swaps the upper left and lower right block.
-Thus, we obtain
+\es
+We can safely omit every second term of the sum since we want to obtain the upper left block of the matrix only
+and $\mN$ always swaps between the upper left and lower right block. Thus, we obtain
+\bs
 \begin{align}
-    r_X (z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_X \nonumber \\
-        &= \left. \frac{1}{\mM - z^2 \mN \mM^{-1} \mN} \right\vert_X \nonumber \\
-        &= \frac{1}{\mathcal{K}_+ - z^2 \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger}\,.
+    r_X (z) &= \left. \frac{1}{\mM} \sum_{j=0}^\infty z^{2j} \left( \mN \frac{1}{\mM} \right)^{2j} \right\vert_{XX} 
+		\\
+        &= \left. \frac{1}{\mM - z^2 \mN \mM^{-1} \mN} \right\vert_{XX} 
+				\\
+        &= \frac{1}{\mathcal{K}_+ - z^2 \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger}.
 \end{align}
-Next, we define $\check{N} \coloneqq \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$ for brevity.
-Since $\mathcal{M}$ is positive semidefinite and block diagonal, its blocks $\mathcal{K}_\pm$ must be positive semidefinite as well.
-Therefore, $\check{N}$ is also positive semidefinite and we can define its square root.
-We obtain
+\es
+For brevity, we define $\check{N}_X \coloneqq \mathcal{L} \mathcal{K}_-^{-1} \mathcal{L}^\dagger$.
+Since $\mathcal{M}$ is positive semidefinite and block diagonal its blocks $\mathcal{K}_\pm$ are positive semidefinite as well.
+Therefore, $\check{N}_X$ is also positive semidefinite and Hermitian so that its square root can be defined.
+Then, the resolvent $r_X(z)$ can be expressed by
 \begin{equation}
     \label{eqn:rx}
-    r_X (z) = -\check{N}^{-1/2} \frac{1}{z^2 - \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}} \check{N}^{-1/2}\,.
+    r_X (z) = -\check{N}_X^{-1/2} \frac{1}{z^2 - \check{N}_X^{-1/2} \mathcal{K}_+ \check{N}_X^{-1/2}} 
+		\check{N}_X^{-1/2},
 \end{equation}
-The matrix $\check{M} \coloneqq \check{N}^{-1/2} \mathcal{K}_+ \check{N}^{-1/2}$ is positive semidefinite and Hermitian by the previous arguments.
-If $\check{N}$ has a singular part, the inverse can be replaced by the Moore-Penrose pseudo-inverse.
-\textcolor{\markEdited}{A possible way to compute this is to diagonalize $\check{N} = \mathcal{V} \mathcal{D} \mathcal{V}^\dagger$, with a diagonal matrix $\mathcal{D}$ and a unitary transformation matrix $\mathcal{V}$.
-Now, the pseudo-inverse can be defined as
-\begin{equation}
-    \check{N}^+ \coloneqq \mathcal{V} \mathcal{D}^+ \mathcal{V}^\dagger
-\end{equation}
-with
-\begin{equation}
-    (\mathcal{D}^+)_{ij} = \begin{cases}
-        1/\mathcal{D}_{ij} & \mathcal{D}_{ij} \neq 0 \\ 0 & \text{otherwise}
-    \end{cases}\,.
-\end{equation}
-Note, that this definition yields the standard inverse for invertible matrices.}
+where the matrix $\check{M}_X \coloneqq \check{N}_X^{-1/2} \mathcal{K}_+ \check{N}_X^{-1/2}$ is used; it is
+positive semidefinite and Hermitian by the previous arguments.
 
-The same calculation can be repeated by exchanging $X$ with $P$, yielding the relation for the remaining block.
-Then, the definitions of the matrices above change in the following way
+If $\check{N}_X$ has a singular part, for instance, due to numerical inaccuracies \blue{Das kann auch völlig analytisch auftreten}, the inverse can be replaced by the Moore-Penrose pseudo-inverse. 
+A possible way to compute this inverse is to diagonalize 
+$\check{N}_X = \mathcal{V} \mathcal{D} \mathcal{V}^\dagger$ yielding a diagonal matrix $\mathcal{D}$ and a unitary transformation matrix $\mathcal{V}$. 
+Then, the pseudo-inverse can be defined by
 \begin{equation}
-    \check{N}_P \coloneqq \mathcal{L}^\dagger \mathcal{K}_+^{-1} \mathcal{L}\,,\quad \check{M}_P \coloneqq \check{N}_P^{-1/2} \mathcal{K}_- \check{N}_P^{-1/2}\,.
+    \check{N}^{-1} \coloneqq \mathcal{V} \mathcal{D}^{-1} \mathcal{V}^\dagger
 \end{equation}
-In conclusion, the Green's function is given by
+with \red{Ich habe das hoch + in ein hoch -1 geaendert, weil mir das "`+"' zu sehr an Transposition erinnerte.}
+\begin{equation}
+    (\mathcal{D}^{-1})_{ij} = \begin{cases}
+        1/\mathcal{D}_{ij} & \mathcal{D}_{ij} \neq 0 \\ 0 & \text{otherwise}
+    \end{cases}.
+\end{equation}
+Note that this definition recovers the standard inverse for invertible matrices.
+
+The same calculation can be repeated by exchanging $X$ with $P$, yielding the relation for the lower right block.
+The relevant matrices turn out to be 
+\bs
+\begin{align}
+    \check{N}_P &\coloneqq \mathcal{L}^\dagger \mathcal{K}_+^{-1} \mathcal{L}
+		\\
+		\check{M}_P &\coloneqq \check{N}_P^{-1/2} \mathcal{K}_- \check{N}_P^{-1/2}\,.
+\end{align}
+\es
+Summarizing, the Green's function is given by
 \begin{subequations}
     \begin{align}
-        G_{AB^\dagger} \vert_P (z) &= - \left[ \vec{b}^\dagger (0) \right]_P \mathcal{L}^\dagger r_X (z) \mathcal{L} \left[ \vec{a}(0) \right]_P\,, \\
-        G_{AB^\dagger} \vert_X (z) &= - \left[ \vec{b}^\dagger (0) \right]_X \mathcal{L} r_P (z) \mathcal{L}^\dagger \left[ \vec{a}(0) \right]_X\,,
+        G_{X_j,X_i}  (z) &= - \left[ \vec{x}_j^\dagger (0) \right]_X \mathcal{L}^\dagger r_X (z) \mathcal{L} \left[ \vec{x}_i(0) \right]_X, 
+				\\
+        G_{P_j,P_i} (z) &= \red{+} \left[ \vec{p}_j^\dagger (0) \right]_P \mathcal{L} r_P (z) \mathcal{L}^\dagger \left[ \vec{p}_i(0) \right]_P\,,
     \end{align}
 \end{subequations}
-\textcolor{\markEdited}{where $r_X (z)$ is given in \eqref{eqn:rx} and 
+\blue{Brauchen/wollen wir die $[]_{X/P}$ noch? Und ich bin mir ziemlich sicher, dass das in beiden Fällen ein Minus sein sollte.}
+where the vectors $x_j(0)$ and $x_i(0)$ describe the initial conditions for the operators
+$X_j$ and $X_i$, respectively and $p_j(0)$ and $p_i(0)$ correspondingly for the operators
+$P_j$ and $P_i$. The resolvent $r_X (z)$ is given in \eqref{eqn:rx} and 
 \begin{equation}
-    r_P (z) = -\check{N}_P^{-1/2} \frac{1}{z^2 - \check{M}_P} \check{N}_P^{-1/2}\,.
-\end{equation}}
+    r_P (z) = -\check{N}_P^{-1/2} \frac{1}{z^2 - \check{M}_P} \check{N}_P^{-1/2} .
+\end{equation}
+\red{@ Joshua: Bitte noch einmal sorgfaeltig alles pruefen, da ich doch einiges angepasst habe.}
 
-Now, the task at hand is finding the inverse $1/(z^2 - \check{M})$ for all $z$.
-This can be achieved using a Lanczos tridiagonalization and subsequently, a continued fraction expansion in terms of the Lanczos coefficients $a_i$ and $b_i$ \cite{PettiforRecursion,ViswanathRecursion}.
+The remaining task consists of finding the inverse $1/(z^2 - \check{M})$ for all $z$.
+This, however, can be achieved efficiently using a Lanczos tridiagonalization and
+a continued fraction expansion in terms of the Lanczos coefficients $a_i$ and $b_i$ 
+\cite{PettiforRecursion,ViswanathRecursion}.
 In the single-band case, the coefficients approach the limit
 \begin{equation}
     \label{eqn:inf_lanczos}
     a_\infty = \frac{\omega_+ + \omega_-}{2}\text{  and  } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
 \end{equation}
 where $\omega_\pm$ represents the upper and lower band edge, respectively \cite{PettiforRecursion}.
-This behavior allows us to terminate the continued fraction, once the coefficients have converged close enough to these values, using the so-called square root terminator
+The continued fraction is truncated at some depth when the coefficients $a_i$ and $b_i$ are sufficiently
+close to the limits \eqref{eqn:inf_lanczos}. Then, the truncated continued fraction can be terminated by the
+square root terminator
 \begin{equation}
-    T(\omega) = \frac{1}{2b_\infty^2} \left( \omega - a_\infty \mp \sqrt{(\omega - a_\infty)^2 - 4 b_\infty^2} \right)\,,
+\label{eqn:terminator}
+    T(\omega) = \frac{1}{2b_\infty^2} 
+		\left( \omega - a_\infty \mp \sqrt{(\omega - a_\infty)^2 - 4 b_\infty^2} \right),
 \end{equation}
-where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and $|\omega - a_\infty| < 2b_\infty$ and the positive one otherwise.
-It is to be noted, that the coefficients start to drop off from this limit as more and more Lanczos iterations are performed \cite{ViswanathRecursion}.
-Therefore, we terminate the continued fraction with the aforementioned terminator at the coefficient pair that has the least deviation from $a_\infty$ and $b_\infty$.
+where the negative sign is to be chosen for $\omega - a_\infty > 2b_\infty$ and the positive sign for
+$\omega - a_\infty < -2b_\infty$. For $|\omega - a_\infty| < 2b_\infty$, the square root in \eqref{eqn:terminator}
+is replaced by $+\im\sqrt{4 b_\infty^2 - (\omega - a_\infty)^2}$.
+
+Note that the coefficients start to deviate from the limits \eqref{eqn:inf_lanczos} as more and more Lanczos iterations are performed \cite{ViswanathRecursion}.
+Therefore, we terminate the continued fraction with the aforementioned terminator when the pair of coefficients 
+occurs in the fraction which deviates the least from $a_\infty$ and $b_\infty$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -592,70 +680,88 @@ Therefore, we terminate the continued fraction with the aforementioned terminato
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/resolvent_overview_SC_CDW.pdf}
-    \caption{Spectral functions with respect to the operators listed in Eq.~\eqref{eqn:resolvent_bases}.
-    The left column shows the results for the square lattice while the right column shows the results for the simple cubic lattice.
-    The left edge of each plot is at $-0.05$ rather than $0$ in order to improve the visibility of the phase peak.
-    The shaded area marks the two-particle continuum.
-    For each plot, the parameters are set to $U=-2.5t$ and $N_\gamma = 6000$, while $V$ is varied, see the legend.
-    The panels show the spectral functions in the (a) SC phase and the (b and c) CDW phase, respectively.}
+    \caption{Spectral functions of the operators listed in Eq.~\eqref{eqn:resolvent_bases}.
+    The left column shows the results for the square lattice and the right column for the simple cubic lattice.
+    The left edge of each plot is at $-0.05t$  in order to improve the visibility of the phase peak at zero frequency
+		($\hbar$ is set to unity). The gray area marks the two-particle continuum.
+    The parameters are set to $U=-2.5t$ and $N_\gamma = 6000$, while $V$ is varied according to the legends.
+    The panels show the spectral functions in the SC phase (a) and in the CDW phase, (b) and (c), respectively.}
     \label{fig:resolvent_overview_SC}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/resolvent_overview_V0.pdf}
-    \caption{\textcolor{\markEdited}{Same as \autoref{fig:resolvent_overview_SC}, except that we set $V=0$, i.e, SC and CDW order coexist.}
-    Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ may be chosen arbitrarily, we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$.}
+    \caption{Same as Fig.\ \ref{fig:resolvent_overview_SC} except that  $V=0$, i.e., 
+		SC and CDW order can coexist due to the SO(4) symmetry.
+    Since the ratio of $\Delta_\text{SC}$ to $\Delta_\text{CDW}$ can be chosen arbitrarily, 
+    we show in (a) the spectral functions for $\Delta_\text{CDW} = 0$ and in (b) for $\Delta_\text{SC} = 0$ while we distribute the gap equally in (c).}
     \label{fig:resolvent_overview_V0}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
-    \caption{\textcolor{\markEdited}{Same as \autoref{fig:resolvent_overview_SC}, except that we are now looking at the system near the AFM-CDW phase transition.
-    For the square lattice, we set $V=1.2t$ and for the simple cubic lattice, we set $V=0.8t$. This choice yields the phase boundary at $U=4.8t$ for both lattices.}
-    The panels (a) and (c) show the spectral functions in the AFM phase, and the panels (b) and (d) in the CDW phase.}
+    \caption{\red{Die ersten beiden Reihen muessen getauscht werden. Stimmt dann der Text?} 
+    \blue{Ich hab dir offenbar tatsächlich den falschen Plot geschickt... 
+    Das ist der Plot der auf dem Poster ist, hier hatte ich eigentlich einen 4 Zeilen-Plot angedacht.}
+		Same as Fig.\ \ref{fig:resolvent_overview_SC} except that we are focusing 
+		on the AFM-CDW phase transition.
+    For the square lattice, we set $V=1.2t$, and for the simple cubic lattice, $V=0.8t$. 
+		This choice yields the phase transition at $U=4.8t$ for both lattices.
+    The panels (a) and (c) show the spectral functions in the AFM phase and the 
+		panels (b) and (d) in the CDW phase.}
     \label{fig:resolvent_overview_AFM}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/sc_peak_in_cdw.pdf}
-    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase while the lower panels (b) show their respective weights $W_0$.
-    In the upper panels, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$.
-    The left column shows the results for the square and the right column for the simple cubic lattice at $U=-2.5t$.
-    \textcolor{\markEdited}{The fits are linear, i.e., $y(V) = e^d V^c$, and the parameters are printed on the individual panels.}}
+    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{SC}$ in the CDW phase 
+    while the lower panels (b) show their respective weights $W_0$.
+    In the upper panels, the pink markers additionally show the peak position divided by the gap $\omega_0 / \Delta_\text{CDW}$. 
+    The left column shows the results for the square lattice and the right column for the simple cubic lattice at $U=-2.5t$. 
+    The fits are linear in the double logarithmic plot, i.e., $y(V) = e^d V^c$, and the parameters are indicated in the panels.}
     \label{fig:sc_in_cdw_behavior}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/cdw_peak_in_sc.pdf}
-    \caption{\textcolor{\markEdited}{Same as \autoref{fig:sc_in_cdw_behavior} but for the peak in $\spectral{CDW}$ within the SC phase, i.e., $V<0$.}}
+    \caption{Same as in Fig.\ \ref{fig:sc_in_cdw_behavior}, but for the peak in $\spectral{CDW}$ 
+		in the SC phase, i.e., for $V<0$.}
     \label{fig:cdw_in_sc_behavior}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_overview.pdf}
-    \caption{\textcolor{\markEdited}{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) and $\spectral{l.AFM}$ (green lines) close to the corresponding phase transition $U = 4.8t$.
-    Again, we chose $V=1.2t$ for the square lattice (left column) and $V=0.8t$ for the simple cubic lattice (right column) respectively.
-    The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum $\omega_-$, while the bottom panels (c) show their respective weights.}
-    The shadings indicate the phase the system is in. Green represents AFM while orange represents CDW.
+    \caption{The upper panels (a) show plots of the positions $\omega_0$ of the peak in $\spectral{CDW}$ (orange lines) 
+		and $\spectral{l.AFM}$ (green lines) close to the corresponding phase transition 
+		at $U = 4.8t$.   Again, we choose $V=1.2t$ for the square lattice (left column) and $V=0.8t$ for the simple cubic lattice (right column), respectively.
+    The middle panels (b) depict the peak positions relative to the lower edge of the two-particle continuum 
+		$\omega_-$, while the bottom panels (c) show the peak weights.
+    The shadings indicate the phase in which the system is. Green represents AFM while orange represents CDW.
     Note the difference in the scales for the two lattices.}
     \label{fig:afm_cdw_peaks_overview}
 \end{figure*}
 
+
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_details.pdf}
-    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ of the peak in $\spectral{l.AFM}$ relative to the lower edge of the two-particle continuum $\omega_-$.
-    The lower panels (b) depict their respective weights $W_0$.
-    Again, we chose $V=1.2t$ for the square lattice (left column) and $V=0.8t$ for the simple cubic lattice (right column) respectively.
-    $U_0$ denotes the highest value of $U$ for which there is no peak below the two-particle continuum.
-    For the square lattice, it is $U_0 \approx 3.372t$ and for the simple cubic lattice, it is $U_0 \approx 4.479t$.
+    \caption{\red{Muss es im log-Argument nicht $U_0-U$ heissen, um klar zu sein?} 
+		The upper panels (a) show double logarithmic plots of the positions $\omega_0$ 
+		of the peak in $\spectral{l.AFM}$ relative to the lower edge of the two-particle continuum $\omega_-$.
+    The lower panels (b) depict the respective weights $W_0$.
+    Again, we choose $V=1.2t$ for the square lattice (left column) and 
+		$V=0.8t$ for the simple cubic lattice (right column), respectively.
+    The interaction $U_0$ denotes the highest value of $U$ for which 
+		there is no peak below the two-particle continuum, i.e., for $U> U_0$ a peak occurs.
+		\red{Ja, was gilt? Wann gibt's einen Peak, wann nicht? Bitte konsistent im ganzen Artikel bezeichnen.}
+    For the square lattice, we find $U_0 \approx 3.372t$ and for the simple cubic lattice $U_0 \approx 4.479t$.
     The parameter range depicted here places the system within the CDW phase.
-    The fits are of the same fashion as in \autoref{fig:sc_in_cdw_behavior}.}
+    The fits are of the same kind as in Fig.\ \ref{fig:sc_in_cdw_behavior}.}
     \label{fig:afm_cdw_peaks_details}
 \end{figure*}
 
