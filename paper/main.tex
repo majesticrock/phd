@@ -1215,127 +1215,177 @@ diagrams and corresponding collective excitations.
 \section{Semipositivity of the dynamical matrix}
 \label{sec:positive_M}
 
-We show that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
-For any $\vec{x} \in \mathbb{C}^N$, consider
+We argue that $\mathcal{M}$ is positive semidefinite if the system is in thermal equilibrium.
+For any $\vec{x} \in \mathbb{C}^N$, we consider
+\bs
 \begin{align}
-    \vec{x}^\dagger \mM \vec{x} &= \sum_{ij} x_i^* x_j \mM_{ij} \nonumber \\
-        &= \langle \left[ \sum_i x_i^* A_i^\dagger, \left[ H, \sum_j x_j A_j \right] \right]  \rangle \nonumber \\
-        &= \langle [B^\dagger, [H, B]] \rangle\,,\quad B \coloneqq  \sum_j x_j A_j\,.
+    \vec{x}^\dagger \mM \vec{x} &= \sum_{ij} x_i^* x_j \mM_{ij} 
+		\\
+        &= \Big\langle \Big[ \sum_i x_i^* A_i^\dagger, \Big[ H, \sum_j x_j A_j \Big] \Big]  \Big\rangle 
+				\\
+        &= \langle [B^\dagger, [H, B]] \rangle,\quad B \coloneqq  \sum_j x_j A_j.
 \end{align}
-For $\mM$ to be positive semidefinite the expression above must not be negative,
-\textcolor{\markEdited}{which has already been proven in Refs. \cite{Dyson1978,mermin66}.}
+\es
+For $\mM$ to be positive semidefinite the expression above must not be negative.
+Exactly this property has been already proven in Refs.\ \cite{mermin66,Dyson1978}
+as the non-negativity of the double commutator.
+
 
 \section{Fits to the Green's functions}
 \label{sec:fit_greens_functions}
 
-\begin{figure*}
+\begin{figure*}[htb]
     \centering
     \includegraphics[width=0.98\textwidth]{plots/zero_peaks.pdf}
-    \caption{The upper panel shows a log-log plot of the real part of $\spectral{Phase}$ in the SC phase at $U=-2.5t$ and $V=-0.1t$ as well as a linear fit to it.
-    The lower panel shows the same plot for $\spectral{Higgs}$ in the coexistence phase at $V=0$. The columns show the results for the square and the simple cubic lattice, respectively.
-    The functions behave as $1/\omega^2$ indicating that the peaks in the spectral functions are the derivative of a $\delta$ distribution.}
+    \caption{The upper panel shows a log-log plot of the real part of $\spectral{Phase}$ 
+		in the SC phase at $U=-2.5t$ and $V=-0.1t$ as well as a linear fit to it.
+    The lower panel shows the same plot for $\spectral{Higgs}$ in the coexistence phase at $V=0$. 
+		The columns show the results for the square and the simple cubic lattice, respectively.
+    The functions behave as $1/\omega^2$ indicating that the peaks in the spectral functions are derivatives 
+		of a $\delta$ distribution.}
     \label{fig:zero_peaks}
 \end{figure*}
 
-In this appendix section, we discuss fits to the real and imaginary parts of various Green's functions in the different phases.
-All fits are linear of the type $y = ax + b$ in double logarithmic plots, i.e., $a$ describes the power-law behavior of the functions.
-An example plot of the real part of $\greens{Phase}$ in the SC phase is shown in panel (a) of \autoref{fig:zero_peaks}.
-It behaves as $1/\omega^2$ indicating that the peak we find in the spectral function at $\omega=0$ corresponds to the derivative of a $\delta$ distribution.
-The same results are obtained for the peak in $\spectral{Higgs}$ and $\spectral{CDW}$ in the coexistence phase as well as in $\spectral{t.AFM}$ within the AFM phase.
+Here, we discuss fits to the real parts of various Green's functions in the different phases.
+All fits are linear of the type $y = ax + b$ in double logarithmic plots, i.e., $a$ describes the exponent of
+the power-law behavior of the functions.
+An examplary plot of the real part of $\greens{Phase}$ 
+in the SC phase is shown in panel (a) of Fig.\ \ref{fig:zero_peaks}.
+It behaves like $1/\omega^2$ indicating that the peak 
+at $\omega=0$ is the derivative of a $\delta$ distribution.
+The same kind of result is obtained for the transversal magnon in $\spectral{t.AFM}$ in the AFM phase, 
+as well as in $\spectral{Higgs}$ and $\spectral{CDW}$ in the coexistence phase.
 
-Continuing, we investigate the divergence at $\omega = 2\Delta$ found in $\spectral{Higgs}$ and $\spectral{CDW}$ at $V=0$. It behaves as $1/\sqrt{\omega}$.
+The analogous analysis of the divergence at $\omega = 2\Delta$ 
+found in $\spectral{Higgs}$ and $\spectral{CDW}$ at $V=0$
+reveals the power law  $1/\sqrt{\omega}$.
 
-Lastly, all remaining peaks below the two-particle continuum behave identically.
-The real part of each one of them behaves as $1/\omega$ in close vicinity to the peak position.
+Lastly, all other peaks below the two-particle continuum behave identically.
+The real part of them behaves like $1/\omega$ in close vicinity to the peak position.
 This indicates that the peaks are $\delta$ distributions.
-The peaks of $\spectral{l.AFM}$ and $\spectral{CDW}$ close the phase transition are identical when swapped, 
-i.e., $\spectral{l.AFM}$ in the CDW phase is the same as $\spectral{CDW}$ in the AFM phase.
+The peaks of $\spectral{l.AFM}$ and $\spectral{CDW}$ close to the phase transition are identical 
+when swapped, i.e., $\spectral{l.AFM}$ in the CDW phase is the same as $\spectral{CDW}$ in the AFM phase.
+This reflects the SO(4) symmetry of the model. \red{Die Spektralfunktionen sind also komplett identisch, richtig?
+Oder nur so ungefähr?} \blue{Wirklich komplett identisch}
 
-\section{Numerical treatment of the iEoM matrices in \hmath $\gamma$-space}
+
+\section{Numerical treatment of the matrix elements in $\gamma$-space}
 \label{sec:numerical_ieom}
 
-We would like to use operators like \eqref{eqn:ieom_basis_operator} to span our operator set.
-However, numerically, it is impossible to matrices with infinite dimensions, requiring us to discretize.
-Additionally, we cannot numerically write down $\delta$ distributions as matrix elements. Therefore, we need some special treatments, which we will describe in this section.
-We discretize the $\gamma$-space equally with each abscissa $\gamma_i$ being spaced by $\Delta \gamma$.
-Then, we define an approximate $\delta$ function
+
+We want to use operators such as \eqref{eqn:ieom_basis_operator} to span the considered operator set.
+Numerically, however, it is impossible to deal with matrices of infinite dimensions so a discretization is necessary.
+Additionally, we cannot use $\delta$ distributions as matrix elements. 
+Therefore, we also discretize the $\delta$ distribution as follows.
+A mesh of equidistant sampling points is chosen for $\gamma\in[-1,1]$.
+They are midpoints of intervals of length $\Delta \gamma$.
+Then, we define an approximate $\delta$ function by
 \begin{equation}
     h(\gamma) \coloneqq \begin{cases}
         \frac{1}{\Delta \gamma} & |\gamma| < \frac{\Delta \gamma}{2} \\ 0 & \text{otherwise}
-    \end{cases}\,.
+    \end{cases}.
 \end{equation}
-Computing an integral numerically yields
+Numerical integration amounts up to the finite sum over the sampling points and for the approximate $\delta$ function in particular reads
 \begin{equation}
-    \int f(\tilde{\gamma}) h(\tilde{\gamma} - \gamma_j) \mathrm{d} \tilde{\gamma} \approx \sum_i f(\gamma_i) h(\gamma_i - \gamma_j) \Delta \gamma = f(\gamma_j)\,,
+    \int_{-1}^1 f(\tilde{\gamma}) h(\tilde{\gamma} - \gamma_j) \mathrm{d} \tilde{\gamma} \approx 
+		\sum_i f(\gamma_i) h(\gamma_i - \gamma_j) \Delta \gamma = f(\gamma_j),
 \end{equation}
-showing that $h(\gamma)$ mimicks the continuous $\delta$ distribution for a discrete description.
-Note, that if one takes the limit $\Delta \gamma \to 0$ the $\delta$ distribution is exactly reproduced.
+showing that $h(\gamma)$ mimics the continuous $\delta$ distribution on the discrete mesh.
+Note that the limit $\Delta \gamma \to 0$ reproduces the continuous case with the $\delta$ distribution.
 
-Numerically, we can compute the matrix elements like this
+We compute the matrix elements as
 \begin{equation}
     \label{eqn:numerical_example}
-    (A_i | A_j) = \frac{1}{N} \sum_{\vk \vl} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vl)) (A_{\vk} | A_{\vl})\,.
+    (A_i | A_j) = \frac{1}{N} \sum_{\vk \vl} h(\gamma_i - \widehat{\gamma}(\vk)) h(\gamma_j - 
+		\widehat{\gamma}(\vl)) (A_{\vk} | A_{\vl}).
 \end{equation}
-Here, all expressions are finite numbers and do not require further treatment.
-Mutatis mutandis, one obtains a similar expression for $(A_i | [H, A_j])$.
-Additionally, note, that the expressions $(A_{\vk} | A_{\vl})$ and $(A_{\vk} | [H, A_{\vl}])$ can be reduced to sums of terms that are proportional to $\gamma_i$ or $\gamma_j$, respectively.
-Therefore, it is not necessary to implement any sort of momentum space computations.
-For example, consider $A_{\vk} = f_{\vk}^\dagger$, then
-\begin{equation}
-    ( f_{\vk}^\dagger | f_{\vl}^\dagger ) = \delta_{\vk, \vl}\, \langle 1 - n_{\vk \uparrow} - n_{\vk \downarrow} \rangle \eqqcolon \delta_{\vk, \vl}\, \alpha(\vk)
-\end{equation}
-holds. Inserting this into \eqref{eqn:numerical_example} yields
-\begin{equation}
-    (A_i | A_j) = \frac{1}{N} \sum_{\vk} h(\gamma_i - \hat{\gamma}(\vk)) h(\gamma_j - \hat{\gamma}(\vk)) \alpha(\vk)\,.
-\end{equation}
-As stated in the main text, see \eqref{eqn:equal_expecs}, $\alpha(\vk)$ depends only on $\hat{\gamma}(\vk)$, hence we can switch from the momentum sum to a $\gamma$ integration
-\begin{align}
-    (A_i | A_j) &= \int \rho(\gamma) h(\gamma_i - \gamma) h(\gamma_j - \gamma) \alpha(\gamma) \dgamma \nonumber \\
-        &\approx \rho(\gamma_i) h(\gamma_j - \gamma_i) \alpha(\gamma_i) \nonumber \\
-        &= \frac{\delta_{ij}}{\Delta \gamma} \rho(\gamma_i) \alpha(\gamma_i)\,.
-\end{align}
-Since $\Delta \gamma$ is a positive constant factor, it does not impact any of our matrix operations, i.e., we can pull it out to the front of the expressions $\mM \to \tilde{m} (\Delta \gamma)^2$ and $\mN \to \tilde{n} (\Delta \gamma)^2$.
-Then, we can rewrite \eqref{eqn:green_derivation} as
-\begin{equation}
-    G_{AB^\dagger}(z) = - (\Delta \gamma)^2 \vec{b}^\dagger (0) \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right] \vec{a}(0)\,.
-\end{equation}
+Here, all expressions represent finite numbers so that they are suitable for
+numerical treatment. This procedure can also be applied to the matrix elements $(A_i | [H, A_j])$ of the dynamical matrix.
 
-\begin{figure}
+
+Additionally, we stress that expressions such as $(A_{\vk} | A_{\vl})$ or
+$(A_{\vk} | [H, A_{\vl}])$ can be reduced to sums proportional to $\gamma_i$ or $\gamma_j$, respectively.
+Therefore, it is not necessary to implement any sort of computation in reciprocal space.
+As an example, let us consider $A_{\vk} = f_{\vk}^\dagger$ and 
+\begin{equation}
+    ( f_{\vk}^\dagger | f_{\vl}^\dagger ) = \delta_{\vk, \vl}\, \langle 1 - n_{\vk \uparrow} - n_{\vk \downarrow} \rangle = \alpha(\vk) \delta_{\vk, \vl}  
+\end{equation}
+with $\alpha(\vk)\coloneqq 1 - \langle n_{\vk \uparrow} + n_{\vk \downarrow} \rangle$. 
+Inserting this into Eq.\ \eqref{eqn:numerical_example} yields
+\begin{equation}
+    (A_i | A_j) = \frac{1}{N} \sum_{\vk} \alpha(\vk) h(\gamma_i 
+		- \widehat{\gamma}(\vk)) h(\gamma_j - \widehat{\gamma}(\vk)).
+\end{equation}
+As stated in the main text, see Eq.\ \eqref{eqn:equal_expecs}, $\alpha(\vk)$ depends only on $\widehat{\gamma}(\vk)$, 
+hence we can pass from the wave vector integration to a $\gamma$ integration and eventually to a $\gamma$ sum
+\bs
+\begin{align}
+    (A_i | A_j) &= \int \rho(\gamma) h(\gamma_i - \gamma) h(\gamma_j - \gamma) \alpha(\gamma) \dgamma 
+      \\
+    &\approx \rho(\gamma_i) h(\gamma_j - \gamma_i) \alpha(\gamma_i) 
+			\\
+    &= \frac{\delta_{ij}}{\Delta \gamma} \rho(\gamma_i) \alpha(\gamma_i).
+\end{align}
+\es
+Since $\Delta \gamma$ is a positive constant factor, it does not impact any of our matrix operations, i.e., we can shift it to the front of the expressions $\mM \to \tilde{m} (\Delta \gamma)^2$ 
+and $\mN \to \tilde{n} (\Delta \gamma)^2$.
+This allows us to rewrite \eqref{eqn:green_derivation} as
+\begin{equation}
+    G_{AB^\dagger}(z) = - (\Delta \gamma)^2 \vec{b}^\dagger (0) \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right] \vec{a}(0)
+\end{equation}
+for the general operators $A$ and $B$ and the initial conditions
+$A=\sum a_i A_i$ and $B=\sum b_i A_i$. \red{Passt das?}  \blue{Tut es. Wir könnten überlegen hier auch $a_i$ und $a_j$ statt a und b zu verwenden, um dieselbe Notation wie im Haupttext zu nutzen?}
+
+
+
+In order to provide an explicit example, 
+let us compute $\greens{Higgs}$ from \eqref{eqn:resolvent_bases}.
+We order our operator set such that the operators $f_\gamma + f_\gamma^{\dagger}$ are the first ones
+in the set. Then, the initial conditions read 
+\begin{equation}
+    a_i = b_i = \begin{cases}
+        1 & 1\le i \le N_\gamma \\
+        0 & \text{otherwise}
+    \end{cases},
+\end{equation}
+where $N_\gamma$ is the number of sampling points.
+For the Green's function, this implies
+\bs
+\begin{align}
+    \green{Higgs} (z) &= -(\Delta \gamma)^2 \sum_{i=1}^{N_\gamma} \sum_{j=1}^{N_\gamma} \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right]_{ij} 
+		\\
+        &\approx - \int \dgamma \int \dgamma' \left[ \tilde{n} 
+				\frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right](\gamma, \gamma').
+\end{align}
+\es
+The first line is an approximation of the integral in the second line, as each matrix element corresponds to a specific value for $\gamma$.
+
+\section{Influence of the discretization}
+\label{sec:finite_size}
+
+\begin{figure}[htb]
     \centering
     \includegraphics[width=0.48\textwidth]{plots/finite_size.pdf}
-    \caption{Effect of changing the number of discretization points $N_\gamma$ on the absolute position of the peak in $\spectral{Phase}$ for $U=-2.5t$ and $V=-0.1t$.
-    On the simple cubic lattice, the peak already lies properly at $\omega=0$.
-    On the square lattice, its position approaches $0$ with $\sqrt{1/N_\gamma}$.}
+    \caption{\red{Die abbildung muss an beiden Achsen bei 0 beginnen. Der Fit sollte auch bei (0,0) 
+		beginnen. In der Legende sollte statt "`Data square"' einfach "`square lattice"' stehen und
+		entsprechend "`cubic lattice"'.} Effect of the number of  sampling points $N_\gamma$ 
+		on the absolute position of the peak in $\spectral{Phase}$ for $U=-2.5t$ and $V=-0.1t$.
+    On the simple cubic lattice, the peak already is located at $\omega=0$ within numerical accuracy.
+    On the square lattice, its position approaches $0$ following $\sqrt{1/N_\gamma}$.}
     \label{fig:finite_size}
 \end{figure}
 
-To give a practical example, let us compute $\greens{Higgs}$ from \eqref{eqn:resolvent_bases}.
-We order our operator set such that all $f_\gamma + f_\gamma^{\dagger}$ are upfront. 
-This requires the vector elements $\vec{a}$ and $\vec{b}$ to be
-\begin{equation}
-    a_i = b_i = \begin{cases}
-        1 & i < N_\gamma \\
-        0 & \text{otherwise}
-    \end{cases}\,,
-\end{equation}
-where $N_\gamma$ is the number of discretization points.
-Using this, we can expand the relation for the Green's function
-\begin{align}
-    \greens{Higgs} (z) &= -(\Delta \gamma)^2 \sum_{i=0}^{N_\gamma} \sum_{j=0}^{N_\gamma} \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right]_{ij} \nonumber \\
-        &\approx - \int \dgamma \int \dgamma' \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right](\gamma, \gamma')\,.
-\end{align}
-The first line is an approximation of the integral in the second line, as each matrix element corresponds to a specific value for $\gamma$.
-
-\section{Dependence of the results on the discretization}
-\label{sec:finite_size}
-
-Most of our data barely depends on the number of discretization points $N_\gamma$ at all.
-However, specifically features that lie at very small energies, e.g., the peak in $\spectral{Phase}$ within the SC phase, can be difficult to properly resolve.
-We show this effect in \autoref{fig:finite_size}.
-Neglecting minor fluctuations, this peak is properly located at $\omega=0$ for the simple cubic lattice.
-On the square lattice, however, it follows a $\sqrt{1/N_\gamma}$ behavior, i.e., also approaching $0$.
+Most of the computed data barely depend on the number of sampling points $N_\gamma$.
+However, specific features at very small energies can be difficult to  resolve properly, e.g., 
+the peak in $\spectral{Phase}$ in the SC phase.
+We illustrate this effect in Fig.\ \ref{fig:finite_size}.
+Neglecting minor numerical scattering, the phase peak is properly located at $\omega=0$ for the simple cubic lattice.
+On the square lattice, however, it follows a $\sqrt{1/N_\gamma}$ behavior, i.e., also approaching $0$,
+but only in the limit $N_\gamma \to \infty$.
 This behavior can be observed for the other peaks at $\omega=0$ as well.
-How far away they are from $0$, or whether they are at all, depends on the spectral function as well as on the system parameters.
+How strong this effect is, i.e., how large the deviation from $0$ is depends on the spectral function
+as well as on the other parameters of the system, in particular its dimension.
+
 
 \bibliography{sn-bibliography}
 %\bibliography{../../A_bibinput/liter10.bib}
