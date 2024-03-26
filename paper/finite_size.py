@@ -37,13 +37,14 @@ for j, lattice_folder in enumerate(lattice_folders):
         
         peak_positions[i] = peak_result["x"]
 
-    ax.plot(1/N, peak_positions, "o", label=f"Data {lattice_folder}")
+    ax.plot(1/N, peak_positions, "o", label=f"{lattice_folder} lattice")
     if(j==0):
         def func(x, a, b):
             return a*np.sqrt(x) + b
         popt, pcov = ez_general_fit(1/N, peak_positions, func, label="$a \\sqrt{1/N_\gamma} + b$", x_space=np.linspace(0, max(1/N), 300))
         ax.text(0.00175, 0.0175, f"$a = {popt[0]:.5f}$\n$b = {popt[1]:.5f}$")
 
+ax.tick_params(axis='x', pad=10)
 ax.set_xlabel("$1/N_\\gamma$")
 ax.set_ylabel("$\\omega_0 [t]$")
 
