@@ -64,6 +64,8 @@ for i in range(2):
             counter += 1
         
         label_subscript = name_suffix if name_suffix != "AFM" else "l.AFM"
+        
+        #us_same = np.array([np.concatenate((Us_square[::-1], Us_square)), np.concatenate((Us_cube[::-1], Us_cube))], dtype=object)
         plotters[0][i].plot(u_data, peak_positions, label=f"$\\mathcal{{A}}_\\mathrm{{{label_subscript}}} (\\omega)$")
         plotters[1][i].plot(u_data, peak_positions_to_cont)
         plotters[2][i].plot(u_data, np.exp(weights))
