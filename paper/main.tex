@@ -1088,8 +1088,8 @@ This occurs at $U_0 = 3.372t$ on the square lattice and at $U_0 = 4.479t$ on the
 The peak positions $\omega_0$ in panels (a) behave quadratically as they merge with the 
 two-particle continuum, i.e., 
 $\omega_0 \propto (U-U_0)^2$ while the weights $W_0$ in panel (b) decrease linearly, i.e., 
-$W_0 \propto (U-U_0)$ \red{Stimmt das Vorzeichen?}. This behavior is generic for the peaks of bound states merging with
-their continua at vanishing binding energy \cite{uhrig96b,uhrig96be,zhito13}.
+$W_0 \propto (U-U_0)$ \red{Stimmt das Vorzeichen?} \blue{Ja.}. This behavior is generic for the peaks of bound states merging with
+their continua at vanishing binding energy \cite{uhrig96b,uhrig96be,zhito13}. \blue{Das wusste ich tatsächlich nicht.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1099,58 +1099,117 @@ their continua at vanishing binding energy \cite{uhrig96b,uhrig96be,zhito13}.
 
 \section{Conclusion}\label{sec:conclusion}
 
+%%%
+% competing phases, collective modes, softening, weights, shift of energies
+% controlled, powerful formalism on top of mean-field Hamiltonian,
+%but dynamics well beyond!, can be extended to diagrammatics.
 
-We have conducted an analysis of the mean-field phase diagram of the extended Hubbard model in 2D and 3D. 
-Specifically, both systems provide a similar structure of $s$-wave SC, CDW, and AFM.
-Furthermore, we were able to identify an area in which our analysis is incomplete.
-In 2D, this region coincides with a phase-separated state that has already been observed in recent research \cite{Linner23}.
+The objective of this article was to study collective excitations in competing phases.
+We wanted to understand how collective excitations behave in the vicinity of phase transitions
+and how they signal these transitions, for example by softening or by losing spectral weight.
+To this end, we developed a general and versatile formalism based on iterated equations of motion.
+We could show that the formalism reproduces all rigorously known properties such as
+the existence of Goldstone bosons in case of broken continuous symmetries and the absence thereof
+if the broken symmetry is discrete.
 
-We have also developed a novel method to obtain Fourier-transformed Green's functions and analyzed various such functions. 
-We have found collective excitations within the spectral functions $\spectral{Higgs}$, $\spectral{Phase}$, $\spectral{CDW}$, $\spectral{l.AFM}$, and $\spectral{t.AFM}$ 
-and examined their behavior as the system approaches phase transitions. 
-In particular, we identified the peak and singularity found in the first two as the well-known phase and amplitude modes in neutral superconductors 
+We conducted an analysis of the mean-field phase diagram of the extended Hubbard model in 
+two (2D) and three dimensions (3D). The results in both dimensions are qualitatively very similar.
+Specifically, we studied the competing phases 
+of $s$-wave superconducting order (SC), alternating charge density wave order
+(CDW), and N\'eel antiferromagnetism (AFM).
+Furthermore, we were able to identify regions in which our analysis is incomplete
+in the sense that the assumed phases turn out to be unstable, but it is not obvious which
+phases are the stable ones. Since we observed this phenomenon for strongly attractive interactions
+we conjecture that the instability indicates the occurrence of phase separation in 2D and 3D. 
+For the square lattice, recent findings at finite temperature also pointed in this direction \cite{Linner23}.
+
+We developed a method to obtain Fourier-transformed Green's functions
+based on iterated equations of motion and analyzed the most relevant
+of them. We identified the signatures of collective excitations in the spectral functions 
+$\spectral{Higgs}$, $\spectral{Phase}$, $\spectral{CDW}$, $\spectral{l.AFM}$, and $\spectral{t.AFM}$ 
+which are designed to excite the Higgs mode, the phase mode, a staggered density mode, a longitudinal, and a transversal magnon, respectively. 
+The focus was the analysis of their behavior as the system approaches and crosses phase transitions.
+In particular, we identified the peak and the singularity occurring in the first two 
+spectral functions related to superconductivity
+to be the well-known amplitude and phase modes in neutral superconductors 
 and thereby provided a technique to obtain them starting from a microscopic description.
+Outside an SC phase, both spectral functions are identical while in an SC phase,
+the phase mode is massless while the Higgs mode is at the lower edge of the continuum.
+So, the phase mode manifests as the derivative of the $\delta$ function at zero energy
+complying with the asymmetry of the spectral function.
 
-We observed the behavior of the peak in the SC-related spectral functions, \textcolor{\markEdited}{corresponding to a cooperon}.
-It moves towards 0 energy and attains more weight as the system moves from the CDW phase towards the SC phase. 
-The peak's relative position to the two-particle continuum and its weight plateau as the system moves away from the phase transition.
+We observed the behavior of the peak in the SC-related spectral functions corresponding to a cooperon in various phases. 
+It shifts towards zero energy and acquires more and more weight as the system moves from the CDW phase toward the SC phase. 
+The peak's relative position to the two-particle continuum and its weight saturate 
+as the system moves away from the phase transition.
+In the SC phase close to the CDW phase, the peak in $\spectral{CDW}$ 
+is located at a finite energy and and has finite weight. 
+It must represent a bound state because it is located below the two-particle continuum. 
+This state is induced by the application of an electron creation and an electron annihilation without effect of its spin content so that we interpret it as an $S=0$ exciton.
+It behaves similarly to the SC-related peak in non-SC phases. \blue{Explizit in der CDW Phase, nicht?}
 
-In the SC phase close to the CDW phase, the peak in $\spectral{CDW}$, \textcolor{\markEdited}{corresponding to an exciton}, is located at a finite energy and and has a finite weight. 
-\textcolor{\markEdited}{It behaves in the same manner as the previously discussed peak}.
+In the vicinity of the AFM-CDW phase transition, the spectral densities
+$\spectral{CDW}$ and $\spectral{l.AFM}$ feature a peak. 
+The former is the aforementioned exciton while the latter is a longitudinal magnon. 
+Of course, this can also be seen as an exciton being a bound
+state of an electron and a hole, yet with spin content $S=1$ and $S^z=0$. 
+The longitudinal magnon lies at lower energy in the AFM phase than the CDW exciton. 
+In the CDW phases, the two peaks swap their relative energy positions. 
+Moving away from the phase transition, the higher-lying peak merges with the two-particle continuum. 
+The peak position relative to the two-particle continuum approaches $0$ 
+quadratically in $\Delta U$ while its weight approaches $0$ linearly with $\Delta U$ where
+$\Delta U$ measures the distance to the interaction \blue{strength?} where the merging takes place.
 
-Around the AFM-CDW phase transition, both $\spectral{l.AFM}$ and $\spectral{CDW}$ feature a peak. 
-\textcolor{\markEdited}{The former corresponds to a longitudinal magnon, while the latter represents an exciton.}
-The peak of the former in the AFM phase lies at lower energies than the latter one and vice-versa. 
-Moving away from the phase transition, the higher-lying peak moves into the two-particle continuum. 
-The peak position relative to the two-particle continuum approaches $0$ quadratically with $U$, and its weight approaches $0$ linearly.
+Furthermore, we found the exciton peak in $\spectral{CDW}$ also at large values of $V$ in the CDW phase, 
+evolving smoothly from the CDW-AFM phase transition. \red{Das kannst Du vllt. noch stichprobenartig pruefen.}
+We assume that this peak is always located outside of the two-particle continuum, even for small values of $V$.
+In this case, however, it can lie very close to the continuum, so that we cannot resolve it due to the limited accuracy of our numerics.
+So it seems to appear as a singularity at $2\Delta$ for small values of $V$.
+\red{Stimmst Du dieser Darstellung zu?} \blue{Ja.}
 
-Furthermore, we have found a peak in $\spectral{CDW}$ that appears at large values of $V$, 
-which is most likely the same as the one found close to the CDW-AFM phase transition. 
-\textcolor{\markEdited}{It is also reasonable to assume, that this peak is always located outside of the two-particle continuum, even for small values of $V$.
-In this case, however, it would lie very close to the continuum, which we cannot resolve due to the limited accuracy of our numerics.
-Therefore, it appears as a singularity at $2\Delta$.}
+In the AFM phase, the spectral functions $\spectral{l.AMF}$ and $\spectral{t.AFM}$ are distinct.
+While the longitudinal magnon continues to manifest as a peak at relatively high energies
+the transversal magnon appears as a peak at zero energy within our numerical accuracy. Due to
+the asymmetry of the spectral, its peak is the derivative of a $\delta$ function.
+It is an advantageous feature of the adopted approach that the Goldstone theorem is 
+automatically fulfilled. Both, phase mode and transversal magnon are located at zero energy
+if the corresponding symmetry is broken, i.e., the U(1) symmetry and the $O(3)$ symmetry,
+respectively. \blue{Mathmode?}
+
+\red{Haben wir jetzt alle wesentlichen Beobachtungen erwaehnt?} \blue{Ja.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Some possible ideas for future research include incorporating phase-separated states into the mean-field theory.
-This would enable us to peer deeper into the negative $V$ regime of the phase diagrams and provide more analysis of the collective excitations that occur therein.
+Future directions of research comprise incorporating the investigation of possible phase-separated states. 
+This would enable us to delve deeper into the negative $V$ regime 
+of the phase diagrams and to analyze its collective excitations. Anticipating the occurrence
+of regions of high and low density of electrons, a necessary prerequisite is to investigate doped systems.
 
-\textcolor{\markEdited}{Specifically for the SC-related quantities, one can fathom including a coupling of the electronic system to the electromagnetic field.}
-This should move the position of the phase mode close to the plasma frequency as explained by the Anderson-Higgs mechanism.
+Another intriguing extension is to extend the study from the $\Gamma$ point to the full Brillouin zone.
+This implies studying the same phases with operators at finite wave vectors beyond the nesting vector. 
+Conceptually, this extension is straightforward. But it spoils the efficient approach
+to discretize the $\gamma$ space since the dependence on two wave vectors will no longer
+allow us to reduce all wave vector dependence to a single dependence on $\gamma$. \blue{Das verwirrt mich.}
 
-Additionally, one could describe multi-band systems with even richer phases and collective excitations. 
+Additionally, one can fathom including a coupling of the electronic system to the electromagnetic fields
+so that we no longer study a neutral, but a charged superconducting system. One would expect
+to capture the important shift of the phase mode to finite energies close to the plasma frequency 
+as explained by the Anderson-Higgs mechanism.
+
+Lastly, one could deal with multi-band systems with even richer phase
+diagrams and corresponding collective excitations. 
 
 
 %==============================================================================
 % Acknowledgments 
 %==============================================================================
 \begin{acknowledgments} 
-    \textcolor{\markEdited}{This research was partially funded by the MERCUR Kooperation.
-    We would like to thank the members of our group for various useful discussions.
-    [Oder hier lieber alle mal beim Namen nennen? Ich hab mich ja mit allen mal unterhalten]
-    [Götz Seibold zu danken klingt meines Erachtens auch sinnig, mit dem hast du ja viel gesprochen.
-    Lido habe ich nicht verwendet.]}
+	This research was partially funded by the MERCUR Kooperation
+		in project KO-2021-0027. We acknowledge very helpful discussions with
+		Anna B\"ohmer, J\"org B\"unemann, Ilya Eremin, G\"otz Seibold, Joachim Stolze, and Zhe Wang
+		as well as with all members of our research group.
 \end{acknowledgments}
+
 
 \appendix
 \section{Semipositivity of the dynamical matrix}
