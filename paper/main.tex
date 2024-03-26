@@ -185,8 +185,8 @@ the amplitude (Higgs) modes. The former occurs in neutral superfluids at zero en
 in a large number of studies \cite{Bogoljubov1958,Anderson58,Brieskorn74,Schmid1975,simanek1975,schon76,Maiti2015,Sun2020,Fan22} which we cannot list exhaustively here.
 We obtain this mode based on a microscopic description without long-range electromagnetic interactions.
 The inclusion of this kind of interaction would shift this mode towards the plasma frequency 
-\cite{Anderson58,schon76,Kulik1981} which is, however, beyond the scope of the present 
-paper. The amplitude mode, on the other hand, is located at the lower edge of the quasiparticle continuum.
+\cite{Anderson58,schon76,Kulik1981} which is, however, beyond the scope of the present paper. 
+The amplitude mode, on the other hand, is located at the lower edge of the quasiparticle continuum.
 The corresponding energy is the energy required to break up a Cooper pair 
 \cite{Schmid1975,Varma02,Cea14,Measson14,Tsuji15,Krull16,Mueller2019,Schwarz20}.
 This Higgs mode is not charged so that it does not couple to the electromagnetic fields.
@@ -203,59 +203,63 @@ an outlook.
 
 \subsection{Model}
 
-In our study, we employ the extended Hubbard model at half-filling as it encompasses the relevant phases and thereby provides direct access to the rich excitation spectra therein.
+In our study, we employ the extended Hubbard model at half-filling as it hosts
+the relevant phases and thereby provides direct access to the rich excitation spectra therein.
 Its Hamiltonian is given by
-\begin{equation}
-    \label{eqn:full_hamiltonian}
-    \begin{aligned}
+\begin{align}
+\nonumber
         H = &-t \sum_{\langle i, j \rangle, \sigma} \left( c_{i\sigma}^\dagger c_{j\sigma} + \text{h.c.} \right) 
         + \mu \sum_{i,\sigma} n_{i\sigma} \\
-        &+ U \sum_{i} n_{i\uparrow} n_{i\downarrow} 
-        + \frac{V}{2} \sum_{\langle i, j\rangle, \sigma} n_{i\sigma} n_{j\sigma}\,,
-    \end{aligned}
-\end{equation}
+        & + U \sum_{i} n_{i\uparrow} n_{i\downarrow} 
+        + \frac{V}{2} \sum_{\langle i, j\rangle, \sigma} n_{i\sigma} n_{j\sigma},
+				    \label{eqn:full_hamiltonian}
+\end{align}
 where $c_{i\sigma}^{(\dagger)}$ annihilates (creates) an electron with spin $\sigma$ on lattice site $i$ 
-and $\langle i, j\rangle$ denotes the summation over the next neighbors.
+and $\langle i, j\rangle$ denotes the summation over nearest neighbor sites.
 The parameters are the hopping amplitude $t$, the onsite interaction $U$, the intersite interaction $V$, and the chemical potential $\mu$.
-Applying a Fourier transform into $k$ space yields the single-particle dispersion 
+Applying a Fourier transform passing to $k$ space yields the single-particle dispersion 
 \begin{equation}
-    \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha)\,,\quad k_\alpha \in [-\pi, \pi)\,,
+    \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha), \quad k_\alpha \in [-\pi, \pi)\,,
 \end{equation}
-with the system's dimension $D$ and the dimensionless momentum $\vk$.
+with the system's dimension $D$ and the dimensionless wave vector $\vk$ where we set the lattice constant to unity.
 
-\textcolor{\markEdited}{We will investigate this model for various sets of parameters allowing us access to an assortment of phases.
-Namely, the model exhibits antiferromagnetism for positive $U$ and moderately sized $V$.
-At larger $V$ the intersite repulsion takes over and favors a charge-ordered phase.
-In the $U<0$ region, the same phase occurs for any $V>0$.
-Choosing $V=0$ leads to a coexistence of $s$-wave superconductivity and said CDW \cite{yang90}, while moderately sized $V<0$ yield a purely $s$-wave superconducting phase \cite{Micnas88b}.
-In this article, we will explore the AFM-CDW as well as the CDW-SC phase transitions.}
+We investigate this model for various sets of parameters allowing us access to a variety of phases.
+The model exhibits antiferromagnetism for positive $U$ and moderate values of $V$.
+At larger $V$, the intersite repulsion takes over and favors a charge-ordered phase, i.e., a CDW.
+In the $U<0$ region, the CDW occurs for any $V>0$.
+Choosing $V=0$ leads to a coexistence of $s$-wave superconductivity and said CDW \cite{yang90}, while moderate
+values of  $V<0$ yield an $s$-wave superconducting phase \cite{Micnas88b}.
+In this article, we explore the AFM-CDW as well as the CDW-SC phase transitions.
+For $U<0$ and $V<0$, signs of phase separation occur as one would expect.
+
 
 \subsection{Static mean-field theory}
 
-Next, we decouple the interaction terms.
-We define 
-\begin{equation}
+Next, we decouple the interaction terms according to Wick's theorem.
+We define short hands for the operators
+\bs
+\begin{align}
     \label{eqn:operators}
-    \begin{aligned}
         n_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk\sigma}      &f_k     &\coloneqq  c_{-\vk\down} c_{\vk\up} \\
         g_{k\sigma} &\coloneqq  c_{\vk\sigma}^\dagger c_{\vk+\vQ\sigma}  &\eta_k  &\coloneqq  c_{-\vk-\vQ\down} c_{\vk\up}
-    \end{aligned}
-\end{equation}
-where $\vQ \coloneqq  (\pi, ...)$ defines the nesting vector for the CDW and AFM phases, see Ref. \cite{sentef17}.
-We use the following abbreviations to write down the mean-field parameters
+\end{align}
+\es
+where $\vQ \coloneqq  (\pi, \pi)$ in 2D and $\vQ \coloneqq  (\pi, \pi,\pi)$ in 3D
+defines the nesting vector for the CDW and AFM phases. We use the following abbreviations to write down the mean-field parameters
 \begin{subequations}
     \begin{align}
         \label{eqn:delta_cdw}
-        \Delta_\text{CDW} &= \left(\frac{U}{2N} - \frac{zV}{N}\right) \sum_{\vk\sigma} \langle g_{\vk\sigma} \rangle\,, \\
+        \Delta_\text{CDW} &= \left(\frac{U}{2N} - 
+				\frac{zV}{N}\right) \sum_{\vk\sigma} \langle g_{\vk\sigma} \rangle \\
         \label{eqn:delta_afm}
-        \Delta_\text{AFM} &= \frac{U}{2N} \sum_{\vk} \left( \langle g_{k\uparrow} \rangle - \langle g_{\vk\downarrow} \rangle \right)\,, \\
-        \Delta_\text{SC} &= \frac{U}{N} \sum_{\vk} \langle f_{\vk} \rangle\,, \\
-        \Delta_\eta &= \frac{U}{N} \sum_{\vk} \langle \eta_{\vk} \rangle\,, \\
-        \Delta_n &= \frac{V}{N} \sum_{\vk,\sigma} \sum_{\alpha=1}^D \cos k_\alpha \langle n_{\vk\sigma} \rangle\,,
+        \Delta_\text{AFM} &= \frac{U}{2N} \sum_{\vk} \left( \langle g_{k\uparrow} \rangle - \langle g_{\vk\downarrow} \rangle \right), \\
+        \Delta_\text{SC} &= \frac{U}{N} \sum_{\vk} \langle f_{\vk} \rangle, \\
+        \Delta_\eta &= \frac{U}{N} \sum_{\vk} \langle \eta_{\vk} \rangle, \\
+        \Delta_n &= \frac{V}{N} \sum_{\vk,\sigma} \sum_{\alpha=1}^D \cos k_\alpha \langle n_{\vk\sigma} \rangle,
     \end{align}
 \end{subequations}
 where $z$ denotes the coordination number of the lattice.
-The last parameter, $\Delta_n$, renormalizes the hopping term to
+The last parameter, $\Delta_n$, renormalizes the hopping term according to 
 \begin{equation}
     \epsilon( \vk ) \coloneqq  -(2 + \Delta_n) \sum_{\alpha=1}^D \cos(k_\alpha)\,.
 \end{equation}
@@ -268,7 +272,7 @@ with the spinors
 \begin{equation}
     \Psi^\dagger (\vk) \coloneqq  \left( c_{\vk\up}^\dagger\,, c_{\kplusQ\up}^\dagger\,, c_{-\vk\down}\,, c_{\kminusQ\down} \right)
 \end{equation}
-and 
+and the matrix
 \begin{equation}
     h(\vk) \coloneqq  \begin{pmatrix}
         \epsilon (\vk) & \Delta_-^* & \Delta_\text{SC} & \Delta_\eta \\
@@ -282,57 +286,64 @@ where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
 \begin{figure}
     \centering
     \includegraphics[width=.48\textwidth]{plots/phase_diagram.pdf}
-    \caption{The phase diagram obtained for the extended Hubbard model on 
-    (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at temperature $T=0$.
+    \caption{The phase diagram obtained for the extended Hubbard model \eqref{eqn:full_hamiltonian} on 
+    (a) a square lattice and (b) a simple cubic lattice using a mean-field approximation at $T=0$.
     The CDW-AFM boundary lies at $U = zV$, where $z$ is the coordination number. 
-    For $U<0$ and $V=0$, there is a coexistence of CDW and $s$-wave SC.
-    The boundary for the $d_{x^2 - y^2}$-wave SC (dashed line) for the square lattice has been taken from Ref. \cite{Micnas88b}, 
-    as it is not accessible using our formalism.
-    \textcolor{\markEdited}{The red shading shows the region in which the dynamical matrix $\mM$, see equation \eqref{eqn:heisenberg}, has negative eigenvalues, 
-    indicating that there are phases not captured by our methods.
-    In accordance with the literature, we expect to find a phase-separated state \cite{Linner23}.
-    Lastly, the striped area shows the region that we cannot access because the discretization $N_\gamma$, 
-    which is required to accurately describe the system, is too large. However, we expect to find a superconducting state here.}}
+    For $U<0$ and $V=0$,  CDW and $s$-wave SC coexist.
+    The boundary for the $d_{x^2 - y^2}$-wave SC (dashed line) for the square lattice is  taken from Ref.\
+		\cite{Micnas88b} since it is not accessible within our formalism, see below.
+    However, the red shading indicates the region in which the dynamical matrix $\mM$ in 
+		Eq.\ \eqref{eqn:heisenberg}, has negative eigenvalues indicating the instability of the assumed phase.
+    In view of the attractive interactions, we expect a separation of phases \cite{Linner23}.
+    Lastly, the striped area shows the region that we cannot access numerically
+		because the gap values are too small for any tractable discretization. 
+    Yet an SC phase is expected.}
     \label{fig:phase_diagram}
 \end{figure}
 
-We observe that the entire Hamiltonian and thus all expectation values only depend on
+We observe that  the entire Hamiltonian and all expectation values in the considered phases only depend on
 \begin{equation}
-    \hat{\gamma}(\vk) \coloneqq \frac{1}{D} \sum_{\alpha=1}^D \cos(k_\alpha)\,,
+    \widehat{\gamma}(\vk) \coloneqq \frac{1}{D} \sum_{\alpha=1}^D \cos(k_\alpha),
 \end{equation}
-i.e., for any operator $\hat{O}$ the following relation holds 
+i.e., for any operator $\widehat{O}$ the following relation holds 
 \begin{equation}
     \label{eqn:equal_expecs}
-    \langle \hat{O}_{\vk} \rangle = \langle \hat{O}_{\vk'} \rangle \eqqcolon \langle \hat{O}( \gamma ) \rangle\,,
+    \langle \widehat{O}_{\vk} \rangle = \langle \widehat{O}_{\vk'} \rangle \eqqcolon \langle \widehat{O}( \gamma ) \rangle\,,
 \end{equation}
-if $\hat{\gamma}(\vk) = \hat{\gamma}(\vk')$.
-While two-dimensional systems around the size of $100\times100$ lattice sites can still be solved by using momentum sums,
+if $\gamma= \widehat{\gamma}(\vk) = \widehat{\gamma}(\vk')$.
+While 2D systems  of about $100\times100$ lattice sites can still be solved by evaluating sums over  wave vectors,
 computing solutions for large three-dimensional systems becomes impossible due to the $N=L^3$ scaling.
-This issue can be resolved by using the aforementioned fact and replacing the momentum sums with energy integrals using the bare density of states (DOS)
+This issue can be resolved by using the aforementioned fact and replacing the wave vector sums 
+by energy integrals using the density of states (DOS) for $\gamma$ defined by
 \begin{equation}
-    \rho(\gamma) \coloneqq  \frac{1}{N} \sum_{\vk} \delta \left(\gamma - \hat{\gamma} (\vk) \right)\,.
+    \rho(\gamma) \coloneqq  \frac{1}{N} \sum_{\vk} \delta \left(\gamma - \widehat{\gamma} (\vk) \right)\,.
 \end{equation}
 As an example, we consider 
 \begin{equation}
     \Delta_\text{SC} = \frac{U}{N} \int_{-1}^{1} \dgamma \rho(\gamma) \langle f( \gamma ) \rangle\,.
 \end{equation}
-We will be using the exact densities of states for the square and the simple cubic lattice found in Ref. \cite{Hanisch97}.
-This allows us to access both two- and three-dimensional models on equal footing.
-We can compute any phase as long as it does not introduce another kind of momentum dependence.
+Henceforth, we use the exact DOS for the square and the simple cubic lattice provided 
+in Ref.\ \cite{Hanisch97}. 
+This allows us to access both 2D and 3D models on equal footing.
+We can compute any phase as long as it does not introduce another kind of wave vector dependence.
+
 
 We solve the mean-field equations self-consistently.
-The $\gamma$-integrals are approximated numerically using a $\tanh$-$\sinh$ quadrature \cite{takahasi73}, 
-terminating once $|1 - \int \dgamma \rho(\gamma)| < 10^{-13}$ and reusing the computed points and weights.
-This method excels at dealing with the singularities in the DOS, 
+The $\gamma$ integrals are approximated numerically using a $\tanh$-$\sinh$ quadrature \cite{takahasi73} 
+terminating once $|1 - \int \dgamma \rho(\gamma)| < 10^{-13}$ is achieved
+and reusing the computed sampling points and weights.
+This method excels at dealing with the singularities in the DOS 
 requiring merely a few hundred function evaluations to achieve the desired accuracy.
 
-This procedure yields the ground state phase diagram at temperature $T=0$ shown in \autoref{fig:phase_diagram}.
-The CDW-AFM boundary is located at $U = zV$, where $z$ is the coordination.
-This holds for both the square lattice ($z=4$) and the simple cubic lattice ($z=6$) and can be seen by comparing \eqref{eqn:delta_cdw} and \eqref{eqn:delta_afm}:
-Crossing the aforementioned line, changes which prefactor of the two order parameters is larger.
+This procedure yields the ground state phase diagram at $T=0$ shown in Fig.\ 
+\ref{fig:phase_diagram}.
+The CDW-AFM boundary is located at $U = zV$, where $z$ is the coordination number.
+This holds for both the square lattice ($z=4$) and the simple cubic lattice ($z=6$) and can be seen by comparing the prefactors in Eqs.\ \eqref{eqn:delta_cdw} and \eqref{eqn:delta_afm}:
+Crossing $U = zV$ changes which prefactor of the two order parameters is larger.
 
-Note, that the $d_{x^2 - y^2}$-superconducting state, which has been confirmed for the square lattice \cite{Micnas88b,Huang13}, cannot be described by our method. 
-This is due to our restriction to terms that are proportional to $\hat{\gamma}(\vk)$.
+Note, that the $d_{x^2 - y^2}$-superconducting state, which has been confirmed for the square lattice 
+\cite{Micnas88b,Huang13}, cannot be described by our method because it would require to 
+deal with expectations values which do not depend only on $\widehat{\gamma}(\vk)$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
