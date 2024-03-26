@@ -63,7 +63,8 @@ for i in range(2):
             peak_positions_to_cont[counter] = cont_edges[0] - peak_positions[counter]
             counter += 1
         
-        plotters[0][i].plot(u_data, peak_positions, label=f"$\\mathcal{{A}}_\\mathrm{{{name_suffix}}} (\\omega)$")
+        label_subscript = name_suffix if name_suffix != "AFM" else "l.AFM"
+        plotters[0][i].plot(u_data, peak_positions, label=f"$\\mathcal{{A}}_\\mathrm{{{label_subscript}}} (\\omega)$")
         plotters[1][i].plot(u_data, peak_positions_to_cont)
         plotters[2][i].plot(u_data, np.exp(weights))
     
@@ -71,7 +72,7 @@ for i in range(2):
         axs[j][i].axvspan(min(u_data), (min(u_data) + max(u_data)) / 2, alpha=0.3, color="C1")
         axs[j][i].axvspan((min(u_data) + max(u_data)) / 2, max(u_data), alpha=0.3, color="C2")
 
-axs[0][0].set_title("Square lattice"      )
+axs[0][0].set_title("Square lattice")
 axs[0][1].set_title("Simple cubic lattice")
 
 for i in range(2):

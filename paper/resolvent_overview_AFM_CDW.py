@@ -26,7 +26,7 @@ folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
 nrows = 3 if poster_plot else 4
 ncols = 2
 # ax = axs[row][col]
-fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 8), sharey=True, sharex="col", gridspec_kw=dict(hspace=0, wspace=0))
+fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(12.8, 8 if poster_plot else 10), sharey=True, sharex="col", gridspec_kw=dict(hspace=0, wspace=0))
 
 plotters = np.empty((nrows, ncols), dtype=ps.CURVEFAMILY)
 for i in range(nrows):
