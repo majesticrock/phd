@@ -43,7 +43,7 @@
 \usepackage{color}
 \usepackage{placeins}
 \usepackage[normalem]{ulem}
-\usepackage{mhchem}
+%\usepackage{mhchem}
 
 %=======================
 % New Commands:
@@ -65,9 +65,18 @@
 \newcommand{\mN}{\mathcal{N}}
 
 \newcommand{\greens}[1]{\mathcal{G}_\text{#1} (\omega)}
+\newcommand{\green}[1]{\mathcal{G}_\text{#1}}
 \newcommand{\spectral}[1]{\mathcal{A}_\text{#1}  (\omega)}
 
-\newcommand{\markEdited}{black}
+\newcommand{\markEdited}{red}
+
+\newcommand{\bs}{\begin{subequations}}
+\newcommand{\es}{\end{subequations}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
 
 \def\hmath$#1${\texorpdfstring{{\rmfamily\textit{#1}}}{#1}}
 
@@ -97,14 +106,23 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-    We investigate the superconducting (SC), charge-density wave (CDW), and antiferromagnetic (AFM) phases in the extended Hubbard model at zero temperature and half-filling. 
-    We employ the iterated equations of motion approach to compute the two-particle Green's functions and their spectral densities. 
-    This renders a comprehensive analysis of the behavior of collective excitations possible as the model's parameters are changed across phase transitions. 
-    We identify the well-known amplitude (Higgs) and phase (Anderson-Bogoliubov) modes within the superconducting phase 
-    and observe a similar excitation (cooperon) in the CDW phase which shifts towards zero energy as the system approaches the phase transition to the SC phase. 
-    \textcolor{\markEdited}{In the CDW phase, close to the phase transition to the AFM phase, 
-    we find a collective mode (exciton) that does not change significantly and another mode (magnon) that moves into the two-particle continuum. 
-    In the AFM phase, we identify both longitudinal and transversal magnons.}
+    We investigate the superconducting (SC), charge-density wave (CDW), and antiferromagnetic (AFM) phases in the 
+		extended Hubbard model at zero temperature and half-filling. 
+    We employ the iterated equations of motion approach to compute the two-particle Green's functions and their
+		spectral densities. 
+    This renders a comprehensive analysis of the behavior of collective excitations possible as the 
+		model's parameters are tuned across phase transitions. 
+    We identify the well-known amplitude (Higgs) and phase (Anderson-Bogoliubov) modes within the 
+		superconducting phase and observe a similar excitation (cooperon) in the CDW phase which shifts towards 
+		zero energy as the system approaches the phase transition to the SC phase. 
+    In the CDW phase, close to the phase transition to the AFM phase, 
+    we find a collective mode, an exciton, that does not change significantly 
+    and another mode, a longitudinal magnon, that emerges from the two-particle continuum as the system approaches the phase transition to the AFM phase. 
+    \red{Habe ich geaendert - stimmt es so?} \blue{Nicht ganz, das Magnon verschwindet, wenn man weg von der Phasengrenze geht, also zu kleineren U/größeren V. 
+    Umgekehrt in der AFM phase, verschwindet das Exziton, bei dem analogen Prozess, also zu großem U/kleinen V. Des Weiteren sind beide Magnonen außerhalb der AFM Phase identisch.
+    Ist es dann richtig, hier nur von dem longitudinalen zu sprechen?}
+		In the AFM phase, we identify both a longitudinal (amplitude) and a 
+		transversal Goldstone magnon; the latter is located at zero energy.
 \end{abstract}
 
 \maketitle
@@ -119,44 +137,67 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
 
 
 The study of collective excitations is of great interest as it sheds light on the intricate dynamics of correlated electron systems, providing crucial insight into emergent material properties.
-On the theoretical side, the Hubbard model has been employed in a plethora of previous studies. 
-Early studies proved the existence of eigenstates to the Hubbard Hamiltonian that exhibit off-diagonal long-range order,
-encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
-Shortly afterward, an exact SO(4) symmetry was discovered, which allows a degeneracy of superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
-This coexistence can be argued by the existence of a particle-hole transformation on bipartite lattices, 
-that maps the attractive Hubbard model exactly onto the repulsive one, exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
-The previously mentioned SC and CDW phases map to different spin operators \cite{zitko15,lieb89}.
+We are in particular interested in the behavior of the collective excitations in the vicinity of phase transitions.
+Do they signal these transitions, for instance by softening? 
+How does the competition of different phases manifest in the energies and weights of the collective excitations?
+These questions set the context of the present article. 
 
-Numerous studies have investigated the phases and various quantities of the Hubbard model in equilibrium systems, including various additional interactions with and without doping.
-\cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}.
-\textcolor{\markEdited}{Recent studies on the dynamics of the superconducting gap parameter examined quenches, yielding oscillations \cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Barankov06,Cui19}, 
-and driven systems in the hope of inducing superconductivity \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.}
+On the theoretical side, we choose a paradigmatic, but simple model which displays competing phases.
+The Hubbard model has been employed in a plethora of previous studies and competing phases are established in its extensions. 
+Early studies proved the existence of eigenstates of the Hubbard Hamiltonian that exhibit off-diagonal long-range order, encouraging the model's usage for the description of high-temperature superconductivity \cite{yang89}.
+Shortly afterward, an exact SO(4) symmetry was discovered, which induces a degeneracy of 
+superconductivity (SC) and a charge-density wave (CDW) governed by an attractive on-site interaction \cite{yang90}.
+This coexistence stems from the existence of a particle-hole transformation on bipartite lattices, 
+that maps the attractive Hubbard model rigorously onto the repulsive one, 
+exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
+The order parameters of the previously mentioned SC and CDW phases map to different spin expectation values \cite{zitko15,lieb89}.
+\blue{Den vorigen Satz verstehe ich leider gar nicht: phase = spin operator? Ja, das war ungenau. So ist es vermutlich besser?}
 
-In this paper, we will restrict ourselves to the half-filled Hubbard model, including an additional intersite interaction, on a square and a simple cubic lattice.
-\textcolor{\markEdited}{Specifically, we investigate competing phases, i.e., the behavior of various collective modes around phase transitions.
-To this end, the 2D case already provides a wide range of possible phases, including CDW, AFM, $s$- and $d_{x^2 - y^2}$-wave superconductivity, and phase-separated states \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22,Linner23}.}
-We expand these well-known phase diagrams to the simple cubic lattice where we find a similar structure for CDW, AFM, and $s$-wave SC.
+Numerous studies investigated the phases and various quantities of the Hubbard model in equilibrium systems, including additional interactions with and without doping
+\cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}. 
+Recent studies on the dynamics of the superconducting gap parameter examined quenches, yielding oscillations \cite{Volkov73,Yuzbashyan05,Yuzbashyan06,Barankov06,Cui19}, 
+and driven systems motivated by the goal to induce superconductivity \cite{Nicoletti14,Krull14,Moor14,Casandruc15,patel16,sentef17,Buenemann17}.
 
-To study this system, we will first employ a mean-field approximation to the interaction terms 
-and then use the methodology from the so-called iterated equations of motion approach (iEoM),
-which has already seen success in the handling of interaction quenches \cite{uhrig09,hamerla13,hamerla14,bleicker18}.
-Here, one commutes operators from a suitable operator basis with the Hamiltonian and adds the newly occurring terms to it.
-Naturally, a truncation is necessary for most practical applications, however, the approximation becomes better the more terms are included within the basis.
-The functionality of this method has been compared to the density matrix formalism and has proved to be considerably more accurate \cite{Kalthoff17}.
+In this paper, we restrict ourselves to the half-filled Hubbard model 
+including an additional nearest neighbor, intersite interaction on the square and the simple cubic lattice at zero temperature.
+Specifically, we investigate competing phases, i.e., the behavior of various collective modes close to phase transitions between these phases.
+To this end, the case in two dimensions (2D) already displays a wide range of possible phases
+including CDW, AFM, $s$- and $d_{x^2 - y^2}$-wave superconductivity as well as 
+phase-separated states \cite{Micnas88b,Tsuchiura95,Su01,Su04,ha11,Huang13,Jiang22,Linner23}.
+We extend the corresponding established phase diagrams to the simple cubic lattice in three dimensions
+(3D) where we find a qualitatively similar phase diagran for CDW, AFM, $s$-wave SC phases, and
+indications of phase separation.
 
-Moreover, we demonstrate an explicit way to obtain various Green's functions from the aforementioned methodology.
-By extension, we also obtain the spectral functions of the investigated systems and discuss the excitations found therein.
-The prominent examples in the SC phase are the well-known phase (Anderson-Bogoliubov) and amplitude (Higgs) modes.
-\textcolor{\markEdited}{The former occurs in neutral superfluids at $0$ energy and has been found in the past \cite{Bogoljubov1958,Anderson58,Brieskorn74,Schmid1975,simanek1975,schoen1976propagating,Maiti2015,Sun2020,Fan22}.
-We will obtain this mode as well based on a microscopic description that excludes long-range electromagnetic interactions.
-The inclusion of this kind of interaction would shift this mode towards the plasma frequency \cite{Anderson58,schoen1976propagating,Kulik1981}.}
-\textcolor{\markEdited}{The amplitude mode, on the other hand, is located at the lower edge of the quasiparticle continuum as it represents the energy required to form or break a Cooper pair \cite{Schmid1975,Varma02,Cea14,Measson14,Tsuji15,Krull16,Mueller2019,Schwarz20}}
+First, we employ a mean-field approximation to the interaction terms to determine the phases.
+Second, we use the iterated equations of motion approach (iEoM)
+which has already seen success in the handling of interaction quenches \cite{uhrig09,hamerla13,hamerla14,bleicker18}
+to compute the collective excitations.
+The basic idea is to start in the Heisenberg picture from a suitable operator basis which is extended
+upon commuting its operators with the Hamiltonian and including the appearing additional operators to the basis. 
+Of course, a truncation is necessary for most practical applications, however, the approximation becomes better the more terms are included within the basis.
+The applicability of this method was compared successfully to the results of the density matrix formalism \cite{Kalthoff17}.
 
-The remainder of this paper is organized as follows:
-In \autoref{sec:model} we will introduce the model and its Hamiltonian as well as our mean-field theory for the ground state.
-We give a brief overview of the iterated equations of motion approach and derive a rigorous link to Green's functions in \autoref{sec:ieom}.
-Next, we show our results in \autoref{sec:results}.
-Lastly, in \autoref{sec:conclusion}, we will discuss our results.
+Moreover, we demonstrate an explicit way to compute various Green's functions by this approach.
+By extension, the corresponding spectral functions of the investigated systems can be computed and 
+we discuss the signatures of collective excitations in the spectral functions. \blue{within these?}
+The most prominent examples in the SC phase are the well-known phase mode (Anderson-Bogoliubov) and 
+the amplitude (Higgs) modes. The former occurs in neutral superfluids at zero energy and was found
+in a large number of studies \cite{Bogoljubov1958,Anderson58,Brieskorn74,Schmid1975,simanek1975,schon76,Maiti2015,Sun2020,Fan22} which we cannot list exhaustively here.
+We obtain this mode based on a microscopic description without long-range electromagnetic interactions.
+The inclusion of this kind of interaction would shift this mode towards the plasma frequency 
+\cite{Anderson58,schon76,Kulik1981} which is, however, beyond the scope of the present 
+paper. The amplitude mode, on the other hand, is located at the lower edge of the quasiparticle continuum.
+The corresponding energy is the energy required to break up a Cooper pair 
+\cite{Schmid1975,Varma02,Cea14,Measson14,Tsuji15,Krull16,Mueller2019,Schwarz20}.
+This Higgs mode is not charged so that it does not couple to the electromagnetic fields.
+
+This paper is organized as follows:
+In \autoref{sec:model} we introduce the model and its Hamiltonian as well as the employed mean-field theory for the ground state.
+We give a brief overview of the iterated equations of motion approach and 
+derive a rigorous relation to Green's functions in \autoref{sec:ieom}.
+Next, we show and discuss results in \autoref{sec:results}.
+Lastly, in \autoref{sec:conclusion}, we summarize the results, draw the conclusions, and provide
+an outlook.
 
 \section{Model and mean-field theory}\label{sec:model}
 
