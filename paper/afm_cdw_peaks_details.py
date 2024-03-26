@@ -85,6 +85,8 @@ axs[0][0].text(0.89, 0.66, "(a.1)", transform = axs[0][0].transAxes)
 axs[0][1].text(0.89, 0.66, "(a.2)", transform = axs[0][1].transAxes)
 axs[1][0].text(0.89, 0.66, "(b.1)", transform = axs[1][0].transAxes)
 axs[1][1].text(0.89, 0.66, "(b.2)", transform = axs[1][1].transAxes)
+axs[2][0].text(0.89, 0.66, "(c.1)", transform = axs[1][0].transAxes)
+axs[2][1].text(0.89, 0.66, "(c.2)", transform = axs[1][1].transAxes)
 
 axs[nrows-1][0].set_xlabel(r"$\ln((U - U_0) / t)$")
 axs[nrows-1][1].set_xlabel(r"$\ln((U - U_0) / t)$")
