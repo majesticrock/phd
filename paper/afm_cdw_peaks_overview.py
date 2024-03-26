@@ -77,6 +77,7 @@ axs[0][1].set_title("Simple cubic lattice")
 for i in range(2):
     axs[0][i].text(0.87, 0.5, f"(a.{i+1})", transform = axs[0][i].transAxes)
     axs[1][i].text(0.87, 0.5, f"(b.{i+1})", transform = axs[1][i].transAxes)
+    axs[2][i].text(0.87, 0.5, f"(c.{i+1})", transform = axs[2][i].transAxes)
 
 axs[nrows-1][0].set_xlabel(r"$U [t]$")
 axs[nrows-1][1].set_xlabel(r"$U [t]$")

@@ -41,7 +41,7 @@ for j, lattice_folder in enumerate(lattice_folders):
     if(j==0):
         def func(x, a, b):
             return a*np.sqrt(x) + b
-        popt, pcov = ez_general_fit(1/N, peak_positions, func, label="$a \\sqrt{1/N_\gamma} + b$")
+        popt, pcov = ez_general_fit(1/N, peak_positions, func, label="$a \\sqrt{1/N_\gamma} + b$", x_space=np.linspace(0, max(1/N), 300))
         ax.text(0.00175, 0.0175, f"$a = {popt[0]:.5f}$\n$b = {popt[1]:.5f}$")
 
 ax.set_xlabel("$1/N_\\gamma$")
