@@ -68,8 +68,6 @@
 \newcommand{\green}[1]{\mathcal{G}_\text{#1}}
 \newcommand{\spectral}[1]{\mathcal{A}_\text{#1}  (\omega)}
 
-\newcommand{\markEdited}{red}
-
 \newcommand{\bs}{\begin{subequations}}
 \newcommand{\es}{\end{subequations}}
 \newcommand{\be}{\begin{equation}}
@@ -217,7 +215,7 @@ and $\langle i, j\rangle$ denotes the summation over nearest neighbor sites.
 The parameters are the hopping amplitude $t$, the onsite interaction $U$, the intersite interaction $V$, and the chemical potential $\mu$.
 Applying a Fourier transform passing to $k$ space yields the single-particle dispersion 
 \begin{equation}
-    \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha), \quad k_\alpha \in [-\pi, \pi)\,,
+    \epsilon_0 (\vk) = -2t \sum_{\alpha=1}^D \cos(k_\alpha), \quad k_\alpha \in [-\pi, \pi),
 \end{equation}
 with the system's dimension $D$ and the dimensionless wave vector $\vk$ where we set the lattice constant to unity.
 
@@ -264,11 +262,11 @@ The last parameter, $\Delta_n$, renormalizes the hopping term according to
 In total, we obtain the mean-field Hamiltonian in spinor representation as
 \begin{equation}
     \label{eqn:mf_hamiltonian}
-    H_\text{MF} = \sum_{\vk} \Psi^\dagger (\vk) h(\vk) \Psi (\vk)\,,
+    H_\text{MF} = \sum_{\vk} \Psi^\dagger (\vk) h(\vk) \Psi (\vk),
 \end{equation}
 with the spinors
 \begin{equation}
-    \Psi^\dagger (\vk) \coloneqq  \left( c_{\vk\up}^\dagger\,, c_{\kplusQ\up}^\dagger\,, c_{-\vk\down}\,, c_{\kminusQ\down} \right)
+    \Psi^\dagger (\vk) \coloneqq  \left( c_{\vk\up}^\dagger, c_{\kplusQ\up}^\dagger, c_{-\vk\down}, c_{\kminusQ\down} \right)
 \end{equation}
 and the matrix
 \begin{equation}
@@ -277,7 +275,7 @@ and the matrix
         \Delta_- & \epsilon (\vk + \vQ) & \Delta_\eta & \Delta_\text{SC} \\
         \Delta_\text{SC}^* & \Delta_\eta^* & - \epsilon (-\vk) & - \Delta_+ \\
         \Delta_\eta^* & \Delta_\text{SC}^* & - \Delta_+^* & - \epsilon (-\vk - \vQ)
-        \end{pmatrix}\,,
+        \end{pmatrix},
 \end{equation}
 where we defined $\Delta_\pm \coloneqq \Delta_\text{CDW} \pm \Delta_\text{AFM}$.
 
@@ -306,7 +304,7 @@ We observe that  the entire Hamiltonian and all expectation values in the consid
 i.e., for any operator $\widehat{O}$ the following relation holds 
 \begin{equation}
     \label{eqn:equal_expecs}
-    \langle \widehat{O}_{\vk} \rangle = \langle \widehat{O}_{\vk'} \rangle \eqqcolon \langle \widehat{O}( \gamma ) \rangle\,,
+    \langle \widehat{O}_{\vk} \rangle = \langle \widehat{O}_{\vk'} \rangle \eqqcolon \langle \widehat{O}( \gamma ) \rangle,
 \end{equation}
 if $\gamma= \widehat{\gamma}(\vk) = \widehat{\gamma}(\vk')$.
 While 2D systems  of about $100\times100$ lattice sites can still be solved by evaluating sums over  wave vectors,
@@ -382,24 +380,6 @@ The advantage is that one can now handle simple matrices rather than operators
 acting on an enormous Hilbert space.
 The dimension of these matrices depends on the number of operators in the set $\mathcal{B}$.
 
-The dynamical matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
-We derive this statement in  App.\ \ref{sec:positive_M}.
-We use this fact to further enhance our ground state phase diagram.
-If $\mM$ has even a single negative eigenvalue for a combination of parameters, 
-we know that the assumed phase does not represent a true ground state.
-Physically, this means that there are ``excitations'' which in fact lower the energy. 
-Thus, the assumed ground state is not the lowest state and therefore unstable.
-This happens for certain values $U<0$ and $V<0$, see the red shading in Fig.\ \ref{fig:phase_diagram}.
-For finite temperatures on the square lattice, a phase-separated state as well as the coexistence of a phase-separated state with $s$-wave superconductivity has been found in this region \cite{Linner23}.
-The phase boundary that we propose here agrees qualitatively well with the one found in the aforementioned reference.
-We expect a similar set of phases to be present on the simple cubic lattice. \red{This is indicated by
-the negative eigenvalues of the corresponding dynamical matrix. Stimmt das so, Joshua?} \blue{ja. Ich überlege gerade, ob dieser Absatz evtl. mehr Sinn nach dem Einführen des symplektischen Produktes hat?}
-
-While the existence of a negative eigenvalue of $\mM$ proves that the assumed phase is
-not in thermal equilibrium, the absence of negative eigenvalues does not imply absolute stability,
-but only local stability with respect to the considered operators.
-For example, we do not find any negative eigenvalues of $\mM$ in the $U>0$, $V<0$ region despite previous studies indicating $d_{x^2 - y^2}$-wave superconductivity \cite{Micnas88b,Huang13}.
-
 In practice, however, generic Hamiltonians do not allow for
 a complete operator set $\mathcal{B}$ to exist because the commutations usually introduce terms which are not 
 yet in $\mathcal{B}$, e.g., because they are of higher order.
@@ -413,7 +393,7 @@ to bilinear operators to capture the leading effects of collective behavior.
 Furthermore, we use the symplectic product as operator product
 \begin{equation}
 \label{eqn:scalar_product}
-    (A | B) \coloneqq  \langle [A^\dagger, B] \rangle\,,
+    (A | B) \coloneqq  \langle [A^\dagger, B] \rangle,
 \end{equation}
 where the expectation values are taken with respect to the assumed phase of the mean-field Hamiltonian 
 \eqref{eqn:mf_hamiltonian}.
@@ -434,8 +414,24 @@ We emphasize, that the dynamical matrix  $\mM$ is computed
 by commuting with the \emph{full} Hubbard Hamiltonian \eqref{eqn:full_hamiltonian} 
 enabling us to capture collective behavior 
 rather than using only the mean-field Hamiltonian \eqref{eqn:mf_hamiltonian}
-which captures the one-particle dynamics, but misses
-the two-body dynamics.
+which captures the one-particle dynamics, but misses the two-body dynamics.
+
+The dynamical matrix $\mM$ is positive semidefinite if the system is in thermal equilibrium.
+We derive this statement in  App.\ \ref{sec:positive_M}.
+We use this fact to further enhance our ground state phase diagram.
+If $\mM$ has even a single negative eigenvalue for a combination of parameters, 
+we know that the assumed phase does not represent a true ground state.
+Physically, this means that there are ``excitations'' which in fact lower the energy. 
+Thus, the assumed ground state is not the lowest state and therefore unstable.
+This happens for certain values $U<0$ and $V<0$, see the red shading in Fig.\ \ref{fig:phase_diagram}.
+For finite temperatures on the square lattice, a phase-separated state as well as the coexistence of a phase-separated state with $s$-wave superconductivity has been found in this region \cite{Linner23}.
+The phase boundary that we propose here agrees qualitatively well with the one found in the aforementioned reference.
+We expect a similar set of phases to be present on the simple cubic lattice. 
+
+While the existence of a negative eigenvalue of $\mM$ proves that the assumed phase is
+not in thermal equilibrium, the absence of negative eigenvalues does not imply absolute stability,
+but only local stability with respect to the considered operators.
+For example, we do not find any negative eigenvalues of $\mM$ in the $U>0$, $V<0$ region despite previous studies indicating $d_{x^2 - y^2}$-wave superconductivity \cite{Micnas88b,Huang13}.
 
 In order to treat the square and the simple cubic lattice on equal footing, we exploit 
 \eqref{eqn:equal_expecs} to define the operator set in $\gamma$ space
@@ -476,7 +472,7 @@ nevertheless, we expect similar inaccuracies in the AFM region for small values 
 In the next step, we rearrange these operators in a way reminiscent of the $x$ and $p$ operators
 of a harmonic oscillator
 \begin{equation}
-    X_i \coloneqq  A_i + A_i^\dagger\,,\quad P_i \coloneqq  A_i - A_i^\dagger.
+    X_i \coloneqq  A_i + A_i^\dagger,\quad P_i \coloneqq  A_i - A_i^\dagger.
 \end{equation}
 Then, the studied operator set is given by $\mathcal{B}_{XP} \coloneqq \{ X_i, \ldots, P_i, \ldots \}$.
 If some operators would be 0, e.g., $P_i$ for any Hermitian $A_i$, or duplicate, e.g., certain $X_i$ for $g$-type terms where $g_{k\sigma} = g_{k+Q\sigma}^\dagger$, we omit these redundant operators.
@@ -486,7 +482,7 @@ Due to this particular choice of operators, the matrices occurring in \eqref{eqn
     \label{eqn:xp_set}
     \mM = \begin{pmatrix}
         \mathcal{K}_+ & \kappa \\ \kappa^\dagger & \mathcal{K}_-
-    \end{pmatrix}\,,\quad \mN = \begin{pmatrix}
+    \end{pmatrix},\quad \mN = \begin{pmatrix}
         \Lambda_+ & \mathcal{L} \\ \mathcal{L}^\dagger & \Lambda_-
     \end{pmatrix},
 \end{equation}
@@ -495,12 +491,12 @@ Furthermore, due to symmetry, the relations $\Im [\mathcal{K}_\pm] = \Re [\kappa
 Since the mean-field Hamiltonian is real, all ensuing expectation values are real
 and we can conclude both matrices have large empty blocks with zero elements: $\kappa=0$ and $\Lambda_\pm=0$.
 This condition is fulfilled for all cases investigated in this article because the model displays
-inversion symmetry and time-reversal symmetry \red{or at least the combination of both in the AFM phase}.
+inversion symmetry and time-reversal symmetry or at least the combination of both in the AFM phase.
 
 To study the collective excitations quantitatively, we investigate various retarded Green's functions 
 \bs
 \begin{equation}
-    G_{AB}^\text{ret} (t) = - \im \langle [A(t), B] \rangle \Theta(t)\,,
+    G_{AB}^\text{ret} (t) = - \im \langle [A(t), B] \rangle \Theta(t),
 \end{equation}
 where $\Theta(t)$ is the Heaviside function and their Fourier transforms
 \begin{equation}
@@ -525,7 +521,7 @@ where we introduced the resolvent
 The entries of this matrix $\mathcal{G}(z)$ are the Fourier-transformed Green's functions given in 
 \eqref{eqn:standard_gf} with respect to the studied operators. For simplicity, we formulate the
 relation between the Green's functions and the matrices for the operators $A_j$. Eventually, we 
-use the block representation resulting for the operators $X_i$ and $P_i$. \red{Wird das klar?}
+use the block representation resulting for the operators $X_i$ and $P_i$.
 The matrix element $(j,i)$ refers to
 \bs
 \begin{align}
@@ -569,7 +565,8 @@ Then, the final result reads
 with the resolvent $\mathcal{R}(z)$ from \eqref{eqn:resolvent}.
 Obviously, the key task is computing the resolvent $\mathcal{R}$ efficiently.
 
-To this end, we exploit the matrix structure in \eqref{eqn:xp_set} and assume that all matrix entries are real so that $\kappa_{ij} = \Lambda_{\pm,ij} = 0$ holds. \red{Stimmt das so?}
+To this end, we exploit the matrix structure in \eqref{eqn:xp_set} 
+and assume that all matrix entries are real so that $\kappa_{ij} = \Lambda_{\pm,ij} = 0$ holds.
 Then, with $r_X(z)\coloneqq\mathcal{R}|_{XX}$ denoting the upper left block of a matrix $\mathcal{R}$ which 
 refers to the $X$-operators, we can calculate
 \bs
@@ -603,16 +600,17 @@ Then, the resolvent $r_X(z)$ can be expressed by
 where the matrix $\check{M}_X \coloneqq \check{N}_X^{-1/2} \mathcal{K}_+ \check{N}_X^{-1/2}$ is used; it is
 positive semidefinite and Hermitian by the previous arguments.
 
-If $\check{N}_X$ has a singular part, for instance, due to numerical inaccuracies or for particular operators, the inverse can be replaced by the Moore-Penrose pseudo-inverse. 
+If $\check{N}_X$ has a singular part, for instance, due to numerical inaccuracies or for particular operators, 
+the inverse can be replaced by the Moore-Penrose pseudo-inverse. 
 A possible way to compute this inverse is to diagonalize 
 $\check{N}_X = \mathcal{V} \mathcal{D} \mathcal{V}^\dagger$ yielding a diagonal matrix $\mathcal{D}$ and a unitary transformation matrix $\mathcal{V}$. 
 Then, the pseudo-inverse can be defined by
 \begin{equation}
-    \check{N}^{-1} \coloneqq \mathcal{V} \mathcal{D}^{-1} \mathcal{V}^\dagger
+    \check{N}^{\mathrm{MP}} \coloneqq \mathcal{V} \mathcal{D}^{\mathrm{MP}} \mathcal{V}^\dagger
 \end{equation}
-with \red{Ich habe das hoch + in ein hoch -1 geaendert, weil mir das "`+"' zu sehr an Transposition erinnerte.}
+with
 \begin{equation}
-    (\mathcal{D}^{-1})_{ij} = \begin{cases}
+    (\mathcal{D}^{\mathrm{MP}})_{ij} = \begin{cases}
         1/\mathcal{D}_{ij} & \mathcal{D}_{ij} \neq 0 \\ 0 & \text{otherwise}
     \end{cases}.
 \end{equation}
@@ -630,19 +628,17 @@ The relevant matrices turn out to be
 Summarizing, the Green's function is given by
 \begin{subequations}
     \begin{align}
-        G_{X_j,X_i}  (z) &= - \left[ \vec{x}_j^\dagger (0) \right]_X \mathcal{L}^\dagger r_X (z) \mathcal{L} \left[ \vec{x}_i(0) \right]_X, 
+        G_{X_j,X_i}  (z) &= - \vec{x}_j^\dagger (0) \mathcal{L}^\dagger r_X (z) \mathcal{L} \vec{x}_i(0), 
 				\\
-        G_{P_j,P_i} (z) &= \red{+} \left[ \vec{p}_j^\dagger (0) \right]_P \mathcal{L} r_P (z) \mathcal{L}^\dagger \left[ \vec{p}_i(0) \right]_P\,,
+        G_{P_j,P_i} (z) &= - \vec{p}_j^\dagger (0) \mathcal{L} r_P (z) \mathcal{L}^\dagger \vec{p}_i(0),
     \end{align}
 \end{subequations}
-\blue{Brauchen/wollen wir die $[]_{X/P}$ noch? Und ich bin mir ziemlich sicher, dass das in beiden Fällen ein Minus sein sollte.}
 where the vectors $x_j(0)$ and $x_i(0)$ describe the initial conditions for the operators
 $X_j$ and $X_i$, respectively and $p_j(0)$ and $p_i(0)$ correspondingly for the operators
 $P_j$ and $P_i$. The resolvent $r_X (z)$ is given in \eqref{eqn:rx} and 
 \begin{equation}
     r_P (z) = -\check{N}_P^{-1/2} \frac{1}{z^2 - \check{M}_P} \check{N}_P^{-1/2} .
 \end{equation}
-\red{@ Joshua: Bitte noch einmal sorgfaeltig alles pruefen, da ich doch einiges angepasst habe.}
 
 The remaining task consists of finding the inverse $1/(z^2 - \check{M})$ for all $z$.
 This, however, can be achieved efficiently using a Lanczos tridiagonalization and
@@ -651,7 +647,7 @@ a continued fraction expansion in terms of the Lanczos coefficients $a_i$ and $b
 In the single-band case, the coefficients approach the limit
 \begin{equation}
     \label{eqn:inf_lanczos}
-    a_\infty = \frac{\omega_+ + \omega_-}{2}\text{  and  } b_\infty = \frac{\omega_+ - \omega_-}{4}\,,
+    a_\infty = \frac{\omega_+ + \omega_-}{2}\text{  and  } b_\infty = \frac{\omega_+ - \omega_-}{4},
 \end{equation}
 where $\omega_\pm$ represents the upper and lower band edge, respectively \cite{PettiforRecursion}.
 The continued fraction is truncated at some depth when the coefficients $a_i$ and $b_i$ are sufficiently
@@ -700,10 +696,7 @@ occurs in the fraction which deviates the least from $a_\infty$ and $b_\infty$.
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/resolvent_overview_AFM_CDW.pdf}
-    \caption{\red{Die ersten beiden Reihen muessen getauscht werden. Stimmt dann der Text?} 
-    \blue{Ich hab dir offenbar tatsächlich den falschen Plot geschickt... 
-    Das ist der Plot der auf dem Poster ist, hier hatte ich eigentlich einen 4 Zeilen-Plot angedacht.}
-		Same as Fig.\ \ref{fig:resolvent_overview_SC} except that we are focusing 
+    \caption{Same as Fig.\ \ref{fig:resolvent_overview_SC} except that we are focusing 
 		on the AFM-CDW phase transition.
     For the square lattice, we set $V=1.2t$, and for the simple cubic lattice, $V=0.8t$. 
 		This choice yields the phase transition at $U=4.8t$ for both lattices.
@@ -748,15 +741,13 @@ occurs in the fraction which deviates the least from $a_\infty$ and $b_\infty$.
 \begin{figure*}
     \centering
     \includegraphics[width=.98\textwidth]{plots/afm_cdw_peaks_details.pdf}
-    \caption{\red{Muss es im log-Argument nicht $U_0-U$ heissen, um klar zu sein?}  \blue{Wir plotten $U\in(U_0, 4.8t)$, also $U_0 < U$}
-		The upper panels (a) show double logarithmic plots of the positions $\omega_0$ 
+    \caption{The upper panels (a) show double logarithmic plots of the positions $\omega_0$ 
 		of the peak in $\spectral{l.AFM}$ relative to the lower edge of the two-particle continuum $\omega_-$.
     The lower panels (b) depict the respective weights $W_0$.
     Again, we choose $V=1.2t$ for the square lattice (left column) and 
 		$V=0.8t$ for the simple cubic lattice (right column), respectively.
     The interaction $U_0$ denotes the highest value of $U$ for which 
 		there is no peak below the two-particle continuum, i.e., for $U> U_0$ a peak occurs.
-		\red{Ja, was gilt? Wann gibt's einen Peak, wann nicht? Bitte konsistent im ganzen Artikel bezeichnen.}
     For the square lattice, we find $U_0 \approx 3.372t$ and for the simple cubic lattice $U_0 \approx 4.479t$.
     The parameter range depicted here places the system within the CDW phase.
     The fits are of the same kind as in Fig.\ \ref{fig:sc_in_cdw_behavior}.}
@@ -968,8 +959,7 @@ In the CDW phase, this behavior is reversed, i.e., the peak of $\spectral{CDW}$ 
 than the one in $\spectral{l.AFM}$.
 Analyzing the power-law behavior of the real part described above, see also
 App.\ \ref{sec:fit_greens_functions}, we confirm that these peaks are $\delta$ peaks.
-Moving further away from the phase transition, here $U=6.2t$ in panels (c) \blue{and $U=3.4t$ in panels (d)}
-\red{Im Text war (d) benannt, aber das existiert ja nicht.}, 
+Moving further away from the phase transition, here $U=6.2t$ in panels (c) and $U=3.4t$ in panels (d),
 the upper peak merges with the two-particle continuum while the lower one persists.
 We emphasize that the spectral function of the transverse magnon $\spectral{t.AFM}$ always 
 displays a $\delta'$ peak at $\omega=0$, independent of how far away the parameters are chosen
@@ -983,7 +973,7 @@ from the phase transition. This is the expected behavior of a Goldstone boson.
 \subsection{SC-CDW transition}
 
 Having discussed the dominant peaks, we address their behavior when 
-the system approaches the phase transition \blue{between the SC and CDW phase} at $V=0$ for $U=-2.5t$.
+the system approaches the phase transition between the SC and CDW phase at $V=0$ for $U=-2.5t$.
 First, we investigate the identical peak in $\spectral{Phase}$ and $\spectral{Higgs}$, respectively, in the CDW phase.
 The evolution of its position $\omega_0$ and its weight $W_0$ as a function of $V$ is depicted
 double logarithmically in Fig.\ \ref{fig:sc_in_cdw_behavior}.
@@ -1058,21 +1048,19 @@ We attribute this behavior to the simplicity of our model and do not expect this
 
 Panel (a) shows the peak positions which shift essentially linearly upon varying $U$.
 It is noteworthy, that in the AFM phase the peak in $\spectral{l.AFM}$ lies energetically
-lower than the one \red{Welchen meinst Du? CDW oder l.AFM? Uneindeutig ...} in $\spectral{CDW}$. \blue{Der AFM-peak ist in der AFM-phase bei kleinerer Energie als der CDW-peak in der AFM-phase.}
+lower than the one in $\spectral{CDW}$.
 This is reversed if the system is in the CDW phase.
 We conclude that it is energetically more favorable to create an AFM excitation (magnon) than a CDW
 exciton if the system is in the AFM phase. In the CDW phase, the creation of the CDW exciton is
-energetically cheaper than the creation of a magnon. \red{Habe ich das so richtig dargestellt?} \blue{Ja.}
+energetically cheaper than the creation of a magnon.
 
 Additionally, we plot the peak positions in panel (b) relative to the lower edge of the two-particle continuum.
 We see that the lower-lying peak, i.e., the peak corresponding to the phase in which the system is, 
 shifts further away from the continuum as the system moves away from the phase boundary.
 The other peak, however, shifts closer to the continuum until it dives into it.
 At this point, the weight of the merging peak vanishes, see panels (c).
-\blue{This occurs around $U \approx 4.8t + 1.428t$ ($\spectral{CDW}$) and $U \approx 4.8t - 1.428t$ ($\spectral{l.AFM}$) for the square lattice 
-and around $U \approx 4.8t + 0.321t$  ($\spectral{CDW}$) and $U \approx 4.8t - 0.321t$  ($\spectral{l.AFM}$) for the simple cubic lattice.}
-\red{Was willst Du mit dem $\pm$ ausdruecken? Verstehe ich nicht ... Besser etwas ausfuehrlicher trotz
-einer gewissen Redundanz.}
+This occurs around $U \approx 4.8t + 1.428t$ ($\spectral{CDW}$) and $U \approx 4.8t - 1.428t$ ($\spectral{l.AFM}$) for the square lattice 
+and around $U \approx 4.8t + 0.321t$  ($\spectral{CDW}$) and $U \approx 4.8t - 0.321t$  ($\spectral{l.AFM}$) for the simple cubic lattice.
 
 The weights of the peaks in $\spectral{l.AFM}$ in the AFM phase (the same applies to $\spectral{CDW}$ in the CDW phase) grow as the system moves away from the phase transition.
 The same applies to the peaks in $\spectral{CDW}$ in the CDW phase.
@@ -1082,13 +1070,12 @@ on a double logarithmic scale.
 We restrict the analysis to $\spectral{l.AFM}$ in the CDW phase as the swapped case of $\spectral{CDW}$ in the 
 AFM phase shows the same behavior.
 We consider $U$ relative to the value $U_0$ at which the peak in $\spectral{l.AFM}$ ceases to exist.
-\red{Stimmt die Formulierung?} \blue{Ja.}
 This occurs at $U_0 = 3.372t$ on the square lattice and at $U_0 = 4.479t$ on the simple cubic lattice.
 The peak positions $\omega_0$ in panels (a) behave quadratically as they merge with the 
 two-particle continuum, i.e., 
 $\omega_0 \propto (U-U_0)^2$ while the weights $W_0$ in panel (b) decrease linearly, i.e., 
-$W_0 \propto (U-U_0)$ \red{Stimmt das Vorzeichen?} \blue{Ja.}. This behavior is generic for the peaks of bound states merging with
-their continua at vanishing binding energy \cite{uhrig96b,uhrig96be,zhito13}. \blue{Das wusste ich tatsächlich nicht.}
+$W_0 \propto (U-U_0)$. This behavior is generic for the peaks of bound states merging with
+their continua at vanishing binding energy \cite{uhrig96b,uhrig96be,zhito13}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1145,7 +1132,7 @@ In the SC phase close to the CDW phase, the peak in $\spectral{CDW}$
 is located at a finite energy and and has finite weight. 
 It must represent a bound state because it is located below the two-particle continuum. 
 This state is induced by the application of an electron creation and an electron annihilation without effect of its spin content so that we interpret it as an $S=0$ exciton.
-It behaves similarly to the SC-related peak in non-SC phases. \blue{Explizit in der CDW Phase, nicht?}
+It behaves similarly to the SC-related peak in non-SC phases.
 
 In the vicinity of the AFM-CDW phase transition, the spectral densities
 $\spectral{CDW}$ and $\spectral{l.AFM}$ feature a peak. 
@@ -1157,14 +1144,13 @@ In the CDW phases, the two peaks swap their relative energy positions.
 Moving away from the phase transition, the higher-lying peak merges with the two-particle continuum. 
 The peak position relative to the two-particle continuum approaches $0$ 
 quadratically in $\Delta U$ while its weight approaches $0$ linearly with $\Delta U$ where
-$\Delta U$ measures the distance to the interaction \blue{strength?} where the merging takes place.
+$\Delta U$ measures the distance to the interaction where the merging takes place.
 
 Furthermore, we found the exciton peak in $\spectral{CDW}$ also at large values of $V$ in the CDW phase, 
-evolving smoothly from the CDW-AFM phase transition. \red{Das kannst Du vllt. noch stichprobenartig pruefen.} \blue{Tut es.}
+evolving smoothly from the CDW-AFM phase transition. 
 We assume that this peak is always located outside of the two-particle continuum, even for small values of $V$.
 In this case, however, it can lie very close to the continuum, so that we cannot resolve it due to the limited accuracy of our numerics.
 So it seems to appear as a singularity at $2\Delta$ for small values of $V$.
-\red{Stimmst Du dieser Darstellung zu?} \blue{Ja.}
 
 In the AFM phase, the spectral functions $\spectral{l.AMF}$ and $\spectral{t.AFM}$ are distinct.
 While the longitudinal magnon continues to manifest as a peak at relatively high energies
@@ -1172,10 +1158,9 @@ the transversal magnon appears as a peak at zero energy within our numerical acc
 the asymmetry of the spectral, its peak is the derivative of a $\delta$ function.
 It is an advantageous feature of the adopted approach that the Goldstone theorem is 
 automatically fulfilled. Both, phase mode and transversal magnon are located at zero energy
-if the corresponding symmetry is broken, i.e., the U(1) symmetry and the $O(3)$ symmetry,
-respectively. \blue{Mathmode?}
+if the corresponding symmetry is broken, i.e., the U(1) symmetry and the O(3) symmetry,
+respectively.
 
-\red{Haben wir jetzt alle wesentlichen Beobachtungen erwaehnt?} \blue{Ja.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1188,7 +1173,7 @@ Another intriguing extension is to extend the study from the $\Gamma$ point to t
 This implies studying the same phases with operators at finite wave vectors beyond the nesting vector. 
 Conceptually, this extension is straightforward. But it spoils the efficient approach
 to discretize the $\gamma$ space since the dependence on two wave vectors will no longer
-allow us to reduce all wave vector dependence to a single dependence on $\gamma$. \blue{Das verwirrt mich.}
+allow us to reduce all wave vector dependence to a single dependence on $\gamma$.
 
 Additionally, one can fathom including a coupling of the electronic system to the electromagnetic fields
 so that we no longer study a neutral, but a charged superconducting system. One would expect
@@ -1331,7 +1316,7 @@ This allows us to rewrite \eqref{eqn:green_derivation} as
     G_{AB^\dagger}(z) = - (\Delta \gamma)^2 \vec{b}^\dagger (0) \left[ \tilde{n} \frac{1}{\tilde{m} + z \tilde{n}} \tilde{n} \right] \vec{a}(0)
 \end{equation}
 for the general operators $A$ and $B$ and the initial conditions
-$A=\sum a_i A_i$ and $B=\sum b_i A_i$. \red{Passt das?}  \blue{Tut es. Wir könnten überlegen hier auch $a_i$ und $a_j$ statt a und b zu verwenden, um dieselbe Notation wie im Haupttext zu nutzen?}
+$A=\sum a_i A_i$ and $B=\sum b_i A_i$.
 
 
 
@@ -1363,9 +1348,7 @@ The first line is an approximation of the integral in the second line, as each m
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.48\textwidth]{plots/finite_size.pdf}
-    \caption{\red{Die abbildung muss an beiden Achsen bei 0 beginnen. Der Fit sollte auch bei (0,0) 
-		beginnen. In der Legende sollte statt "`Data square"' einfach "`square lattice"' stehen und
-		entsprechend "`cubic lattice"'.} Effect of the number of  sampling points $N_\gamma$ 
+    \caption{Effect of the number of  sampling points $N_\gamma$ 
 		on the absolute position of the peak in $\spectral{Phase}$ for $U=-2.5t$ and $V=-0.1t$.
     On the simple cubic lattice, the peak already is located at $\omega=0$ within numerical accuracy.
     On the square lattice, its position approaches $0$ following $\sqrt{1/N_\gamma}$.}
