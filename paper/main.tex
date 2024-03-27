@@ -117,12 +117,11 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
 		zero energy as the system approaches the phase transition to the SC phase. 
     In the CDW phase, close to the phase transition to the AFM phase, 
     we find a collective mode, an exciton, that does not change significantly 
-    and another mode, a longitudinal magnon, that emerges from the two-particle continuum as the system approaches the phase transition to the AFM phase. 
-    \red{Habe ich geaendert - stimmt es so?} \blue{Nicht ganz, das Magnon verschwindet, wenn man weg von der Phasengrenze geht, also zu kleineren U/größeren V. 
-    Umgekehrt in der AFM phase, verschwindet das Exziton, bei dem analogen Prozess, also zu großem U/kleinen V. Des Weiteren sind beide Magnonen außerhalb der AFM Phase identisch.
-    Ist es dann richtig, hier nur von dem longitudinalen zu sprechen?}
-		In the AFM phase, we identify both a longitudinal (amplitude) and a 
-		transversal Goldstone magnon; the latter is located at zero energy.
+    and another mode, a longitudinal magnon, 
+    that emerges from the two-particle continuum as the system approaches the phase transition to the AFM phase. 
+    It becomes identical with the former at the transition.
+		In the AFM phase, their roles are reversed.
+    Additionally, we find a transversal Goldstone magnon located at zero energy.
 \end{abstract}
 
 \maketitle
@@ -150,8 +149,7 @@ superconductivity (SC) and a charge-density wave (CDW) governed by an attractive
 This coexistence stems from the existence of a particle-hole transformation on bipartite lattices, 
 that maps the attractive Hubbard model rigorously onto the repulsive one, 
 exhibiting antiferromagnetism (AFM) \cite{Hirsch85}.
-The order parameters of the previously mentioned SC and CDW phases map to different spin expectation values \cite{zitko15,lieb89}.
-\blue{Den vorigen Satz verstehe ich leider gar nicht: phase = spin operator? Ja, das war ungenau. So ist es vermutlich besser?}
+The order parameters of the SC and CDW phases in the attractive model map to different spin expectation values in the repulsive one \cite{zitko15,lieb89}.
 
 Numerous studies investigated the phases and various quantities of the Hubbard model in equilibrium systems, including additional interactions with and without doping
 \cite{Micnas88,Micnas88b,Micnas89,Dzierzawa92,Kostyrko92,Eriksson95,Staudt00,Onari04,Toschi05,Brackett16,Paki19,romer20,Sushchyev22}. 
@@ -179,7 +177,7 @@ The applicability of this method was compared successfully to the results of the
 
 Moreover, we demonstrate an explicit way to compute various Green's functions by this approach.
 By extension, the corresponding spectral functions of the investigated systems can be computed and 
-we discuss the signatures of collective excitations in the spectral functions. \blue{within these?}
+we discuss the signatures of collective excitations in the spectral functions. 
 The most prominent examples in the SC phase are the well-known phase mode (Anderson-Bogoliubov) and 
 the amplitude (Higgs) modes. The former occurs in neutral superfluids at zero energy and was found
 in a large number of studies \cite{Bogoljubov1958,Anderson58,Brieskorn74,Schmid1975,simanek1975,schon76,Maiti2015,Sun2020,Fan22} which we cannot list exhaustively here.
@@ -605,7 +603,7 @@ Then, the resolvent $r_X(z)$ can be expressed by
 where the matrix $\check{M}_X \coloneqq \check{N}_X^{-1/2} \mathcal{K}_+ \check{N}_X^{-1/2}$ is used; it is
 positive semidefinite and Hermitian by the previous arguments.
 
-If $\check{N}_X$ has a singular part, for instance, due to numerical inaccuracies \blue{Das kann auch völlig analytisch auftreten}, the inverse can be replaced by the Moore-Penrose pseudo-inverse. 
+If $\check{N}_X$ has a singular part, for instance, due to numerical inaccuracies or for particular operators, the inverse can be replaced by the Moore-Penrose pseudo-inverse. 
 A possible way to compute this inverse is to diagonalize 
 $\check{N}_X = \mathcal{V} \mathcal{D} \mathcal{V}^\dagger$ yielding a diagonal matrix $\mathcal{D}$ and a unitary transformation matrix $\mathcal{V}$. 
 Then, the pseudo-inverse can be defined by
@@ -1039,8 +1037,8 @@ on the square lattice, at least at finite temperature \cite{Linner23}.
 Thus, we interpret the negative eigenvalues in the dynamical matrix as indicators of phase separation. 
 Physically, a strong attractive interaction clearly favors phase separation since the particles prefer to stay close together 
 so it is highly plausible that they gather in one region of the sample while leaving the remainder essentially empty.
-\red{Was ist in 3D - gibt es da nicht auch negative Eigenwerte usw.? Das solten wir dann hier
-ebenfalls besprechen. Wo wollten wir denn die Diskussion des Tricks von Biermann publizieren?}
+In 3D, we observe negative eigenvalues in $\mM$ for strongly negative interactions as well.
+Thus, we expect that phase separation also occurs on this lattice.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1054,8 +1052,9 @@ As in the previous subsection, we plot the occurring peaks in $\spectral{CDW}$ a
 $\spectral{l.AFM}$ in the respective phases in Fig.\ \ref{fig:afm_cdw_peaks_overview}.
 On the right-hand side of each panel, i.e., for $U > zV$, the system is in the AFM phase (green shading);
 on the left-hand side, it is in the CDW phase (orange shading).
-Qualitatively, the peak in $\spectral{l.AFM}$ behaves like the peak in 
-$\spectral{CDW}$ if the phases are swapped. \red{Ist das exakt oder nur ungefaehr so?} \blue{tatsächlich exakt.}
+Qualitatively, the peak in $\spectral{l.AFM}$ behaves exactly like the peak in 
+$\spectral{CDW}$ if the phases are swapped.
+We attribute this behavior to the simplicity of our model and do not expect this behavior quantitatively generic.
 
 Panel (a) shows the peak positions which shift essentially linearly upon varying $U$.
 It is noteworthy, that in the AFM phase the peak in $\spectral{l.AFM}$ lies energetically
@@ -1265,9 +1264,7 @@ The real part of them behaves like $1/\omega$ in close vicinity to the peak posi
 This indicates that the peaks are $\delta$ distributions.
 The peaks of $\spectral{l.AFM}$ and $\spectral{CDW}$ close to the phase transition are identical 
 when swapped, i.e., $\spectral{l.AFM}$ in the CDW phase is the same as $\spectral{CDW}$ in the AFM phase.
-This reflects the SO(4) symmetry of the model. \red{Die Spektralfunktionen sind also komplett identisch, richtig?
-Oder nur so ungefähr?} \blue{Wirklich komplett identisch}
-
+However, we do not believe that this identity is quantitatively generic.
 
 \section{Numerical treatment of the matrix elements in $\gamma$-space}
 \label{sec:numerical_ieom}
