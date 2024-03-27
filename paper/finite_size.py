@@ -37,7 +37,7 @@ for j, lattice_folder in enumerate(lattice_folders):
         
         peak_positions[i] = peak_result["x"]
 
-    ax.plot(1/N, peak_positions, "o", label=f"{lattice_folder} lattice")
+    ax.plot(1/N, peak_positions, "o", label=f"{'Square' if j == 0 else 'Simple cubic'} lattice")
     if(j==0):
         def func(x, a, b):
             return a*np.sqrt(x) + b
