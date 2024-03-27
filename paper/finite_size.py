@@ -48,7 +48,7 @@ ax.tick_params(axis='x', pad=10)
 ax.set_xlabel("$1/N_\\gamma$")
 ax.set_ylabel("$\\omega_0 [t]$")
 
-ax.legend()
+ax.legend(loc="lower right")
 fig.tight_layout()
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 #plt.show()
