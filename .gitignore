@@ -25,7 +25,7 @@ cpp/HubbardMeanField/small_square_auto_generated
 cpp/main
 cpp/HubbardMeanField/doxy
 *.bin
-
+paper/plots
 
 cpp/HubbardMeanField/sources/SymbolicOperators
 cpp/HubbardMeanField/sources/Utility

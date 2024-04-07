@@ -79,4 +79,5 @@ axs[2][1].text(0.93, 0.59, "(c.2) CDW\n$V=0.5t$", transform = axs[2][1].transAxe
 
 fig.tight_layout()
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
+plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.svg")
 #plt.show()

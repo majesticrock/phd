@@ -90,4 +90,5 @@ if nrows > 3: axs[3][1].text(10.6, 0.6, "(d.2) CDW\n$U = 3.4t$")
 
 fig.tight_layout()
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
+plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.svg")
 #plt.show()
