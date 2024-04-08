@@ -13,3 +13,10 @@
 # declare binary files that should not be modified
 *.gz binary
 *.pdf binary
+*.png binary
+*.pptx binary
+*.blender binary
+*.blend1 binary
+*.blend binary
+*.svg binary
+*.docx binary
