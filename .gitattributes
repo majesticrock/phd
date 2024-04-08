@@ -16,4 +16,7 @@
 *.png binary
 *.pptx binary
 *.blender binary
+*.blend1 binary
+*.blend binary
 *.svg binary
+*.docx binary
