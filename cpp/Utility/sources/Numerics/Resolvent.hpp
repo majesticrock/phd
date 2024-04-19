@@ -2,14 +2,14 @@
 // Use (void) to silence unused warnings.
 #define assertm(exp, msg) assert(((void)msg, exp))
 
-#include "OutputConvenience.hpp"
+#include "../OutputConvenience.hpp"
 #include "GramSchmidt.hpp"
 #include <type_traits>
 #include <Eigen/Dense>
 #include <cmath>
 #include <optional>
 
-namespace Utility {
+namespace Utility::Numerics {
 	using std::abs;
 
 	template <typename T>

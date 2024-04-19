@@ -14,11 +14,11 @@ namespace Utility::Selfconsistency {
         bool convergenceWarning{true};
         bool printSteps{false};
     };
-    constexpr PhaseDebuggingPolicy WarnNoConvergence{ false, true };
-	constexpr PhaseDebuggingPolicy NoWarning{ false, false };
-	constexpr PhaseDebuggingPolicy PrintEverything{ true, true };
+    constexpr DebugPolicy WarnNoConvergence{ false, true };
+	constexpr DebugPolicy NoWarning{ false, false };
+	constexpr DebugPolicy PrintEverything{ true, true };
 
-	template <typename DataType, class Model, class SelfconsistencyAttributes, DebugPolicy debugPolicy=WarnNoConvergence>
+	template <typename DataType, class Model, class SelfconsistencyAttributes, const DebugPolicy& debugPolicy=WarnNoConvergence>
 	class IterativeSolver {
 	protected:
 		Model* _model{};

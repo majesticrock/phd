@@ -2,9 +2,9 @@
 #include <Eigen/Dense>
 #include <limits>
 #include <vector>
-#include "UnderlyingFloatingPoint.hpp"
+#include "../UnderlyingFloatingPoint.hpp"
 
-namespace Utility
+namespace Utility::Numerics
 {
 	using std::abs;
 

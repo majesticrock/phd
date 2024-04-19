@@ -2,7 +2,7 @@
 #include <Eigen/Dense>
 #include <type_traits>
 
-namespace Utility::NumericalSolver::Roots {
+namespace Utility::Numerics::Roots {
 	template<typename RealType, int t_vector_size>
 	class BroydensMethodEigen {
 		using MatrixType = Eigen::Matrix<RealType, t_vector_size, t_vector_size>;

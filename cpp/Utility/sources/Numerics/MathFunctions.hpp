@@ -1,7 +1,7 @@
 #pragma once
 #include <type_traits>
 
-namespace Utility {
+namespace Utility::Numerics {
 	// Computes n!!!... (m times)
 	template <unsigned int factorial_m, typename IntegerType, typename RealType = size_t>
 	constexpr RealType m_fold_factorial(const IntegerType n) {
