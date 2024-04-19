@@ -1,7 +1,7 @@
 #pragma once
 #include <utility>
 
-namespace Utility::NumericalSolver::Integration {
+namespace Utility::Numerics::Integration {
 	template <class UnaryFunction, class RealType, class... Args>
 	auto midpoint_rule(UnaryFunction& function, RealType begin, const RealType end, unsigned long num_steps, Args&&... args)
 	{

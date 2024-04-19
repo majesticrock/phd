@@ -1,7 +1,7 @@
 #pragma once
 #include <Eigen/Dense>
 
-namespace Utility {
+namespace Utility::Numerics {
 	// Pivots a matrix so that all offdiagonal 0 blocks are contiguous
 	// The permutation matrix is returned
 	// epsilon is used to determine if a matrix element is 0 (especially important for floating point operations)
