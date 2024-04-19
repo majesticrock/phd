@@ -8,17 +8,18 @@
 namespace Utility::Selfconsistency {
     template<class RealType>
     constexpr RealType PRECISION = 1e2 * std::numeric_limits<RealType>::epsilon();
-    template<> constexpr float PRECISION<float> = 1e1 * std::numeric_limits<float>::epsilon();
+    template<> constexpr float PRECISION<float> = 1e1f * std::numeric_limits<float>::epsilon();
 
     struct DebugPolicy {
         bool convergenceWarning{true};
         bool printSteps{false};
     };
-    constexpr DebugPolicy WarnNoConvergence{ false, true };
+    constexpr DebugPolicy WarnNoConvergence{ true, false };
 	constexpr DebugPolicy NoWarning{ false, false };
 	constexpr DebugPolicy PrintEverything{ true, true };
 
-	template <typename DataType, class Model, class SelfconsistencyAttributes, const DebugPolicy& debugPolicy=WarnNoConvergence>
+	template <typename DataType, class Model, class SelfconsistencyAttributes, 
+		const DebugPolicy& debugPolicy=WarnNoConvergence>
 	class IterativeSolver {
 	protected:
 		Model* _model{};
@@ -31,8 +32,8 @@ namespace Utility::Selfconsistency {
 		inline bool hasSignFlippingBehaviour(const ParameterVector& x0) {
 			for (size_t j = 0U; j < this->NUMBER_OF_PARAMETERS; ++j)
 			{
-				if (abs(x0[j]) > 1e1 * PRECISION<DataType>) {
-					if (abs((x0[j] + (*this->_attr)[j]) / x0[j]) < PRECISION<DataType>) {
+				if (abs(x0[j]) > 1e1 * PRECISION<RealType>) {
+					if (abs((x0[j] + (*this->_attr)[j]) / x0[j]) < PRECISION<RealType>) {
 						return true;
 					}
 				}
@@ -41,18 +42,18 @@ namespace Utility::Selfconsistency {
 		};
 		bool procedureIterative(const size_t MAX_STEPS)
 		{
-			UnderlyingFloatingPoint_t<DataType> error{ 100 };
+			RealType error{ 100 };
 
 			ParameterVector f0{ ParameterVector::Zero(this->NUMBER_OF_PARAMETERS) };
 			std::copy(this->_attr->begin(), this->_attr->end(), f0.begin());
 			ParameterVector x0{ f0 };
 
-			if (debugPolicy.printAll) {
+			if (debugPolicy.printSteps) {
 				std::cout << "-1:\t" << std::scientific << std::setprecision(4) << "\n" << x0.transpose() << std::endl;
 			}
 
 			size_t iterNum = 0U;
-			while (iterNum < MAX_STEPS && error > PRECISION<DataType>) {
+			while (iterNum < MAX_STEPS && error > PRECISION<RealType>) {
 				this->_model->iterationStep(x0, f0);
 				if (hasSignFlippingBehaviour(x0)) {
 					if constexpr (debugPolicy.convergenceWarning) {
@@ -65,7 +66,7 @@ namespace Utility::Selfconsistency {
 				error = f0.norm();
 				std::copy(this->_attr->begin(), this->_attr->end(), x0.begin());
 
-				if constexpr (debugPolicy.printAll) {
+				if constexpr (debugPolicy.printSteps) {
 					std::cout << iterNum << ":\t" << std::scientific << std::setprecision(4) << "\n" << x0.transpose() << std::endl;
 					std::cout << "Error:  " << error << "\n";
 				}

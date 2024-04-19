@@ -3,7 +3,7 @@
 
 namespace Utility::Numerics::Integration {
 	template <class UnaryFunction, class RealType, class... Args>
-	auto midpoint_rule(UnaryFunction& function, RealType begin, const RealType end, unsigned long num_steps, Args&&... args)
+	auto midpoint_rule(const UnaryFunction& function, RealType begin, const RealType end, unsigned long num_steps, Args&&... args)
 	{
 		const RealType step = (end - begin) / num_steps;
 		begin += 0.5 * step;
@@ -13,11 +13,12 @@ namespace Utility::Numerics::Integration {
 			begin += step;
 			value += function(begin, std::forward<Args>(args)...);
 		}
-		return step * value;
+		value *= step;
+		return value;
 	}
 
 	template <class UnaryFunction, class RealType>
-	auto midpoint_rule(UnaryFunction& function, RealType begin, const RealType end, unsigned long num_steps)
+	auto midpoint_rule(const UnaryFunction& function, RealType begin, const RealType end, unsigned long num_steps)
 	{
 		const RealType step = (end - begin) / num_steps;
 		begin += 0.5 * step;
@@ -26,6 +27,7 @@ namespace Utility::Numerics::Integration {
 			begin += step;
 			value += function(begin);
 		}
-		return step * value;
+		value *= step;
+		return value;
 	}
 }
