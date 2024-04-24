@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 
+
 namespace Utility {
 	// Casts a floating point number to a std::string with desired precision n
 	template <typename T>
@@ -43,8 +44,8 @@ namespace Utility {
 	}
 
 	// Checks whether the vector data contains any NaNs. Only defines if data_type is float, double or long double
-	template <typename data_type>
-	inline bool checkDataForNaN(const std::vector<data_type>& data) {
+	template <typename vector_type, typename data_type = typename vector_type::value_type>
+	inline bool checkDataForNaN(const vector_type& data) {
 		static_assert(std::is_floating_point_v<data_type>);
 		for (const auto& value : data) {
 			if (std::isnan(value)) {
@@ -57,7 +58,7 @@ namespace Utility {
 
 	// data_type is a type that overloads the << operator - e.g. float or double, but custom types are allowed too
 	// outstream_type is a type of output stream, e.g. std::ofstream or std::ostringstream
-	template <typename data_type, typename outstream_type>
+	template <typename outstream_type, typename vector_type, typename data_type = typename vector_type::value_type>
 	class OutputWriter {
 	public:
 		// Writes the current time stamp and comments to the file
@@ -65,19 +66,18 @@ namespace Utility {
 		void writeComments(outstream_type& out, const std::vector<std::string>& comments = std::vector<std::string>()) const
 		{
 			out << "# " << time_stamp() << "\n#\n";
-			for (int i = 0; i < comments.size(); i++)
-			{
-				out << "# " << comments[i] << "\n";
+			for(const auto& comment : comments){
+				out << "# " << comment << "\n";
 			}
 		};
 
 		// Appends a line consisting of <data> to <out>
-		void appendLine(const std::vector<data_type>& data, outstream_type& out) const
+		void appendLine(const vector_type& data, outstream_type& out) const
 		{
 			if constexpr (std::is_floating_point_v<data_type>) {
 				checkDataForNaN(data);
 			}
-			for (int i = 0; i < data.size(); i++)
+			for (size_t i = 0U; i < data.size(); ++i)
 			{
 				out << data[i];
 				if (i < data.size() - 1) {
@@ -87,15 +87,7 @@ namespace Utility {
 			out << "\n";
 		}
 
-		void saveData(const data_type& data, outstream_type& out,
-			const std::vector<std::string>& comments = std::vector<std::string>()) const
-		{
-			writeComments(out, comments);
-			out << std::scientific << std::setprecision(10);
-			out << data;
-		};
-
-		void saveData(const std::vector<data_type>& data, outstream_type& out,
+		void saveData(const vector_type& data, outstream_type& out,
 			const std::vector<std::string>& comments = std::vector<std::string>()) const
 		{
 			if constexpr (std::is_floating_point_v<data_type>) {
@@ -108,14 +100,14 @@ namespace Utility {
 			}
 		};
 
-		void saveData(const std::vector<std::vector<data_type>>& data, outstream_type& out,
+		template<typename Allocator>
+		void saveData(const std::vector<vector_type, Allocator>& data, outstream_type& out,
 			const std::vector<std::string>& comments = std::vector<std::string>()) const
 		{
 			writeComments(out, comments);
 			out << std::scientific << std::setprecision(10);
-			for (int i = 0; i < data.size(); i++)
-			{
-				appendLine(data[i], out);
+			for(const auto& data_line : data){
+				appendLine(data_line, out);
 			}
 		};
 	};
