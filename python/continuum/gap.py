@@ -2,17 +2,21 @@ import matplotlib.pyplot as plt
 import numpy as np
 import gzip
 
-with gzip.open("data/continuum/test/gap.dat.gz", 'rt') as f_open:
+plot_approx = True
+folder = "omega=50_U=10_mu=-50"
+
+with gzip.open(f"data/continuum/{folder}/gap.dat.gz", 'rt') as f_open:
     M = np.loadtxt(f_open)
-    
-DISC = len(M)
-def k_transform(u):
-    return u / (1 - u)
+plt.plot(M[0], M[1], "-", label=r"exact $\theta$")
 
-k_space = k_transform(np.linspace(0., 1., DISC, endpoint=False))
-plt.plot(k_space, M)
-plt.xlabel(r"$k [\sqrt{meV}]$")
+if plot_approx:
+    with gzip.open(f"data/continuum/{folder}/gap_approx.dat.gz", 'rt') as f_open:
+        M_approx = np.loadtxt(f_open)
+    plt.plot(M_approx[0], M_approx[1], "-", label=r"approx. $\theta$")
+
+
+plt.xlabel(r"$k [\sqrt{\mathrm{meV}}]$")
 plt.ylabel(r"$\Delta [\mathrm{meV}]$")
-
+plt.legend()
 plt.tight_layout()
 plt.show()
