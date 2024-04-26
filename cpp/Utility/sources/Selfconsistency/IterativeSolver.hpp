@@ -6,20 +6,20 @@
 #include "../UnderlyingFloatingPoint.hpp"
 
 namespace Utility::Selfconsistency {
-    template<class RealType>
-    constexpr RealType PRECISION = 1e2 * std::numeric_limits<RealType>::epsilon();
-    template<> constexpr float PRECISION<float> = 1e1f * std::numeric_limits<float>::epsilon();
+	template<class RealType>
+	constexpr RealType PRECISION = 1e2 * std::numeric_limits<RealType>::epsilon();
+	template<> constexpr float PRECISION<float> = 1e1f * std::numeric_limits<float>::epsilon();
 
-    struct DebugPolicy {
-        bool convergenceWarning{true};
-        bool printSteps{false};
-    };
-    constexpr DebugPolicy WarnNoConvergence{ true, false };
+	struct DebugPolicy {
+		bool convergenceWarning{ true };
+		bool printSteps{ false };
+	};
+	constexpr DebugPolicy WarnNoConvergence{ true, false };
 	constexpr DebugPolicy NoWarning{ false, false };
 	constexpr DebugPolicy PrintEverything{ true, true };
 
-	template <typename DataType, class Model, class SelfconsistencyAttributes, 
-		const DebugPolicy& debugPolicy=WarnNoConvergence>
+	template <typename DataType, class Model, class SelfconsistencyAttributes,
+		const DebugPolicy& debugPolicy = WarnNoConvergence>
 	class IterativeSolver {
 	protected:
 		Model* _model{};

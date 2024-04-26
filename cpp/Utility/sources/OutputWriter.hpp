@@ -6,7 +6,6 @@
 #include <cmath>
 #include <iostream>
 
-
 namespace Utility {
 	// Casts a floating point number to a std::string with desired precision n
 	template <typename T>
@@ -66,7 +65,7 @@ namespace Utility {
 		void writeComments(outstream_type& out, const std::vector<std::string>& comments = std::vector<std::string>()) const
 		{
 			out << "# " << time_stamp() << "\n#\n";
-			for(const auto& comment : comments){
+			for (const auto& comment : comments) {
 				out << "# " << comment << "\n";
 			}
 		};
@@ -106,7 +105,7 @@ namespace Utility {
 		{
 			writeComments(out, comments);
 			out << std::scientific << std::setprecision(10);
-			for(const auto& data_line : data){
+			for (const auto& data_line : data) {
 				appendLine(data_line, out);
 			}
 		};

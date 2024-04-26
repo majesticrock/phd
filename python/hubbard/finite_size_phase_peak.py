@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from lib.ez_fit import *
 import lib.resolvent_peak as rp
 
