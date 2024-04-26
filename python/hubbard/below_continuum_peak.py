@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import lib.resolvent_peak as rp
 import lib.continued_fraction as cf
 

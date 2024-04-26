@@ -2,10 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import os, sys
-if os.name == "nt":
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + r"\python")
-else:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/python")
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import lib.continued_fraction as cf
 from lib.iterate_containers import *
