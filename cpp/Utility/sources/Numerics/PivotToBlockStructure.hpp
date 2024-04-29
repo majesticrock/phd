@@ -1,5 +1,6 @@
 #pragma once
 #include <Eigen/Dense>
+#include <omp.h>
 
 namespace Utility::Numerics {
 	// Pivots a matrix so that all offdiagonal 0 blocks are contiguous
@@ -61,5 +62,59 @@ namespace Utility::Numerics {
 			}
 		}
 		return block_indices;
+	};
+
+	template <class NumberType>
+	struct matrix_wrapper {
+		using RealType = UnderlyingFloatingPoint_t<NumberType>;
+		using MatrixType = Eigen::Matrix<NumberType, Eigen::Dynamic, Eigen::Dynamic>;
+		using RealVector = Eigen::Vector<RealType, Eigen::Dynamic>;
+		MatrixType eigenvectors;
+		RealVector eigenvalues;
+
+		inline matrix_wrapper() {};
+
+		inline explicit matrix_wrapper(Eigen::Index size)
+			: eigenvectors(MatrixType::Zero(size, size)), eigenvalues(RealVector::Zero(size))
+		{};
+
+		inline MatrixType reconstruct_matrix() const
+		{
+			return eigenvectors * eigenvalues.asDiagonal() * eigenvectors.adjoint();
+		};
+
+		static matrix_wrapper pivot_and_solve(MatrixType& toSolve)
+		{
+			auto pivot = pivot_to_block_structure(toSolve);
+			toSolve = pivot.transpose() * toSolve * pivot;
+			auto blocks = identify_hermitian_blocks(toSolve);
+			matrix_wrapper solution(toSolve.rows());
+
+#pragma omp parallel for
+			for (int i = 0; i < blocks.size(); ++i)
+			{
+				Eigen::SelfAdjointEigenSolver<MatrixType> solver(toSolve.block(blocks[i].position, blocks[i].position, blocks[i].size, blocks[i].size));
+				solution.eigenvalues.segment(blocks[i].position, blocks[i].size) = solver.eigenvalues();
+				solution.eigenvectors.block(blocks[i].position, blocks[i].position, blocks[i].size, blocks[i].size) = solver.eigenvectors();
+			}
+			solution.eigenvectors.applyOnTheLeft(pivot);
+			return solution;
+		};
+
+		static bool is_non_negative(MatrixType& toSolve, const RealType EPSILON)
+		{
+			auto pivot = pivot_to_block_structure(toSolve);
+			toSolve = pivot.transpose() * toSolve * pivot;
+			auto blocks = identify_hermitian_blocks(toSolve);
+			for (const auto& block : blocks)
+			{
+				Eigen::SelfAdjointEigenSolver<MatrixType> solver(toSolve.block(block.position, block.position, block.size, block.size), Eigen::EigenvaluesOnly);
+				
+				if ((solver.eigenvalues().array() < -EPSILON).any()) {
+					return false;
+				}
+			}
+			return true;
+		};
 	};
 }

@@ -1,0 +1,83 @@
+#pragma once
+#include "../../better_to_string.hpp"
+#include "../../UnderlyingFloatingPoint.hpp"
+#include <Eigen/Dense>
+
+namespace Utility::Numerics::iEoM {
+	template<class RealType>
+	class MatrixIsNegativeException : public std::runtime_error {
+	public:
+		RealType negative_eigenvalue{};
+		MatrixIsNegativeException(RealType _negative_eigenvalue)
+			: std::runtime_error("The matrix M is negative! Most negative eigenvalue = "
+				+ Utility::better_to_string(_negative_eigenvalue, std::chars_format::scientific, 6)),
+			negative_eigenvalue(_negative_eigenvalue)
+		{};
+	};
+
+	template<class NumberType>
+	struct ieom_internal {
+		using RealType = UnderlyingFloatingPoint_t<NumberType>;
+		using RealVector = Eigen::Vector<RealType, Eigen::Dynamic>;
+
+		const RealType _sqrt_precision{ 1e-6 };
+		const RealType _precision{ 1e-12 };
+
+		constexpr ieom_internal() = default;
+		constexpr ieom_internal(RealType const& sqrt_precision)
+			: _sqrt_precision(sqrt_precision), _precision(sqrt_precision * sqrt_precision) {};
+
+		template <class EigenMatrixType>
+		inline EigenMatrixType removeNoise(EigenMatrixType const& matrix) const {
+			return matrix.unaryExpr([](typename EigenMatrixType::Scalar const& val) {
+				return (abs(val) < _precision ? typename EigenMatrixType::Scalar{} : val);
+				});
+		};
+
+		inline bool contains_negative(const RealVector& vector) const {
+			return (vector.array() < -_sqrt_precision).any();
+		};
+
+		enum Operation { OPERATION_NONE, OPERATION_INVERSE, OPERATION_SQRT, OPERATION_INVERSE_SQRT };
+		/* Takes a positive semidefinite vector (the idea is that this contains eigenvalues) and applies an operation on it
+		* 0: Correct for negative eigenvalues
+		* 1: Compute the pseudoinverse
+		* 2: Compute the square root
+		* 3: Compute the pseudoinverse square root
+		*/
+		template<Operation option, bool pseudo_inverse = false>
+		inline void applyMatrixOperation(RealVector& evs) const {
+			if (contains_negative(evs)) throw MatrixIsNegativeException<RealType>(evs.minCoeff());
+			for (auto& ev : evs)
+			{
+				if (ev < _sqrt_precision) {
+					if constexpr (pseudo_inverse) {
+						ev = 0;
+					}
+					else {
+						if constexpr (option == OPERATION_INVERSE) {
+							ev = (1. / _precision);
+						}
+						else if constexpr (option == OPERATION_SQRT) {
+							ev = _sqrt_precision;
+						}
+						else if constexpr (option == OPERATION_INVERSE_SQRT) {
+							ev = (1. / _sqrt_precision);
+						}
+					}
+				}
+				else {
+					if constexpr (option == OPERATION_INVERSE) {
+						ev = 1. / ev;
+					}
+					else if constexpr (option == OPERATION_SQRT) {
+						ev = sqrt(ev);
+					}
+					else if constexpr (option == OPERATION_INVERSE_SQRT) {
+						ev = 1. / sqrt(ev);
+					}
+				}
+			}
+		};
+	};
+}
