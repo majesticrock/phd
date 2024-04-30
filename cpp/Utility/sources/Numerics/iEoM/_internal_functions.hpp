@@ -15,6 +15,8 @@ namespace Utility::Numerics::iEoM {
 		{};
 	};
 
+	enum ieom_operation { IEOM_NONE, IEOM_INVERSE, IEOM_SQRT, IEOM_INVERSE_SQRT };
+
 	template<class NumberType>
 	struct ieom_internal {
 		using RealType = UnderlyingFloatingPoint_t<NumberType>;
@@ -29,8 +31,8 @@ namespace Utility::Numerics::iEoM {
 
 		template <class EigenMatrixType>
 		inline EigenMatrixType removeNoise(EigenMatrixType const& matrix) const {
-			return matrix.unaryExpr([](typename EigenMatrixType::Scalar const& val) {
-				return (abs(val) < _precision ? typename EigenMatrixType::Scalar{} : val);
+			return matrix.unaryExpr([this](typename EigenMatrixType::Scalar const& val) {
+				return (abs(val) < this->_precision ? typename EigenMatrixType::Scalar{} : val);
 				});
 		};
 
@@ -38,14 +40,13 @@ namespace Utility::Numerics::iEoM {
 			return (vector.array() < -_sqrt_precision).any();
 		};
 
-		enum Operation { OPERATION_NONE, OPERATION_INVERSE, OPERATION_SQRT, OPERATION_INVERSE_SQRT };
 		/* Takes a positive semidefinite vector (the idea is that this contains eigenvalues) and applies an operation on it
 		* 0: Correct for negative eigenvalues
 		* 1: Compute the pseudoinverse
 		* 2: Compute the square root
 		* 3: Compute the pseudoinverse square root
 		*/
-		template<Operation option, bool pseudo_inverse = false>
+		template<ieom_operation option, bool pseudo_inverse = false>
 		inline void applyMatrixOperation(RealVector& evs) const {
 			if (contains_negative(evs)) throw MatrixIsNegativeException<RealType>(evs.minCoeff());
 			for (auto& ev : evs)
@@ -55,25 +56,25 @@ namespace Utility::Numerics::iEoM {
 						ev = 0;
 					}
 					else {
-						if constexpr (option == OPERATION_INVERSE) {
+						if constexpr (option == IEOM_INVERSE) {
 							ev = (1. / _precision);
 						}
-						else if constexpr (option == OPERATION_SQRT) {
+						else if constexpr (option == IEOM_SQRT) {
 							ev = _sqrt_precision;
 						}
-						else if constexpr (option == OPERATION_INVERSE_SQRT) {
+						else if constexpr (option == IEOM_INVERSE_SQRT) {
 							ev = (1. / _sqrt_precision);
 						}
 					}
 				}
 				else {
-					if constexpr (option == OPERATION_INVERSE) {
+					if constexpr (option == IEOM_INVERSE) {
 						ev = 1. / ev;
 					}
-					else if constexpr (option == OPERATION_SQRT) {
+					else if constexpr (option == IEOM_SQRT) {
 						ev = sqrt(ev);
 					}
-					else if constexpr (option == OPERATION_INVERSE_SQRT) {
+					else if constexpr (option == IEOM_INVERSE_SQRT) {
 						ev = 1. / sqrt(ev);
 					}
 				}

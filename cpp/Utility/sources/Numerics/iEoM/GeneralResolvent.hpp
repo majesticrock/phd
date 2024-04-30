@@ -1,12 +1,13 @@
 #pragma once
-#include "IEoMResolventInterface.hpp"
 #include "../PivotToBlockStructure.hpp"
 #include "../Resolvent.hpp"
+#include "_internal_functions.hpp"
+#include "../../IsComplex.hpp"
 #include <chrono>
 
 namespace Utility::Numerics::iEoM {
-	template<class NumberType>
-	class GeneralResolvent : IEoMResolventInterface<NumberType> {
+	template<class Derived, class NumberType>
+	class GeneralResolvent {
 	public:
 		using RealType = UnderlyingFloatingPoint_t<NumberType>;
 		using Matrix = Eigen::Matrix<NumberType, Eigen::Dynamic, Eigen::Dynamic>;
@@ -19,13 +20,20 @@ namespace Utility::Numerics::iEoM {
 		std::vector<ComplexVector> starting_states;
 
 	public:
-		GeneralResolvent(RealType const& sqrt_precision)
-			: IEoMResolventInterface<NumberType>(sqrt_precision) {};
+		GeneralResolvent(Derived* derived_ptr, RealType const& sqrt_precision)
+			: _internal(sqrt_precision), _derived(derived_ptr) { };
 
-		virtual bool dynamic_matrix_is_negative() override final {
-			this->fill_M();
-			if (this->_internal.contains_negative(M.diagonal())) {
-				return true;
+		bool dynamic_matrix_is_negative() {
+			_derived->fill_M();
+			if constexpr (is_complex<NumberType>()) {
+				if (this->_internal.contains_negative(M.diagonal().real())) {
+					return true;
+				}
+			}
+			else {
+				if (this->_internal.contains_negative(M.diagonal())) {
+					return true;
+				}
 			}
 			M = this->_internal.removeNoise(M);
 			if (not matrix_wrapper<NumberType>::is_non_negative(M, this->_internal._sqrt_precision)) {
@@ -35,12 +43,13 @@ namespace Utility::Numerics::iEoM {
 			return false;
 		};
 
-		virtual std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER) override final
+		std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER)
 		{
 			std::chrono::time_point begin = std::chrono::steady_clock::now();
 			std::chrono::time_point end = std::chrono::steady_clock::now();
 
-			this->fillMatrices();
+			_derived->fillMatrices();
+			_derived->createStartingStates();
 			if ((M - M.adjoint()).norm() > 1e-8) {
 				throw std::runtime_error("M is not Hermitian!");
 			}
@@ -55,7 +64,7 @@ namespace Utility::Numerics::iEoM {
 
 			Eigen::SelfAdjointEigenSolver<Matrix> M_solver(M);
 			RealVector& evs_M = const_cast<RealVector&>(M_solver.eigenvalues());
-			this->_internal.applyMatrixOperation<this->_internal.OPERATION_NONE>(evs_M);
+			this->_internal.template applyMatrixOperation<IEOM_NONE>(evs_M);
 
 			auto bufferMatrix = N * M_solver.eigenvectors();
 			// = N * 1/M * N
@@ -65,7 +74,7 @@ namespace Utility::Numerics::iEoM {
 
 			Eigen::SelfAdjointEigenSolver<Matrix> norm_solver(n_hacek);
 			RealVector& evs_norm = const_cast<RealVector&>(norm_solver.eigenvalues());
-			this->_internal.applyMatrixOperation<this->_internal.OPERATION_SQRT>(evs_norm);
+			this->_internal.template applyMatrixOperation<IEOM_SQRT>(evs_norm);
 
 			// n_hacek -> n_hacek^(-1/2)
 			n_hacek = norm_solver.eigenvectors()
@@ -116,5 +125,9 @@ namespace Utility::Numerics::iEoM {
 			}
 			return ret;
 		}
+
+	private:
+		ieom_internal<RealType> _internal;
+		Derived* _derived;
 	};
 }
