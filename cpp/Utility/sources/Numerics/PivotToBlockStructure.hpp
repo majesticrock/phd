@@ -4,11 +4,16 @@
 #include "../UnderlyingFloatingPoint.hpp"
 
 namespace Utility::Numerics {
+	namespace Detail {
+		template<class EigenMatrixType>
+		using RealScalar = UnderlyingFloatingPoint_t<typename EigenMatrixType::Scalar>;
+	}
+
 	// Pivots a matrix so that all offdiagonal 0 blocks are contiguous
 	// The permutation matrix is returned
 	// epsilon is used to determine if a matrix element is 0 (especially important for floating point operations)
 	template<class EigenMatrixType>
-	auto pivot_to_block_structure(const EigenMatrixType& matrix, const typename EigenMatrixType::Scalar epsilon = 1e-12) {
+	auto pivot_to_block_structure(const EigenMatrixType& matrix, const Detail::RealScalar<EigenMatrixType> epsilon = 1e-12) {
 		Eigen::PermutationMatrix<Eigen::Dynamic, Eigen::Dynamic> P(matrix.rows());
 		P.setIdentity();
 
@@ -19,7 +24,7 @@ namespace Utility::Numerics {
 		for (int i = 0; i < matrix.rows(); ++i) {
 			int offset = 1;
 			for (int j = i + 1; j < matrix.cols(); ++j) {
-				if (permuted_matrix_element(i, j) > epsilon) {
+				if (abs(permuted_matrix_element(i, j)) > epsilon) {
 					P.applyTranspositionOnTheRight(j, i + offset);
 					++offset;
 				}
@@ -39,7 +44,7 @@ namespace Utility::Numerics {
 	};
 
 	template<class EigenMatrixType>
-	auto identify_hermitian_blocks(const EigenMatrixType& matrix, const typename EigenMatrixType::Scalar epsilon = 1e-12) {
+	auto identify_hermitian_blocks(const EigenMatrixType& matrix, const Detail::RealScalar<EigenMatrixType> epsilon = 1e-12) {
 		Eigen::Index block_index{ 1 };
 		Eigen::Index block_size{};
 		std::vector<HermitianBlock> block_indices;
@@ -47,7 +52,7 @@ namespace Utility::Numerics {
 		{
 			for (Eigen::Index j = matrix.cols() - 1; j > block_index; --j)
 			{
-				if (abs(matrix(i, j)) > 1e-12) {
+				if (abs(matrix(i, j)) > epsilon) {
 					block_index = j;
 					break;
 				}
@@ -110,7 +115,7 @@ namespace Utility::Numerics {
 			for (const auto& block : blocks)
 			{
 				Eigen::SelfAdjointEigenSolver<MatrixType> solver(toSolve.block(block.position, block.position, block.size, block.size), Eigen::EigenvaluesOnly);
-				
+
 				if ((solver.eigenvalues().array() < -EPSILON).any()) {
 					return false;
 				}

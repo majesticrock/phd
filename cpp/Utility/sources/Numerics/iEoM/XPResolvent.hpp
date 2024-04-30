@@ -3,43 +3,44 @@
 #include <vector>
 #include <array>
 #include "../PivotToBlockStructure.hpp"
-#include "IEoMResolventInterface.hpp"
+#include "_internal_functions.hpp"
+#include "../Resolvent.hpp"
 #include <chrono>
 
 namespace Utility::Numerics::iEoM {
-	template<class RealType>
-	class XPResolvent : IEoMResolventInterface<RealType> {
+	template<class Derived, class RealType>
+	struct XPResolvent {
 	public:
 		using Matrix = Eigen::Matrix<RealType, Eigen::Dynamic, Eigen::Dynamic>;
 		using Vector = Eigen::Vector<RealType, Eigen::Dynamic>;
-	protected:
+
 		Matrix K_plus, K_minus, L;
 		std::vector<std::array<Vector, 2>> starting_states;
 
-	public:
-		XPResolvent(RealType const& sqrt_precision)
-			: IEoMResolventInterface<RealType>(sqrt_precision) { };
+		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision)
+			: _internal(sqrt_precision), _derived(derived_ptr) { };
 
-		virtual bool dynamic_matrix_is_negative() override final {
-			this->fill_M();
-			if (this->_internal.contains_negative(K_minus.diagonal()) || this->_internal.contains_negative(K_plus.diagonal())) {
+		bool dynamic_matrix_is_negative()
+		{
+			_derived->fill_M();
+			if (_internal.contains_negative(K_minus.diagonal()) || _internal.contains_negative(K_plus.diagonal())) {
 				return true;
 			}
-			K_minus = this->_internal.removeNoise(K_minus);
-			if (not matrix_wrapper<RealType>::is_non_negative(K_minus, this->_internal._sqrt_precision)) {
+			K_minus = _internal.removeNoise(K_minus);
+			if (not matrix_wrapper<RealType>::is_non_negative(K_minus, _internal._sqrt_precision)) {
 				return true;
 			}
-			K_plus = this->_internal.removeNoise(K_plus);
-			if (not matrix_wrapper<RealType>::is_non_negative(K_plus, this->_internal._sqrt_precision)) {
+			K_plus = _internal.removeNoise(K_plus);
+			if (not matrix_wrapper<RealType>::is_non_negative(K_plus, _internal._sqrt_precision)) {
 				return true;
 			}
 			return false;
 		};
 
-		virtual std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER) override final
+		std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER)
 		{
-			this->fillMatrices();
-			this->createStartingStates();
+			_derived->fillMatrices();
+			_derived->createStartingStates();
 
 			Matrix solver_matrix;
 			matrix_wrapper<RealType> k_solutions[2];
@@ -53,7 +54,7 @@ namespace Utility::Numerics::iEoM {
 				{
 					std::chrono::time_point begin_in = std::chrono::steady_clock::now();
 					k_solutions[0] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_plus);
-					this->_internal.applyMatrixOperation<this->_internal.OPERATION_NONE>(k_solutions[0].eigenvalues);
+					_internal.template applyMatrixOperation<IEOM_NONE>(k_solutions[0].eigenvalues);
 					std::chrono::time_point end_in = std::chrono::steady_clock::now();
 					std::cout << "Time for solving K_+: "
 						<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
@@ -65,7 +66,7 @@ namespace Utility::Numerics::iEoM {
 				{
 					std::chrono::time_point begin_in = std::chrono::steady_clock::now();
 					k_solutions[1] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_minus);
-					this->_internal.applyMatrixOperation<this->_internal.OPERATION_NONE>(k_solutions[1].eigenvalues);
+					_internal.template applyMatrixOperation<IEOM_NONE>(k_solutions[1].eigenvalues);
 					std::chrono::time_point end_in = std::chrono::steady_clock::now();
 					std::cout << "Time for solving K_-: "
 						<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
@@ -86,7 +87,7 @@ namespace Utility::Numerics::iEoM {
 				solver_matrix.resize(k_solutions[plus_index].eigenvalues.rows(), k_solutions[plus_index].eigenvalues.rows());
 
 				Vector K_EV = k_solutions[minus_index].eigenvalues;
-				this->_internal.applyMatrixOperation<this->_internal.OPERATION_INVERSE>(K_EV);
+				_internal.template applyMatrixOperation<IEOM_INVERSE>(K_EV);
 				Matrix buffer_matrix = L * k_solutions[minus_index].eigenvectors;
 				Matrix N_new = buffer_matrix * K_EV.asDiagonal() * buffer_matrix.adjoint();
 
@@ -96,7 +97,7 @@ namespace Utility::Numerics::iEoM {
 				begin_in = std::chrono::steady_clock::now();
 
 				auto n_solution = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(N_new);
-				this->_internal.applyMatrixOperation<this->_internal.OPERATION_INVERSE_SQRT>(n_solution.eigenvalues);
+				_internal.template applyMatrixOperation<IEOM_INVERSE_SQRT>(n_solution.eigenvalues);
 
 				// Starting here, N_new = 1/sqrt(N_new)
 				// I forego another matrix to save some memory
@@ -111,7 +112,7 @@ namespace Utility::Numerics::iEoM {
 
 				begin_in = std::chrono::steady_clock::now();
 				buffer_matrix = N_new * k_solutions[plus_index].eigenvectors;
-				solver_matrix = this->_internal.removeNoise((buffer_matrix * k_solutions[plus_index].eigenvalues.asDiagonal() * buffer_matrix.adjoint()).eval());
+				solver_matrix = _internal.removeNoise((buffer_matrix * k_solutions[plus_index].eigenvalues.asDiagonal() * buffer_matrix.adjoint()).eval());
 				end_in = std::chrono::steady_clock::now();
 				std::cout << "Time for computing solver_matrix: "
 					<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
@@ -119,7 +120,7 @@ namespace Utility::Numerics::iEoM {
 
 			std::chrono::time_point begin = std::chrono::steady_clock::now();
 
-			const int N_RESOLVENT_TYPES = this->starting_states.size();
+			const int N_RESOLVENT_TYPES = starting_states.size();
 			std::vector<Resolvent<RealType, false>> resolvents{};
 			resolvents.reserve(2 * N_RESOLVENT_TYPES);
 
@@ -131,7 +132,7 @@ namespace Utility::Numerics::iEoM {
 					resolvents.push_back(Resolvent<RealType, false>(starting_state[i]));
 				}
 #pragma omp parallel for
-				for (int j = 0; i < N_RESOLVENT_TYPES; ++j) {
+				for (int j = 0; j < N_RESOLVENT_TYPES; ++j) {
 					resolvents[N_RESOLVENT_TYPES * i + j].compute(solver_matrix, LANCZOS_ITERATION_NUMBER);
 				}
 			}
@@ -148,5 +149,9 @@ namespace Utility::Numerics::iEoM {
 			}
 			return ret;
 		};
+
+	private:
+		ieom_internal<RealType> _internal;
+		Derived* _derived;
 	};
 }
