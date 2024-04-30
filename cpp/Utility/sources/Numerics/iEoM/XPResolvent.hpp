@@ -17,14 +17,26 @@ namespace Utility::Numerics::iEoM {
 		std::vector<std::array<Vector, 2>> starting_states;
 
 	public:
-		XPResolvent(RealType const& sqrt_precision) 
+		XPResolvent(RealType const& sqrt_precision)
 			: IEoMResolventInterface<RealType>(sqrt_precision) { };
 
-		bool matrix_is_negative() {
-
+		virtual bool dynamic_matrix_is_negative() override final {
+			this->fill_M();
+			if (this->_internal.contains_negative(K_minus.diagonal()) || this->_internal.contains_negative(K_plus.diagonal())) {
+				return true;
+			}
+			K_minus = this->_internal.removeNoise(K_minus);
+			if (not matrix_wrapper<RealType>::is_non_negative(K_minus, this->_internal._sqrt_precision)) {
+				return true;
+			}
+			K_plus = this->_internal.removeNoise(K_plus);
+			if (not matrix_wrapper<RealType>::is_non_negative(K_plus, this->_internal._sqrt_precision)) {
+				return true;
+			}
+			return false;
 		};
 
-		std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER)
+		virtual std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER) override final
 		{
 			this->fillMatrices();
 			this->createStartingStates();
