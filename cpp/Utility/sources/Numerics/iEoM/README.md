@@ -10,13 +10,13 @@ class MyClass : public Utility::Numerics::iEoM::XPResolvent<MyClass, double>
 
 The user is required to define the following methods:
 
-# fill_M()
+### fill_M()
 Needs to fill the dynamical matrix *K_plus / K_minus* for ```XPResolvent``` and *M* for ```GeneralResolvent```
 
-# fillMatrices()
+### fillMatrices()
 Needs to fill both the dynamical matrix (see above) and norm matrix *N*
 
-# createStartingStates()
+### createStartingStates()
 Needs to create the starting states for the Lanczos algorithm.
 These vectors govern which kind of Green's function will be computed.
 For ```XPResolvent``` the starting states are each an ```std::array<Vector, 2>```, 
