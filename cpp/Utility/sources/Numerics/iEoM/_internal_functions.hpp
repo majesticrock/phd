@@ -25,7 +25,7 @@ namespace Utility::Numerics::iEoM {
 
 		constexpr ieom_internal() = default;
 		constexpr ieom_internal(RealType const& sqrt_precision)
-			: _sqrt_precision(sqrt_precision), _precision(sqrt_precision * sqrt_precision) {};
+			: _sqrt_precision(sqrt_precision), _precision(sqrt_precision* sqrt_precision) {};
 
 		template <class EigenMatrixType>
 		inline EigenMatrixType removeNoise(EigenMatrixType const& matrix) const {

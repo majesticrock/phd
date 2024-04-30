@@ -21,7 +21,7 @@ namespace Utility::Numerics::iEoM {
 			this->fill_M();
 		}
 	public:
-		virtual bool matrix_is_negative() = 0;
+		virtual bool dynamic_matrix_is_negative() = 0;
 		virtual std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER) = 0;
 
 		IEoMResolventInterface(RealType const& sqrt_precision)

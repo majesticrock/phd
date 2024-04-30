@@ -1,6 +1,7 @@
 #pragma once
 #include <Eigen/Dense>
 #include <omp.h>
+#include "../UnderlyingFloatingPoint.hpp"
 
 namespace Utility::Numerics {
 	// Pivots a matrix so that all offdiagonal 0 blocks are contiguous
