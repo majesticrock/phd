@@ -23,6 +23,8 @@ namespace Utility::Numerics::iEoM {
 		GeneralResolvent(Derived* derived_ptr, RealType const& sqrt_precision)
 			: _internal(sqrt_precision), _derived(derived_ptr) { };
 
+		virtual ~GeneralResolvent() = default;
+
 		bool dynamic_matrix_is_negative() {
 			_derived->fill_M();
 			if constexpr (is_complex<NumberType>()) {
