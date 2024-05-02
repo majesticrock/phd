@@ -3,6 +3,7 @@
 #include "../Resolvent.hpp"
 #include "_internal_functions.hpp"
 #include "../../IsComplex.hpp"
+#include "../../ConstexprPower.hpp"
 #include <chrono>
 
 namespace Utility::Numerics::iEoM {
@@ -45,6 +46,7 @@ namespace Utility::Numerics::iEoM {
 			return false;
 		};
 
+		template<int CheckHermitian = -1>
 		std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER)
 		{
 			std::chrono::time_point begin = std::chrono::steady_clock::now();
@@ -52,11 +54,13 @@ namespace Utility::Numerics::iEoM {
 
 			_derived->fillMatrices();
 			_derived->createStartingStates();
-			if ((M - M.adjoint()).norm() > 1e-8) {
-				throw std::runtime_error("M is not Hermitian!");
-			}
-			if ((N - N.adjoint()).norm() > 1e-8) {
-				throw std::runtime_error("N is not Hermitian!");
+			if constexpr (CheckHermitian > 0) {
+				if ((M - M.adjoint()).norm() > ConstexprPower<-CheckHermitian, RealType, RealType>(10.)) {
+					throw std::runtime_error("M is not Hermitian!");
+				}
+				if ((N - N.adjoint()).norm() > ConstexprPower<-CheckHermitian, RealType, RealType>(10.)) {
+					throw std::runtime_error("N is not Hermitian!");
+				}
 			}
 
 			end = std::chrono::steady_clock::now();
