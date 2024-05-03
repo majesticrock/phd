@@ -54,11 +54,15 @@ namespace Utility::Numerics::iEoM {
 
 			_derived->fillMatrices();
 			_derived->createStartingStates();
+
+			M = this->_internal.removeNoise(M);
+			N = this->_internal.removeNoise(N);
+
 			if constexpr (CheckHermitian > 0) {
-				if ((M - M.adjoint()).norm() > ConstexprPower<-CheckHermitian, RealType, RealType>(10.)) {
+				if ((M - M.adjoint()).norm() > constexprPower<-CheckHermitian, RealType, RealType>(10.)) {
 					throw std::runtime_error("M is not Hermitian!");
 				}
-				if ((N - N.adjoint()).norm() > ConstexprPower<-CheckHermitian, RealType, RealType>(10.)) {
+				if ((N - N.adjoint()).norm() > constexprPower<-CheckHermitian, RealType, RealType>(10.)) {
 					throw std::runtime_error("N is not Hermitian!");
 				}
 			}

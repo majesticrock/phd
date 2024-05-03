@@ -41,8 +41,16 @@ namespace Utility::Numerics::iEoM {
 
 		std::vector<ResolventDataWrapper<RealType>> computeCollectiveModes(unsigned int LANCZOS_ITERATION_NUMBER)
 		{
+			std::chrono::time_point begin = std::chrono::steady_clock::now();
 			_derived->fillMatrices();
 			_derived->createStartingStates();
+
+			K_minus = _internal.removeNoise(K_minus);
+			K_plus = _internal.removeNoise(K_plus);
+
+			std::chrono::time_point end = std::chrono::steady_clock::now();
+			std::cout << "Time for filling of M and N: "
+				<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 
 			Matrix solver_matrix;
 			matrix_wrapper<RealType> k_solutions[2];
@@ -120,7 +128,7 @@ namespace Utility::Numerics::iEoM {
 					<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
 				}; // end lambda
 
-			std::chrono::time_point begin = std::chrono::steady_clock::now();
+			begin = std::chrono::steady_clock::now();
 
 			const int N_RESOLVENT_TYPES = starting_states.size();
 			std::vector<Resolvent<RealType, false>> resolvents{};
@@ -139,7 +147,7 @@ namespace Utility::Numerics::iEoM {
 				}
 			}
 
-			std::chrono::time_point end = std::chrono::steady_clock::now();
+			end = std::chrono::steady_clock::now();
 			std::cout << "Time for resolvents: "
 				<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 
