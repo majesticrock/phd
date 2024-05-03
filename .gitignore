@@ -27,6 +27,8 @@ cpp/HubbardMeanField/doxy
 *.bin
 paper/plots
 
+cpp/ContinuumSystem/sources/SymbolicOperators
+cpp/ContinuumSystem/sources/Utility
 cpp/HubbardMeanField/sources/SymbolicOperators
 cpp/HubbardMeanField/sources/Utility
 
