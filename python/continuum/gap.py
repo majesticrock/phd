@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import gzip
 
-plot_approx = True
-folder = "omega=50_U=10_mu=-50"
+plot_approx = False
+folder = "test"
 
 with gzip.open(f"data/continuum/{folder}/gap.dat.gz", 'rt') as f_open:
     M = np.loadtxt(f_open)
