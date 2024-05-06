@@ -8,7 +8,7 @@
 
 namespace Utility::Numerics::iEoM {
 	template<class Derived, class NumberType>
-	class GeneralResolvent {
+	struct GeneralResolvent {
 	public:
 		using RealType = UnderlyingFloatingPoint_t<NumberType>;
 		using Matrix = Eigen::Matrix<NumberType, Eigen::Dynamic, Eigen::Dynamic>;

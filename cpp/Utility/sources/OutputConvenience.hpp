@@ -117,7 +117,7 @@ namespace Utility {
 	{
 		std::ofstream out(filename);
 		if (out.is_open()) {
-			OutputWriter<std::ostringstream, vector_type, data_type> ow;
+			OutputWriter<std::ofstream, vector_type, data_type> ow;
 			ow.saveData(data, out, comments);
 		}
 		else {
@@ -132,7 +132,7 @@ namespace Utility {
 	{
 		std::ofstream out(filename);
 		if (out.is_open()) {
-			OutputWriter<std::ostringstream, vector_type, data_type> ow;
+			OutputWriter<std::ofstream, vector_type, data_type> ow;
 			ow.saveData(data, out, comments);
 		}
 		else {
@@ -154,7 +154,7 @@ namespace Utility {
 		}
 		std::ofstream out(filename);
 		if (out.is_open()) {
-			OutputWriter<std::ostringstream, vector_type, data_type> ow;
+			OutputWriter<std::ofstream, vector_type, data_type> ow;
 			ow.writeComments(out, comments);
 
 			for (size_t n = linebreak; n < data.size(); n += linebreak)
