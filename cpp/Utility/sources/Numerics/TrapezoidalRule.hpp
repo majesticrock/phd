@@ -6,7 +6,7 @@ namespace Utility::Numerics::Integration {
 	auto trapezoidal_rule(const UnaryFunction& function, const RealType begin, const RealType end, unsigned long num_steps, Args&&... args) {
 		const RealType step = (end - begin) / num_steps;
 		auto value = 0.5 * (function(begin, std::forward<Args>(args)...) + function(end, std::forward<Args>(args)...));
-		for (int n = 1; n < num_steps; ++n) {
+		for (int n = 1U; n < num_steps; ++n) {
 			value += function(n * step, std::forward<Args>(args)...);
 		}
 		value *= step;
@@ -17,8 +17,18 @@ namespace Utility::Numerics::Integration {
 	auto trapezoidal_rule(const UnaryFunction& function, const RealType begin, const RealType end, unsigned long num_steps) {
 		const RealType step = (end - begin) / num_steps;
 		auto value = 0.5 * (function(begin) + function(end));
-		for (unsigned long n = 1; n < num_steps; ++n) {
+		for (unsigned long n = 1U; n < num_steps; ++n) {
 			value += function(n * step);
+		}
+		value *= step;
+		return value;
+	}
+
+	template <class Vector, class RealType>
+	auto trapezoidal_rule(const Vector& fx, const RealType step) {
+		auto value = 0.5 * (fx.front() + fx.back());
+		for (unsigned long n = 1U; n + 1U < fx.size(); ++n) {
+			value += fx[n];
 		}
 		value *= step;
 		return value;
