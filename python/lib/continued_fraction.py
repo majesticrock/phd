@@ -14,13 +14,18 @@ class ContinuedFraction:
         self.z_squared = z_squared
         self.messages = messages
         file = f"{data_folder}/one_particle.dat.gz"
-        with gzip.open(file, 'rt') as f_open:
-            one_particle = np.abs(np.loadtxt(f_open).flatten())
-        if z_squared:
-            self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
-        else:
-            self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])
-        self.a_infinity = (self.roots[0] + self.roots[1]) * 0.5
+        try:
+            with gzip.open(file, 'rt') as f_open:
+                one_particle = np.abs(np.loadtxt(f_open).flatten())
+            if z_squared:
+                self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])**2
+            else:
+                self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])
+        except FileNotFoundError:
+            self.roots = np.array([0., 0])
+            self.roots = np.array([0., 0])
+        
+        self.a_infinity = (self.roots[1] + self.roots[0]) * 0.5
         self.b_infinity = (self.roots[1] - self.roots[0]) * 0.25
         
         file = f"{data_folder}/{filename}.dat.gz"

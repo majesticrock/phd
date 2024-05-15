@@ -30,18 +30,18 @@ plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 #plotter.set_individual_dashes()
 
 plot_lower_lim = -0.05
-plot_upper_lim = 10000
+plot_upper_lim = 1000
 
 name_suffix = "phase_SC"
 for name in naming_scheme(Ts, Us, Vs):
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5, withTerminator=False)
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=50, withTerminator=False)
     plotter.plot(w_lin, data, label="Phase")
 
 name_suffix = "higgs_SC"
 for name in naming_scheme(Ts, Us, Vs):
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5, withTerminator=False)
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=50, withTerminator=False)
     plotter.plot(w_lin, data, label="Higgs")
 
 res.mark_continuum(ax)

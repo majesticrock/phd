@@ -8,7 +8,7 @@ U = 2.5
 use_XP = True
 
 folder = "data/continuum/test/"
-name_suffix = "phase_SC"
+name_suffix = "higgs_SC"
 element_names = ["a", "a+b", "a+ib"]
 
 #file = f"{folder}{name}one_particle.dat.gz"
