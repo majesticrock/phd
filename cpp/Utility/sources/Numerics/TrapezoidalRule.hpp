@@ -7,7 +7,7 @@ namespace Utility::Numerics::Integration {
 		const RealType step = (end - begin) / num_steps;
 		auto value = 0.5 * (function(begin, std::forward<Args>(args)...) + function(end, std::forward<Args>(args)...));
 		for (int n = 1U; n < num_steps; ++n) {
-			value += function(n * step, std::forward<Args>(args)...);
+			value += function(begin + n * step, std::forward<Args>(args)...);
 		}
 		value *= step;
 		return value;
@@ -18,7 +18,7 @@ namespace Utility::Numerics::Integration {
 		const RealType step = (end - begin) / num_steps;
 		auto value = 0.5 * (function(begin) + function(end));
 		for (unsigned long n = 1U; n < num_steps; ++n) {
-			value += function(n * step);
+			value += function(begin + n * step);
 		}
 		value *= step;
 		return value;

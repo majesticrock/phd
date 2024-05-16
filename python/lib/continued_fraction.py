@@ -22,8 +22,17 @@ class ContinuedFraction:
             else:
                 self.roots = np.array([np.min(one_particle) * 2, np.max(one_particle) * 2])
         except FileNotFoundError:
-            self.roots = np.array([0., 0])
-            self.roots = np.array([0., 0])
+            file = f"{data_folder}/continuum.dat.gz"
+            try:
+                with gzip.open(file, 'rt') as f_open:
+                    if z_squared:
+                        self.roots = np.abs(np.loadtxt(f_open).flatten())**2
+                    else:
+                        self.roots = np.abs(np.loadtxt(f_open).flatten())
+                    
+            except FileNotFoundError:
+                self.roots = np.array([0., 0])
+                self.roots = np.array([0., 0])
         
         self.a_infinity = (self.roots[1] + self.roots[0]) * 0.5
         self.b_infinity = (self.roots[1] - self.roots[0]) * 0.25

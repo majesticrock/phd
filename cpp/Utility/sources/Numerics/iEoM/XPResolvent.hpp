@@ -17,8 +17,8 @@ namespace Utility::Numerics::iEoM {
 		Matrix K_plus, K_minus, L;
 		std::vector<std::array<Vector, 2>> starting_states;
 
-		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision)
-			: _internal(sqrt_precision), _derived(derived_ptr) { };
+		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision, bool pivot=true)
+			: _internal(sqrt_precision), _derived(derived_ptr), _pivot(pivot) { };
 
 		virtual ~XPResolvent() = default;
 
@@ -63,8 +63,12 @@ namespace Utility::Numerics::iEoM {
 #pragma omp section
 				{
 					std::chrono::time_point begin_in = std::chrono::steady_clock::now();
-					k_solutions[0] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_plus);
-					_internal.template applyMatrixOperation<IEOM_NONE>(k_solutions[0].eigenvalues);
+					if(_pivot) {
+						k_solutions[0] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_plus);
+					} 
+					else {
+						k_solutions[0] = Utility::Numerics::matrix_wrapper<RealType>::only_solve(K_plus);
+					}
 					std::chrono::time_point end_in = std::chrono::steady_clock::now();
 					std::cout << "Time for solving K_+: "
 						<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
@@ -75,8 +79,12 @@ namespace Utility::Numerics::iEoM {
 #pragma omp section
 				{
 					std::chrono::time_point begin_in = std::chrono::steady_clock::now();
-					k_solutions[1] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_minus);
-					_internal.template applyMatrixOperation<IEOM_NONE>(k_solutions[1].eigenvalues);
+					if(_pivot) {
+						k_solutions[1] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_minus);
+					} 
+					else {
+						k_solutions[1] = Utility::Numerics::matrix_wrapper<RealType>::only_solve(K_minus);
+					}
 					std::chrono::time_point end_in = std::chrono::steady_clock::now();
 					std::cout << "Time for solving K_-: "
 						<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
@@ -95,9 +103,9 @@ namespace Utility::Numerics::iEoM {
 				std::chrono::time_point begin_in = std::chrono::steady_clock::now();
 				if (minus_index == 0) L.transposeInPlace();
 				solver_matrix.resize(k_solutions[plus_index].eigenvalues.rows(), k_solutions[plus_index].eigenvalues.rows());
-
+				
 				Vector K_EV = k_solutions[minus_index].eigenvalues;
-				_internal.template applyMatrixOperation<IEOM_INVERSE>(K_EV);
+				_internal.template applyMatrixOperation<IEOM_INVERSE>(K_EV, plus_index==1 ? "K_+" : "K_-");
 				Matrix buffer_matrix = L * k_solutions[minus_index].eigenvectors;
 				Matrix N_new = buffer_matrix * K_EV.asDiagonal() * buffer_matrix.adjoint();
 
@@ -106,8 +114,9 @@ namespace Utility::Numerics::iEoM {
 					<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
 				begin_in = std::chrono::steady_clock::now();
 
-				auto n_solution = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(N_new);
-				_internal.template applyMatrixOperation<IEOM_INVERSE_SQRT>(n_solution.eigenvalues);
+				auto n_solution = _pivot ? Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(N_new)
+					: Utility::Numerics::matrix_wrapper<RealType>::only_solve(N_new);
+				_internal.template applyMatrixOperation<IEOM_INVERSE_SQRT>(n_solution.eigenvalues, plus_index==1 ? "+: N_new" : "-: N_new");
 
 				// Starting here, N_new = 1/sqrt(N_new)
 				// I forego another matrix to save some memory
@@ -163,5 +172,6 @@ namespace Utility::Numerics::iEoM {
 	private:
 		ieom_internal<RealType> _internal;
 		Derived* _derived;
+		const bool _pivot{};
 	};
 }
