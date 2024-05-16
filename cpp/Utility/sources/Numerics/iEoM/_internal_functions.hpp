@@ -8,8 +8,8 @@ namespace Utility::Numerics::iEoM {
 	class MatrixIsNegativeException : public std::runtime_error {
 	public:
 		RealType negative_eigenvalue{};
-		MatrixIsNegativeException(RealType _negative_eigenvalue)
-			: std::runtime_error("The matrix M is negative! Most negative eigenvalue = "
+		MatrixIsNegativeException(RealType _negative_eigenvalue, const std::string& name="M")
+			: std::runtime_error("The matrix " + name + " is negative! Most negative eigenvalue = "
 				+ Utility::better_to_string(_negative_eigenvalue, std::chars_format::scientific, 6)),
 			negative_eigenvalue(_negative_eigenvalue)
 		{};
@@ -46,9 +46,9 @@ namespace Utility::Numerics::iEoM {
 		* 2: Compute the square root
 		* 3: Compute the pseudoinverse square root
 		*/
-		template<ieom_operation option, bool pseudo_inverse = false>
-		inline void applyMatrixOperation(RealVector& evs) const {
-			if (contains_negative(evs)) throw MatrixIsNegativeException<RealType>(evs.minCoeff());
+		template<ieom_operation option, bool pseudo_inverse = true>
+		inline void applyMatrixOperation(RealVector& evs, const std::string& name="M") const {
+			if (contains_negative(evs)) throw MatrixIsNegativeException<RealType>(evs.minCoeff(), name);
 			for (auto& ev : evs)
 			{
 				if (ev < _sqrt_precision) {

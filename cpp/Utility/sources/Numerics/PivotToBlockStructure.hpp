@@ -107,6 +107,15 @@ namespace Utility::Numerics {
 			return solution;
 		};
 
+		static matrix_wrapper only_solve(MatrixType& toSolve)
+		{
+			Eigen::SelfAdjointEigenSolver<MatrixType> solver(toSolve);
+			matrix_wrapper solution(toSolve.rows());
+			solution.eigenvalues = solver.eigenvalues();
+			solution.eigenvectors = solver.eigenvectors();
+			return solution;
+		};
+
 		static bool is_non_negative(MatrixType& toSolve, const RealType EPSILON)
 		{
 			auto pivot = pivot_to_block_structure(toSolve);

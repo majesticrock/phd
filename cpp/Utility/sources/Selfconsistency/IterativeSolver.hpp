@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <Eigen/Dense>
 #include <limits>
+#include <chrono>
 #include "../UnderlyingFloatingPoint.hpp"
 
 namespace Utility::Selfconsistency {
@@ -77,8 +78,9 @@ namespace Utility::Selfconsistency {
 			return true;
 		};
 	public:
-		virtual const SelfconsistencyAttributes& computePhases()
+		virtual const SelfconsistencyAttributes& compute(bool print_time=false)
 		{
+			std::chrono::time_point begin = std::chrono::steady_clock::now();
 			constexpr size_t MAX_STEPS = 1500;
 			this->_attr->converged = true;
 			if (!procedureIterative(MAX_STEPS)) {
@@ -86,6 +88,12 @@ namespace Utility::Selfconsistency {
 					std::cerr << "No convergence for " << this->_model->info() << std::endl;
 				}
 				this->_attr->setZero();
+			}
+
+			if (print_time) {
+				std::chrono::time_point end = std::chrono::steady_clock::now();
+				std::cout << "Time for self-consistency computations: "
+					<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 			}
 
 			return *this->_attr;
