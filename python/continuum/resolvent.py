@@ -16,7 +16,7 @@ use_XP = True
 folder = "data/continuum/test"
 fig, ax = plt.subplots()
 
-ax.set_yscale("log")
+#ax.set_yscale("log")
 #ax.set_yscale("symlog")
 #ax.set_ylim(-0.05, 100.)
 
@@ -26,7 +26,7 @@ plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 #plotter.set_individual_dashes()
 
 plot_lower_lim = -0.05
-plot_upper_lim = 100
+plot_upper_lim = 120
 
 name_suffix = "phase_SC"
 data, data_real, w_lin, res = cf.resolvent_data(f"{folder}", name_suffix, plot_lower_lim, plot_upper_lim, 
@@ -43,8 +43,8 @@ legend = plt.legend()
 ax.add_artist(legend)
 
 ax.set_xlim(plot_lower_lim, plot_upper_lim)
-ax.set_xlabel(r"$\omega [t]$")
-ax.set_ylabel(r"$\mathcal{A} (\omega) [t^{-1}]$")
+ax.set_xlabel(r"$\omega [\mathrm{meV}]$")
+ax.set_ylabel(r"$\mathcal{A} (\omega) [1 / \mathrm{meV}]$")
 fig.tight_layout()
 
 import os
