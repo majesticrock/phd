@@ -361,7 +361,7 @@ Then, we can express any time-dependent operator in this set by
     \label{eqn:time_dependent_operator}
     A(t) = \sum_n a_n(t) A_n,
 \end{equation}
-where the coefficients $c_j(t)$ capture the entire time dependence. 
+where the coefficients $a_n(t)$ capture the entire time dependence. 
 Inserting this into the Heisenberg equation of motion and applying a sort of operator scalar product $(A_i|\cdot)$ 
 on both sides of the equation yields
 \bs
@@ -445,7 +445,7 @@ Operators with different indices are treated separately, e.g., $n_{\gamma \up}$ 
 are distinct operators in the studied set $\mathcal{B}$.
 Additionally, we consider an analogous expression for the operator
 \begin{equation}
-    \tau_{k} \coloneqq c_{k \uparrow}^\dagger c_{k \downarrow}
+  \tau_k \coloneqq c_{\vec{k}\uparrow}^\dagger c_{\vec{k}+\vec{Q}\downarrow}
 \end{equation}
 and its Hermitian conjugate.
 This will allow us to describe transversal magnons, i.e., perpendicular 
@@ -1152,7 +1152,7 @@ We assume that this peak is always located outside of the two-particle continuum
 In this case, however, it can lie very close to the continuum, so that we cannot resolve it due to the limited accuracy of our numerics.
 So it seems to appear as a singularity at $2\Delta$ for small values of $V$.
 
-In the AFM phase, the spectral functions $\spectral{l.AMF}$ and $\spectral{t.AFM}$ are distinct.
+In the AFM phase, the spectral functions $\spectral{l.AFM}$ and $\spectral{t.AFM}$ are distinct.
 While the longitudinal magnon continues to manifest as a peak at relatively high energies
 the transversal magnon appears as a peak at zero energy within our numerical accuracy. Due to
 the asymmetry of the spectral, its peak is the derivative of a $\delta$ function.
@@ -1290,9 +1290,9 @@ $(A_{\vk} | [H, A_{\vl}])$ can be reduced to sums proportional to $\gamma_i$ or 
 Therefore, it is not necessary to implement any sort of computation in reciprocal space.
 As an example, let us consider $A_{\vk} = f_{\vk}^\dagger$ and 
 \begin{equation}
-    ( f_{\vk}^\dagger | f_{\vl}^\dagger ) = \delta_{\vk, \vl}\, \langle 1 - n_{\vk \uparrow} - n_{\vk \downarrow} \rangle = \alpha(\vk) \delta_{\vk, \vl}  
+    ( f_{\vk}^\dagger | f_{\vl}^\dagger ) = \delta_{\vk, \vl}\, \langle 1 - n_{-\vk \uparrow} - n_{\vk \downarrow} \rangle = \alpha(\vk) \delta_{\vk, \vl}  
 \end{equation}
-with $\alpha(\vk)\coloneqq 1 - \langle n_{\vk \uparrow} + n_{\vk \downarrow} \rangle$. 
+with $\alpha(\vk)\coloneqq 1 - \langle n_{\vk \uparrow} + n_{-\vk \downarrow} \rangle$. 
 Inserting this into Eq.\ \eqref{eqn:numerical_example} yields
 \begin{equation}
     (A_i | A_j) = \frac{1}{N} \sum_{\vk} \alpha(\vk) h(\gamma_i 
