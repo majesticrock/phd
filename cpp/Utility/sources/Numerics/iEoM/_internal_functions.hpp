@@ -9,7 +9,7 @@ namespace Utility::Numerics::iEoM {
 	public:
 		RealType negative_eigenvalue{};
 		MatrixIsNegativeException(RealType _negative_eigenvalue, const std::string& name="M")
-			: std::runtime_error("The matrix " + name + " is negative! Most negative eigenvalue = "
+			: std::runtime_error("The matrix " + name + " is negative! First negative eigenvalue = "
 				+ Utility::better_to_string(_negative_eigenvalue, std::chars_format::scientific, 6)),
 			negative_eigenvalue(_negative_eigenvalue)
 		{};
