@@ -69,6 +69,7 @@ namespace Utility::Numerics::iEoM {
 					else {
 						k_solutions[0] = Utility::Numerics::matrix_wrapper<RealType>::only_solve(K_plus);
 					}
+					this->_internal.template applyMatrixOperation<IEOM_NONE>(k_solutions[0].eigenvalues, "K_+");
 					std::chrono::time_point end_in = std::chrono::steady_clock::now();
 					std::cout << "Time for solving K_+: "
 						<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
@@ -85,6 +86,7 @@ namespace Utility::Numerics::iEoM {
 					else {
 						k_solutions[1] = Utility::Numerics::matrix_wrapper<RealType>::only_solve(K_minus);
 					}
+					this->_internal.template applyMatrixOperation<IEOM_NONE>(k_solutions[1].eigenvalues, "K_-");
 					std::chrono::time_point end_in = std::chrono::steady_clock::now();
 					std::cout << "Time for solving K_-: "
 						<< std::chrono::duration_cast<std::chrono::milliseconds>(end_in - begin_in).count() << "[ms]" << std::endl;
