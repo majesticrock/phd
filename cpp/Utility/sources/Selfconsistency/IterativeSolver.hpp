@@ -19,7 +19,7 @@ namespace Utility::Selfconsistency {
 	constexpr DebugPolicy NoWarning{ false, false };
 	constexpr DebugPolicy PrintEverything{ true, true };
 
-	template <typename DataType, class Model, class SelfconsistencyAttributes, const DebugPolicy& debugPolicy = WarnNoConvergence>
+	template <class DataType, class Model, class SelfconsistencyAttributes, const DebugPolicy& debugPolicy = WarnNoConvergence>
 	class IterativeSolver {
 	protected:
 		Model* _model{};

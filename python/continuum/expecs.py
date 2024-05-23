@@ -7,6 +7,7 @@ with gzip.open(f"data/continuum/test/expecs.dat.gz", 'rt') as f_open:
     
 plt.plot(M[0], M[1], "-", label="$<n_k>$")
 plt.plot(M[0], M[2], "-", label="$<f_k>$")
+plt.plot(M[0], M[1] * M[2], "--", label="$<n_k><f_k>$")
 
 plt.legend()
 plt.xlabel("$k$")
