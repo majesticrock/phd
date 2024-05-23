@@ -8,7 +8,7 @@ U = 2.5
 use_XP = True
 
 folder = "data/continuum/test/"
-name_suffix = "higgs_SC"
+name_suffix = "phase_SC"
 element_names = ["a", "a+b", "a+ib"]
 
 file = f"{folder}continuum.dat.gz"
@@ -36,6 +36,9 @@ ax.plot(A, ls="-", marker='x', label="$a_i$")
 ax.plot(np.sqrt(B), ls="-", marker='o', label="$b_i$")
 ax.axhline(a_inf, linestyle="-" , color="k", label="$a_\\infty$")
 ax.axhline(b_inf, linestyle="--", color="k", label="$b_\\infty$")
+
+ax.set_ylim(0.8 * np.min([a_inf, b_inf]), 1.2 * np.max([a_inf, b_inf]))
+
 ax.legend()
 ax.set_xlabel("Iteration $i$")
 ax.set_ylabel("Lanczos coefficient")

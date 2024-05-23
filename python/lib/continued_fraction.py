@@ -48,7 +48,8 @@ class ContinuedFraction:
             deviation_from_infinity[i] = abs((self.A[i] - self.a_infinity) / self.a_infinity) + abs((np.sqrt(self.B[i + 1]) - self.b_infinity) / self.b_infinity)
         
         best_approx = np.argmin(deviation_from_infinity[ingore_first:]) + ingore_first
-
+        #best_approx = 45
+        
         #artifacts = find_peaks(self.B[1:], prominence=5e2, width=1)
         #if len(artifacts[0]) > 0:
         #    first_artifact = artifacts[0][0] - 2 - int(artifacts[1]["widths"][0])
