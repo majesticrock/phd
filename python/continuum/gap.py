@@ -15,8 +15,8 @@ if plot_approx:
     plt.plot(M_approx[0], M_approx[1], "-", label=r"approx. $\theta$")
 
 
-plt.xlabel(r"$k [\sqrt{\mathrm{meV}}]$")
-plt.ylabel(r"$\Delta [\mathrm{meV}]$")
+plt.xlabel(r"$k [\sqrt{\mathrm{eV}}]$")
+plt.ylabel(r"$\Delta [\mathrm{eV}]$")
 plt.legend()
 plt.tight_layout()
 plt.show()

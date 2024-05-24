@@ -2,11 +2,11 @@
 #include "OutputWriter.hpp"
 #include <iostream>
 
-#ifndef _DEBUG
-#define _USE_BOOST // Disable if boost is not desired
+#ifdef _DEBUG
+#define _NO_BOOST // Enable if boost is desired
 #endif
 
-#ifdef _USE_BOOST
+#ifndef _NO_BOOST
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
@@ -14,7 +14,7 @@
 #endif
 
 namespace Utility {
-#ifdef _USE_BOOST
+#ifndef _NO_BOOST
 	template <typename vector_type, typename data_type = typename vector_type::value_type>
 	void saveData(const vector_type& data, const std::string& filename,
 		const std::vector<std::string>& comments = std::vector<std::string>())

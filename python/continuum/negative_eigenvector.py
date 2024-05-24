@@ -511,10 +511,13 @@ Delta = 4.18987368671297e-03
 
 eps = 0.5 * np.linspace(np.sqrt(2 * (eps_F - w_D)), np.sqrt(2 * (eps_F + w_D)), 500)**2 - eps_F
 
-plt.plot(eps, coeffs, "x")
-plt.plot(eps, eps / np.sqrt(eps*eps + Delta*Delta))
-plt.plot(eps, coeffs * eps / np.sqrt(eps*eps + Delta*Delta))
+plt.plot(eps, coeffs, "x", label="$v_i$")
+plt.plot(eps, eps / np.sqrt(eps*eps + Delta*Delta), label="$1 - 2<n_k>$")
+norm_factor = coeffs[0] / (Delta / (2 * np.sqrt(eps[0]*eps[0] + Delta*Delta)))
+plt.plot(eps, coeffs * eps / np.sqrt(eps*eps + Delta*Delta) / norm_factor, label="$\\mathrm{const} \\cdot v_i \\cdot (1 - 2<n_k>)$")
+plt.plot(eps, -Delta / (2 * np.sqrt(eps*eps + Delta*Delta)), "--", label="$<f_k>$")
 
+plt.legend()
 plt.xlabel("$\\epsilon(k) - \\epsilon_F$ [eV]")
 plt.tight_layout()
 plt.show()

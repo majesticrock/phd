@@ -117,7 +117,7 @@ class ContinuedFraction:
     def spectral_density(self, w_param, withTerminator = True):
         return NORM_FACTOR * self.continued_fraction(w_param, withTerminator).imag
     
-    def mark_continuum(self, axes=None, label="Continuum"):
+    def mark_continuum(self, axes=None, scale_factor=1., label="Continuum"):
         if label is not None:
             args = {"alpha" : 0.333, "color": "grey", "label" : label}
         else:
@@ -129,9 +129,9 @@ class ContinuedFraction:
             plotter = axes.axvspan
             
         if self.z_squared:
-            plotter(np.sqrt(self.roots[0]), np.sqrt(self.roots[1]), **args)
+            plotter(scale_factor * np.sqrt(self.roots[0]), scale_factor * np.sqrt(self.roots[1]), **args)
         else:
-            plotter(self.roots[0], self.roots[1], **args)
+            plotter(scale_factor * self.roots[0], scale_factor * self.roots[1], **args)
         
     def continuum_edges(self):
         if not self.z_squared:
