@@ -2,6 +2,7 @@
 #include "../../better_to_string.hpp"
 #include "../../UnderlyingFloatingPoint.hpp"
 #include <Eigen/Dense>
+#include <iostream>
 
 namespace Utility::Numerics::iEoM {
 	template<class RealType>
@@ -9,7 +10,7 @@ namespace Utility::Numerics::iEoM {
 	public:
 		RealType negative_eigenvalue{};
 		MatrixIsNegativeException(RealType _negative_eigenvalue, const std::string& name="M")
-			: std::runtime_error("The matrix " + name + " is negative! First negative eigenvalue = "
+			: std::runtime_error("The matrix " + name + " is negative! Most negative eigenvalue = "
 				+ Utility::better_to_string(_negative_eigenvalue, std::chars_format::scientific, 6)),
 			negative_eigenvalue(_negative_eigenvalue)
 		{};
@@ -25,9 +26,13 @@ namespace Utility::Numerics::iEoM {
 		const RealType _sqrt_precision{ 1e-6 };
 		const RealType _precision{ 1e-12 };
 
+		const bool _negative_matrix_is_error{ true };
+
 		constexpr ieom_internal() = default;
 		constexpr ieom_internal(RealType const& sqrt_precision)
 			: _sqrt_precision(sqrt_precision), _precision(sqrt_precision* sqrt_precision) {};
+		constexpr ieom_internal(RealType const& sqrt_precision, bool negative_matrix_is_error)
+			: _sqrt_precision(sqrt_precision), _precision(sqrt_precision* sqrt_precision), _negative_matrix_is_error(negative_matrix_is_error) {};
 
 		template <class EigenMatrixType>
 		inline EigenMatrixType removeNoise(EigenMatrixType const& matrix) const {
@@ -48,7 +53,15 @@ namespace Utility::Numerics::iEoM {
 		*/
 		template<ieom_operation option, bool pseudo_inverse = true>
 		inline void applyMatrixOperation(RealVector& evs, const std::string& name="M") const {
-			if (contains_negative(evs)) throw MatrixIsNegativeException<RealType>(evs.minCoeff(), name);
+			if (contains_negative(evs)) {
+				if (_negative_matrix_is_error) {
+					throw MatrixIsNegativeException<RealType>(evs.minCoeff(), name);
+				}
+				else {
+					std::cerr << "Warning: The matrix " << name << " is negative with min(ev) = " << evs.minCoeff() << std::endl; 
+				}
+			} 
+			
 			for (auto& ev : evs)
 			{
 				if (ev < _sqrt_precision) {

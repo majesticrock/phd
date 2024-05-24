@@ -17,8 +17,8 @@ namespace Utility::Numerics::iEoM {
 		Matrix K_plus, K_minus, L;
 		std::vector<std::array<Vector, 2>> starting_states;
 
-		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision, bool pivot=true)
-			: _internal(sqrt_precision), _derived(derived_ptr), _pivot(pivot) { };
+		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision, bool pivot=true, bool negative_matrix_is_error=true)
+			: _internal(sqrt_precision, negative_matrix_is_error), _derived(derived_ptr), _pivot(pivot) { };
 
 		virtual ~XPResolvent() = default;
 

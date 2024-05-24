@@ -15,33 +15,32 @@ use_XP = True
 folder = "data/continuum/test"
 fig, ax = plt.subplots()
 
-ax.set_yscale("log")
-#ax.set_yscale("symlog")
-#ax.set_ylim(-0.05, 100.)
+MEV_FACTOR = 1e3
+ax.set_ylim(-0.05, 1000. / MEV_FACTOR)
 
 plotter = ps.CURVEFAMILY(6, axis=ax)
 plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 #plotter.set_individual_dashes()
 
-plot_lower_lim = 0
-plot_upper_lim = 0.07
+plot_upper_lim = 0.03
+plot_lower_lim = -0.01 * plot_upper_lim
 
 name_suffix = "phase_SC"
 data, data_real, w_lin, res = cf.resolvent_data(f"{folder}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
-plotter.plot(w_lin, data, label="Phase")
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-7, ingore_first=5)
+plotter.plot(w_lin * MEV_FACTOR, data / MEV_FACTOR, label="Phase")
 
 name_suffix = "higgs_SC"
 data, data_real, w_lin, res = cf.resolvent_data(f"{folder}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
-plotter.plot(w_lin, data, label="Higgs")
+                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-7, ingore_first=5)
+plotter.plot(w_lin * MEV_FACTOR, data / MEV_FACTOR, label="Higgs")
 
-res.mark_continuum(ax)
+res.mark_continuum(ax, scale_factor=MEV_FACTOR)
 legend = plt.legend()
 ax.add_artist(legend)
 
-ax.set_xlim(plot_lower_lim, plot_upper_lim)
+ax.set_xlim(plot_lower_lim * MEV_FACTOR, plot_upper_lim * MEV_FACTOR)
 ax.set_xlabel(r"$\omega [\mathrm{meV}]$")
 ax.set_ylabel(r"$\mathcal{A} (\omega) [1 / \mathrm{meV}]$")
 fig.tight_layout()
