@@ -51,8 +51,12 @@ def color_and_linestyle_legends(ax, color_legend_loc='upper right', linestyle_le
         linestyle_legend = ax.legend(unique_linestyles.values(), unique_linestyles.keys(), title=linestyle_legend_title, loc=linestyle_legend_loc)
 
     # Set the line colors in the linestyle legend
-    for handle in linestyle_legend.legend_handles:
-        handle.set_color(linestyle_legend_color)
+    if hasattr(linestyle_legend, 'legend_handles'):
+        for handle in linestyle_legend.legend_handles:
+            handle.set_color(linestyle_legend_color)
+    else:
+        for handle in linestyle_legend.legendHandles:
+            handle.set_color(linestyle_legend_color)
 
     # Add both legends to the axes
     ax.add_artist(color_legend)  # Add color legend back to the axes
@@ -88,7 +92,7 @@ def color_and_linestyle_legends(ax, color_legend_loc='upper right', linestyle_le
 #
 ## Call the function to create legends with optional settings, including custom labels for colors and linestyles
 #color_and_linestyle_legends(ax, color_legend_loc='upper right', linestyle_legend_loc='lower right', linestyle_legend_color='black', 
-#                                   color_legend_title='Color title', linestyle_legend_title='Linestyle title', color_labels=color_labels, linestyle_labels=linestyle_labels)
+#                            color_legend_title='Color title', linestyle_legend_title='Linestyle title', color_labels=color_labels, linestyle_labels=linestyle_labels)
 #
 ## Show the plot
 #plt.show()

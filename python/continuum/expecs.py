@@ -1,17 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import gzip
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-with gzip.open(f"data/continuum/test/expecs.dat.gz", 'rt') as f_open:
+from lib.color_and_linestyle_legends import *
+
+fig, ax = plt.subplots()
+
+with gzip.open(f"data/continuum/exact_theta/expecs.dat.gz", 'rt') as f_open:
     M = np.loadtxt(f_open)
     
-plt.plot(M[0], M[1], "-", label="$<n_k>$")
-plt.plot(M[0], M[2], "-", label="$<f_k>$")
-plt.plot(M[0], M[1] * M[2], "--", label="$<n_k><f_k>$")
+ax.plot(M[0], M[1], ls="-", color="C0")
+ax.plot(M[0], M[2], ls="-", color="C1")
 
-plt.legend()
-plt.xlabel("$k$")
-plt.ylabel("$<O>$")
+with gzip.open(f"data/continuum/approx_theta/expecs.dat.gz", 'rt') as f_open:
+    M = np.loadtxt(f_open)
+    
+ax.plot(M[0], M[1], ls="--", color="C0", linewidth=4)
+ax.plot(M[0], M[2], ls="--", color="C1", linewidth=4)
 
-plt.tight_layout()
+color_and_linestyle_legends(ax, color_labels=[r"$\langle n_k \rangle$", r"$\langle f_k \rangle$"], 
+                            linestyle_labels=["Exact interaction", "Approx. interaction"])
+
+ax.set_xlabel("$k$")
+ax.set_ylabel("$<O>$")
+
+fig.tight_layout()
 plt.show()

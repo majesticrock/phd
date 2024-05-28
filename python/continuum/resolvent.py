@@ -12,7 +12,8 @@ colors = prop_cycle.by_key()['color']
 
 use_XP = True
 
-folder = "data/continuum/test"
+subfolder = "exact_theta"
+folder = f"data/continuum/{subfolder}"
 fig, ax = plt.subplots()
 
 MEV_FACTOR = 1e3
@@ -23,7 +24,7 @@ plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 #plotter.set_individual_dashes()
 
-plot_upper_lim = 0.03
+plot_upper_lim = 0.11
 plot_lower_lim = -0.01 * plot_upper_lim
 
 name_suffix = "phase_SC"

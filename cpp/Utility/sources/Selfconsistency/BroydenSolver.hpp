@@ -15,7 +15,7 @@ namespace Utility::Selfconsistency {
 		virtual const SelfconsistencyAttributes& compute(bool print_time=false)
 		{
             std::chrono::time_point begin = std::chrono::steady_clock::now();
-			this->procedureIterative(_MaxPreBroydenIterations);
+			this->_parent::procedureIterative(_MaxPreBroydenIterations, 1e-6);
 
 			std::function<void(const ParameterVector&, ParameterVector&)> func = [&](const ParameterVector& x, ParameterVector& F) {
                 this->_model->iterationStep(x, F);
