@@ -12,7 +12,7 @@ colors = prop_cycle.by_key()['color']
 
 use_XP = True
 
-subfolder = "exact_theta"
+subfolder = "test"
 folder = f"data/continuum/{subfolder}"
 fig, ax = plt.subplots()
 
