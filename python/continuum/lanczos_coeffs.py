@@ -7,7 +7,8 @@ U = 2.5
 
 use_XP = True
 
-folder = "data/continuum/test/"
+subfolder = "exact_theta"
+folder = f"data/continuum/{subfolder}/"
 name_suffix = "phase_SC"
 element_names = ["a", "a+b", "a+ib"]
 

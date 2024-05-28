@@ -40,7 +40,8 @@ namespace Utility::Selfconsistency {
 			}
 			return false;
 		};
-		bool procedureIterative(const size_t MAX_STEPS)
+
+		bool procedureIterative(const size_t MAX_STEPS, RealType precision = PRECISION<RealType>)
 		{
 			RealType error{ 100 };
 
@@ -53,7 +54,7 @@ namespace Utility::Selfconsistency {
 			}
 
 			size_t iterNum = 0U;
-			while (iterNum < MAX_STEPS && error > PRECISION<RealType>) {
+			while (iterNum < MAX_STEPS && error > precision) {
 				this->_model->iterationStep(x0, f0);
 				if (hasSignFlippingBehaviour(x0)) {
 					if constexpr (debugPolicy.convergenceWarning) {
