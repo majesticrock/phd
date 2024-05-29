@@ -60,7 +60,6 @@ namespace Utility::Selfconsistency {
 					if constexpr (debugPolicy.convergenceWarning) {
 						std::cerr << "Sign flipper for " << this->_model->info() << std::endl;
 					}
-					this->_attr->setZero();
 					return false;
 				}
 
@@ -88,7 +87,7 @@ namespace Utility::Selfconsistency {
 				if constexpr (debugPolicy.convergenceWarning) {
 					std::cerr << "No convergence for " << this->_model->info() << std::endl;
 				}
-				this->_attr->setZero();
+				//this->_attr->setZero();
 			}
 
 			if (print_time) {
