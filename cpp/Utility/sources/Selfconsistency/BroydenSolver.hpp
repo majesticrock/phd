@@ -29,7 +29,6 @@ namespace Utility::Selfconsistency {
 				if (debugPolicy.convergenceWarning) {
 					std::cerr << std::fixed << std::setprecision(8) << "No convergence for " << this->_model->info() << std::endl;
 				}
-				this->_attr->setZero();
 			}
 			else {
 				this->_attr->converged = true;
