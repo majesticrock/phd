@@ -24,7 +24,7 @@ namespace Utility {
 		using iterator = typename std::vector<T>::iterator;
 		using const_iterator = typename std::vector<T>::const_iterator;
 		using reverse_iterator = typename std::vector<T>::reverse_iterator;
-		using constreverse__iterator = typename std::vector<T>::const_reverse_iterator;
+		using constreverse_iterator = typename std::vector<T>::const_reverse_iterator;
 
 		virtual ~VectorWrapper() = default;
 		VectorWrapper() = default;

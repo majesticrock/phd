@@ -1,6 +1,8 @@
 #pragma once
 #include <Eigen/Dense>
+#include <complex>
 #include <type_traits>
+#include <cstring>
 
 namespace Utility::Numerics::Roots {
 	template<typename RealType, int t_vector_size>
@@ -20,8 +22,8 @@ namespace Utility::Numerics::Roots {
 			J_new += J_old;
 		};
 	public:
-		static bool compute(std::function<void(const VectorType&, VectorType&)>& func,
-			VectorType& x0, const int MAX_ITER = 200)
+		template<class FunctionType>
+		static bool compute(const FunctionType& func, VectorType& x0, const int MAX_ITER = 200)
 		{
 			size_t DIM = x0.rows();
 			// You may play around with EPS_X and EPS_F to your desire
@@ -56,6 +58,45 @@ namespace Utility::Numerics::Roots {
 			}
 			// This method returns true if convergence is achieved, in this case if |F(x_final)| < 1e-10
 			return (F_new.norm() < 1e-10);
+		}
+
+		inline static bool compute(std::function<void(const VectorType&, VectorType&)>& func,
+			VectorType& x0, const int MAX_ITER = 200)
+		{
+			return compute(func, x0, MAX_ITER);
 		};
+	};
+
+	template<typename RealType, int t_vector_size>
+	class BroydensMethodEigen< std::complex<RealType>, t_vector_size > {
+		static constexpr Eigen::Index double_size = t_vector_size == Eigen::Dynamic ? Eigen::Dynamic : 2 * t_vector_size;
+		using VectorType = Eigen::Vector<std::complex<RealType>, t_vector_size>;
+		using RealVector = Eigen::Vector<RealType, double_size>;
+
+		using RealSolver = BroydensMethodEigen<RealType, t_vector_size>;
+	public:
+		static bool compute(std::function<void(const VectorType&, VectorType&)>& func,
+			VectorType& x_complex, const int MAX_ITER = 200)
+		{
+			VectorType f_complex = x_complex;
+			RealVector x0;
+			if constexpr (t_vector_size == Eigen::Dynamic) {
+				x0.setZero(2 * x_complex.size());
+			}
+			else {
+				x0.setZero();
+			}
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
+			auto call_f_from_real = [&](const RealVector& x_real, RealVector& f_real){
+				std::memcpy(x_complex.data(), x_real.data(), 2 * sizeof(RealType) * x_complex.size());
+				func(x_complex, f_complex);
+				std::memcpy(f_real.data(), f_complex.data(), 2 * sizeof(RealType) * x_complex.size());
+			};
+
+			std::memcpy(x0.data(), x_complex.data(), 2 * sizeof(RealType) * x_complex.size());
+#pragma GCC diagnostic pop
+			return RealSolver::compute(call_f_from_real, x0, MAX_ITER);
+		}
 	};
 }
