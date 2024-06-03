@@ -40,6 +40,6 @@ namespace Utility::Numerics::Minimization {
 		if (maxiter <= 0) {
 			std::cerr << "Bisection terminated by maxiter-constraint!" << std::endl;
 		}
-		return RealType{ 0.5 } * (begin + end);
+		return RealType{ 0.5 } *(begin + end);
 	}
 }

@@ -24,14 +24,14 @@ namespace Utility::Selfconsistency {
 		RealType error{};
 		bool converged{};
 		explicit operator bool() const {
-			return this->converged; 
+			return this->converged;
 		};
 	};
 
 	template<class RealType>
 	std::ostream& operator<<(std::ostream& os, const ConvergenceInfo<RealType>& _info)
 	{
-		os << (_info ? "C" : "No c")  << "onvergence achieved with error = " << _info.error;
+		os << (_info ? "C" : "No c") << "onvergence achieved with error = " << _info.error;
 		return os;
 	}
 
@@ -76,7 +76,7 @@ namespace Utility::Selfconsistency {
 					if constexpr (debugPolicy.convergenceWarning) {
 						std::cerr << "Sign flipper for " << this->_model->info() << std::endl;
 					}
-					return {2 * x0.norm(), false};
+					return { 2 * x0.norm(), false };
 				}
 
 				error = f0.norm();
@@ -89,18 +89,18 @@ namespace Utility::Selfconsistency {
 				++iterNum;
 			}
 			if (iterNum >= MAX_STEPS) {
-				return {error, false};
+				return { error, false };
 			}
-			return {error, true};
+			return { error, true };
 		};
 	public:
-		virtual const SelfconsistencyAttributes& compute(bool print_time=false)
+		virtual const SelfconsistencyAttributes& compute(bool print_time = false)
 		{
 			std::chrono::time_point begin = std::chrono::steady_clock::now();
 			constexpr size_t MAX_STEPS = 1500;
 			this->_attr->converged = true;
 			auto _info = this->procedureIterative(MAX_STEPS);
-			if (! _info) {
+			if (!_info) {
 				if constexpr (debugPolicy.convergenceWarning) {
 					std::cerr << "For " << this->_model->info() << ": " << _info << std::endl;
 				}

@@ -17,7 +17,7 @@ namespace Utility::Numerics::iEoM {
 		Matrix K_plus, K_minus, L;
 		std::vector<std::array<Vector, 2>> starting_states;
 
-		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision, bool pivot=true, bool negative_matrix_is_error=true)
+		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision, bool pivot = true, bool negative_matrix_is_error = true)
 			: _internal(sqrt_precision, negative_matrix_is_error), _derived(derived_ptr), _pivot(pivot) { };
 
 		virtual ~XPResolvent() = default;
@@ -63,9 +63,9 @@ namespace Utility::Numerics::iEoM {
 #pragma omp section
 				{
 					std::chrono::time_point begin_in = std::chrono::steady_clock::now();
-					if(_pivot) {
+					if (_pivot) {
 						k_solutions[0] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_plus);
-					} 
+					}
 					else {
 						k_solutions[0] = Utility::Numerics::matrix_wrapper<RealType>::only_solve(K_plus);
 					}
@@ -80,9 +80,9 @@ namespace Utility::Numerics::iEoM {
 #pragma omp section
 				{
 					std::chrono::time_point begin_in = std::chrono::steady_clock::now();
-					if(_pivot) {
+					if (_pivot) {
 						k_solutions[1] = Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(K_minus);
-					} 
+					}
 					else {
 						k_solutions[1] = Utility::Numerics::matrix_wrapper<RealType>::only_solve(K_minus);
 					}
@@ -105,9 +105,9 @@ namespace Utility::Numerics::iEoM {
 				std::chrono::time_point begin_in = std::chrono::steady_clock::now();
 				if (minus_index == 0) L.transposeInPlace();
 				solver_matrix.resize(k_solutions[plus_index].eigenvalues.rows(), k_solutions[plus_index].eigenvalues.rows());
-				
+
 				Vector K_EV = k_solutions[minus_index].eigenvalues;
-				_internal.template applyMatrixOperation<IEOM_INVERSE>(K_EV, plus_index==1 ? "K_+" : "K_-");
+				_internal.template applyMatrixOperation<IEOM_INVERSE>(K_EV, plus_index == 1 ? "K_+" : "K_-");
 				Matrix buffer_matrix = L * k_solutions[minus_index].eigenvectors;
 				Matrix N_new = buffer_matrix * K_EV.asDiagonal() * buffer_matrix.adjoint();
 
@@ -118,7 +118,7 @@ namespace Utility::Numerics::iEoM {
 
 				auto n_solution = _pivot ? Utility::Numerics::matrix_wrapper<RealType>::pivot_and_solve(N_new)
 					: Utility::Numerics::matrix_wrapper<RealType>::only_solve(N_new);
-				_internal.template applyMatrixOperation<IEOM_INVERSE_SQRT>(n_solution.eigenvalues, plus_index==1 ? "+: N_new" : "-: N_new");
+				_internal.template applyMatrixOperation<IEOM_INVERSE_SQRT>(n_solution.eigenvalues, plus_index == 1 ? "+: N_new" : "-: N_new");
 
 				// Starting here, N_new = 1/sqrt(N_new)
 				// I forego another matrix to save some memory

@@ -8,7 +8,7 @@ namespace Utility::Numerics::Roots {
 	template<typename RealType, int t_vector_size>
 	class BroydensMethodEigen {
 		static_assert(std::is_floating_point<RealType>::value, "Broyden's method is not yet implemented for complex numbers!");
-		
+
 		using MatrixType = Eigen::Matrix<RealType, t_vector_size, t_vector_size>;
 		using VectorType = Eigen::Vector<RealType, t_vector_size>;
 
@@ -88,11 +88,11 @@ namespace Utility::Numerics::Roots {
 			}
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
-			auto call_f_from_real = [&](const RealVector& x_real, RealVector& f_real){
+			auto call_f_from_real = [&](const RealVector& x_real, RealVector& f_real) {
 				std::memcpy(x_complex.data(), x_real.data(), 2 * sizeof(RealType) * x_complex.size());
 				func(x_complex, f_complex);
 				std::memcpy(f_real.data(), f_complex.data(), 2 * sizeof(RealType) * x_complex.size());
-			};
+				};
 
 			std::memcpy(x0.data(), x_complex.data(), 2 * sizeof(RealType) * x_complex.size());
 #pragma GCC diagnostic pop

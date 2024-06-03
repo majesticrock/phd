@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
 	auto min_test = [](double x) {return x * x - x * std::exp(-3 * x); };
 	std::cout << "\n#####################################\n\nMin Test:\n";
-	std::cout << Minimization::bisection(min_test, -3., 6., 1e-9, 100) <<  "\tAnalytical result: 0.16036674296 -> error = "
+	std::cout << Minimization::bisection(min_test, -3., 6., 1e-9, 100) << "\tAnalytical result: 0.16036674296 -> error = "
 		<< Minimization::bisection(min_test, -3., 6., 1e-9, 100) - 0.16036674296 << std::endl;
 
 	std::cout << "Min on boundary:\n";
