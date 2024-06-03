@@ -31,7 +31,7 @@ namespace Utility::Numerics::Integration {
 		decltype(function(begin)) y{ 0.5 * (function(begin) + function(end)) };
 		decltype(function(begin)) t{ y };
 		decltype(function(begin)) c{ t - y };
-	
+
 		decltype(function(begin)) value{ t };
 		for (unsigned long n = 1U; n < num_steps; ++n) {
 			y = function(begin + n * step) - c;
