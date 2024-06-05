@@ -78,7 +78,6 @@ namespace Utility::Selfconsistency {
 					}
 					return { 2 * x0.norm(), false };
 				}
-
 				error = f0.norm();
 				std::copy(this->_attr->begin(), this->_attr->end(), x0.begin());
 
@@ -87,6 +86,9 @@ namespace Utility::Selfconsistency {
 					std::cout << "Error:  " << error << "\n";
 				}
 				++iterNum;
+			}
+			if constexpr (debugPolicy.printSteps) {
+				std::cout << "Finished iterative procedure!" << std::endl;
 			}
 			if (iterNum >= MAX_STEPS) {
 				return { error, false };
