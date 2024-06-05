@@ -22,6 +22,7 @@ namespace Utility::Numerics::Roots {
 			J_new += J_old;
 		};
 	public:
+		// the function must have the following signature void func(const VectorType& input, VectorType& output)
 		template<class FunctionType>
 		static bool compute(const FunctionType& func, VectorType& x0, const int MAX_ITER = 200)
 		{
@@ -59,12 +60,6 @@ namespace Utility::Numerics::Roots {
 			// This method returns true if convergence is achieved, in this case if |F(x_final)| < 1e-10
 			return (F_new.norm() < 1e-10);
 		}
-
-		inline static bool compute(std::function<void(const VectorType&, VectorType&)>& func,
-			VectorType& x0, const int MAX_ITER = 200)
-		{
-			return compute(func, x0, MAX_ITER);
-		};
 	};
 
 	template<typename RealType, int t_vector_size>
@@ -75,8 +70,9 @@ namespace Utility::Numerics::Roots {
 
 		using RealSolver = BroydensMethodEigen<RealType, t_vector_size>;
 	public:
-		static bool compute(std::function<void(const VectorType&, VectorType&)>& func,
-			VectorType& x_complex, const int MAX_ITER = 200)
+	template<class FunctionType>
+		// the function must have the following signature void func(const VectorType& input, VectorType& output)
+		static bool compute(const FunctionType& func, VectorType& x_complex, const int MAX_ITER = 200)
 		{
 			VectorType f_complex = x_complex;
 			RealVector x0;
