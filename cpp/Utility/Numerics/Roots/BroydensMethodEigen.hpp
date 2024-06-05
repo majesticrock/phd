@@ -7,7 +7,7 @@
 namespace Utility::Numerics::Roots {
 	template<typename RealType, int t_vector_size>
 	class BroydensMethodEigen {
-		static_assert(std::is_floating_point<RealType>::value, "Broyden's method is not yet implemented for complex numbers!");
+		static_assert(std::is_floating_point<RealType>::value, "You're data type must be a floating point number");
 
 		using MatrixType = Eigen::Matrix<RealType, t_vector_size, t_vector_size>;
 		using VectorType = Eigen::Vector<RealType, t_vector_size>;
