@@ -1,10 +1,10 @@
 #pragma once
-#include "../PivotToBlockStructure.hpp"
 #include "../Resolvent.hpp"
 #include "_internal_functions.hpp"
 #include "../../IsComplex.hpp"
 #include "../../ConstexprPower.hpp"
 #include <chrono>
+#include "../PivotToBlockStructure.hpp"
 
 namespace Utility::Numerics::iEoM {
 	template<class Derived, class NumberType>
@@ -21,8 +21,8 @@ namespace Utility::Numerics::iEoM {
 		std::vector<ComplexVector> starting_states;
 
 	public:
-		GeneralResolvent(Derived* derived_ptr, RealType const& sqrt_precision)
-			: _internal(sqrt_precision), _derived(derived_ptr) { };
+		GeneralResolvent(Derived* derived_ptr, RealType const& sqrt_precision, bool negative_matrix_is_error = true)
+			: _internal(sqrt_precision, negative_matrix_is_error), _derived(derived_ptr) { };
 
 		virtual ~GeneralResolvent() = default;
 
@@ -104,8 +104,8 @@ namespace Utility::Numerics::iEoM {
 				<< std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 			begin = std::chrono::steady_clock::now();
 
-			const int N_RESOLVENT_TYPES = 4;
-			std::vector<Resolvent<RealType, true>> resolvents{ 3 * N_RESOLVENT_TYPES };
+			const int N_RESOLVENT_TYPES = starting_states.size();
+			std::vector<Resolvent<RealType, true>> resolvents(3 * N_RESOLVENT_TYPES);
 
 #pragma omp parallel for
 			for (int i = 0; i < N_RESOLVENT_TYPES; i++)

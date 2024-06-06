@@ -8,6 +8,7 @@
 #include <chrono>
 
 namespace Utility::Numerics::iEoM {
+
 	template<class Derived, class RealType>
 	struct XPResolvent {
 	public:
@@ -17,9 +18,30 @@ namespace Utility::Numerics::iEoM {
 		Matrix K_plus, K_minus, L;
 		std::vector<std::array<Vector, 2>> starting_states;
 
+		// Matrix accessors. Boundary checking is handled by Eigen
+		inline const RealType& M(int row, int col) const {
+			if(row < _hermitian_size)
+				return K_plus(row, col);
+			return K_minus(row - _hermitian_size, col - _hermitian_size);
+		}
+		inline RealType& M(int row, int col) {
+			if(row < _hermitian_size)
+				return K_plus(row, col);
+			return K_minus(row -_hermitian_size, col - _hermitian_size);
+		}
+		inline const RealType& N(int row, int col) const {
+			return L(row, col - _hermitian_size);
+		}
+		inline RealType& N(int row, int col) {
+			return L(row, col - _hermitian_size);
+		}
+
 		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision, bool pivot = true, bool negative_matrix_is_error = true)
 			: _internal(sqrt_precision, negative_matrix_is_error), _derived(derived_ptr), _pivot(pivot) { };
-
+		XPResolvent(Derived* derived_ptr, RealType const& sqrt_precision, int hermitian_size, int antihermitian_size,
+			bool pivot = true, bool negative_matrix_is_error = true)
+			: _internal(sqrt_precision, negative_matrix_is_error), _derived(derived_ptr), 
+			_hermitian_size(hermitian_size), _antihermitian_size(antihermitian_size), _pivot(pivot) { };
 		virtual ~XPResolvent() = default;
 
 		bool dynamic_matrix_is_negative()
@@ -174,6 +196,8 @@ namespace Utility::Numerics::iEoM {
 	private:
 		ieom_internal<RealType> _internal;
 		Derived* _derived;
+		const int _hermitian_size{};
+		const int _antihermitian_size{};
 		const bool _pivot{};
 	};
 }
