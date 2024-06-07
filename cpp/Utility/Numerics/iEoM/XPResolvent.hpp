@@ -17,6 +17,7 @@ namespace Utility::Numerics::iEoM {
 
 		Matrix K_plus, K_minus, L;
 		std::vector<std::array<Vector, 2>> starting_states;
+		std::vector<Resolvent<RealType, false>> resolvents;
 
 		// Matrix accessors. Boundary checking is handled by Eigen
 		inline const RealType& M(int row, int col) const {
@@ -164,15 +165,20 @@ namespace Utility::Numerics::iEoM {
 			begin = std::chrono::steady_clock::now();
 
 			const int N_RESOLVENT_TYPES = starting_states.size();
-			std::vector<Resolvent<RealType, false>> resolvents{};
 			resolvents.reserve(2 * N_RESOLVENT_TYPES);
 
 			for (size_t i = 0U; i < 2U; ++i)
 			{
 				// It is going to compute the anti-Hermitian first
 				compute_solver_matrix(i, 1 - i);
-				for (const auto& starting_state : starting_states) {
-					resolvents.push_back(Resolvent<RealType, false>(starting_state[i]));
+				if(resolvents.size() < N_RESOLVENT_TYPES){
+					for (const auto& starting_state : starting_states) {
+						resolvents.push_back(Resolvent<RealType, false>(starting_state[i]));
+					}
+				} else {
+					for(int j = 0; j < N_RESOLVENT_TYPES; ++j) {
+						resolvents[N_RESOLVENT_TYPES * i + j].setStartingState(starting_states[j][i]);
+					}
 				}
 #pragma omp parallel for
 				for (int j = 0; j < N_RESOLVENT_TYPES; ++j) {
