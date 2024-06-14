@@ -12,7 +12,7 @@ namespace Utility::Selfconsistency {
         using ParameterVector = typename _parent::ParameterVector;
         using RealType = typename _parent::RealType;
 	public:
-		virtual const SelfconsistencyAttributes& compute(bool print_time=false)
+		virtual const SelfconsistencyAttributes& compute(bool print_time=false, const size_t MAX_STEPS = 400)
 		{
             std::chrono::time_point begin = std::chrono::steady_clock::now();
 			this->_parent::procedureIterative(_MaxPreBroydenIterations, 1e-6);
@@ -25,7 +25,7 @@ namespace Utility::Selfconsistency {
 			std::copy(this->_attr->begin(), this->_attr->end(), x0.begin());
 			Utility::Numerics::Roots::BroydensMethodEigen<DataType, -1> broyden_solver;
 
-			if (!broyden_solver.compute(func, x0, 400)) {
+			if (!broyden_solver.compute(func, x0, MAX_STEPS)) {
 				if (debugPolicy.convergenceWarning) {
 					std::cerr << std::fixed << std::setprecision(8) << "No convergence for " << this->_model->info() << std::endl;
 				}
