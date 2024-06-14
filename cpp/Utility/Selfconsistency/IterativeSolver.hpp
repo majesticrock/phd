@@ -96,10 +96,9 @@ namespace Utility::Selfconsistency {
 			return { error, true };
 		};
 	public:
-		virtual const SelfconsistencyAttributes& compute(bool print_time = false)
+		virtual const SelfconsistencyAttributes& compute(bool print_time = false, const size_t MAX_STEPS = 1500)
 		{
 			std::chrono::time_point begin = std::chrono::steady_clock::now();
-			constexpr size_t MAX_STEPS = 1500;
 			this->_attr->converged = true;
 			auto _info = this->procedureIterative(MAX_STEPS);
 			if (!_info) {
