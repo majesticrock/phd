@@ -11,7 +11,7 @@ namespace Utility::Numerics::Minimization {
 		RealType middle = 0.5 * (begin + end);
 		RealType d{};
 
-		while (end - begin > tol && maxiter > 0) {
+		while (end - begin > tol && --maxiter >= 0) {
 			if (middle - begin > end - middle) {
 				d = (begin + middle) * .5;
 
@@ -34,10 +34,8 @@ namespace Utility::Numerics::Minimization {
 					end = d;
 				}
 			}
-
-			--maxiter;
 		}
-		if (maxiter <= 0) {
+		if (maxiter < 0) {
 			std::cerr << "Bisection terminated by maxiter-constraint!" << std::endl;
 		}
 		return RealType{ 0.5 } *(begin + end);
