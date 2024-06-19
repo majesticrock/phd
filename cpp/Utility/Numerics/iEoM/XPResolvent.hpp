@@ -171,7 +171,7 @@ namespace Utility::Numerics::iEoM {
 			{
 				// It is going to compute the anti-Hermitian first
 				compute_solver_matrix(i, 1 - i);
-				if(resolvents.size() < N_RESOLVENT_TYPES){
+				if(resolvents.size() < 2 * N_RESOLVENT_TYPES){
 					for (const auto& starting_state : starting_states) {
 						resolvents.push_back(Resolvent<RealType, false>(starting_state[i]));
 					}
