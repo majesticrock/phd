@@ -30,10 +30,12 @@ fit_data_y = MEV_FACTOR * M[1][int(use_points * len(M[1])):]
 
 def func(x, a, b):
     return a / x**b
-popt, pcov = curve_fit(func, fit_data_x, fit_data_y)
-print(popt)
-ax.plot(fit_data_x, func(fit_data_x, *popt), ls="--", color="C3", label="Fit")
-
+try:
+    popt, pcov = curve_fit(func, fit_data_x, fit_data_y)
+    print(popt)
+    ax.plot(fit_data_x, func(fit_data_x, *popt), ls="--", color="C3", label="Fit")
+except RuntimeError:
+    print("Fit was not possible")
 
 ax.set_xlabel(r"$k - k_\mathrm{F} [\sqrt{\mathrm{eV}}]$")
 ax.set_ylabel(r"$\Delta [\mathrm{meV}]$")
