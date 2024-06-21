@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from lib.ez_fit import *
-import lib.resolvent_peak as rp
+import __path_appender as __ap
+__ap.append()
+from ez_fit import *
+import resolvent_peak as rp
 
 T = 0.0
 U = -2.5

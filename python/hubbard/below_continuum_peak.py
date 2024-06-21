@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import lib.resolvent_peak as rp
-import lib.continued_fraction as cf
+import __path_appender as __ap
+__ap.append()
+import resolvent_peak as rp
+import continued_fraction as cf
 
 reversed = True
 

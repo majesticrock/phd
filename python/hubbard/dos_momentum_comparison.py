@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import lib.continued_fraction as cf
-from lib.iterate_containers import *
-import lib.plot_settings as ps
-from lib.color_and_linestyle_legends import *
-from lib.resolvent_peak import *
+import __path_appender as __ap
+__ap.append()
+import continued_fraction as cf
+from iterate_containers import *
+import plot_settings as ps
+from color_and_linestyle_legends import *
+from resolvent_peak import *
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']

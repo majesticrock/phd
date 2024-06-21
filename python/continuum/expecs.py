@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import gzip
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import __path_appender as __ap
+__ap.append()
 
-from lib.color_and_linestyle_legends import *
+from color_and_linestyle_legends import *
 
 fig, ax = plt.subplots()
 
