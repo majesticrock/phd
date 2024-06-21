@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from lib.iterate_containers import *
-from lib.extract_key import *
-import lib.resolvent_peak as rp
+import __path_appender as __ap
+__ap.append()
+from iterate_containers import *
+from extract_key import *
+import resolvent_peak as rp
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors = prop_cycle.by_key()['color']
