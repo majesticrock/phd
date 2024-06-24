@@ -22,7 +22,7 @@ for a in [0.5, 1.0, 2.0, 4.0, 10., 100.]:
 # Plotting the fixed points
 plt.plot([0, 0.5 * n, n], [0, 1, 2], 'ro')  # Points (-n, -1), (0, 0), (n, 1)
 
-plt.title('Function f(x) with Adjustable Steepness')
+plt.title(r'$f(x) = 1 + \frac{\sinh\left(\dfrac{2a}{n}x - a\right)}{\sinh(a)}$')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.axhline(0, color='black',linewidth=0.5)
