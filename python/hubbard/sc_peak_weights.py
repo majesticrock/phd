@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import __path_appender as __ap
 __ap.append()
 from iterate_containers import *
-from extract_key import *
 import resolvent_peak as rp
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
