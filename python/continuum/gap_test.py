@@ -2,14 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import gzip
 
+import __path_appender as __ap
+__ap.append()
+from extract_key import *
+
 MEV_FACTOR = 1e3
 plotPhase = False
 
 fig, ax = plt.subplots()
 
-with gzip.open(f"data/continuum/test/gap.dat.gz", 'rt') as f_open:
+with gzip.open("data/continuum/test/gap.dat.gz", 'rt') as f_open:
     M = np.loadtxt(f_open)
-M[0] = M[0] - M[0][int(0.5 * len(M[0])) - 1]
+M[0] = M[0] - extract_key("data/continuum/test/gap.dat.gz", "k_F")
 
 if plotPhase:
     delta_abs = np.sqrt(M[1]**2 + M[2]**2)
