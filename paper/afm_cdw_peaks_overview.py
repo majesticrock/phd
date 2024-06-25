@@ -9,7 +9,6 @@ else:
 
 import lib.continued_fraction as cf
 from lib.iterate_containers import *
-from lib.extract_key import *
 import lib.resolvent_peak as rp
 import lib.plot_settings as ps
 
