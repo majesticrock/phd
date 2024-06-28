@@ -34,6 +34,7 @@ cpp/HubbardMeanField/sources/Utility
 
 #include literature
 !literature/*.pdf
+!*CMakeLists.txt
 
 #ignore data that is subject to change
 data/**/test/
