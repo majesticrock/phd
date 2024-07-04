@@ -5,15 +5,14 @@
 *.vcxproj
 *.vcxproj.*
 .vscode/
-x64/
-Debug/
-Release/
-build/
+**/x64/
+**/Debug/
+**/Release/
+**/build/
 *.csv
 stdout*
 stderr*
-python/*/__pycache__
-cpp/ModeFinder/sources/Utility
+**/__pycache__
 cpp/HubbardMeanField/auto_generated
 cpp/HubbardMeanField/small_auto_generated
 cpp/HubbardMeanField/small_auto_generated2
@@ -21,24 +20,17 @@ cpp/HubbardMeanField/cube_auto_generated
 cpp/HubbardMeanField/square_auto_generated
 cpp/HubbardMeanField/small_cube_auto_generated
 cpp/HubbardMeanField/small_square_auto_generated
-cpp/main
 cpp/HubbardMeanField/doxy
 *.bin
 paper/plots
-
-
-cpp/ContinuumSystem/sources/SymbolicOperators
-cpp/ContinuumSystem/sources/Utility
-cpp/HubbardMeanField/sources/SymbolicOperators
-cpp/HubbardMeanField/sources/Utility
 
 #include literature
 !literature/*.pdf
 !*CMakeLists.txt
 
 #ignore data that is subject to change
-data/**/test/
-data/**/test2/
+**/test/
+**/test2/
 
 *.aux
 *.blg
@@ -82,4 +74,3 @@ data/**/test2/
 *.exe
 *.out
 *.app
-data/modes/square/mom_test

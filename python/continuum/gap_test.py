@@ -6,13 +6,14 @@ import gzip
 import __path_appender as __ap
 __ap.append()
 from create_zoom import create_zoom
-from get_data import load_panda_series, continuum_params
+from get_data import load_panda, continuum_params
 
 MEV_FACTOR = 1e3
 
 fig, ax = plt.subplots()
 
-pd_data = load_panda_series("continuum", "test", "gap.json.gz", **continuum_params(0.0, 9.3, 12.71, 0.01))
+pd_data = load_panda("continuum", "test", "gap.json.gz", 
+                     **continuum_params(0.0, 1.0, 9.3, 12.71, 0.01)).iloc[0]
 pd_data["ks"] -= pd_data["k_F"]
 
 ax.plot(pd_data["ks"], pd_data["Delta_Phonon"] + pd_data["Delta_Coulomb"], "k-", label=r"$\Delta_\mathrm{SC}$")
