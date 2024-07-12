@@ -20,11 +20,13 @@ def convert_lists_to_arrays(obj):
 def __load_panda__(file):
     with gzip.open(file, 'rt') as f_open:
         jData = json.load(f_open, object_hook=convert_lists_to_arrays)
-    main_data = {k: v for k, v in jData.items() if k != 'data'}
-
-    main_df = pd.DataFrame([main_data])
-    main_df['data'] = [pd.DataFrame(jData['data'])]
-    #data = pd.json_normalize(jData, max_level=1)
+    
+    if 'data' in jData:
+        main_data = {k: v for k, v in jData.items() if k != 'data'}
+        main_df = pd.DataFrame([main_data])
+        main_df['data'] = [pd.DataFrame(jData['data'])]
+    else:
+        main_df = pd.json_normalize(jData, max_level=1)
     return main_df
 
 def load_panda(model, subfolder, file, **kwargs):
