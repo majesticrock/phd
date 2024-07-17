@@ -17,8 +17,8 @@ pgf.rcfonts : False
 
 #backend : pgf
 ## TeX benutzen
-#text.usetex : True
-#pgf.texsystem : lualatex
+text.usetex : True
+pgf.texsystem : lualatex
 
 savefig.directory : ./finished_plots
 savefig.format : svg

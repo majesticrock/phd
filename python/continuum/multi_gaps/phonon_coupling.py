@@ -40,4 +40,6 @@ ax.set_ylabel(r"$\Delta [\mathrm{meV}]$")
 
 fig.tight_layout()
 
+import os
+plt.savefig(f"python/build/multi_{os.path.basename(__file__).split('.')[0]}.svg")
 plt.show()
