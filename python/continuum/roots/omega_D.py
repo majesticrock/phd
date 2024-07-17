@@ -8,10 +8,10 @@ from get_data import *
 from scipy.interpolate import InterpolatedUnivariateSpline
 from ez_fit import *
 
-TYPE = "g"
-LABEL= r"$g$"
+TYPE = "omega_D"
+LABEL= r"$\omega_\mathrm{D}$"
 
-pd_data = load_all("continuum/exact_2000", "gap.json.gz").query('omega_D == 10 & E_F == 9.3 & \
+pd_data = load_all("continuum/exact_2000", "gap.json.gz").query('g == 10 & E_F == 9.3 & \
                     (coulomb_scaling == 1 | coulomb_scaling == 0.75 | coulomb_scaling == 0.5 | coulomb_scaling == 0.25)')
 pd_data.sort_values(TYPE, inplace=True)
 pd_data.reset_index(inplace=True)
@@ -44,17 +44,14 @@ for coulomb_idx, (coulomb_scaling, iter_frame) in enumerate(coulomb_group):
         #min_index = np.argmin(cr_pts)
         #min_energies[coulomb_idx][index] = cr_pts[min_index]
 
-    ax.plot(iter_frame[TYPE], min_positions[coulomb_idx], "v", c=f"C{coulomb_idx}", label=fr"$\alpha = {coulomb_scaling}$")
+    ax.plot(iter_frame[TYPE],       min_positions[coulomb_idx], "v", c=f"C{coulomb_idx}", label=fr"$\alpha = {coulomb_scaling}$")
     ez_linear_fit(iter_frame[TYPE], min_positions[coulomb_idx], ax, c=f"C{coulomb_idx}")
 
-#import matplotlib.ticker as ticker
-#ticks_mev = ticker.FuncFormatter(lambda x, pos: '{0:g}'.format(x*1e3))
-#ax.yaxis.set_major_formatter(ticks_mev)
 ax.set_ylabel(r"$k_0 - k_\mathrm{F} [\sqrt{\mathrm{eV}}]$")
-
 ax.legend()
-
-ax.set_xlabel(f"{LABEL} [eV]")
-
+ax.set_xlabel(f"{LABEL} [meV]")
 fig.tight_layout()
+
+import os
+plt.savefig(f"python/build/root_{os.path.basename(__file__).split('.')[0]}.svg")
 plt.show()

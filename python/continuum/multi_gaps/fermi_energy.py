@@ -14,7 +14,7 @@ TYPE = "E_F"
 LABEL= r"$E_\mathrm{F}$"
 X_BOUNDS = [-0.1, 0.1]
 
-main_df = load_all("continuum/disc_2000", "gap.json.gz").query(
+main_df = load_all("continuum/exact_2000", "gap.json.gz").query(
             'omega_D == 10 & coulomb_scaling == 1 & g == 10')
 main_df.sort_values(TYPE, inplace=True)
 main_df.reset_index(inplace=True)
@@ -40,4 +40,6 @@ ax.set_ylabel(r"$\Delta [\mathrm{meV}]$")
 
 fig.tight_layout()
 
+import os
+plt.savefig(f"python/build/multi_{os.path.basename(__file__).split('.')[0]}.svg")
 plt.show()
