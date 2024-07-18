@@ -15,11 +15,6 @@ Ts = np.array([0.])
 Us = np.array([-2.5])
 Vs = np.array([-0.1])
 
-from get_data import load_panda, hubbard_params
-pd_data = load_panda("modes/square", "test", "resolvents.json.gz", **hubbard_params(0.0, -2.5, -0.1))
-print(type(pd_data))
-exit()
-
 use_XP = True
 
 folder = "data/modes/square/test/"
