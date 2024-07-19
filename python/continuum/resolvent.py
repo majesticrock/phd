@@ -1,51 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
 import __path_appender as __ap
 __ap.append()
-import continued_fraction as cf
+
+from get_data import load_panda, continuum_params
+pd_data = load_panda("continuum/", "test", "resolvents.json.gz", **continuum_params(0., 0., 9.3, 10., 10.))
+
+import continued_fraction_pandas as cf
 import plot_settings as ps
-# Calculates the resolvent in w^2
 
-prop_cycle = plt.rcParams['axes.prop_cycle']
-colors = prop_cycle.by_key()['color']
+resolvents = cf.ContinuedFraction(pd_data, ignore_first=30)
 
-use_XP = True
-
-subfolder = "test"
-folder = f"data/continuum/{subfolder}"
 fig, ax = plt.subplots()
-
-MEV_FACTOR = 1e3
-ax.set_ylim(-0.05, 1000. / MEV_FACTOR)
+ax.set_ylim(-0.05, 1e5)
+ax.set_xlabel(r"$\omega [\mathrm{eV}]$")
+ax.set_ylabel(r"$\mathcal{A} (\omega) [\mathrm{eV}^{-1}]$")
 
 plotter = ps.CURVEFAMILY(6, axis=ax)
 plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
-#plotter.set_individual_dashes()
 
-plot_upper_lim = 0.11
-plot_lower_lim = -0.01 * plot_upper_lim
+w_lin = np.linspace(-0.01 * pd_data["continuum_boundaries"][0], 1.1 * pd_data["continuum_boundaries"][1], 5000, dtype=complex)
+w_lin += 1e-6j
 
-name_suffix = "phase_SC"
-data, data_real, w_lin, res = cf.resolvent_data(f"{folder}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-7, ingore_first=5)
-plotter.plot(w_lin * MEV_FACTOR, data / MEV_FACTOR, label="Phase")
+plotter.plot(w_lin.real, resolvents.spectral_density(w_lin, "phase_SC"), label="Phase")
+plotter.plot(w_lin.real, resolvents.spectral_density(w_lin, "amplitude_SC"), label="Higgs")
 
-name_suffix = "higgs_SC"
-data, data_real, w_lin, res = cf.resolvent_data(f"{folder}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-7, ingore_first=5)
-plotter.plot(w_lin * MEV_FACTOR, data / MEV_FACTOR, label="Higgs")
+resolvents.mark_continuum(ax)
 
-res.mark_continuum(ax, scale_factor=MEV_FACTOR)
-legend = plt.legend()
-ax.add_artist(legend)
-
-ax.set_xlim(plot_lower_lim * MEV_FACTOR, plot_upper_lim * MEV_FACTOR)
-ax.set_xlabel(r"$\omega [\mathrm{meV}]$")
-ax.set_ylabel(r"$\mathcal{A} (\omega) [1 / \mathrm{meV}]$")
+ax.legend()
 fig.tight_layout()
-
-import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.pdf")
 plt.show()

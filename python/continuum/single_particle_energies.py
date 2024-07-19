@@ -1,27 +1,21 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import gzip
+
+import __path_appender as __ap
+__ap.append()
+from get_data import *
 
 fig, ax = plt.subplots()
 
-with gzip.open(f"data/continuum/test/one_particle_energies.dat.dz", 'rt') as f_open:
-    M = np.loadtxt(f_open)
+main_df = load_panda("continuum", "test", "gap.json.gz", 
+                     **continuum_params(0.0, 0., 9.3, 10., 10.))
+pd_data = main_df["data"]
 
-for i in range(len(M[1])):
-    M[1][i] = -M[1][i]
-    if(np.abs(M[1][i]) < 1e-5):
-        break
-ax.axhline(0, color="k")
-ax.plot(M[0], M[1], "-", label="With Coulomb")
+energies = np.sqrt((pd_data["xis"] + pd_data["Delta_Fock"])**2 + (pd_data["Delta_Coulomb"] + pd_data["Delta_Phonon"])**2)
+ax.plot(pd_data["ks"] / main_df["k_F"], energies / 9.3)
 
-def bare(k):
-    return 0.5 * k * k - 9.3
-ax.plot(M[0], bare(M[0]), "--", label="Bare")
+ax.set_xlabel(r"$k / k_\mathrm{F}$")
+ax.set_ylabel(r"$E(k) / E_\mathrm{F}$")
 
-
-ax.set_xlabel(r"$k [\sqrt{\mathrm{eV}}]$")
-ax.set_ylabel(r"$E(k) [\mathrm{eV}]$")
-ax.legend()
 fig.tight_layout()
-
 plt.show()

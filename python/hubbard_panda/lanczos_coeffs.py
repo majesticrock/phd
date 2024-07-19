@@ -9,7 +9,6 @@ V = -0.1
 
 from get_data import load_panda, hubbard_params
 pd_data = load_panda("hubbard/square", "test", "resolvents.json.gz", **hubbard_params(0.0, -2.5, -0.1))
-print(pd_data)
 
 a_inf = (pd_data["continuum_boundaries"][0]**2 + pd_data["continuum_boundaries"][1]**2) * 0.5
 b_inf = (pd_data["continuum_boundaries"][1]**2 - pd_data["continuum_boundaries"][0]**2) * 0.25
