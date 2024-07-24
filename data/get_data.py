@@ -30,7 +30,9 @@ def __load_panda__(file):
     return main_df
 
 def load_panda(model, subfolder, file, **kwargs):
-    return __load_panda__(f"{CURRENT_DIR}{__to_path(model, subfolder, **kwargs)}{file}").iloc[0]
+    data = __load_panda__(f"{CURRENT_DIR}{__to_path(model, subfolder, **kwargs)}{file}").iloc[0]
+    print(f"Loaded data has been produced on {data['time']}")
+    return data
 
 def continuum_params(T, coulomb_scaling, E_F, g, omega_D):
     return {"T": T, "coulomb_scaling": coulomb_scaling, "E_F": E_F, "g": g, "omega_D": omega_D}

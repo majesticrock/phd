@@ -8,9 +8,10 @@ MEV_FACTOR = 1e3
 
 fig, ax = plt.subplots()
 
-pd_data = load_panda("continuum", "test", "gap.json.gz", 
-                     **continuum_params(0.0, 1.0, 9.3, 10., 0.01)).iloc[0]
-pd_data["ks"] -= pd_data["k_F"]
+main_df = load_panda("continuum", "test", "gap.json.gz", 
+                     **continuum_params(0.0, 0.0, 9.3, 1., 10.))
+pd_data = main_df["data"]
+pd_data["ks"] /= main_df["k_F"]
 
 ax.plot(pd_data["ks"], label="Discretization")
 
