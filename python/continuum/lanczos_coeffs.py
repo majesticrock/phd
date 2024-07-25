@@ -20,7 +20,7 @@ ax.axhline(b_inf, linestyle="--", color="k", label="$b_\\infty$")
 ax.legend()
 ax.set_xlabel("Iteration $i$")
 ax.set_ylabel("Lanczos coefficient")
-#ax.set_ylim(13, 34)
+ax.set_ylim(min(a_inf, b_inf) - 0.2 * max(a_inf, b_inf), 1.2 * max(a_inf, b_inf))
 fig.tight_layout()
 
 import os
