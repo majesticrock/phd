@@ -11,7 +11,7 @@ X_BOUNDS = [-0.1, 0.1]
 fig, ax = plt.subplots()
 
 main_df = load_panda("continuum", "test", "gap.json.gz", 
-                     **continuum_params(0.0, 0.0, 9.3, 0.5, 100.))
+                     **continuum_params(0.0, 0.0, 9.3, 2., 10.))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 if pd_data["Delta_Coulomb"][0] > 0:
