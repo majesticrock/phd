@@ -6,16 +6,16 @@
 #include <mpi.h>
 
 int main(int argc, char** argv){
-    // First call MPI_Init
+	// First call MPI_Init
 	MPI_Init(&argc, &argv);
 
-    std::chrono::steady_clock::time_point test_b = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point test_b = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point test_e;
 
-    const std::vector<int> ranges = {
-	    100, 200, 500, 1000,
-	    2000, 5000, 10000,
-	    20000, 50000, 100000
+	const std::vector<int> ranges = {
+		100, 200, 500, 1000,
+		2000, 5000, 10000,
+		20000, 50000, 100000
 	};
 
 	for (auto range : ranges) {
@@ -34,9 +34,9 @@ int main(int argc, char** argv){
 				v[i] += c(j);
 			}
 		}
-        test_e = std::chrono::steady_clock::now();
+		test_e = std::chrono::steady_clock::now();
 		std::cout << "Total runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(test_e - test_b).count() << "[ms]" << std::endl;
-    }
+	}
 
-    return MPI_Finalize();
+	return MPI_Finalize();
 }
