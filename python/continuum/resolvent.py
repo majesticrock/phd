@@ -9,7 +9,7 @@ pd_data = load_panda("continuum/", "test", "resolvents.json.gz", **continuum_par
 import continued_fraction_pandas as cf
 import plot_settings as ps
 
-resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=50)
+resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=60)
 
 fig, ax = plt.subplots()
 #ax.set_ylim(-0.05, 1e3)
