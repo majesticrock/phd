@@ -4,15 +4,15 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, continuum_params
-pd_data = load_panda("continuum/", "test", "resolvents.json.gz", **continuum_params(0., 0., 9.3, 2., 10.))
+pd_data = load_panda("continuum/", "test", "resolvents.json.gz", **continuum_params(0., 1., 9.3, 5., 10.))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
 
-resolvents = cf.ContinuedFraction(pd_data, ignore_first=5)
+resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=50)
 
 fig, ax = plt.subplots()
-ax.set_ylim(-0.05, 1e3)
+#ax.set_ylim(-0.05, 1e3)
 ax.set_xlabel(r"$\omega [\mathrm{eV}]$")
 ax.set_ylabel(r"$\mathcal{A} (\omega) [\mathrm{eV}^{-1}]$")
 
