@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, continuum_params
-pd_data = load_panda("continuum/", "test", "resolvents.json.gz", **continuum_params(0., 0., 9.3, 1., 10.))
+pd_data = load_panda("continuum/", "test", "resolvents.json.gz", **continuum_params(0., 1., 9.3, 5., 10.))
 
 a_inf = (pd_data["continuum_boundaries"][0]**2 + pd_data["continuum_boundaries"][1]**2) * 0.5
 b_inf = (pd_data["continuum_boundaries"][1]**2 - pd_data["continuum_boundaries"][0]**2) * 0.25
