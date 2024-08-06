@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 
 import os, sys
 if os.name == "nt":
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + r"\python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + r"\PhdUtility\python")
 else:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/python")
-import lib.continued_fraction as cf
-import lib.plot_settings as ps
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + "/PhdUtility/python")
+import continued_fraction as cf
+import plot_settings as ps
 
 from scipy.optimize import curve_fit
 def func_ln(x, a, b):
@@ -17,7 +17,7 @@ T = 0.
 U = -2.5
 V = 0.0
 
-folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
+folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
 
 fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12.8, 6), sharex=True, sharey=True, gridspec_kw=dict(hspace=0, wspace=0))
 

@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 
 import os, sys
 if os.name == "nt":
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + r"\python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + r"\PhdUtility\python")
 else:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + "/PhdUtility/python")
 
-import lib.continued_fraction as cf
-from lib.iterate_containers import naming_scheme_tuples
-import lib.plot_settings as ps
-from lib.create_zoom import *
+import continued_fraction as cf
+from iterate_containers import naming_scheme_tuples
+import plot_settings as ps
+from create_zoom import *
 
 poster_plot = False
 if poster_plot:
@@ -22,7 +22,7 @@ else:
 params = [  [ [0., 4.85, 1.2], [0., 4.75, 1.2], [0., 6.2, 1.2], [0., 3.4, 1.2] ],
             [ [0., 4.85, 0.8], [0., 4.75, 0.8], [0., 6.2, 0.8], [0., 3.4, 0.8] ]]
 
-folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
+folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
 nrows = 3 if poster_plot else 4
 ncols = 2
 # ax = axs[row][col]
@@ -34,7 +34,7 @@ for i in range(nrows):
         axs[i][j].set_ylim(0, .99)
         plotters[i][j] = ps.CURVEFAMILY(5, axis=axs[i][j])
         plotters[i][j].set_individual_colors("GPT")
-        plotters[i][j].set_individual_dashes([ [1,0], [1.5,1.5], [3, 1.5], [5,2,1,2], [7,3,2,2,3,2] ])
+        plotters[i][j].set_individual_dashes(np.array([ [1,0], [1.5,1.5], [3, 1.5], [5,2,1,2], [7,3,2,2,3,2] ], dtype=object))
 
 name_suffices = ["phase_SC", "higgs_SC", "CDW", "AFM", "higgs_AFM_trans"]
 labels = ["Phase", "Higgs", "CDW", "l.AFM", "t.AFM"]
@@ -66,8 +66,8 @@ for j, folder in enumerate(folders):
                             y_funcs=[lambda x, res=res: res.spectral_density(x + 1e-5j) for res in resolvents],
                             skip_lines=[1, 3, 5, 7, 9], mark_inset=False, **inset_ticks)
         axs[i][j].set_xlim(plot_lower_lim, usage_upper_lim)
-        resolvents[0].mark_continuum(axs[i][j], None)
-        resolvents[0].mark_continuum(axins, None)
+        resolvents[0].mark_continuum(axs[i][j], label=None)
+        resolvents[0].mark_continuum(axins, label=None)
 
 legend = axs[0][1].legend(loc='upper center', ncol=5, shadow=True, **legend_args)
 

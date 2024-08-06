@@ -3,15 +3,15 @@ import matplotlib.pyplot as plt
 
 import os, sys
 if os.name == "nt":
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + r"\python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + r"\PhdUtility\python")
 else:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + "/PhdUtility/python")
 
-import lib.continued_fraction as cf
-from lib.iterate_containers import *
-import lib.resolvent_peak as rp
-import lib.plot_settings as ps
-from lib.ez_fit import *
+import continued_fraction as cf
+from iterate_containers import *
+import resolvent_peak as rp
+import plot_settings as ps
+from ez_fit import *
 
 Ts = np.array([0.])
 Us_square = np.array([  0.0001, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 
@@ -26,7 +26,7 @@ Us = np.array([Us_square, Us_cube], dtype=object)
 Vs = np.array([0.])
 
 
-folders = ["../data/modes/square/dos_6000/", "../data/modes/cube/dos_6000/"]
+folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffix = "AFM"
