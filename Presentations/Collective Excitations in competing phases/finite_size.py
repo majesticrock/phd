@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 
 import os, sys
 if os.name == "nt":
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + r"\python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + r"\PhdUtility\python")
 else:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/python")
-from lib.ez_fit import *
-import lib.resolvent_peak as rp
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + "/PhdUtility/python")
+from ez_fit import *
+import resolvent_peak as rp
 
 T = 0.0
 U = -2.5
@@ -27,7 +27,7 @@ ax.set_ylim(0, 0.03)
 
 for j, lattice_folder in enumerate(lattice_folders):
     for i, n in enumerate(N):
-        folder = f"../data/modes/{lattice_folder}/dos_{n}/"
+        folder = f"../../data/modes/{lattice_folder}/dos_{n}/"
         peak = rp.Peak(f"{folder}{name}", name_suffix, imaginary_offset=1e-7)
         peak_pos_value = np.copy(peak.peak_position)
         peak_result = peak.improved_peak_position(xtol=1e-14)
