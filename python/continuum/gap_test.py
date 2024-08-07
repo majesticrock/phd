@@ -10,9 +10,8 @@ X_BOUNDS = [-0.1, 0.1]
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "test", "gap.json.gz", **continuum_params(0.0, 1.0, 9.3, 5., 10.))
+main_df = load_panda("continuum", "test", "gap.json.gz", **continuum_params(0.0, 1.0, 0.45, 5., 10.))
 pd_data = main_df["data"]
-pd_data["ks"] /= main_df["k_F"]
 
 if "imag_Delta_Phonon" in pd_data:
     phonon = pd_data["Delta_Phonon"].to_numpy() + 1j * pd_data["imag_Delta_Phonon"].to_numpy()
