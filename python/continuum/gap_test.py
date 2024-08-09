@@ -3,14 +3,13 @@ import numpy as np
 
 import __path_appender as __ap
 __ap.append()
-from create_zoom import create_zoom
 from get_data import *
 
 X_BOUNDS = [-0.1, 0.1]
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "test", "gap.json.gz", **continuum_params(0.0, 1.0, 9.3, 5., 10.))
+main_df = load_panda("continuum", "test2", "gap.json.gz", **continuum_params(0.0, 0.0, 4., 5., 10.))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 
