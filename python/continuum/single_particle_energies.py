@@ -7,11 +7,11 @@ from get_data import *
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "test", "gap.json.gz", **continuum_params(0.0, 0.0, 4.5, 5., 10.))
+main_df = load_panda("continuum", "test", "gap.json.gz", **continuum_params(0.0, 1.0, 4.25, 7.5, 10.))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 
-energies = np.sqrt((1e3 * pd_data["xis"] + pd_data["Delta_Fock"])**2 + (pd_data["Delta_Coulomb"] + pd_data["Delta_Phonon"])**2)
+energies = 1e-3 * np.sqrt((1e3 * pd_data["xis"] + 1e3 * pd_data["Delta_Fock"])**2 + (pd_data["Delta_Coulomb"] + pd_data["Delta_Phonon"])**2) / main_df["E_F"]
 ax.plot(pd_data["ks"], energies )
 inner = int((main_df["discretization"] - main_df["inner_discretization"]) / 2)
 ax.axvline(pd_data["ks"][inner], ls=":", color="grey")
