@@ -34,9 +34,9 @@ def load_panda(model, subfolder, file, **kwargs):
     print(f"Loaded data has been produced on {data['time']}")
     return data
 
-def continuum_params(T, coulomb_scaling, screening, k_F, g, omega_D):
+def continuum_params(N_k, T, coulomb_scaling, screening, k_F, g, omega_D):
     cp_screening = 0.0 if abs(screening) < 1e-12 else screening
-    return {"T": T, "coulomb_scaling": coulomb_scaling, "screening": cp_screening, "k_F": k_F, "g": g, "omega_D": omega_D}
+    return {"N_k" : N_k , "T": T, "coulomb_scaling": coulomb_scaling, "screening": cp_screening, "k_F": k_F, "g": g, "omega_D": omega_D}
 
 def hubbard_params(T, U, V):
     return {"T": T, "U": U, "V": V}
