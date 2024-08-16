@@ -9,7 +9,7 @@ X_BOUNDS = [-0.1, 0.1]
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "test5", "gap.json.gz", **continuum_params(2000, 0.0, 0.0, 1e-4, 4.25, 2.5, 10.))
+main_df = load_panda("continuum", "offset_20", "gap.json.gz", **continuum_params(2000, 0.0, 0.0, 1e-4, 4.25, 2.5, 10.))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 
@@ -26,8 +26,8 @@ else:
     if pd_data["Delta_Coulomb"][0] > 0:
         pd_data["Delta_Phonon"] *= -1
         pd_data["Delta_Coulomb"] *= -1
-    ax.plot(pd_data["ks"], pd_data["Delta_Phonon"] + pd_data["Delta_Coulomb"], "k-", label=r"$\Delta_\mathrm{SC}$")
-    pd_data.plot(x="ks", y=["Delta_Phonon", "Delta_Coulomb", "Delta_Fock"], ax=ax, style=['--', '--', '-'], label=[r"$\Delta_\mathrm{Phonon}$", r"$\Delta_\mathrm{Coulomb}$", r"$\Delta_\mathrm{Fock}$"])
+    ax.plot(pd_data["ks"], pd_data["Delta_Phonon"] + pd_data["Delta_Coulomb"],  label=r"$\Delta_\mathrm{Phonon}$")
+    #pd_data.plot(x="ks", y=["Delta_Phonon", "Delta_Coulomb", "Delta_Fock"], ax=ax, style=['--', '--', '-'], label=[r"$\Delta_\mathrm{Phonon}$", r"$\Delta_\mathrm{Coulomb}$", r"$\Delta_\mathrm{Fock}$"])
 
 inner = int((main_df["discretization"] - main_df["inner_discretization"]) / 2)
 ax.axvline(pd_data["ks"][inner], ls=":", color="grey")

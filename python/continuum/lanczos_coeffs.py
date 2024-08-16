@@ -4,13 +4,13 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, continuum_params
-pd_data = load_panda("continuum/", "test6", "resolvents.json.gz", **continuum_params(2000, 0., 0., 1e-4, 4.25, 2.5, 10.))
+pd_data = load_panda("continuum/", "offset_20", "resolvents.json.gz", **continuum_params(8000, 0., 0., 1e-4, 4.25, 4.5, 10.))
 
 a_inf = (pd_data["continuum_boundaries"][0]**2 + pd_data["continuum_boundaries"][1]**2) * 0.5
 b_inf = (pd_data["continuum_boundaries"][1]**2 - pd_data["continuum_boundaries"][0]**2) * 0.25
 
-A = pd_data["resolvents.amplitude_SC"][0]["a_i"]
-B = pd_data["resolvents.amplitude_SC"][0]["b_i"]
+A = pd_data["resolvents.phase_SC"][0]["a_i"]
+B = pd_data["resolvents.phase_SC"][0]["b_i"]
 
 fig, ax = plt.subplots()
 ax.plot(A, ls="-", marker='x', label="$a_i$")
