@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, hubbard_params
-pd_data = load_panda("hubbard/square", "test", "resolvents.json.gz", **hubbard_params(0.0, 2.5, 0.0))
+pd_data = load_panda("hubbard/square", "test", "resolvents.json.gz", **hubbard_params(0.0, -2.5, 0.0))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
