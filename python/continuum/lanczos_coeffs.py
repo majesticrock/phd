@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, continuum_params
-pd_data = load_panda("continuum/", "test", "resolvents.json.gz", **continuum_params(0., 1., 0.45, 5., 10.))
+pd_data = load_panda("continuum/", "offset_20", "resolvents.json.gz", **continuum_params(8000, 0., 0., 1e-4, 4.25, 4.5, 10.))
 
 a_inf = (pd_data["continuum_boundaries"][0]**2 + pd_data["continuum_boundaries"][1]**2) * 0.5
 b_inf = (pd_data["continuum_boundaries"][1]**2 - pd_data["continuum_boundaries"][0]**2) * 0.25
@@ -13,8 +13,8 @@ A = pd_data["resolvents.phase_SC"][0]["a_i"]
 B = pd_data["resolvents.phase_SC"][0]["b_i"]
 
 fig, ax = plt.subplots()
-ax.plot(A, ls="", marker='x', label="$a_i$")
-ax.plot(np.sqrt(B), ls="", marker='o', label="$b_i$")
+ax.plot(A, ls="-", marker='x', label="$a_i$")
+ax.plot(np.sqrt(B), ls="-", marker='o', label="$b_i$")
 ax.axhline(a_inf, linestyle="-" , color="k", label="$a_\\infty$")
 ax.axhline(b_inf, linestyle="--", color="k", label="$b_\\infty$")
 ax.legend()
