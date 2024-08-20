@@ -7,7 +7,7 @@ from get_data import *
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "test5", "gap.json.gz", **continuum_params(0.0, 0.0, 4.25, 2.5, 10.))
+main_df = load_panda("continuum", "test", "gap.json.gz", **continuum_params(4000, 0., 0., 0., 4.25, 4.5, 10.))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 
@@ -19,6 +19,6 @@ ax.axvline(pd_data["ks"][inner + main_df["inner_discretization"]], ls=":", color
 
 ax.set_xlabel(r"$k / k_\mathrm{F}$")
 ax.set_ylabel(r"$E(k) / E_\mathrm{F}$")
-
+ax.grid()
 fig.tight_layout()
 plt.show()
