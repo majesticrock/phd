@@ -7,8 +7,10 @@ import os
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def __to_path(model, subfolder, **kwargs):
-    parameters = "/".join(f"{key}={value}" for key, value in kwargs.items())
-    return f"/{model}/{subfolder}/{parameters}/"
+    params = os.path.join(*(f"{key}={value}" for key, value in kwargs.items()))
+    return os.path.join(CURRENT_DIR, model, subfolder, params)
+    #parameters = "/".join(f"{key}={value}" for key, value in kwargs.items())
+    #return f"/{model}/{subfolder}/{parameters}/"
 
 def convert_lists_to_arrays(obj):
     if isinstance(obj, list):
@@ -30,7 +32,7 @@ def __load_panda__(file):
     return main_df
 
 def load_panda(model, subfolder, file, **kwargs):
-    data = __load_panda__(f"{CURRENT_DIR}{__to_path(model, subfolder, **kwargs)}{file}").iloc[0]
+    data = __load_panda__(os.path.join(__to_path(model, subfolder, **kwargs), file)).iloc[0]
     print(f"Loaded data has been produced on {data['time']}")
     return data
 

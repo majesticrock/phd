@@ -13,7 +13,7 @@ fig, axs = plt.subplots(len(N_ks), len(couplings), sharex="col", sharey=True)
 
 for i in range(len(N_ks)):
     for j in range(len(couplings)):
-        pd_data = load_panda("continuum/", "offset_10", "resolvents.json.gz", **continuum_params(N_ks[i], 0., 0., 1e-4, 4.25, couplings[j], 10.))
+        pd_data = load_panda("continuum", "offset_5", "resolvents.json.gz", **continuum_params(N_ks[i], 0., 0., 1e-4, 4.25, couplings[j], 10.))
         resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=80)
         
         plotter = ps.CURVEFAMILY(6, axis=axs[i][j])
