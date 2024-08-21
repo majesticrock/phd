@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, continuum_params
-pd_data = load_panda("continuum", "test", "resolvents.json.gz", **continuum_params(4000, 0., 0., 0., 4.25, 4.5, 10.))
+pd_data = load_panda("continuum", "test", "resolvents.json.gz", **continuum_params(4000, 0., 0., 0., 4.25, 2.5, 10.))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
