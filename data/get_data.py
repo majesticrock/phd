@@ -9,8 +9,6 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 def __to_path(model, subfolder, **kwargs):
     params = os.path.join(*(f"{key}={value}" for key, value in kwargs.items()))
     return os.path.join(CURRENT_DIR, model, subfolder, params)
-    #parameters = "/".join(f"{key}={value}" for key, value in kwargs.items())
-    #return f"/{model}/{subfolder}/{parameters}/"
 
 def convert_lists_to_arrays(obj):
     if isinstance(obj, list):
