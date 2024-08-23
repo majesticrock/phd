@@ -21,4 +21,4 @@ pgf.rcfonts : False
 #pgf.texsystem : lualatex
 
 savefig.directory : ./finished_plots
-savefig.format : svg
+savefig.format : pdf
