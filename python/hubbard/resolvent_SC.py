@@ -17,7 +17,7 @@ Vs = np.array([-0.1])
 
 use_XP = True
 
-folder = "data/modes/square/test/"
+folder = "data/modes/square/dos_3000/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
@@ -44,23 +44,23 @@ for name in naming_scheme(Ts, Us, Vs):
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
     plotter.plot(w_lin, data, label="Higgs")
     
-name_suffix = "CDW"
-for name in naming_scheme(Ts, Us, Vs):
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
-    plotter.plot(w_lin, data, label=name_suffix)
-
-name_suffix = "AFM"
-for name in naming_scheme(Ts, Us, Vs):
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
-    plotter.plot(w_lin, data, label=name_suffix)
-
-name_suffix = "amplitude_AFM_transversal"
-for name in naming_scheme(Ts, Us, Vs):
-    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
-                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
-    plotter.plot(w_lin, data, label=name_suffix)
+#name_suffix = "CDW"
+#for name in naming_scheme(Ts, Us, Vs):
+#    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+#                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
+#    plotter.plot(w_lin, data, label=name_suffix)
+#
+#name_suffix = "AFM"
+#for name in naming_scheme(Ts, Us, Vs):
+#    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+#                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
+#    plotter.plot(w_lin, data, label=name_suffix)
+#
+#name_suffix = "amplitude_AFM_transversal"
+#for name in naming_scheme(Ts, Us, Vs):
+#    data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
+#                                                    number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
+#    plotter.plot(w_lin, data, label=name_suffix)
 
 res.mark_continuum(ax)
 legend = plt.legend()
