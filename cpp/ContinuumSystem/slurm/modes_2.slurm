@@ -4,8 +4,8 @@
 ## or look up the slurm documentation under https://slurm.schedmed.com/sbatch.html
 
 ## Mandatory:
-#SBATCH --job-name=modes
-#SBATCH --output=/home/althueser/phd/cpp/ContinuumSystem/modes_output.txt
+#SBATCH --job-name=modes2
+#SBATCH --output=/home/althueser/phd/cpp/ContinuumSystem/modes_2_output.txt
 #SBATCH --time=24:00:00         ## maximum runtime; hours:minutes:seconds
 #SBATCH --partition=long       ## choose queue
 
@@ -24,14 +24,17 @@
 #SBATCH --constraint=CascadeLake       ## chose a specific feature, e.g., only nodes with Haswell-architecture
                                 ## Feature-Output by "cat /etc/slurm/slurm.conf | grep Feature"
 module purge
-mcpp
+module load gcc/11.2.0-full
+module load mpi/openmpi3-x86_64
+module load boost/1.71.0
+module load cmake/3.23.2
 cd /home/althueser/phd/cpp/ContinuumSystem/        ## go to working directory
 
 date
 echo "--- START ---"
 
 ## execute binary using mpirun on the allocated computation resource; the number of cores is $
-mpirun ./build/ContinuumSystem params/cluster.config
+mpirun ./build/ContinuumSystem params/cluster_2.config
 
 echo "--- END ---"
 date
