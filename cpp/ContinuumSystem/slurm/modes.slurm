@@ -24,7 +24,10 @@
 #SBATCH --constraint=CascadeLake       ## chose a specific feature, e.g., only nodes with Haswell-architecture
                                 ## Feature-Output by "cat /etc/slurm/slurm.conf | grep Feature"
 module purge
-mcpp
+module load gcc/11.2.0-full
+module load mpi/openmpi3-x86_64
+module load boost/1.71.0
+module load cmake/3.23.2
 cd /home/althueser/phd/cpp/ContinuumSystem/        ## go to working directory
 
 date
