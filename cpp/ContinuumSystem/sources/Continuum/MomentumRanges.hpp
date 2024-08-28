@@ -85,7 +85,7 @@ namespace Continuum {
 	public:
 		c_float k{};
 		int idx{};
-		static const int& max_idx;
+		static inline int max_idx() { return DISCRETIZATION; }
 
 		MomentumIterator(MomentumRanges const * const parent, int init = 0) 
 			: _parent(parent), k(_parent->index_to_momentum(init)), idx(init) {}
@@ -95,8 +95,8 @@ namespace Continuum {
 			if( k <= _parent->INNER_K_MAX) return _parent->INNER_STEP;
 			return _parent->UPPER_STEP;
 		}
-		inline c_float max_k() const { return _parent->index_to_momentum(max_idx); }
-		inline c_float min_k() const { return _parent->index_to_momentum(0); }
+		inline c_float max_k() const { return _parent->K_MAX; }
+		inline c_float min_k() const { return _parent->K_MIN; }
 
 		inline MomentumIterator& operator++() {
 			++idx;
@@ -175,7 +175,7 @@ namespace Continuum {
 	public:
 		c_float k{};
 		int idx{};
-		static const int& max_idx;
+		static inline int max_idx() { return _INNER_DISC + 1; }
 
 		IEOMIterator(MomentumRanges const * const parent, int init = 0) 
 			: _parent(parent), k(this->index_to_momentum(init)), idx(init) {}
@@ -183,7 +183,7 @@ namespace Continuum {
 		inline c_float parent_step() const {
 			return 0.5 * _parent->INNER_STEP;
 		}
-		inline c_float max_k() const { return this->index_to_momentum(max_idx); }
+		inline c_float max_k() const { return this->index_to_momentum(max_idx()); }
 		inline c_float min_k() const { return this->index_to_momentum(0); }
 		
 		inline IEOMIterator& operator++() {
