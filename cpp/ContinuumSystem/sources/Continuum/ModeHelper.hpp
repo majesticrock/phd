@@ -21,7 +21,7 @@ namespace Continuum {
 	private:
 		friend struct __ieom_algorithm;
 		using _parent = __ieom_algorithm;
-		using m_iterator = MomentumIterator;
+		using m_iterator = InnerIterator;
 
 		c_float compute_momentum(SymbolicOperators::Momentum const& momentum, c_float k, c_float l, c_float q = 0) const;
 		c_complex get_expectation_value(SymbolicOperators::WickOperator const& op, c_float momentum) const;
