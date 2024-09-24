@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 from create_zoom import *
 from get_data import load_panda, continuum_params
-pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", **continuum_params(12000, 0., 1., 4.25, 4.25, 3.5, 10.))
+pd_data = load_panda("continuum", "full_disc", "resolvents.json.gz", **continuum_params(12000, 0., 1., 1e-4, 4.25, 5., 10.))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
