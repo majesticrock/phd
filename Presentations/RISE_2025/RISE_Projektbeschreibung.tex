@@ -113,7 +113,7 @@ This method is based on the Heisenberg equations of motion
     \timeDeriv A(t) = \frac{i}{\hbar} [H, A(t)]\,.
 \end{equation}
 To solve this equation, one needs an operator basis, which is complete in the sense, that each commutator $[H, A(t)]$ can be represented by this basis.
-Practically, this is often requires an infinite basis, which is impossible to implement numerically.
+Practically, this often requires an infinite basis, which is impossible to implement numerically.
 The idea of the iEoM is, to iterate the commutation process and truncate at some point, assuming that the error becomes smaller with each iteration.
 Introducing an operator scalar product $(A | B)$ allows us to reduce the operator-valued differential equations to simple matrices.
 All system dynamics are now contained within these complex-valued matrices, which can be analysed using a plethora of well-established numerical methods.
@@ -124,6 +124,7 @@ Generally, the internship involves mainly \emph{numerical} tasks and \emph{codin
 Your project will involve investigating the excitations and their dispersion relations within the Hubbard model on a simple lattice.
 You will begin by familiarising yourself with the topic using literature that we will provide.
 Subsequently, you would write a program that solves a self-consistency problem and analyses the system dynamics.
+One interesting goal is to compute the dispersion of the collective excitations, e.g., in one dimension.
 We will provide you with some of our existing code to help you get started.
 Generally, some experience in \textbf{C++}, \emph{Python} or coding is advantageous. Moreover, knowledge of quantum mechanics is required.
 
