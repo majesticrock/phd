@@ -13,11 +13,11 @@ colors = prop_cycle.by_key()['color']
 
 Ts = np.array([0.])
 Us = np.array([-2.5])
-Vs = np.array([-0.1])
+Vs = np.array([0.0])
 
 use_XP = True
 
-folder = "data/modes/square/dos_3000/"
+folder = "data/modes/square/dos_6000_SC/"
 fig, ax = plt.subplots()
 
 #ax.set_xscale("log")
@@ -38,7 +38,7 @@ for name in naming_scheme(Ts, Us, Vs):
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5, withTerminator=True)
     plotter.plot(w_lin, data, label="Phase")
 
-name_suffix = "amplitude_SC"
+name_suffix = "higgs_SC"
 for name in naming_scheme(Ts, Us, Vs):
     data, data_real, w_lin, res = cf.resolvent_data(f"{folder}{name}", name_suffix, plot_lower_lim, plot_upper_lim, 
                                                     number_of_values=20000, xp_basis=use_XP, imaginary_offset=1e-6, ingore_first=5)
