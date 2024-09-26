@@ -12,6 +12,8 @@ b_inf = (pd_data["continuum_boundaries"][1]**2 - pd_data["continuum_boundaries"]
 A = pd_data["resolvents.phase_SC"][0]["a_i"]
 B = pd_data["resolvents.phase_SC"][0]["b_i"]
 
+A_osc = 
+
 fig, ax = plt.subplots()
 ax.plot(A, ls="-", marker='x', label="$a_i$")
 ax.plot(np.sqrt(B), ls="-", marker='o', label="$b_i$")

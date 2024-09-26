@@ -8,7 +8,7 @@ TeXOptions = -pdflatex \
 build/RISE_Projektbeschreibung.pdf: FORCE | build
 		TEXTINPUTS=build: \
 		BIBINPUTS=build: \
-		max_print_line=1048576 \
+		max_print_line=19999 \
 	latexmk $(TeXOptions) RISE_Projektbeschreibung.tex 1> build/log || cat build/log
 
 FORCE:
