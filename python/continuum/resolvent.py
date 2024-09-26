@@ -4,7 +4,8 @@ import __path_appender as __ap
 __ap.append()
 from create_zoom import *
 from get_data import load_panda, continuum_params
-pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", **continuum_params(12000, 0., 1., 4.25, 4.25, 3.5, 10.))
+pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", 
+                    **continuum_params(N_k=4000, T=0.0, coulomb_scaling=1., screening=1e-4, k_F=4.25, g=1., omega_D=10.))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
@@ -22,7 +23,7 @@ plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 
 w_lin = np.linspace(-0.005 * pd_data["continuum_boundaries"][1], 1.1 * pd_data["continuum_boundaries"][1], 15000, dtype=complex)
 #w_lin = np.linspace(0, 150, 15000, dtype=complex)
-w_lin += 1e-4j
+w_lin += 1e-5j
 
 plotter.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "phase_SC",     withTerminator=True), label="Phase")
 plotter.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "amplitude_SC", withTerminator=True), label="Higgs")
