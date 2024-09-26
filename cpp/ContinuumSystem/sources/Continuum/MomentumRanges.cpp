@@ -15,7 +15,7 @@ namespace Continuum {
 	MomentumRanges::MomentumRanges(c_float* k_F, const c_float omega_debye)
 		: 
 #ifndef mielke_coulomb
-		K_MAX{ 4 * (*k_F) }, K_MIN{ 0 },
+		K_MAX{ 2 * (*k_F) }, K_MIN{ 0 },
 #else
 		K_MAX{ (*k_F) + (inner_offset * 2) * omega_debye }, K_MIN{ (*k_F) - (inner_offset * 2) * omega_debye },
 #endif

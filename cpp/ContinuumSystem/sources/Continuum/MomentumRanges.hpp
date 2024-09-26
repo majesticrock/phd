@@ -170,18 +170,20 @@ namespace Continuum {
 	class IEOMIterator {
 		MomentumRanges const * const _parent;
 		inline c_float index_to_momentum(int i) const {
-			return (_parent->INNER_K_MIN + i * 0.5 * _parent->INNER_STEP);
+			return _parent->index_to_momentum(i + 3 * _OUTER_DISC / 4);
 		}
 	public:
 		c_float k{};
 		int idx{};
-		static inline int max_idx() { return _INNER_DISC + 1; }
+		static inline int max_idx() { return _INNER_DISC + 45 * _OUTER_DISC / 100; }
 
 		IEOMIterator(MomentumRanges const * const parent, int init = 0) 
 			: _parent(parent), k(this->index_to_momentum(init)), idx(init) {}
 
 		inline c_float parent_step() const {
-			return 0.5 * _parent->INNER_STEP;
+			if( k < _parent->INNER_K_MIN ) return _parent->LOWER_STEP;
+			if( k <= _parent->INNER_K_MAX) return _parent->INNER_STEP;
+			return _parent->UPPER_STEP;
 		}
 		inline c_float max_k() const { return this->index_to_momentum(max_idx()); }
 		inline c_float min_k() const { return this->index_to_momentum(0); }
