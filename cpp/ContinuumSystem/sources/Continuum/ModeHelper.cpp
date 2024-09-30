@@ -9,8 +9,8 @@
 #include <Utility/Numerics/Minimization/Bisection.hpp>
 #include <boost/math/quadrature/gauss.hpp>
 
-#define ieom_diag(k) k * k * (DISCRETIZATION * it.parent_step() / (2 * PI * PI))
-#define ieom_offdiag(k, l) k * k * l * l * (DISCRETIZATION * it.parent_step() * jt.parent_step() / (4 * PI * PI * PI * PI))
+#define ieom_diag(k) k * k * (DISCRETIZATION * DISCRETIZATION * it.parent_step() / (2 * PI * PI))
+#define ieom_offdiag(k, l) k * k * l * l * (DISCRETIZATION * DISCRETIZATION * it.parent_step() * jt.parent_step() / (4 * PI * PI * PI * PI))
 
 #ifdef _complex
 #define __conj(z) std::conj(z)
@@ -63,8 +63,8 @@ namespace Continuum {
 #else
 		starting_states.push_back({ _parent::Vector::Zero(antihermitian_discretization), _parent::Vector::Zero(hermitian_discretization), "SC"});
 		for(m_iterator it(&model->momentumRanges); it < m_iterator::max_idx(); ++it) {
-			starting_states[0][0](it.idx) = 1. / sqrt((c_float)DISCRETIZATION);
-			starting_states[0][1](it.idx) = 1. / sqrt((c_float)DISCRETIZATION);
+			starting_states[0][0](it.idx) = 1. / ((c_float)DISCRETIZATION);
+			starting_states[0][1](it.idx) = 1. / ((c_float)DISCRETIZATION);
 		}
 #endif
 	}

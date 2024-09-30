@@ -15,7 +15,8 @@ namespace Continuum {
 		: Delta(2 * DISCRETIZATION + 1, c_complex{}), 
 		temperature{ parameters.temperature }, phonon_coupling{ parameters.phonon_coupling }, 
 		omega_debye{ parameters.omega_debye }, fermi_energy{ parameters.fermi_energy },
-		screening{ parameters.screening },coulomb_scaling{ parameters.coulomb_scaling },
+		screening_ratio{ parameters.screening_ratio }, screening { parameters.screening },
+		coulomb_scaling{ parameters.coulomb_scaling },
 		fermi_wavevector{ parameters.fermi_wavevector }, rho_F { parameters.rho_F },
 		momentumRanges(&fermi_wavevector, omega_debye)
 	{
@@ -43,6 +44,8 @@ namespace Continuum {
 		this->fermi_energy = parameters.fermi_energy; 
 		this->phonon_coupling = parameters.phonon_coupling; 
 		this->coulomb_scaling = parameters.coulomb_scaling; 
+		this->screening_ratio = parameters.screening_ratio;
+		this->screening = parameters.screening;
 		this->fermi_wavevector = parameters.fermi_wavevector;
 		this->rho_F = parameters.rho_F;
 		try {
@@ -325,7 +328,7 @@ namespace Continuum {
 
 		return "T=" + improved_string(temperature) 
 			+ "/coulomb_scaling=" + improved_string(coulomb_scaling)
-			+ "/screening=" + improved_string(screening)
+			+ "/screening=" + improved_string(screening_ratio)
 			+ "/k_F=" + improved_string(fermi_wavevector)
 			+ "/g=" + improved_string(phonon_coupling) 
 			+ "/omega_D=" + improved_string(1e3 * omega_debye) + "/";		
