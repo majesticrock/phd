@@ -23,7 +23,7 @@ plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 
 w_lin = np.linspace(-0.005 * pd_data["continuum_boundaries"][1], 1.1 * pd_data["continuum_boundaries"][1], 15000, dtype=complex)
 #w_lin = np.linspace(0, 150, 15000, dtype=complex)
-w_lin += 1e-5j
+w_lin += 1e-3j
 
 plotter.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "phase_SC",     withTerminator=True), label="Phase")
 plotter.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "amplitude_SC", withTerminator=True), label="Higgs")
@@ -31,16 +31,16 @@ plotter.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "amplitude_SC"
 resolvents.mark_continuum(ax, 1e3)
 
 import gzip
-with gzip.open("data/continuum/test/full_diag/+values.dat.gz", 'rt') as f_open:
+with gzip.open("data/continuum/test/full_diag/-values.dat.gz", 'rt') as f_open:
     M_ev = np.loadtxt(f_open)
-with gzip.open("data/continuum/test/full_diag/sc+weights.dat.gz", 'rt') as f_open:
+with gzip.open("data/continuum/test/full_diag/sc-weights.dat.gz", 'rt') as f_open:
     M_w = np.loadtxt(f_open)
     
 def resolvent(z, evs, weights):
     ret = np.zeros(len(z), dtype=complex)
     for i in range(len(evs)):
         ret += weights[i] / (z - evs[i])
-    return ret
+    return - ret.imag / np.pi
 
 plotter.plot(1e3 * w_lin.real, resolvent(w_lin, M_ev, M_w), label="Exact")
 

@@ -133,7 +133,7 @@ namespace Continuum {
 		{
 			for (int j = 0; j < number_of_basis_terms; ++j)
 			{
-#ifndef _complex
+#ifdef _XP
 				// Ignore the offdiagonal blocks as they are 0
 				if ((i < hermitian_size && j < hermitian_size) || (j >= hermitian_size && i >= hermitian_size)) 
 #endif
@@ -297,7 +297,7 @@ namespace Continuum {
 		total_matrix_size = m_iterator::max_idx() * number_of_basis_terms;
 
 		model = std::make_unique<SCModel>(init);
-		wicks.load("../commutators/continuum/", false, number_of_basis_terms, 0);
+		wicks.load("../commutators/continuum/", true, number_of_basis_terms, 0);
 
 		//auto solver = Utility::Selfconsistency::make_iterative<c_complex>(model.get(), &model->Delta);
 		auto solver = Utility::Selfconsistency::make_broyden<c_complex>(model.get(), &model->Delta, 200);
