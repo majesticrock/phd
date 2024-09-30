@@ -222,7 +222,9 @@ int main(int argc, char** argv) {
 		}
 
 		if (true) {
-			auto resolvents = modes.computeCollectiveModes(150, "../../data/continuum/test/full_diag");
+			//const std::string full_diag_folder = "../../data/continuum/test/full_diag";
+			//std::filesystem::create_directories(full_diag_folder);
+			auto resolvents = modes.computeCollectiveModes(150); //, full_diag_folder + "/"
 			if (!resolvents.empty()) {
 				nlohmann::json jResolvents = {
 					{ "resolvents", resolvents },

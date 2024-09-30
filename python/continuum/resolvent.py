@@ -5,7 +5,7 @@ __ap.append()
 from create_zoom import *
 from get_data import load_panda, continuum_params
 pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", 
-                    **continuum_params(N_k=4000, T=0.0, coulomb_scaling=1., screening=1e-4, k_F=4.25, g=1., omega_D=10.))
+                    **continuum_params(N_k=4000, T=0.0, coulomb_scaling=0., screening=1e-4, k_F=4.25, g=0.5, omega_D=10.))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
@@ -29,6 +29,20 @@ plotter.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "phase_SC",   
 plotter.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "amplitude_SC", withTerminator=True), label="Higgs")
 
 resolvents.mark_continuum(ax, 1e3)
+
+import gzip
+with gzip.open("data/continuum/test/full_diag/+values.dat.gz", 'rt') as f_open:
+    M_ev = np.loadtxt(f_open)
+with gzip.open("data/continuum/test/full_diag/sc+weights.dat.gz", 'rt') as f_open:
+    M_w = np.loadtxt(f_open)
+    
+def resolvent(z, evs, weights):
+    ret = np.zeros(len(z), dtype=complex)
+    for i in range(len(evs)):
+        ret += weights[i] / (z - evs[i])
+    return ret
+
+plotter.plot(1e3 * w_lin.real, resolvent(w_lin, M_ev, M_w), label="Exact")
 
 #axins = create_zoom(ax, 0.2, 0.3, 0.4, 0.4, xlim=(0., 3e4 * pd_data["continuum_boundaries"][0]), ylim=(0., 0.08))
 #resolvents.mark_continuum(axins, 1e3)

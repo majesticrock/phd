@@ -121,6 +121,7 @@ namespace Continuum {
 		c_float phonon_coupling{};
 		c_float omega_debye{};
 		c_float fermi_energy{};
+		c_float screening_ratio{};
 		c_float screening{};
 		c_float coulomb_scaling{};
 

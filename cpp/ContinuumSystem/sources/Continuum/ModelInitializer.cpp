@@ -3,6 +3,10 @@
 #include <Utility/ConstexprPower.hpp>
 
 namespace Continuum {
+	c_float ModelInitializer::compute_screening() const
+	{
+		return screening_ratio * PhysicalConstants::screening_prefactor * sqrt(fermi_wavevector);
+	}
 	c_float ModelInitializer::compute_fermi_energy() const
 	{
 		const c_float kinetic = bare_dispersion(fermi_wavevector);
