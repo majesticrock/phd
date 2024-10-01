@@ -18,7 +18,7 @@ namespace Continuum {
 		c_float rho_F;
 
 		ModelInitializer(Utility::InputFileReader& input)
-			: temperature{ PhysicalConstants::k_B * input.getDouble("T") }, 
+			: temperature{ input.getDouble("T") }, 
 			phonon_coupling{ input.getDouble("phonon_coupling") },
 			omega_debye{ 1e-3 * input.getDouble("omega_debye") }, // given in meV in the parameter file
 			fermi_wavevector{ input.getDouble("k_F") },
