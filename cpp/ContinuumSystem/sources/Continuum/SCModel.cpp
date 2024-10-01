@@ -120,7 +120,7 @@ namespace Continuum {
 		if (is_zero(temperature)) {
 			return -Delta[k] / (2 * E);
 		}
-		return -std::tanh(E / (2 * temperature)) * Delta[k] / (2 * E);
+		return -std::tanh(E / (2. * PhysicalConstants::k_B * temperature)) * Delta[k] / (2 * E);
 	}
 
 	c_float SCModel::occupation_index(int k) const
@@ -131,13 +131,13 @@ namespace Continuum {
 				if (is_zero(eps_mu)) return 0.5;
 				return (eps_mu < 0 ? 1 : 0);
 			}
-			return 1. / (1 + std::exp(eps_mu / temperature));
+			return 1. / (1 + std::exp(eps_mu / (PhysicalConstants::k_B * temperature)));
 		}
 		const c_float E = sqrt(eps_mu * eps_mu + std::norm(Delta[k]));
 		if (is_zero(temperature)) {
 			return 0.5 * (1 - (eps_mu / E));
 		}
-		return 0.5 * (1 - (eps_mu / E) * std::tanh(E / (2 * temperature)));
+		return 0.5 * (1 - (eps_mu / E) * std::tanh(E / (2. * PhysicalConstants::k_B * temperature)));
 	}
 
 	void SCModel::iterationStep(const ParameterVector& initial_values, ParameterVector& result) {

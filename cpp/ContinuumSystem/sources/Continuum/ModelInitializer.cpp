@@ -20,6 +20,11 @@ namespace Continuum {
 	c_float ModelInitializer::compute_rho_F() const
 	{
 		return fermi_wavevector / (2. * PI * PI);
+		/* const c_float kf2 = fermi_wavevector * fermi_wavevector;
+		const c_float ks2 = screening * screening;
+		return kf2 / (2. * PI * PI * (fermi_wavevector - 0.5 * PhysicalConstants::em_factor * coulomb_scaling * 
+			( 2. * kf2 - ks2 ) * ( std::log(1. + 4. * kf2 / ks2) / kf2 - 4. / (4. * kf2 + ks2) )
+		));*/
 	}
 
 	std::ostream& operator<<(std::ostream& os, ModelInitializer const& init) 
