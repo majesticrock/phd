@@ -7,7 +7,7 @@ from get_data import load_panda, continuum_params
 import continued_fraction_pandas as cf
 import plot_settings as ps
 
-screenings = [1e-4, 0.25, 0.5, 0.75, 1., 1.5, 10., r"\lambda"]
+screenings = [1e-4, 1e-2, 0.1, 0.25, 0.5, 0.75, 1., 1.5, 10., 50., 100., r"\lambda"]
 phonons = [0.6, 0.8, 1., 1.2, 1.4, 2., "g"]
 kfs = [3., 3.5, 4.0, 4.5, 5.0, "k_\mathrm{F}"]
 Ts = [11., 12., 13., 14., "T"]
@@ -16,7 +16,7 @@ plotted = screenings
 n_plots = len(plotted) - 1
 
 alphabet = "abcdefghijkl"
-fig, axs = plt.subplots(n_plots, 1, sharex=True, sharey=True, figsize=(6.4, 10))
+fig, axs = plt.subplots(n_plots, 1, sharex=True, sharey=True, figsize=(6.4, 12))
 
 for i in range(n_plots):
     pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", 
