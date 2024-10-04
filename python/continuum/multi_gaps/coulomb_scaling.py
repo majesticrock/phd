@@ -14,7 +14,7 @@ TYPE = "coulomb_scaling"
 LABEL= r"$\alpha$"
 X_BOUNDS = [-0.1, 0.1]
 
-main_df = load_all("continuum/exact_2000", "gap.json.gz").query(
+main_df = load_all("continuum_old/offset_10", "gap.json.gz").query(
             'g == 10 & omega_D == 10 & E_F == 9.3 & coulomb_scaling >= 0')
 main_df.sort_values(TYPE, inplace=True)
 main_df.reset_index(inplace=True)

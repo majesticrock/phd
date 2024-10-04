@@ -41,9 +41,21 @@ def continuum_params(N_k, T, coulomb_scaling, screening, k_F, g, omega_D):
 def hubbard_params(T, U, V):
     return {"T": T, "U": U, "V": V}
 
+def __all_files__(folder, pattern):
+    if isinstance(folder, str):
+        folder = os.path.normpath(folder)
+    search_obj = os.path.join(CURRENT_DIR, folder, os.path.normpath("**/"), pattern)
+    return glob.glob(search_obj, recursive=True)
+
 import glob
-def load_all(folder, pattern):
-    all_files = glob.glob(os.path.join(f"{CURRENT_DIR}/{folder}", f"**/{pattern}"), recursive=True)
+def load_all(folder, pattern, condition=None):
+    all_files = __all_files__(folder, pattern)
+    if condition is not None:
+        if hasattr(condition, "__len__"):
+            for cond in condition:
+                all_files = [file for file in all_files if cond in file]
+        else:
+            all_files = [file for file in all_files if condition in file]
     return pd.concat((__load_panda__(file) for file in all_files), ignore_index=True)
 
 #pd_data = load_all("continuum/disc_2000", "gap.json.gz")
