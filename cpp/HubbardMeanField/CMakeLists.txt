@@ -39,7 +39,7 @@ find_package(OpenMP REQUIRED)
 find_package(Boost REQUIRED COMPONENTS serialization iostreams)
 find_package(ZLIB REQUIRED)
 find_package(Utility REQUIRED)
-find_package(SymbolicOperators REQUIRED)
+find_package(SymbolicOperators REQUIRED CONFIG)
 
 add_library(Utility INTERFACE)
 target_include_directories(Utility INTERFACE)
@@ -49,12 +49,14 @@ add_subdirectory(sources/Handler)
 add_subdirectory(sources/Hubbard/Models)
 add_subdirectory(sources/Hubbard/DensityOfStates)
 
+target_link_libraries(HubbardMeanField PRIVATE SymbolicOperators::SymbolicOperators)
+target_link_libraries(HubbardMeanField PRIVATE Utility::Utility)
+
 target_link_libraries(HubbardMeanField PRIVATE 
     Models
     DensityOfStates
     Handler
     Helper
-    SymbolicOperators
     Boost::iostreams
     Boost::serialization
     MPI::MPI_CXX
