@@ -26,7 +26,7 @@ for index, pd_row in main_df.iterrows():
 
 fig, ax = plt.subplots()
 
-ax.plot(screenings, peak_positions)
+ax.plot(screenings, peak_positions, "x")
 
 ax.set_xlabel('$\\lambda$')
 ax.set_ylabel('$\\omega_P$ [meV]')
