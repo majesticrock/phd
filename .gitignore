@@ -9,6 +9,7 @@
 **/Debug/
 **/Release/
 **/build/
+**/build_cluster/
 *.csv
 stdout*
 stderr*
