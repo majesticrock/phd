@@ -46,6 +46,7 @@ void ModeDispersionHandler::execute(Utility::InputFileReader& input) const
 			{ "used_dos", input.getBool("use_DOS") },
 			{ "discretization", input.getInt("k_discretization") },
 			{ "lattice_type", input.getString("lattice_type") },
+			{ "gap_parameters", modeHelper.getModel().getAttributes().selfconsistency_values },
 			{ "total_gap", modeHelper.getModel().getTotalGapValue() },
 			{ "continuum_boundaries", modeHelper.getModel().continuum_boundaries() },
 			{ "T", modeHelper.getModel().temperature }, 
