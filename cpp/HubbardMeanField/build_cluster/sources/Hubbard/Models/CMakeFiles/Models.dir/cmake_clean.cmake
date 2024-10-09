@@ -11,8 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Models.dir/SquareLattice/SquareTripletPairing.cpp.o.d"
   "CMakeFiles/Models.dir/SquareLattice/UsingBroyden.cpp.o"
   "CMakeFiles/Models.dir/SquareLattice/UsingBroyden.cpp.o.d"
+  "libModels.a"
   "libModels.pdb"
-  "libModels.so"
 )
 
 # Per-language clean rules from dependency scanning.
