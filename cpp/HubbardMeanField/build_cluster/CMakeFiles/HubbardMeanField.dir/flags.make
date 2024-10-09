@@ -4,7 +4,7 @@
 # compile CXX with /net/el7/gcc/11.3.0/rtf/bin/g++
 CXX_DEFINES = -DBOOST_IOSTREAMS_DYN_LINK -DBOOST_IOSTREAMS_NO_LIB -DBOOST_SERIALIZATION_DYN_LINK -DBOOST_SERIALIZATION_NO_LIB
 
-CXX_INCLUDES = -I/home/althueser/phd/cpp/HubbardMeanField/sources/Hubbard/Models -I/home/althueser/phd/cpp/HubbardMeanField/sources/Hubbard/DensityOfStates -I/home/althueser/phd/cpp/HubbardMeanField/sources/Handler -I/home/althueser/phd/cpp/HubbardMeanField/sources/Hubbard/Helper -isystem /home/althueser/usr/local/include -isystem /net/el7/gcc/11.3.0/rtf/include -isystem /usr/include/openmpi3-x86_64
+CXX_INCLUDES = -isystem /home/althueser/usr/local/include -isystem /net/el7/gcc/11.3.0/rtf/include -isystem /usr/include/openmpi3-x86_64
 
 CXX_FLAGS = -Wall -Wno-sign-compare -fopenmp -march=cascadelake -O3 -pthread -std=c++20
 
