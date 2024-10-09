@@ -5,7 +5,7 @@ __ap.append()
 from create_zoom import *
 from get_data import load_panda, continuum_params
 pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", 
-                    **continuum_params(N_k=8000, T=0.0, coulomb_scaling=1., screening=50., k_F=4.25, g=0.6, omega_D=10.))
+                    **continuum_params(N_k=12000, T=0.0, coulomb_scaling=1., screening=0.9, k_F=4.25, g=0.5, omega_D=10.))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
