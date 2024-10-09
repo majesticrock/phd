@@ -14,7 +14,9 @@
 stdout*
 stderr*
 **/__pycache__
-cpp/HubbardMeanField/auto_generated
+**/auto_generated/
+**/auto_generated_2/
+**/auto_generated_3/
 cpp/HubbardMeanField/small_auto_generated
 cpp/HubbardMeanField/small_auto_generated2
 cpp/HubbardMeanField/cube_auto_generated
@@ -75,3 +77,4 @@ paper/plots
 *.exe
 *.out
 *.app
+cpp/packages
