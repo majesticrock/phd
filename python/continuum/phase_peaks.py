@@ -6,7 +6,7 @@ import continued_fraction_pandas as cf
 
 from get_data import *
 
-main_df = load_all("continuum/offset_10/N_k=20000/T=0.0/coulomb_scaling=1.0", "resolvents.json.gz").query('g == 0.5 & k_F == 4.25 & omega_D == 10')
+main_df = load_all("continuum/offset_10/N_k=20000/T=0.0/coulomb_scaling=1.0", "resolvents.json.gz").query('g == 0.7 & k_F == 4.25 & omega_D == 10')
 main_df.sort_values("lambda_screening", inplace=True)
 main_df.reset_index(inplace=True)
 
