@@ -17,8 +17,14 @@ void ModeDispersionHandler::execute(Utility::InputFileReader& input) const
 	std::vector<Hubbard::ResolventReturnData> resolvents;
 	Hubbard::Helper::SquareGeneral modeHelper(input, modelParameters);
 
-	//const int TOTAL_EVAL_POINTS = 3 * Hubbard::Constants::K_DISCRETIZATION;
-	for(int i = 0; i < Hubbard::Constants::K_DISCRETIZATION; ++i)
+	const int TOTAL_EVAL_POINTS = 3 * Hubbard::Constants::K_DISCRETIZATION;
+	const int EVAL_POINTS_PER_RANK = TOTAL_EVAL_POINTS / numberOfRanks;
+	for (int i = 0; i < EVAL_POINTS_PER_RANK; ++i) {
+		modeHelper.mode_momentum = eval_point(i + rank * EVAL_POINTS_PER_RANK);
+		Utility::Numerics::join_data_wrapper(resolvents, modeHelper.computeCollectiveModes());
+	}
+
+	/*for (int i = 0; i < Hubbard::Constants::K_DISCRETIZATION; ++i)
 	{
 		Utility::Numerics::join_data_wrapper(resolvents, modeHelper.computeCollectiveModes());
 		modeHelper.mode_momentum.x() += 1;
@@ -33,7 +39,7 @@ void ModeDispersionHandler::execute(Utility::InputFileReader& input) const
 		Utility::Numerics::join_data_wrapper(resolvents, modeHelper.computeCollectiveModes());
 		modeHelper.mode_momentum.x() -= 1;
 		modeHelper.mode_momentum.y() -= 1;
-	}
+	}*/
 
 	const std::string output_folder{ getOutputFolder(input) + modelParameters.getFolderName() };
 	std::cout << "Saving data to folder " << BASE_FOLDER + output_folder << std::endl;
