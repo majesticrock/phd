@@ -23,11 +23,11 @@ plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 w_lin = np.linspace(-0.01, pd_data["continuum_boundaries"][1] + 0.3, 5000, dtype=complex)
 w_lin += 1e-6j
 
-plotter.plot(w_lin, resolvents.spectral_density(w_lin, "phase_SC"), label="Phase")
-plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_SC"), label="Higgs")
-plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_CDW"), label="CDW")
-plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_AFM"), label="l.AFM")
-plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_AFM_transversal"), label="t.AFM")
+plotter.plot(w_lin, resolvents.spectral_density(w_lin, "phase_SC_a"), label="Phase")
+plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_SC_a"), label="Higgs")
+plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_CDW_a"), label="CDW")
+plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_AFM_a"), label="l.AFM")
+#plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_AFM_transversal"), label="t.AFM")
 
 resolvents.mark_continuum(ax)
 
