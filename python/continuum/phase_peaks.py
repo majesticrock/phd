@@ -16,7 +16,9 @@ gaps = np.zeros(len(main_df))
 
 for index, pd_row in main_df.iterrows():
     resolvents = cf.ContinuedFraction(pd_row, messages=False)
-    w_lin = np.linspace(-0.005 * pd_row["continuum_boundaries"][1], 1.1 * pd_row["continuum_boundaries"][1], 20000, dtype=complex)
+    w_lin = np.linspace(-0.005 * pd_row["continuum_boundaries"][1], 
+                        1.1 * pd_row["continuum_boundaries"][1] if pd_row["lambda_screening"] > 0.01 else 23., 
+                        20000, dtype=complex)
     w_lin += 1e-5j
 
     y_data = resolvents.spectral_density(w_lin, "phase_SC")
