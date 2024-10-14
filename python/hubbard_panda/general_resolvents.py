@@ -11,7 +11,7 @@ import plot_settings as ps
 
 resolvents = d2d.Dispersions2D(pd_data)
 
-index = 22
+index = 0
 
 fig, ax = plt.subplots()
 ax.set_ylim(-0.05, 1.)
