@@ -77,3 +77,4 @@ paper/plots
 *.exe
 *.out
 *.app
+cpp/packages
