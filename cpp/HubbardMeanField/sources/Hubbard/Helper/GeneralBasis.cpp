@@ -14,14 +14,24 @@ namespace Hubbard::Helper {
 			}
 		}
 	}
+
 	void GeneralBasis::fillMatrices()
 	{
 		M = decltype(M)::Zero(TOTAL_BASIS, TOTAL_BASIS);
 		N = decltype(N)::Zero(TOTAL_BASIS, TOTAL_BASIS);
 
-		for (int i = 0; i < number_of_basis_terms; ++i)
+		for (int i = 0; i < std::min(9, number_of_basis_terms); ++i)
 		{
-			for (int j = 0; j < number_of_basis_terms; ++j)
+			for (int j = 0; j < std::min(9, number_of_basis_terms); ++j)
+			{
+				fillBlock(i, j);
+			}
+		}
+		// There are no matrix elements connecting the transversal magnons with the rest of the system.
+		// Therefore, we may seperate them here.
+		for (int i = 9; i < number_of_basis_terms; ++i)
+		{
+			for (int j = 9; j < number_of_basis_terms; ++j)
 			{
 				fillBlock(i, j);
 			}
@@ -65,7 +75,7 @@ namespace Hubbard::Helper {
 				this->starting_states[4](i * number_of_basis_terms + 9) = norm_constant;
 			}
 		}
-		
+
 		this->resolvent_names.reserve(n_starting_states);
 		this->resolvent_names.push_back("amplitude_SC");
 		this->resolvent_names.push_back("phase_SC");
