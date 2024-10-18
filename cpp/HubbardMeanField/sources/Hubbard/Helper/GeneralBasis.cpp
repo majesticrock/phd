@@ -17,8 +17,8 @@ namespace Hubbard::Helper {
 
 	void GeneralBasis::fillMatrices()
 	{
-		M = decltype(M)::Zero(TOTAL_BASIS, TOTAL_BASIS);
-		N = decltype(N)::Zero(TOTAL_BASIS, TOTAL_BASIS);
+		M.setZero(TOTAL_BASIS, TOTAL_BASIS);
+		N.setZero(TOTAL_BASIS, TOTAL_BASIS);
 
 		for (int i = 0; i < std::min(9, number_of_basis_terms); ++i)
 		{
@@ -36,6 +36,9 @@ namespace Hubbard::Helper {
 				fillBlock(i, j);
 			}
 		}
+
+		std::cout << "||M - M^+|| = " << (M - M.adjoint()).norm() << std::endl;
+		std::cout << "||N - N^+|| = " << (N - N.adjoint()).norm() << std::endl;
 	}
 
 	void GeneralBasis::createStartingStates()

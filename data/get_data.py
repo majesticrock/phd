@@ -53,8 +53,16 @@ def load_all(folder, pattern, condition=None):
     if condition is not None:
         if hasattr(condition, "__len__"):
             for cond in condition:
+                if os.name == 'nt':
+                    cond = f"\\{cond}\\"
+                else:
+                    cond = f"/{cond}/"
                 all_files = [file for file in all_files if cond in file]
         else:
+            if os.name == 'nt':
+                cond = f"\\{condition}\\"
+            else:
+                cond = f"/{condition}/"
             all_files = [file for file in all_files if condition in file]
     return pd.concat((__load_panda__(file) for file in all_files), ignore_index=True)
 

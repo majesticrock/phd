@@ -11,7 +11,7 @@ X_BOUNDS = [-0.1, 0.1]
 fig, ax = plt.subplots()
 
 main_df = load_panda("continuum", "offset_10", "gap.json.gz", 
-                    **continuum_params(N_k=8000, T=0.0, coulomb_scaling=1.0, screening=1e-4, k_F=4.25, g=1., omega_D=10.))
+                    **continuum_params(N_k=20000, T=0.0, coulomb_scaling=1.0, screening=1e-4, k_F=4.25, g=5., omega_D=10.))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 
