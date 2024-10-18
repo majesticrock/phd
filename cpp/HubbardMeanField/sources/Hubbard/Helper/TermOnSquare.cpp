@@ -16,27 +16,12 @@ namespace Hubbard::Helper {
 		return expecs[index](momentum_value(0), momentum_value(1));
 	}
 
-	Eigen::Vector2i TermOnSquare::computeMomentum(const SymbolicOperators::MomentumList& momentum,
-		const std::vector<Eigen::Vector2i>& indizes, const std::vector<char>& momenta) const
+	Eigen::Vector2i TermOnSquare::compute_momentum_list(const SymbolicOperators::MomentumList& momentum, const Eigen::Vector2i& k, const Eigen::Vector2i& l) const
 	{
 		if (momentum.empty()) {
 			return Eigen::Vector2i::Zero();
 		}
-		const SymbolicOperators::Momentum& mom = momentum.front();
-		int mom_idx = mom.isUsed('x');
-		Eigen::Vector2i buffer = mom_idx > 0 ? (mom.momentum_list[mom_idx].first * this->mode_momentum).eval() : Eigen::Vector2i::Zero();
-		for (int i = 0; i < momenta.size(); ++i)
-		{
-			int mom_idx = mom.isUsed(momenta[i]);
-			if (mom_idx < 0) continue;
-			buffer += mom.momentum_list[mom_idx].first * indizes[i];
-		}
-		if (mom.add_Q) {
-			buffer(0) += Constants::K_DISCRETIZATION;
-			buffer(1) += Constants::K_DISCRETIZATION;
-		}
-		clean_factor_2pi(buffer);
-		return buffer;
+		return compute_momentum_no_q(momentum.front(), k, l);
 	}
 
 	Eigen::Vector2i TermOnSquare::compute_momentum_no_q(const SymbolicOperators::Momentum& momentum, const Eigen::Vector2i& k, const Eigen::Vector2i& l) const
@@ -111,7 +96,7 @@ namespace Hubbard::Helper {
 
 		if (term.isIdentity()) {
 			if (term.hasSingleCoefficient()) {
-				coeff_momentum = computeMomentum(term.coefficients[0].momenta, indizes, momenta_plain);
+				coeff_momentum = compute_momentum_list(term.coefficients[0].momenta, indizes[0], indizes[1]);
 				return term.getFactor() * this->model->computeCoefficient(term.coefficients[0], coeff_momentum);
 			}
 			return term.getFactor();
@@ -127,7 +112,7 @@ namespace Hubbard::Helper {
 			returnBuffer *= getExpectationValue(op, compute_momentum_no_q(op.momentum, indizes[0], indizes[1]));
 		}
 		if (term.hasSingleCoefficient()) {
-			coeff_momentum = computeMomentum(term.coefficients[0].momenta, indizes, momenta_plain);
+			coeff_momentum = compute_momentum_list(term.coefficients[0].momenta, indizes[0], indizes[1]);
 			return term.getFactor() * this->model->computeCoefficient(term.coefficients[0], coeff_momentum) * returnBuffer;
 		}
 		return term.getFactor() * returnBuffer;
