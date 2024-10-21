@@ -19,7 +19,7 @@ $(BUILD_DIR)/Makefile: CMakeLists.txt
 # Test and debug targets
 test debug: $(BUILD_DIR)/Makefile
 	@$(MAKE) -C $(BUILD_DIR)
-	./$(BUILD_DIR)/FermionCommute $@ nA
+	./$(BUILD_DIR)/FermionCommute $@ hubbard_dispersions
 
 # Ensure commutators directory exists
 ../commutators:
