@@ -63,46 +63,48 @@ int main(int argc, char** argv) {
 	const std::string MODEL_TYPE = argv[2];
 
 	if (EXECUTION_TYPE == "test") {
-		std::vector<Term> base_term_1({
-				Term(1, std::vector<Operator>({ c_k_dagger, c_k_Q }))
-			});
-		std::vector<Term> base_term_2({
-				Term(1, std::vector<Operator>({ c_minus_k_Q, c_k }))
-			});
+		Hubbard hubbard;
 
-		std::vector<Term> disp_term_1 = base_term_1;
-		std::vector<Term> disp_term_2 = base_term_2;
-		for (auto& v : disp_term_1) {
-			if (v.operators.front().isDaggered) {
-				v.operators.front().momentum += Momentum('x');
-			}
-			else {
-				v.operators.front().momentum += Momentum('x', -1);
-			}
-		}
-		for (auto& v : disp_term_2) {
-			if (v.operators.front().isDaggered) {
-				v.operators.front().momentum += Momentum('x');
-			}
-			else {
-				v.operators.front().momentum += Momentum('x', -1);
+		std::vector<std::vector<Term>> base = hubbard.STD_basis();
+		std::vector<std::vector<Term>> disp = base;
+		for (auto& _v : disp) {
+			for (auto& v : _v) {
+				if (v.operators.front().isDaggered) {
+					v.operators.front().momentum += Momentum('x');
+				}
+				else {
+					v.operators.front().momentum += Momentum('x', -1);
+				}
 			}
 		}
 
-		hermitianConjugate(base_term_2);
-		hermitianConjugate(disp_term_2);
+		std::vector<std::vector<Term>> base_daggered(base);
+		std::vector<std::vector<Term>> disp_daggered(disp);
+		for (auto& vec : base_daggered) {
+			hermitianConjugate(vec);
+			renameMomenta(vec, 'k', 'l');
+		}
+		for (auto& vec : disp_daggered) {
+			hermitianConjugate(vec);
+			renameMomenta(vec, 'k', 'l');
+		}
+
 
 		const Term H_U(1, Coefficient("\\frac{U}{N}"), MomentumSum({ 'r', 'p', 'q' }), std::vector<Operator>({
 			Operator('r', 1, false, SpinUp, true), Operator('p', 1, false, SpinDown, true),
 			Operator(momentum_pairs({ std::make_pair(1, 'p'), std::make_pair(-1, 'q') }), SpinDown, false),
 			Operator(momentum_pairs({ std::make_pair(1, 'r'), std::make_pair(1, 'q') }), SpinUp, false),
 			}));
+		const std::vector<Term> H = { H_U };
+		const int inner_idx = 0;
+		const int outer_idx = static_cast<int>(!inner_idx);
 
 		term_vec commute_with_H_base;
-		term_vec commute_with_H_disp;
-		commutator(commute_with_H_base, H_U, base_term_2);
-		commutator(commute_with_H_disp, disp_term_2, H_U);
+		commutator(commute_with_H_base, H, base[inner_idx]);
 		cleanUp(commute_with_H_base);
+
+		term_vec commute_with_H_disp;
+		commutator(commute_with_H_disp, disp[inner_idx], H);
 		cleanUp(commute_with_H_disp);
 		
 		if (true){
@@ -115,28 +117,25 @@ int main(int argc, char** argv) {
 
 		{
 			term_vec base_double;
-			commutator(base_double, base_term_1, commute_with_H_base);
-			std::cout << "b:\n" << base_double.size() << std::endl;
+			commutator(base_double, base_daggered[outer_idx], commute_with_H_base);
 			cleanUp(base_double);
 
 			term_vec disp_double;
-			commutator(disp_double, disp_term_1, commute_with_H_disp);
-			
-			std::cout << "d:\n" << disp_double.size() << std::endl;
+			commutator(disp_double, disp_daggered[outer_idx], commute_with_H_disp);
 			cleanUp(disp_double);
-
-			//remove_all_x(disp_double);
+			
 			term_vec joined = joinVectors(base_double, disp_double);
 			cleanUp(joined);
+			//std::cout << "joined:\n" << joined << std::endl;
 
-			
-			Hubbard hubbard;
 			auto templates = hubbard.templates();
 			auto symmetries = hubbard.symmetries();
 
 			WickTermCollector wicks;
-			wicks_theorem(disp_double, templates, wicks);
+			wicks_theorem(joined, templates, wicks);
 			clearEtas(wicks);
+			cleanWicks(wicks, symmetries);
+			remove_all_x(wicks);
 			cleanWicks(wicks, symmetries);
 
 			std::cout << "Double commutator:\n" << wicks << std::endl;
@@ -163,12 +162,7 @@ int main(int argc, char** argv) {
 		basis = model->STD_basis();
 	}
 	else if (debug) {
-		basis = {
-			// 0: f + f^+
-			std::vector<Term>({
-				Term(1, std::vector<Operator>({ Operator(Momentum({{-1, 'k'}, {-1, 'x'}}), SpinDown, false), c_k}))
-			})
-		};
+		basis = model->STD_basis();
 	}
 	else {
 		std::cerr << "Execution type not recognized! Accepted are: 'XP' and 'std'" << std::endl;
@@ -180,9 +174,9 @@ int main(int argc, char** argv) {
 	for (auto& t : basis_daggered) {
 		hermitianConjugate(t);
 		renameMomenta(t, 'k', 'l');
-		if (debug) {
-			renameMomenta(t, 'x', 'y');
-		}
+		//if (debug) {
+		//	renameMomenta(t, 'x', 'y');
+		//}
 	}
 
 	if (print) std::cout << "\\begin{align*}\n\t H =" << H << "\\end{align*}" << std::endl;
