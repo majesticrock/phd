@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, hubbard_params
-pd_data = load_panda("hubbard/square", "disc_20", "dispersions.json.gz", **hubbard_params(0.0, -2.5, 0.0))
+pd_data = load_panda("hubbard/square", "test", "dispersions.json.gz", **hubbard_params(0.0, -2.5, 0.0))
 
 import dispersions_2D as d2d
 import plot_settings as ps
@@ -17,7 +17,7 @@ w_lin = np.linspace(0., pd_data["continuum_boundaries"][1] + 0.3, 5000, dtype=co
 w_lin += 1e-4j
 
 # Set up the grid for the heatmap
-N_index = 60
+N_index = len(pd_data["resolvents.amplitude_SC_a"])
 index_range = np.arange(0, N_index + 1)  # Change this range as needed
 omega_range = np.real(w_lin)
 
