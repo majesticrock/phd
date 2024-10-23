@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, hubbard_params
-pd_data = load_panda("hubbard/square", "test", "resolvents.json.gz", **hubbard_params(0.0, -2.5, 0.0))
+pd_data = load_panda("hubbard/square", "test", "resolvents.json.gz", **hubbard_params(0.0, -2.5, 0.1))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
@@ -27,7 +27,7 @@ plotter.plot(w_lin, resolvents.spectral_density(w_lin, "phase_SC_a"), label="Pha
 plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_SC_a"), label="Higgs")
 plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_CDW_a"), label="CDW")
 plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_AFM_a"), label="l.AFM")
-#plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_AFM_transversal_a"), label="t.AFM")
+plotter.plot(w_lin, resolvents.spectral_density(w_lin, "amplitude_AFM_transversal_a"), label="t.AFM")
 
 resolvents.mark_continuum(ax)
 
