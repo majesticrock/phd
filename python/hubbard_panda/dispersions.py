@@ -4,7 +4,7 @@ import __path_appender as __ap
 __ap.append()
 
 from get_data import load_panda, hubbard_params
-pd_data = load_panda("hubbard/square", "test", "dispersions.json.gz", **hubbard_params(0.0, -2.5, 0.0))
+pd_data = load_panda("hubbard/square", "disc_20", "dispersions.json.gz", **hubbard_params(0.0, -2.5, 0.0))
 
 import dispersions_2D as d2d
 import plot_settings as ps
