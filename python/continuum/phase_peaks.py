@@ -32,21 +32,18 @@ screenings = np.log(screenings)
 peak_positions = np.log(peak_positions / gaps)
 
 ax.plot(screenings, peak_positions, "o", label=r"$\omega_P$")
-#ax.plot(screenings, gaps, "x", label=r"$2 \Delta$")
 
 from ez_fit import ez_linear_fit
 cut = slice(0, 45)
-popt, pcov = ez_linear_fit(screenings[cut], peak_positions[cut], ax, x_bounds=(min(screenings), max(screenings)))
+popt, pcov = ez_linear_fit(screenings[cut], peak_positions[cut], ax, x_bounds=(min(screenings), max(screenings)), label=r"Fit $a \ln(\omega) + b$")
 ax.text(0.3, 0.9, f"$a = {popt[0]:1.5f} \pm {pcov[0][0]:1.5f}$", transform=ax.transAxes)
 ax.text(0.3, 0.8, f"$b = {popt[1]:1.5f} \pm {pcov[1][1]:1.5f}$", transform=ax.transAxes)
-
 ax.set_xlabel(r'$\ln (\lambda)$')
 ax.set_ylabel(r'$\ln (\omega / \Delta$)')
 
-#ax.set_xscale("log")
-#ax.set_yscale("log")
 
 ax.legend()
 
 fig.tight_layout()
+plt.savefig("python/continuum/build/phase_peaks.pdf")
 plt.show()

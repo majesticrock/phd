@@ -37,18 +37,25 @@ class HeatmapPlotter:
         spectral_functions_higgs_mev = np.array([res.spectral_density(1e-3 * self.y_mev + 2e-5j, "amplitude_SC") for res in self.resolvents]).transpose()
         spectral_functions_phase_mev = np.array([res.spectral_density(1e-3 * self.y_mev + 2e-5j, "phase_SC") for res in self.resolvents]).transpose()
         
-        levels = np.linspace(0., 1., 51, endpoint=True)
+        vmax = max(spectral_functions_higgs.max(), spectral_functions_higgs_mev.max(), spectral_functions_phase.max(), spectral_functions_phase_mev.max())
+        
+        levels = np.linspace(0., min(1.5, vmax), 51, endpoint=True)
         
         contour = self.axes[0][0].contourf(self.x, self.y_gap, spectral_functions_higgs,     cmap=cmap, levels=levels, extend='max')
-        ___c___ = self.axes[0][1].contourf(self.x, self.y_gap, spectral_functions_phase,     cmap=cmap, levels=levels, extend='max')
-        ___c___ = self.axes[1][0].contourf(self.x, self.y_mev, spectral_functions_higgs_mev, cmap=cmap, levels=levels, extend='max')
-        ___c___ = self.axes[1][1].contourf(self.x, self.y_mev, spectral_functions_phase_mev, cmap=cmap, levels=levels, extend='max')
+        _c1____ = self.axes[0][1].contourf(self.x, self.y_gap, spectral_functions_phase,     cmap=cmap, levels=levels, extend='max')
+        _c2____ = self.axes[1][0].contourf(self.x, self.y_mev, spectral_functions_higgs_mev, cmap=cmap, levels=levels, extend='max')
+        _c3____ = self.axes[1][1].contourf(self.x, self.y_mev, spectral_functions_phase_mev, cmap=cmap, levels=levels, extend='max')
+        
+        contour.set_edgecolor('face')
+        _c1____.set_edgecolor('face')
+        _c2____.set_edgecolor('face')
+        _c3____.set_edgecolor('face')
         
         cbar = self.fig.colorbar(contour, ax=self.axes, orientation='vertical', fraction=0.046, pad=0.04, extend='max')
         cbar.set_label(self.zlabel)
 
-        self.axes[0][0].set_ylabel(r"$\omega$ $[2 \Delta]$")
-        self.axes[1][0].set_ylabel(r"$\omega$ [meV]")
+        self.axes[0][0].set_ylabel(r"$\omega [2 \Delta]$")
+        self.axes[1][0].set_ylabel(r"$\omega [\mathrm{meV}]$")
         
         self.axes[1][0].set_xlabel(self.xlabel)
         self.axes[1][1].set_xlabel(self.xlabel)
@@ -87,14 +94,14 @@ if __name__ == "__main__":
 
     # Define tasks for heatmap creation and saving
     tasks = [
-        (all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.5 & lambda_screening > 1e-2"),             "lambda_screening", f"screening_g05{FILE_ENDING}",           r"$\lambda$",                 r"$g = 0.5$", "log"),
-        (all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.7 & lambda_screening > 1e-2"),             "lambda_screening", f"screening_g07{FILE_ENDING}",           r"$\lambda$",                 r"$g = 0.7$", "log"),
-        (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & g == 1 & omega_D < 21"),             "omega_D",          f"omega_D_small_screening{FILE_ENDING}", r"$\omega_\mathrm{D}$ [meV]", r"$\lambda = 0.0001$"),
-        (all_data.query("coulomb_scaling == 1 & lambda_screening == 1 & g == 1 & omega_D < 21"),                  "omega_D",          f"omega_D_large_screening{FILE_ENDING}", r"$\omega_\mathrm{D}$ [meV]", r"$\lambda = 1$"),
-        (all_data.query("coulomb_scaling == 0 & lambda_screening == 0 & g == 1 & omega_D < 21"),                  "omega_D",          f"omega_D_no_coulomb{FILE_ENDING}",      r"$\omega_\mathrm{D}$ [meV]", "No Coulomb"),
-        (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g > 0.7 & g < 3.5"), "g",                f"g_small_screening{FILE_ENDING}",       r"$g$",                       r"$\lambda = 0.0001$"),
-        (all_data.query("coulomb_scaling == 1 & lambda_screening == 1 & omega_D == 10 & g > 0.7 & g < 3.5"),      "g",                f"g_large_screening{FILE_ENDING}",       r"$g$",                       r"$\lambda = 1$"),
-        (all_data.query("coulomb_scaling == 0 & lambda_screening == 0 & omega_D == 10 & g > 0.25 & g < 3.5"),     "g",                f"g_no_coulomb{FILE_ENDING}",            r"$g$",                       "No Coulomb"),
+        (all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.5 & lambda_screening > 1e-2"),             "lambda_screening", f"screening_g05{FILE_ENDING}",           r"$\lambda$",                          r"$g = 0.5$", "log"),
+        (all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.7 & lambda_screening > 1e-2"),             "lambda_screening", f"screening_g07{FILE_ENDING}",           r"$\lambda$",                          r"$g = 0.7$", "log"),
+        (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & g == 1 & omega_D < 21"),             "omega_D",          f"omega_D_small_screening{FILE_ENDING}", r"$\omega_\mathrm{D} [\mathrm{meV}]$", r"$\lambda = 0.0001$"),
+        (all_data.query("coulomb_scaling == 1 & lambda_screening == 1 & g == 1 & omega_D < 21"),                  "omega_D",          f"omega_D_large_screening{FILE_ENDING}", r"$\omega_\mathrm{D} [\mathrm{meV}]$", r"$\lambda = 1$"),
+        (all_data.query("coulomb_scaling == 0 & lambda_screening == 0 & g == 1 & omega_D < 21"),                  "omega_D",          f"omega_D_no_coulomb{FILE_ENDING}",      r"$\omega_\mathrm{D} [\mathrm{meV}]$", "No Coulomb"),
+        (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g > 0.7 & g < 3.5"), "g",                f"g_small_screening{FILE_ENDING}",       r"$g$",                                 r"$\lambda = 0.0001$"),
+        (all_data.query("coulomb_scaling == 1 & lambda_screening == 1 & omega_D == 10 & g > 0.7 & g < 3.5"),      "g",                f"g_large_screening{FILE_ENDING}",       r"$g$",                                 r"$\lambda = 1$"),
+        (all_data.query("coulomb_scaling == 0 & lambda_screening == 0 & omega_D == 10 & g > 0.25 & g < 3.5"),     "g",                f"g_no_coulomb{FILE_ENDING}",            r"$g$",                                 "No Coulomb"),
     ]
 
     # Use ProcessPoolExecutor to parallelize the heatmap generation and saving
