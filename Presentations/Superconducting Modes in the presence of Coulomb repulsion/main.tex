@@ -53,6 +53,8 @@
 \newcommand{\down}{\downarrow}
 \newcommand{\expec}[1]{\langle #1 \rangle}
 \newcommand{\kf}{k_{\mathrm{F}}}
+\newcommand{\Ef}{E_\mathrm{F}}
+\newcommand{\debye}{\omega_\mathrm{D}}
 
 \newcommand{\ope}[2]{c_{\vec{#1} #2}}
 \newcommand{\opd}[2]{\ope{#1}{#2}^\dagger}
@@ -132,24 +134,26 @@ and $H_\mathrm{BG}$ describes the electronic interaction between the electrons a
 The individual terms are given by
 \bs
 \begin{align}
-  H_\mathrm{Kin} &= \sum_{\vec{k} \sigma} \left( \frac{\hbar^2 k^2}{2 m_e} - E_\mathrm{F} \right) n_{k\sigma} \\
+  H_\mathrm{Kin} &= \sum_{\vec{k} \sigma} \left( \frac{\hbar^2 k^2}{2 m_e} - \Ef \right) n_{k\sigma} \\
   H_\mathrm{Ph} &= - \frac{1}{V} \sum_{\vec{k} \vec{k'}} g(k,k') \opSCd{k} \opSC{k'} \\
   H_\mathrm{C} &= \frac{e^2}{2V \epsilon_0} \sum_{\sigma \sigma'} \sum_{\vec{k} \vec{k}' \vec{q}} \frac{1}{q^2 + k_s^2} \opd{k}{\sigma} \opd{k}{'\sigma} c_{\vec{k}'-\vec{q} \sigma'} c_{\vec{k}-\vec{q} \sigma} \\
   H_\mathrm{BG} &= - \frac{e^2}{2 \epsilon_0 k_s^2} \sum_{ \vec{k} \sigma } \rho   c_{ \vec{k}, \sigma }^\dagger  c_{ \vec{k}, \sigma }.
 \end{align}
 \es
-Here, $V$ is the system's volume, $E_\mathrm{F}$ the Fermi energy, $\hbar$ the reduced Planck's constant, $m_e$ the electron's mass, 
+Here, $V$ is the system's volume, $\Ef$ the Fermi energy, $\hbar$ the reduced Planck's constant, $m_e$ the electron's mass, 
 $e$ its charge, $\epsilon_0$ the vacuum permitivity, and $k_s$ the Thomas-Fermi screening wavevector.
 The operator $c_{ \vec{k}, \sigma }^{(\dagger)}$ annihilates (creates) an electron with momentum $\vec{k}$ and spin $\sigma$.
 
 The phononic interaction is given by \cite{krull2012}
 \begin{equation}
 \label{eqn:phonon_int}
-  g(k, k') = G \Theta( \omega_\mathrm{D} - |\xi(k) - \xi(k')| ),
+  g(k, k') = G \Theta( \debye - |\xi(k) - \xi(k')| ),
 \end{equation}
-where $G > 0$ is the interaction strength and $\xi(k)$ describes the single-particle dispersion, i.e.,
-$\xi(k) = \hbar^2 k^2 / (2m_e) + \epsilon_\mathrm{Fock}(k) - E_\mathrm{F}$.
+where $G > 0$ is the interaction strength, $\debye$ the Debye frequency, $\Theta(k)$ the Heaviside function,
+and $\xi(k)$ describes the single-particle dispersion, i.e.,
+$\xi(k) = \hbar^2 k^2 / (2m_e) + \epsilon_\mathrm{Fock}(k) - \Ef$.
 The Fock energy $\epsilon_\mathrm{F}$ originates from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
+This interaction can be derived using continuous unitary transformation and is identical to the commonly known result by Fr\"ohlich for real processes \cite{frohlich1997,krull2012}.
 
 The quantity 
 \begin{equation}
@@ -182,6 +186,8 @@ Lastly, we will define the following operators for brevity
 
 \section{The superconducting gap function}
 \label{sec:mean_field}
+
+\subsection{General considerations}
 
 Computing quanties within the model \eqref{eqn:base_hamiltonian} requires some treatment of the interaction terms.
 Within this article, we use the approach described in Ref. \cite{althuser2024}.
@@ -216,14 +222,70 @@ The Fock energy reads
   &+ \frac{k_s}{\kf } \left( \arctan \left( \frac{k - \kf}{k_s} \right) - \arctan \left( \frac{k + \kf}{k_s} \right) \right) \nonumber \\
   &+ \frac{\kf^2 - k^2 + k_s^2}{2 k \kf} \ln \left( \frac{k_s^2 + (\kf + k)^2}{k_s^2 + (\kf - k)^2} \right) \bigg].
 \end{align}
-The above expression assumes that $\expec{n_{\vec{k} \sigma}} = \Theta (\kf - k)$, where $\Theta$ is the Heaviside function.
+The above expression assumes that $\expec{n_{\vec{k} \sigma}} = \Theta (\kf - k)$.
 Naturally, this is not entirely accurate within the superconducting phase.
 Therefore, we additionally find a small correction the Fock energy
 \begin{equation}
+\label{eqn:fock_corr}
   \epsilon_\mathrm{C}(k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \delta n_{q} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right),
 \end{equation}
 where we defined $\delta n_{k} \coloneqq \Theta (\kf - k) - \expec{n_{k\sigma}}$.
 This quantity is usually in the order of a few microelectronvolts.
+
+For our numerics, we take notice that all of the quantities above merely depend on the absolute value $k = |\vec{k}|$.
+Therefore, we discretize $k$ using $N_k$ individual points. 
+Due to the long-range nature of the Coulomb interaction,
+we need to stretch our discretization across a large range of $k$, theoretically even from $0$ to $\infty$,
+but in practice $k \in [0, 2 \kf]$ produces good results.
+Nevertheless, the main features can be observed around the Fermi edge causing a equidistant discretization to be insufficient.
+To combat this, we choose a fine mesh around the Fermi edge that utilizes $N_k / 2$ individual points and is cut off at $\kf \pm x_\mathrm{cut} \debye / \kf$.
+After this cutoff, the discretization is much coarser with $N_k / 4$ additional discretization points in each direction.
+Choosing $x_\mathrm{cut}$ is somewhat arbitrary.
+If the gap is small, a small value is beneficial as to resolve the relevant part of the gap function in more detail.
+If the gap is large, however, we require a larger $x_\mathrm{cut}$ so that we include the entire relevant part in the first place.
+In practice, $x_\mathrm{cut} = 20$ produces good results and will be used throughout the article.
+
+\subsection{Discussion of the numerical results}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/gap_theta.pdf}
+  \caption{The superconducting gap function without Coulomb interactions. 
+  The blue solid line shows the result for the exact interaction \eqref{eqn:phonon_int}
+  while the orange dashed line depicts the data for the approximation \eqref{eqn:approx_g}.
+  For both cases, we set $N_k = 4000$, $g=0.5$, and $\debye = \SI{10}{meV}$.}
+  \label{fig:gap_theta}
+\end{figure}
+
+Let us begin by omitting the Coulomb interactions, i.e., setting $e=0$.
+Then, the gap function naturally only includes the phononic contribution.
+Oftentimes, the effective electron-electron interaction is assumed to be constant in a small region around the Fermi edge [einige Beispielzitate].
+It is then described by
+\begin{equation}
+\label{eqn:approx_g}
+  g(k, k') \coloneqq G \Theta(\debye - |\xi(k)|) \Theta(\debye - |\xi(k')|).
+\end{equation}
+This case shall suit as a base line for comparision's sake now.
+The gap function for both this approximate interaction and the exact one \eqref{eqn:phonon_int} is depicted in \autoref{fig:gap_theta}.
+As to be expected, both functions are restricted to a small region around the Fermi edge.
+The latter, however, is slightly wider but exhibits a smaller magnitude.
+All in all, the approximation is certainly justified for a qualitative description of the gap function.
+Nonetheless, we will continue using the exact form for this article.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/gap_coulomb.pdf}
+  \caption{The superconducting gap function with Coulomb interactions. 
+  The blue and orange dashed lines depict the phononic \eqref{eqn:delta_phonon} and Coulomb \eqref{eqn:delta_coulomb} contributions to the gap function,
+  which itself is represented by the black solid line.
+  The green dotted line shows the correction to the Fock energy \eqref{eqn:fock_corr}.
+  We used $\lambda = 10^{-4}$ for panel (a) and $\lambda = 1$ for panel(b).
+  For both cases, we set $N_k = 20000$, $g=0.8$, and $\debye = \SI{10}{meV}$.}
+  \label{fig:gap_coulomb}
+\end{figure}
+
+Next, we activate the Coulomb interaction again which results in considerable changes to the gap function.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -232,6 +294,8 @@ This quantity is usually in the order of a few microelectronvolts.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Collective excitations}
+
+\subsection{General considerations}
 
 use ieom as described in \cite{althuser2024}.
 
@@ -263,6 +327,9 @@ This indicates that the proper starting state $\vec{a}$ for, e.g., the Higgs mod
         1 & i < N_k \\ 0 & \mathrm{otherwise}
     \end{cases}.
 \end{equation}
+
+\subsection{Discussion of the numerical results}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

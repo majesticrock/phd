@@ -10,8 +10,8 @@ X_BOUNDS = [-0.1, 0.1]
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "offset_10", "gap.json.gz", 
-                    **continuum_params(N_k=20000, T=0.0, coulomb_scaling=1.0, screening=1e-4, k_F=4.25, g=5., omega_D=10.))
+main_df = load_panda("continuum", "offset_20", "gap.json.gz", 
+                    **continuum_params(N_k=20000, T=0, coulomb_scaling=1, screening=1, k_F=4.25, g=1, omega_D=10))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 
@@ -32,11 +32,8 @@ else:
     pd_data.plot(x="ks", y=["Delta_Phonon", "Delta_Coulomb", "Delta_Fock"], ax=ax, style=['--', '--', ':'], label=[r"$\Delta_\mathrm{Phonon}$", r"$\Delta_\mathrm{Coulomb}$", r"$\epsilon_\mathrm{C}$"])
 
 inner = int((main_df["discretization"] - main_df["inner_discretization"]) / 2)
-#ax.axvline(pd_data["ks"][inner], ls=":", color="grey")
-#ax.axvline(pd_data["ks"][inner + main_df["inner_discretization"]], ls=":", color="grey")
-#(pd_data["Delta_Phonon"] + pd_data["Delta_Coulomb"]).plot(ax=ax, x="ks", style="k-", label=r"$\Delta_\mathrm{SC}$")
 
-axins = create_zoom(ax, 0.35, 0.39, 0.3, 0.59, xlim=(1-0.005, 1.005), ylim=(1.1 * np.min(pd_data["Delta_Coulomb"]), 1.05 * np.max(pd_data["Delta_Phonon"])))
+axins = create_zoom(ax, 0.1, 0.35, 0.3, 0.59, xlim=(1-0.005, 1.005), ylim=(1.2 * np.min(pd_data["Delta_Coulomb"]), 1.05 * np.max(pd_data["Delta_Phonon"])))
 
 ax.set_xlabel(r"$k / k_\mathrm{F}$")
 ax.set_ylabel(r"$\Delta [\mathrm{meV}]$")
@@ -44,6 +41,4 @@ ax.set_ylabel(r"$\Delta [\mathrm{meV}]$")
 ax.legend()
 fig.tight_layout()
 
-import os
-plt.savefig(f"python/build/{os.path.basename(__file__).split('.')[0]}.svg")
 plt.show()

@@ -31,6 +31,5 @@ ax.set_ylabel(r"$\Delta [\mathrm{meV}]$")
 ax.legend()
 fig.tight_layout()
 
-#import os
-#plt.savefig(f"python/continuum/build/{os.path.basename(__file__).split('.')[0]}.svg")
-plt.show()
+import os
+plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

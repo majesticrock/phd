@@ -1,6 +1,6 @@
 all: build/main.pdf
 
-PLTS_SCR=
+PLTS_SCR=gap_theta.py gap_coulomb.py
 	
 #phase_limits.py peak_fits.py higgs_peak.py 
 
@@ -16,9 +16,8 @@ build/main.pdf: $(PLTS_PDF)
 build/main.pdf: FORCE | build
 	latexmk $(TeXOptions) main.tex 1> build/log || cat build/log
 
-plots/%.pdf: %.py | plots
+plots/%.pdf: plot_scripts/%.py | plots
 	TEXINPUTS=$$(pwd): python $<
-
 FORCE:
 
 plots:
