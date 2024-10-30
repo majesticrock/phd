@@ -82,7 +82,7 @@ from get_data import *
 import concurrent.futures
 
 def load_data():
-    return load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
+    return load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
 
 # Function to create and save a heatmap
 def create_and_save_heatmap(data_query, x_column, filename, xlabel, title, xscale="linear"):

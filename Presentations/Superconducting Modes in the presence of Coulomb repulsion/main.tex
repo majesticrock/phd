@@ -1,0 +1,291 @@
+\documentclass[
+    reprint, 
+    aps,
+    preprintnumbers,
+    twocolumn,
+    prb,
+    superscriptaddress
+]{revtex4-2}
+
+
+%=======================
+% Packages:
+%=======================
+
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage[multiple]{footmisc}
+\usepackage{lipsum}
+\usepackage{rotating}
+\usepackage{perpage}
+\usepackage{chronology}
+\usepackage{amssymb}
+\usepackage{amsbsy}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usepackage{etoolbox}
+\usepackage{graphics}
+\usepackage{abraces}
+\makeatletter
+\let\unit\relax % otherwise there are package conflicts with siunitx
+\makeatother
+\usepackage{siunitx}
+\usepackage{hyperref}
+%\usepackage{float}
+\usepackage{multirow}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{url}
+\usepackage{physics}
+\usepackage{hyperref}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{placeins}
+\usepackage[normalem]{ulem}
+%\usepackage{mhchem}
+
+%=======================
+% New Commands:
+%=======================
+
+\newcommand{\up}{\uparrow}
+\newcommand{\down}{\downarrow}
+\newcommand{\expec}[1]{\langle #1 \rangle}
+\newcommand{\kf}{k_{\mathrm{F}}}
+
+\newcommand{\ope}[2]{c_{\vec{#1} #2}}
+\newcommand{\opd}[2]{\ope{#1}{#2}^\dagger}
+\newcommand{\opSC}[1]{c_{-\vec{#1} \down} c_{\vec{#1} \up}}
+\newcommand{\opSCd}[1]{c_{\vec{#1} \up}^\dagger c_{-\vec{#1} \down}^\dagger}
+
+\newcommand{\greens}[1]{\mathcal{G}_\mathrm{#1} (\omega)}
+\newcommand{\green}[1]{\mathcal{G}_\mathrm{#1}}
+\newcommand{\spectral}[1]{\mathcal{A}_\mathrm{#1}  (\omega)}
+
+\newcommand{\bs}{\begin{subequations}}
+\newcommand{\es}{\end{subequations}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+
+\newcommand{\red}[1]{\mathrmcolor{red}{#1}}
+\newcommand{\blue}[1]{\mathrmcolor{blue}{#1}}
+
+\def\hmath$#1${\texorpdfstring{{\rmfamily\mathrmit{#1}}}{#1}}
+
+\begin{document} 
+
+% Preliminary title
+\title{Superconducting Modes in the presence of Coulomb repulsion}
+
+%=======================
+% Authors:
+%=======================
+
+\author{Joshua Alth\"user}\email{joshua.althueser@tu-dortmund.de}
+\affiliation{Condensed Matter Theory, TU Dortmund University,
+Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
+
+\author{G\"otz S.~Uhrig}
+\email{goetz.uhrig@tu-dortmund.de}
+\affiliation{Condensed Matter Theory, TU Dortmund University,
+Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                 Abstract                                                  %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+    Hic sunt dracones.
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                               Introduction                                                %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}\label{sec:introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                   Model                                                   %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Model}\label{sec:model}
+
+We will focus on a rather general Hamiltonian at zero temperature given by
+\begin{equation}
+\label{eqn:base_hamiltonian}
+  H = H_\mathrm{kin} + H_\mathrm{Ph} + H_\mathrm{C} + H_\mathrm{BG},
+\end{equation}
+where $H_\mathrm{kin}$ describes the kinetic part,
+$H_\mathrm{Ph}$ describes an effective electron-electron interaction mediated by phonons, 
+$H_\mathrm{C}$ describes the repulsive Coulomb interaction between electrons,
+and $H_\mathrm{BG}$ describes the electronic interaction between the electrons and the atomic nuclei.
+The individual terms are given by
+\bs
+\begin{align}
+  H_\mathrm{Kin} &= \sum_{\vec{k} \sigma} \left( \frac{\hbar^2 k^2}{2 m_e} - E_\mathrm{F} \right) n_{k\sigma} \\
+  H_\mathrm{Ph} &= - \frac{1}{V} \sum_{\vec{k} \vec{k'}} g(k,k') \opSCd{k} \opSC{k'} \\
+  H_\mathrm{C} &= \frac{e^2}{2V \epsilon_0} \sum_{\sigma \sigma'} \sum_{\vec{k} \vec{k}' \vec{q}} \frac{1}{q^2 + k_s^2} \opd{k}{\sigma} \opd{k}{'\sigma} c_{\vec{k}'-\vec{q} \sigma'} c_{\vec{k}-\vec{q} \sigma} \\
+  H_\mathrm{BG} &= - \frac{e^2}{2 \epsilon_0 k_s^2} \sum_{ \vec{k} \sigma } \rho   c_{ \vec{k}, \sigma }^\dagger  c_{ \vec{k}, \sigma }.
+\end{align}
+\es
+Here, $V$ is the system's volume, $E_\mathrm{F}$ the Fermi energy, $\hbar$ the reduced Planck's constant, $m_e$ the electron's mass, 
+$e$ its charge, $\epsilon_0$ the vacuum permitivity, and $k_s$ the Thomas-Fermi screening wavevector.
+The operator $c_{ \vec{k}, \sigma }^{(\dagger)}$ annihilates (creates) an electron with momentum $\vec{k}$ and spin $\sigma$.
+
+The phononic interaction is given by \cite{krull2012}
+\begin{equation}
+\label{eqn:phonon_int}
+  g(k, k') = G \Theta( \omega_\mathrm{D} - |\xi(k) - \xi(k')| ),
+\end{equation}
+where $G > 0$ is the interaction strength and $\xi(k)$ describes the single-particle dispersion, i.e.,
+$\xi(k) = \hbar^2 k^2 / (2m_e) + \epsilon_\mathrm{Fock}(k) - E_\mathrm{F}$.
+The Fock energy $\epsilon_\mathrm{F}$ originates from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
+
+The quantity 
+\begin{equation}
+  \rho \coloneqq \frac{1}{V} \sum_{\vec{k'} \sigma'} \expec{c_{ \vec{k}', \sigma' }^\dagger  c_{ \vec{k}', \sigma' }}
+\end{equation}
+describes the atomic nuclei qualitatively as a constant positive background charge.
+It exactly cancels with the divergent Hartree contribution in $H_\mathrm{C}$.
+
+Throughout this article, we fix the Fermi wavevector to $\hbar k_\mathrm{F} / \sqrt{m_e} = 4.25 \sqrt{\mathrm{eV}}$.
+Furthermore, we define the dimensionless parameter 
+\begin{equation}
+  g \coloneqq \rho_\mathrm{F} G = G \frac{m_e \kf}{2 \pi^2 \hbar^2},
+\end{equation}
+where $\rho_\mathrm{F}$ is the density of states of the non-interacting system at the Fermi edge.
+In the same manner, we define a dimensionless scaling $\lambda$ for the screening wavevector
+\begin{equation}
+  k_s \coloneqq \lambda \sqrt{\frac{e^2 m_e}{3 \pi^2 \epsilon_0} \kf}.
+\end{equation}
+The square-root expression is an estimate for the Thomas-Fermi wavevector in real materials provided by Ref. \cite{rickayzen80}.
+Lastly, we will define the following operators for brevity
+\begin{equation}
+  f_{\vec{k}} \coloneqq \opSC{k},\qquad n_{\vec{k}\sigma} \coloneqq \opd{k}{\sigma} \ope{k}{\sigma}.
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                 Mean-Field                                                %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{The superconducting gap function}
+\label{sec:mean_field}
+
+Computing quanties within the model \eqref{eqn:base_hamiltonian} requires some treatment of the interaction terms.
+Within this article, we use the approach described in Ref. \cite{althuser2024}.
+Therefore, we begin by formulating a mean-field decoupling of the interaction terms, which will provide us with access to various expectation values.
+
+The phononic contribution boils down to a single non-vanishing term
+\begin{equation}
+  \tilde{H}_\mathrm{Ph} = \sum_{\vec{k}} \Delta_\mathrm{Ph} (k) f_{\vec{k}}^\dagger + \mathrm{H.c.},
+\end{equation}
+where the phononic contribution the the superconducting gap function is given by
+\begin{align}
+\label{eqn:delta_phonon}
+  \Delta_\mathrm{Ph} (k) &= \frac{1}{V} \sum_{\vec{k'}} g(k,k')  \expec{f_k} \nonumber \\
+    &= \frac{1}{2 \pi^2} \int_0^\infty \mathrm{d} k' k'^2 g(k, k') \expec{ f_k }.
+\end{align}
+
+Repeating the same calculation for $H_\mathrm{C}$ yields
+\begin{align}
+  \tilde{H}_\mathrm{C} &= - \sum_{\vec{k}} \Delta_\mathrm{C} (k) f_{\vec{k}} + \mathrm{H.c.} \nonumber \\
+    &+ \sum_{\vec{k} \sigma} (\epsilon_\mathrm{Fock}(k) + \epsilon_\mathrm{C}(k)) n_{\vec{k} \sigma}.
+\end{align}
+The additional contribution to the gap function is given by
+\begin{equation}
+\label{eqn:delta_coulomb}
+  \Delta_\mathrm{C} (k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right).
+\end{equation}
+Note, that this term has the opposite sign of \eqref{eqn:delta_phonon}.
+The Fock energy reads
+\begin{align}
+\label{eqn:fock_coulomb}
+  \epsilon_\mathrm{Fock} (k) &= - \frac{e^2}{4 \pi^2 \epsilon_0} \kf \bigg[1 \nonumber \\
+  &+ \frac{k_s}{\kf } \left( \arctan \left( \frac{k - \kf}{k_s} \right) - \arctan \left( \frac{k + \kf}{k_s} \right) \right) \nonumber \\
+  &+ \frac{\kf^2 - k^2 + k_s^2}{2 k \kf} \ln \left( \frac{k_s^2 + (\kf + k)^2}{k_s^2 + (\kf - k)^2} \right) \bigg].
+\end{align}
+The above expression assumes that $\expec{n_{\vec{k} \sigma}} = \Theta (\kf - k)$, where $\Theta$ is the Heaviside function.
+Naturally, this is not entirely accurate within the superconducting phase.
+Therefore, we additionally find a small correction the Fock energy
+\begin{equation}
+  \epsilon_\mathrm{C}(k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \delta n_{q} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right),
+\end{equation}
+where we defined $\delta n_{k} \coloneqq \Theta (\kf - k) - \expec{n_{k\sigma}}$.
+This quantity is usually in the order of a few microelectronvolts.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                               Mode analysis                                               %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Collective excitations}
+
+use ieom as described in \cite{althuser2024}.
+
+Similar basis idea:
+\begin{equation}
+  B_k \coloneqq \frac{1}{\sqrt{V}} \sum_{\vec{q}} h(k - |\vec{q}|) O_{\vec{q}}.
+\end{equation}
+$O_{\vec{q}}$ represents $f_{\vec{q}}$ and $n_{\vec{k}\up} +  n_{-\vec{k}\down}$
+
+We will investigate the Higgs and the phase modes, given by
+\begin{subequations}
+\begin{align}
+    A_\mathrm{Higgs} &\coloneqq \frac{1}{\sqrt{V}} \sum_{\vec{k}} \left( f_{\vec{k}}^\dagger + f_{\vec{k}} \right), \\
+    A_\mathrm{Phase} &\coloneqq \frac{i}{\sqrt{V}} \sum_{\vec{k}} \left( f_{\vec{k}}^\dagger - f_{\vec{k}} \right).
+\end{align}
+\end{subequations}
+
+Note, that
+\begin{subequations}
+\begin{align}
+    \Delta k \sum_{i=1}^{N_k} B_k &= \frac{\Delta k}{\sqrt{V}} \sum_{i=1}^{N_k} \sum_{\vec{q}} h(k - |\vec{q}|) O_{\vec{q}} \\
+        &\approx \frac{1}{\sqrt{V}} \int \mathrm{d} k \sum_{\vec{q}} \delta(k - |\vec{q}|) O_{\vec{q}} \\
+        &= \frac{1}{\sqrt{V}} \sum_{\vec{q}} O_{\vec{q}}.
+\end{align}
+\end{subequations}
+This indicates that the proper starting state $\vec{a}$ for, e.g., the Higgs mode is given by
+\begin{equation}
+    \vec{a}_i \coloneqq \begin{cases}
+        1 & i < N_k \\ 0 & \mathrm{otherwise}
+    \end{cases}.
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%                                                 Conclusion                                                %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusion}\label{sec:conclusion}
+
+
+%==============================================================================
+% Acknowledgments 
+%==============================================================================
+\begin{acknowledgments} 
+	This research was partially funded by the MERCUR Kooperation
+		in project KO-2021-0027. We acknowledge very helpful discussions with 
+\end{acknowledgments}
+
+
+\appendix
+
+
+
+\bibliography{main}
+
+\end{document}
