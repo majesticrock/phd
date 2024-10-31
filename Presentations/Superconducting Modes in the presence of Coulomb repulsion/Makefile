@@ -1,6 +1,6 @@
 all: build/main.pdf
 
-PLTS_SCR=gap_theta.py gap_coulomb.py
+PLTS_SCR=gap_theta.py gap_coulomb.py resolvent_overview.py
 	
 #phase_limits.py peak_fits.py higgs_peak.py 
 

@@ -365,12 +365,38 @@ where $V(0)$ refers to the Coulomb potential evaluated at $0$.
 Because these terms are contributions to individual matrix elements of matrices that we need to manipulated in a non-trivial manner,
 we cannot lift nor easily avoid these kinds of singularities and ultimately require a finite screening.
 
-\bullet Cut the ieom basis so that it only uses the fine inner mesh, using $N_k=20000$
-
-
-
 \subsection{Discussion of the numerical results}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/resolvent_overview.pdf}
+  \caption{The plot shows the spectral functions $\spectral{Phase}$ (blue solid line) and $\spectral{Higgs}$ (orange dashed line) excluding the Coulomb interaction.
+  In the upper panels (a), we used the exact interaction \eqref{eqn:phonon_int} while we used the approximation \eqref{eqn:approx_g} in the lower ones.
+  The left column (.1) depicts the results for $g=0.4$ and the right one (.2) those for $g=1$.
+  The grey area marks the two-particle continuum.
+  Prominently, we can identify the phase mode at $\omega=0$, and, for small $g$ the Higgs mode at $\omega=2\Delta$.
+  The former moves, and additional modes appear, only for the exact interaction, as $g$ is increased.}
+  \label{fig:resolvent_overview}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/resolvent_overview_coulomb.pdf}
+  \caption{The plot shows the spectral functions $\spectral{Phase}$ (blue solid line) and $\spectral{Higgs}$ (orange dashed line) including the Coulomb interaction.
+  Panel (a) and (b) depict the results for $g=1$ and $g=2$, respectively. For both cases we used an almost vanishing screening $\lambda=10^{-4}$.
+  The Higgs mode persists after introduction of the Coulomb interaction.
+  The phase mode at $\omega=0$, however, disappears as expected. 
+  Increasing $g$ again spawns additional modes, similar to \autoref{fig:resolvent_overview}, but this effect starts at much larger $g$ than before. 
+  This indicates that the governing mechanism is not $g$ itself, but the magnitude of the gap.
+  }
+  \label{fig:resolvent_overview_coulomb}
+\end{figure}
+
+\bullet Cut the ieom basis so that it only uses the fine inner mesh, using $N_k=20000$ and $\debye = \SI{10}{meV}$.
+
+\bullet No Coulomb interaction: extra modes as $g$ is increased - but only for rather large gaps \autoref{fig:resolvent_overview}.
+
+\bullet With Coulomb interaction: still extra modes for large $g$. No phase mode at 0 \autoref{fig:resolvent_overview_coulomb}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
