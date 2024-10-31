@@ -266,7 +266,9 @@ It is then described by
   g(k, k') \coloneqq G \Theta(\debye - |\xi(k)|) \Theta(\debye - |\xi(k')|).
 \end{equation}
 This case shall suit as a base line for comparision's sake now.
-The gap function for both this approximate interaction and the exact one \eqref{eqn:phonon_int} is depicted in \autoref{fig:gap_theta}.
+An exemplary gap function for both, this approximate interaction and the exact one \eqref{eqn:phonon_int}, is depicted in \autoref{fig:gap_theta}.
+We set $N_k = 4000$, $g=0.5$, and $\debye = \SI{10}{meV}$, but the gap function itself is qualitatively generic.
+Increasing $g$ increases its magnitude and increasing $\debye$ increases its width.
 As to be expected, both functions are restricted to a small region around the Fermi edge.
 The latter, however, is slightly wider but exhibits a smaller magnitude.
 All in all, the approximation is certainly justified for a qualitative description of the gap function.
@@ -279,13 +281,39 @@ Nonetheless, we will continue using the exact form for this article.
   The blue and orange dashed lines depict the phononic \eqref{eqn:delta_phonon} and Coulomb \eqref{eqn:delta_coulomb} contributions to the gap function,
   which itself is represented by the black solid line.
   The green dotted line shows the correction to the Fock energy \eqref{eqn:fock_corr}.
-  We used $\lambda = 10^{-4}$ for panel (a) and $\lambda = 1$ for panel(b).
+  We used $\lambda = 10^{-4}$ for panel (a) and $\lambda = 1$ for panel(b). Note the difference in energy scales between the two panels.
   For both cases, we set $N_k = 20000$, $g=0.8$, and $\debye = \SI{10}{meV}$.}
   \label{fig:gap_coulomb}
 \end{figure}
 
 Next, we activate the Coulomb interaction again which results in considerable changes to the gap function.
-
+A plot of two exemplary gap functions can be seen in \autoref{fig:gap_coulomb}.
+Here, we used $N_k = 20000$, $g=0.8$, and $\debye = \SI{10}{meV}$. 
+In the top panel, the screening is set to $\lambda = 10^{-4}$ while the bottom panel has it set to $\lambda = 1$.
+Again, the functions are qualitatively generic with regard to change in $g$ and $\debye$.
+Naturally, increasing the screening also increases the gap's magnitude.
+Also, as mentioned before, the correction to the Fock energy $\epsilon_C$ is neglectably small.
+\newline
+The most striking new feature is that the gap function, indepedent of the screening, stretches to all $k$ values.
+While its main contribution is still confined to a small region around the edge, 
+it approach a constant value for $k \to 0$ and follows a $1/k^2$ behavior as $k \to \infty$. 
+\textcolor{red}{Das kann man analytisch zeigen - wollen/sollen wir das hier tun?}
+Furthermore, due to the repulsive nature of the Coulomb interaction, the gap function has a radial node when said interaction starts dominating over the phononic one.
+\textcolor{red}{TODO: etwas Literatureinordnung gem\"a\ss{} der Quellen von Ilya.}
+At this point, it should be mentioned that the complex phase of the gap function can still be fixed to be real.
+We repeated the calculation allowing for an arbitrary complex phase, but the results are essentially identical:
+Instead of changing sign at the nodal points, the complex phase of the gap function jumps by $\pi$.
+\newline
+Considering a small screening, i.e., $\lambda = 10^{-4}$ in panel (a), results in a rather narrow valley in $\Delta_\mathrm{C}$ around the Fermi edge.
+It is noteworthy, that this result is essentially identical to the one obtained by omiting the screening entirely because this feature originates from integrating over a logarithmic singularity.
+While this part of our calculations can still be easily performed without a screening, the later parts require atleast a small one as to avoid numerically dividing by $0$.
+\newline
+The aforementioned feature disappears entirely if we use the screening wavevector presented in Ref. \cite{rickayzen80}, i.e., $\lambda = 1$ in panel (b).
+In this case, the contribution of $\Delta_\mathrm{C}$ around the Fermi edge is essentially a constant.
+This corroborates the qualitative statements of the commonly used result by Morel and Anderson \cite{morel1962}
+that a screened Coulomb interaction essentially boils down to a constant pseudo-potential around the Fermi edge \cite{sigrist2005,kostrzewa2018,simonato2023}.
+\textcolor{red}{Man k\"onnte jetzt natürlich noch mehr im Detail diskutieren, was mit der L\"ucke passiert, wenn wir an den Parametern drehen.
+Aber im Gro\ss{}en und Ganzen wird da nur das bekannte rauskommen - vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -297,15 +325,15 @@ Next, we activate the Coulomb interaction again which results in considerable ch
 
 \subsection{General considerations}
 
-use ieom as described in \cite{althuser2024}.
+\bullet use ieom as described in \cite{althuser2024}.
 
-Similar basis idea:
+\bullet Similar basis idea:
 \begin{equation}
   B_k \coloneqq \frac{1}{\sqrt{V}} \sum_{\vec{q}} h(k - |\vec{q}|) O_{\vec{q}}.
 \end{equation}
 $O_{\vec{q}}$ represents $f_{\vec{q}}$ and $n_{\vec{k}\up} +  n_{-\vec{k}\down}$
 
-We will investigate the Higgs and the phase modes, given by
+\bullet We will investigate the Higgs and the phase modes, given by
 \begin{subequations}
 \begin{align}
     A_\mathrm{Higgs} &\coloneqq \frac{1}{\sqrt{V}} \sum_{\vec{k}} \left( f_{\vec{k}}^\dagger + f_{\vec{k}} \right), \\
@@ -313,7 +341,7 @@ We will investigate the Higgs and the phase modes, given by
 \end{align}
 \end{subequations}
 
-Note, that
+\bullet Note, that
 \begin{subequations}
 \begin{align}
     \Delta k \sum_{i=1}^{N_k} B_k &= \frac{\Delta k}{\sqrt{V}} \sum_{i=1}^{N_k} \sum_{\vec{q}} h(k - |\vec{q}|) O_{\vec{q}} \\
@@ -327,6 +355,19 @@ This indicates that the proper starting state $\vec{a}$ for, e.g., the Higgs mod
         1 & i < N_k \\ 0 & \mathrm{otherwise}
     \end{cases}.
 \end{equation}
+
+\bullet For these calculations, we finally require atleast a small screening because the commutators yield otherwise divergent terms.
+As an example consider 
+$\expec{[ f_{\vec{l}}^\dagger  - f_{\vec{l}} , [H,  f_{\vec{k}} - f_{\vec{k}}^\dagger ]]}$.
+One of the resulting terms is
+$V( 0 )  \langle f_{ \vec{l} } \rangle \langle f_{ \vec{k} } \rangle$,
+where $V(0)$ refers to the Coulomb potential evaluated at $0$.
+Because these terms are contributions to individual matrix elements of matrices that we need to manipulated in a non-trivial manner,
+we cannot lift nor easily avoid these kinds of singularities and ultimately require a finite screening.
+
+\bullet Cut the ieom basis so that it only uses the fine inner mesh, using $N_k=20000$
+
+
 
 \subsection{Discussion of the numerical results}
 
