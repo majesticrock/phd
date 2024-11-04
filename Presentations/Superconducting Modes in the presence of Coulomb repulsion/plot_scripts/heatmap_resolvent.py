@@ -24,8 +24,8 @@ class HeatmapPlotter:
         self.yscale = yscale
 
     def plot(self, axes, cmap='inferno', labels=True):
-        spectral_functions_higgs = np.array([res.spectral_density(1e-3 * self.y + 2e-5j, "amplitude_SC") for res in self.resolvents]).transpose()
-        spectral_functions_phase = np.array([res.spectral_density(1e-3 * self.y + 2e-5j, "phase_SC") for res in self.resolvents]).transpose()
+        spectral_functions_higgs = np.array([res.spectral_density(1e-3 * self.y + 1e-6j, "amplitude_SC") for res in self.resolvents]).transpose()
+        spectral_functions_phase = np.array([res.spectral_density(1e-3 * self.y + 1e-6j, "phase_SC") for res in self.resolvents]).transpose()
 
         vmax = max(spectral_functions_higgs.max(), spectral_functions_phase.max())
         levels = np.linspace(0., min(1., vmax), 101, endpoint=True)
@@ -49,7 +49,7 @@ class HeatmapPlotter:
 
         return contour_higgs
 
-all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
+all_data = load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
 
 ##########################
 #####       g        #####
@@ -86,7 +86,7 @@ fig.savefig(filename)
 ##########################
 #####     lambda     #####
 ##########################
-
+all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
 tasks = [
     (all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.5 & lambda_screening > 1e-2"), "lambda_screening", r"$\lambda$", "log"),
     #(all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.7 & lambda_screening > 1e-2"), "lambda_screening", r"$\lambda$", "log"),
