@@ -21,8 +21,8 @@ namespace Continuum {
 #endif
 #ifndef approximate_theta
 
-		INNER_K_MAX{ (*k_F) + inner_offset * omega_debye / (*k_F) },
-		INNER_K_MIN{ (*k_F) - inner_offset * omega_debye / (*k_F) },
+		INNER_K_MAX{ (*k_F) + inner_offset * g * omega_debye / (*k_F) },
+		INNER_K_MIN{ (*k_F) - inner_offset * g * omega_debye / (*k_F) },
 #else
 		INNER_K_MAX{ sqrt((*k_F * *k_F) + 2 * inner_offset * omega_debye) },
 		INNER_K_MIN{ sqrt((*k_F * *k_F) - 2 * inner_offset * omega_debye) },
