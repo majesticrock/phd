@@ -373,7 +373,9 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
   The phononic coupling strength $g$ is varied along the $x$-axis.
   For the individual columns, we used (1) no Coulomb interaction, (2) $\lambda=1$, and (3) $\lambda=10^{-4}$.
   Note, that the plots (2) and (3) do not start at $g=0$ because the superconducting state siezes to exist due to the repulsive Coulomb interaction before that point is reached.
-  The green dotted line shows the lower edge of the two-particle continuum at $2\maxGap$.}
+  The green dotted line shows the lower edge of the two-particle continuum at $2\maxGap$.
+  \textcolor{red}{Bis auf (a.1) ist die Kontinuumskante ja schon ganz gut aufgel\"ost. Ich teste gerade, ob ich das mit moderatem Rechenaufwand auch für (a.1) noch besser hinkriege [auch hier ist es schon viel besser als vorher].
+  Ansonsten w\"urde ich sagen, dass uns L\"ucken von 50 meV eh nicht interessieren...}}
   \label{fig:heatmap_resolvent}
 \end{figure*}
 
@@ -382,6 +384,14 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
   \includegraphics[width=.48\textwidth]{plots/heatmap_resolvent_screening.pdf}
   \caption{Same as \autoref{fig:heatmap_resolvent} except that $\lambda$ is varied logarithmically and the phononic coupling strength is fixed to $g=0.5$.}
   \label{fig:heatmap_resolvent_screening}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/phase_peaks.pdf}
+  \caption{Double logarithmic plot of the position $\omega_P$ of the peak in $\spectral{Phase}$ as seen in \autoref{fig:heatmap_resolvent_screening} depending on the screening $\lambda$.
+  \textcolor{red}{TODO: Vllt werde ich den kleinen Sprung noch los - ansonsten erkl\"aren.}}
+  \label{fig:phase_peaks}
 \end{figure}
 
 \textbullet use ieom as described in \cite{althuser2024}.
@@ -444,6 +454,11 @@ Not necessary for the approximate interaction \eqref{eqn:approx_g} as the cutoff
 
 \textbullet \textcolor{red}{TODO: Nice plot.} Changing $\debye$ essentially does nothing; $\maxGap$ scales linearly. Modes are a parallel to $x$-axis if plotted with $\omega / \maxGap$.
 
+\textbullet \autoref{fig:heatmap_resolvent_screening} and \autoref{fig:phase_peaks}: Higgs mode confined to the lower edge of the continuum because we do not enter the ``large-gap regime''.
+Phase peak quickly shifts to large energies as $\lambda$ is decreased. The behavior is almost $\omega_P \propto 1/\lambda$, possibly with logarithmic corrections.
+Note, that contrary to expectation this behavior does not stop at the plasma frequency, which in our case is a few electronvolts.
+We believe, that we plainly cannot resolve the high energy regime properly as our entire approach, including choosing of the numerical cutoff is focused around the low-energy regime.
+Therefore, the mode likely behaves as depicted in \autoref{fig:phase_peaks} for moderate screenings but will deviate in the limit $\lambda \to 0$ in accordance with literature predictions [cite e.g. anderson higgs mechanism].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
