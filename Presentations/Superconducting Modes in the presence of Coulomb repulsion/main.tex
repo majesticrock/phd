@@ -55,6 +55,7 @@
 \newcommand{\kf}{k_{\mathrm{F}}}
 \newcommand{\Ef}{E_\mathrm{F}}
 \newcommand{\debye}{\omega_\mathrm{D}}
+\newcommand{\maxGap}{\Delta_\mathrm{max}}
 
 \newcommand{\ope}[2]{c_{\vec{#1} #2}}
 \newcommand{\opd}[2]{\ope{#1}{#2}^\dagger}
@@ -243,7 +244,7 @@ After this cutoff, the discretization is much coarser with $N_k / 4$ additional 
 Choosing $x_\mathrm{cut}$ is somewhat arbitrary.
 If the gap is small, a small value is beneficial as to resolve the relevant part of the gap function in more detail.
 If the gap is large, however, we require a larger $x_\mathrm{cut}$ so that we include the entire relevant part in the first place.
-In practice, $x_\mathrm{cut} = 20$ produces good results and will be used throughout the article.
+In practice, $x_\mathrm{cut} = 20$ produces good results and will be used throughout the article. \textcolor{red}{Teste noch etwas rum, ob es eine bessere Wahl gibt.}
 
 \subsection{Discussion of the numerical results}
 
@@ -286,6 +287,15 @@ Nonetheless, we will continue using the exact form for this article.
   \label{fig:gap_coulomb}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/gap_behavior.pdf}
+  \caption{Plot of the maximum gap value $\maxGap$ depending on the screening $\lambda$.
+  The former is scaled logarithmically. The phononic interaction strength is set to $g=0.5$ (blue solid line) and $g=0.7$ (orange dashed line).
+  Otherwise, the parameters are identical to the ones in \autoref{fig:gap_coulomb}}
+  \label{fig:gap_behavior}
+\end{figure}
+
 Next, we activate the Coulomb interaction again which results in considerable changes to the gap function.
 A plot of two exemplary gap functions can be seen in \autoref{fig:gap_coulomb}.
 Here, we used $N_k = 20000$, $g=0.8$, and $\debye = \SI{10}{meV}$. 
@@ -312,8 +322,14 @@ The aforementioned feature disappears entirely if we use the screening wavevecto
 In this case, the contribution of $\Delta_\mathrm{C}$ around the Fermi edge is essentially a constant.
 This corroborates the qualitative statements of the commonly used result by Morel and Anderson \cite{morel1962}
 that a screened Coulomb interaction essentially boils down to a constant pseudo-potential around the Fermi edge \cite{sigrist2005,kostrzewa2018,simonato2023}.
+
+\autoref{fig:gap_behavior} shows the maximum gap value $\maxGap$ depending on the screening $\lambda$.
+Naturally, it grows as the screening is increased, but it does not seem to follow any elementary function.
+Expectatly, the function approaches a constant value for both cases $\lambda \to 0$ and $\lambda \to \infty$.
+The general behavior is generic across various values of the phononic coupling strength $g$.
 \textcolor{red}{Man k\"onnte jetzt natürlich noch mehr im Detail diskutieren, was mit der L\"ucke passiert, wenn wir an den Parametern drehen.
-Aber im Gro\ss{}en und Ganzen wird da nur das bekannte rauskommen - vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
+Aber im Gro\ss{}en und Ganzen wird da nur das Bekannte rauskommen. D.h. $\maxGap$ skaliert mit $g$ zun\"achst exponentiell und dann linear und mit $\debye$ immer linear.
+Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -374,7 +390,7 @@ we cannot lift nor easily avoid these kinds of singularities and ultimately requ
   In the upper panels (a), we used the exact interaction \eqref{eqn:phonon_int} while we used the approximation \eqref{eqn:approx_g} in the lower ones.
   The left column (.1) depicts the results for $g=0.4$ and the right one (.2) those for $g=1$.
   The grey area marks the two-particle continuum.
-  Prominently, we can identify the phase mode at $\omega=0$, and, for small $g$ the Higgs mode at $\omega=2\Delta$.
+  Prominently, we can identify the phase mode at $\omega=0$, and, for small $g$ the Higgs mode at $\omega=2\maxGap$.
   The former moves, and additional modes appear, only for the exact interaction, as $g$ is increased.}
   \label{fig:resolvent_overview}
 \end{figure}
@@ -387,16 +403,47 @@ we cannot lift nor easily avoid these kinds of singularities and ultimately requ
   The Higgs mode persists after introduction of the Coulomb interaction.
   The phase mode at $\omega=0$, however, disappears as expected. 
   Increasing $g$ again spawns additional modes, similar to \autoref{fig:resolvent_overview}, but this effect starts at much larger $g$ than before. 
-  This indicates that the governing mechanism is not $g$ itself, but the magnitude of the gap.
-  }
+  This indicates that the governing mechanism is not $g$ itself, but the magnitude of the gap.}
   \label{fig:resolvent_overview_coulomb}
 \end{figure}
 
 \bullet Cut the ieom basis so that it only uses the fine inner mesh, using $N_k=20000$ and $\debye = \SI{10}{meV}$.
+Not necessary for the approximate interaction \eqref{eqn:approx_g} as the cutoff comes naturally with the Heaviside functions.
 
 \bullet No Coulomb interaction: extra modes as $g$ is increased - but only for rather large gaps \autoref{fig:resolvent_overview}.
 
-\bullet With Coulomb interaction: still extra modes for large $g$. No phase mode at 0 \autoref{fig:resolvent_overview_coulomb}.
+\bullet With Coulomb interaction: still extra modes for large $g$. No phase mode at 0 in accordance with the Anderson-Higgs mechanism \autoref{fig:resolvent_overview_coulomb}.
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=.98\textwidth]{plots/heatmap_resolvent.pdf}
+  \caption{The plot shows the spectral functions (a) $\spectral{Higgs}$ and (b) $\spectral{Phase}$.
+  The magnitude of these is represented by the color scale. 
+  The phononic coupling strength $g$ is varied along the $x$-axis.
+  For the individual columns, we used (1) no Coulomb interaction, (2) $\lambda=1$, and (3) $\lambda=10^{-4}$.
+  Note, that the plots (2) and (3) do not start at $g=0$ because the superconducting state siezes to exist due to the repulsive Coulomb interaction before that point is reached.
+  The green dotted line shows the lower edge of the two-particle continuum at $2\maxGap$.}
+  \label{fig:heatmap_resolvent}
+\end{figure*}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/heatmap_resolvent_screening.pdf}
+  \caption{Same as \autoref{fig:heatmap_resolvent} except that $\lambda$ is varied logarithmically and the phononic coupling strength is fixed to $g=0.5$.}
+  \label{fig:heatmap_resolvent_screening}
+\end{figure}
+
+\bullet \autoref{fig:heatmap_resolvent}: evolution of modes as $g$ is varied. (a) $\spectral{Higgs}$, (b) $\spectral{Phase}$.
+\begin{enumerate}
+  \item No Coulomb interaction: Phase mode at 0, multiple additional modes below the continuum.
+  \item $\lambda=1$, i.e., weak Coulomb interaction: Phase mode not at $0$, but still below the continuum.
+  Level repulsion around $g\approx 2.5$ with one of the additional modes. Lowest mode, for both $\spectral{Higgs}$ and $\spectral{Phase}$ is concave.
+  \item $\lambda=10^{-4}$, i.e., strong/normal Coulomb interaction: Low lying phase mode is absent, yet additional modes appear at large $g$.
+  Lowest modes are still concave.
+\end{enumerate}
+
+\bullet \textcolor{red}{TODO: Nice plot.} Changing $\debye$ essentially does nothing; $\maxGap$ scales linearly. Modes are a parallel to $x$-axis if plotted with $\omega / \maxGap$.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
