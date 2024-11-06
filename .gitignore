@@ -16,10 +16,8 @@ stdout*
 stderr*
 **/__pycache__
 **/auto_generated/
-**/auto_generated_2/
-**/auto_generated_3/
-**/auto_generated_4/
-**/auto_generated_5/
+**/auto_generated*/
+**/build*/
 cpp/HubbardMeanField/small_auto_generated
 cpp/HubbardMeanField/small_auto_generated2
 cpp/HubbardMeanField/cube_auto_generated
