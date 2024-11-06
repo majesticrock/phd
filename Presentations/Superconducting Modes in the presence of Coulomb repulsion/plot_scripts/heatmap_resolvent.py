@@ -49,7 +49,7 @@ class HeatmapPlotter:
 
         return contour_higgs
 
-all_data = load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
+all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
 
 ##########################
 #####       g        #####
