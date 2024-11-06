@@ -55,7 +55,12 @@
 \newcommand{\kf}{k_{\mathrm{F}}}
 \newcommand{\Ef}{E_\mathrm{F}}
 \newcommand{\debye}{\omega_\mathrm{D}}
+\newcommand{\eFock}{\epsilon_\mathrm{Fock}}
+
 \newcommand{\maxGap}{\Delta_\mathrm{max}}
+\newcommand{\deltaC}{\Delta_\mathrm{C}}
+\newcommand{\deltaPh}{\Delta_\mathrm{Ph}}
+
 
 \newcommand{\ope}[2]{c_{\vec{#1} #2}}
 \newcommand{\opd}[2]{\ope{#1}{#2}^\dagger}
@@ -79,7 +84,7 @@
 \begin{document} 
 
 % Preliminary title
-\title{Superconducting Modes in the presence of Coulomb repulsion}
+\title{Superconducting modes in the presence of Coulomb repulsion}
 
 %=======================
 % Authors:
@@ -141,8 +146,8 @@ The individual terms are given by
   H_\mathrm{BG} &= - \frac{e^2}{2 \epsilon_0 k_s^2} \sum_{ \vec{k} \sigma } \rho   c_{ \vec{k}, \sigma }^\dagger  c_{ \vec{k}, \sigma }.
 \end{align}
 \es
-Here, $V$ is the system's volume, $\Ef$ the Fermi energy, $\hbar$ the reduced Planck's constant, $m_e$ the electron's mass, 
-$e$ its charge, $\epsilon_0$ the vacuum permitivity, and $k_s$ the Thomas-Fermi screening wavevector.
+Here, $V$ is the system's volume, $\Ef$ the Fermi energy, $\hbar$ the reduced Planck's constant, $m_e$ the electron mass, 
+$e$ its charge, $\epsilon_0$ the vacuum permittivity, and $k_s$ the Thomas-Fermi screening wavevector.
 The operator $c_{ \vec{k}, \sigma }^{(\dagger)}$ annihilates (creates) an electron with momentum $\vec{k}$ and spin $\sigma$.
 
 The phononic interaction is given by \cite{krull2012}
@@ -152,8 +157,8 @@ The phononic interaction is given by \cite{krull2012}
 \end{equation}
 where $G > 0$ is the interaction strength, $\debye$ the Debye frequency, $\Theta(k)$ the Heaviside function,
 and $\xi(k)$ describes the single-particle dispersion, i.e.,
-$\xi(k) = \hbar^2 k^2 / (2m_e) + \epsilon_\mathrm{Fock}(k) - \Ef$.
-The Fock energy $\epsilon_\mathrm{F}$ originates from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
+$\xi(k) = \hbar^2 k^2 / (2m_e) + \eFock(k) - \Ef$.
+The Fock energy $\eFock$ originates from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
 This interaction can be derived using continuous unitary transformation and is identical to the commonly known result by Fr\"ohlich for real processes \cite{frohlich1997,krull2012}.
 
 The quantity 
@@ -163,7 +168,11 @@ The quantity
 describes the atomic nuclei qualitatively as a constant positive background charge.
 It exactly cancels with the divergent Hartree contribution in $H_\mathrm{C}$.
 
-Throughout this article, we fix the Fermi wavevector to $\hbar k_\mathrm{F} / \sqrt{m_e} = 4.25 \sqrt{\mathrm{eV}}$.
+Throughout this article, we fix the Fermi wavevector to $\hbar \kf / \sqrt{m_e} = 4.25 \sqrt{\mathrm{eV}}$.
+This results in a Fermi energy around $\SI{8.5}{eV}$ to $\SI{9}{eV}$ depending on the screening wavevector $k_s$.
+Additionally, we fix the Debye frequency to $\debye = \SI{10}{meV}$.
+These values are taken to be close to the actual parameters found in lead and our results are qualitatively indepedent of them.
+
 Furthermore, we define the dimensionless parameter 
 \begin{equation}
   g \coloneqq \rho_\mathrm{F} G = G \frac{m_e \kf}{2 \pi^2 \hbar^2},
@@ -190,61 +199,73 @@ Lastly, we will define the following operators for brevity
 
 \subsection{General considerations}
 
-Computing quanties within the model \eqref{eqn:base_hamiltonian} requires some treatment of the interaction terms.
+Computing quantities within the model \eqref{eqn:base_hamiltonian} requires some treatment of the interaction terms.
 Within this article, we use the approach described in Ref. \cite{althuser2024}.
 Therefore, we begin by formulating a mean-field decoupling of the interaction terms, which will provide us with access to various expectation values.
 
 The phononic contribution boils down to a single non-vanishing term
 \begin{equation}
-  \tilde{H}_\mathrm{Ph} = \sum_{\vec{k}} \Delta_\mathrm{Ph} (k) f_{\vec{k}}^\dagger + \mathrm{H.c.},
+  \tilde{H}_\mathrm{Ph} = \sum_{\vec{k}} \deltaPh (k) f_{\vec{k}}^\dagger + \mathrm{H.c.},
 \end{equation}
-where the phononic contribution the the superconducting gap function is given by
+where the phononic contribution to the superconducting gap function is given by
 \begin{align}
 \label{eqn:delta_phonon}
-  \Delta_\mathrm{Ph} (k) &= \frac{1}{V} \sum_{\vec{k'}} g(k,k')  \expec{f_k} \nonumber \\
+  \deltaPh (k) &= \frac{1}{V} \sum_{\vec{k'}} g(k,k')  \expec{f_k} \nonumber \\
     &= \frac{1}{2 \pi^2} \int_0^\infty \mathrm{d} k' k'^2 g(k, k') \expec{ f_k }.
 \end{align}
-
 Repeating the same calculation for $H_\mathrm{C}$ yields
 \begin{align}
-  \tilde{H}_\mathrm{C} &= - \sum_{\vec{k}} \Delta_\mathrm{C} (k) f_{\vec{k}} + \mathrm{H.c.} \nonumber \\
-    &+ \sum_{\vec{k} \sigma} (\epsilon_\mathrm{Fock}(k) + \epsilon_\mathrm{C}(k)) n_{\vec{k} \sigma}.
+  \tilde{H}_\mathrm{C} &= - \sum_{\vec{k}} \deltaC (k) f_{\vec{k}} + \mathrm{H.c.} \nonumber \\
+    &+ \sum_{\vec{k} \sigma} (\eFock(k) + \epsilon_\mathrm{C}(k)) n_{\vec{k} \sigma}.
 \end{align}
 The additional contribution to the gap function is given by
 \begin{equation}
 \label{eqn:delta_coulomb}
-  \Delta_\mathrm{C} (k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right).
+  \deltaC (k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right).
 \end{equation}
 Note, that this term has the opposite sign of \eqref{eqn:delta_phonon}.
-The Fock energy reads
+Assuming $\expec{n_{\vec{k} \sigma}} = \Theta (\kf - k)$, the Fock energy reads
 \begin{align}
 \label{eqn:fock_coulomb}
-  \epsilon_\mathrm{Fock} (k) &= - \frac{e^2}{4 \pi^2 \epsilon_0} \kf \bigg[1 \nonumber \\
+  \eFock (k) &= - \frac{e^2}{4 \pi^2 \epsilon_0} \kf \bigg[1 \nonumber \\
   &+ \frac{k_s}{\kf } \left( \arctan \left( \frac{k - \kf}{k_s} \right) - \arctan \left( \frac{k + \kf}{k_s} \right) \right) \nonumber \\
   &+ \frac{\kf^2 - k^2 + k_s^2}{2 k \kf} \ln \left( \frac{k_s^2 + (\kf + k)^2}{k_s^2 + (\kf - k)^2} \right) \bigg].
 \end{align}
-The above expression assumes that $\expec{n_{\vec{k} \sigma}} = \Theta (\kf - k)$.
-Naturally, this is not entirely accurate within the superconducting phase.
-Therefore, we additionally find a small correction the Fock energy
+In the superconducting phase, however, the form of $\expec{n_{\vec{k}}}$ is more complicated.
+We define the difference between these expression as $\delta n_{k} \coloneqq \Theta (\kf - k) - \expec{n_{k\sigma}}$.
+Notably, this quantity is mostly close to $0$ and has a finite contribution only close to the Fermi edge.
+Nevertheless, it results in a small correction to the Fock energy given by
 \begin{equation}
 \label{eqn:fock_corr}
   \epsilon_\mathrm{C}(k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \delta n_{q} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right),
 \end{equation}
-where we defined $\delta n_{k} \coloneqq \Theta (\kf - k) - \expec{n_{k\sigma}}$.
-This quantity is usually in the order of a few microelectronvolts.
+which is usually of the order of a few microelectronvolts.
 
-For our numerics, we take notice that all of the quantities above merely depend on the absolute value $k = |\vec{k}|$.
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/discretization.pdf}
+  \caption{Schematic representation of the numerical discretization showing the magnitude of $k$ versus the discretization index $n$.
+  The black dashed lines show the cutoff points at which the discretization switches from coarse to fine and vice versa.}
+  \label{fig:discretization}
+\end{figure}
+
+For our numerics, we take notice that all of the quantities above merely depend on the absolute value $k = |\vec{k}|$ due to the rotational symmetry of our model.
 Therefore, we discretize $k$ using $N_k$ individual points. 
 Due to the long-range nature of the Coulomb interaction,
-we need to stretch our discretization across a large range of $k$, theoretically even from $0$ to $\infty$,
+we need to extend our discretization across a large range of $k$, theoretically even from $0$ to $\infty$,
 but in practice $k \in [0, 2 \kf]$ produces good results.
-Nevertheless, the main features can be observed around the Fermi edge causing a equidistant discretization to be insufficient.
-To combat this, we choose a fine mesh around the Fermi edge that utilizes $N_k / 2$ individual points and is cut off at $\kf \pm x_\mathrm{cut} \debye / \kf$.
+
+Nevertheless, the main features can be observed around the Fermi edge so that an equidistant discretization would be insufficient.
+To deal with this, we choose a fine mesh around the Fermi edge that utilizes $N_k / 2$ individual points and is cut off at $\kf \pm x_\mathrm{cut} \debye / \kf$.
 After this cutoff, the discretization is much coarser with $N_k / 4$ additional discretization points in each direction.
+A schematic representation of this can be seen in \autoref{fig:discretization}.
+
 Choosing $x_\mathrm{cut}$ is somewhat arbitrary.
 If the gap is small, a small value is beneficial as to resolve the relevant part of the gap function in more detail.
 If the gap is large, however, we require a larger $x_\mathrm{cut}$ so that we include the entire relevant part in the first place.
-In practice, $x_\mathrm{cut} = 20$ produces good results and will be used throughout the article. \textcolor{red}{Teste noch etwas rum, ob es eine bessere Wahl gibt.}
+In practice, we choose $x_\mathrm{cut} = 10$ for a maximum gap value $\maxGap < \SI{4}{meV}$, $x_\mathrm{cut} = 20$ for $\maxGap < \SI{14}{meV}$, and $x_\mathrm{cut} = 25$ beyond that. 
+These cutoffs are not sharp, i.e., varying these values slightly does not impact the results, as long as one chooses a large enough $N_k$.
+In practice, $N_k = 25000$ produces good results for the latter case, while $N_k = 20000$ is sufficiently precise for the other two cases.
 
 \subsection{Discussion of the numerical results}
 
@@ -252,28 +273,29 @@ In practice, $x_\mathrm{cut} = 20$ produces good results and will be used throug
   \centering
   \includegraphics[width=.48\textwidth]{plots/gap_theta.pdf}
   \caption{The superconducting gap function without Coulomb interactions. 
-  The blue solid line shows the result for the exact interaction \eqref{eqn:phonon_int}
+  The blue solid line shows the result for the full interaction \eqref{eqn:phonon_int}
   while the orange dashed line depicts the data for the approximation \eqref{eqn:approx_g}.
-  For both cases, we set $N_k = 4000$, $g=0.5$, and $\debye = \SI{10}{meV}$.}
+  For both cases, we set $N_k = 4000$ and $g=0.5$.}
   \label{fig:gap_theta}
 \end{figure}
 
 Let us begin by omitting the Coulomb interactions, i.e., setting $e=0$.
 Then, the gap function naturally only includes the phononic contribution.
-Oftentimes, the effective electron-electron interaction is assumed to be constant in a small region around the Fermi edge [einige Beispielzitate].
+Often, the effective electron-electron interaction is assumed to be constant in a small region around the Fermi edge [einige Beispielzitate].
 It is then described by
 \begin{equation}
 \label{eqn:approx_g}
   g(k, k') \coloneqq G \Theta(\debye - |\xi(k)|) \Theta(\debye - |\xi(k')|).
 \end{equation}
-This case shall suit as a base line for comparision's sake now.
-An exemplary gap function for both, this approximate interaction and the exact one \eqref{eqn:phonon_int}, is depicted in \autoref{fig:gap_theta}.
-We set $N_k = 4000$, $g=0.5$, and $\debye = \SI{10}{meV}$, but the gap function itself is qualitatively generic.
+We will briefly study this case as well to compare the results of both approaches.
+An exemplary gap function for both, this approximate interaction and the full one \eqref{eqn:phonon_int}, is depicted in \autoref{fig:gap_theta}.
+We set $N_k = 4000$ and $g=0.5$, but the gap function itself is qualitatively generic.
 Increasing $g$ increases its magnitude and increasing $\debye$ increases its width.
 As to be expected, both functions are restricted to a small region around the Fermi edge.
 The latter, however, is slightly wider but exhibits a smaller magnitude.
-All in all, the approximation is certainly justified for a qualitative description of the gap function.
-Nonetheless, we will continue using the exact form for this article.
+Usually, the focus of studies lies in the gap's magnitude at the Fermi edge.
+Here, though the results differ slightly, the approximation \eqref{eqn:approx_g} is certainly sufficient for a qualitative description of the physics.
+Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this article.
 
 \begin{figure}
   \centering
@@ -282,8 +304,11 @@ Nonetheless, we will continue using the exact form for this article.
   The blue and orange dashed lines depict the phononic \eqref{eqn:delta_phonon} and Coulomb \eqref{eqn:delta_coulomb} contributions to the gap function,
   which itself is represented by the black solid line.
   The green dotted line shows the correction to the Fock energy \eqref{eqn:fock_corr}.
-  We used $\lambda = 10^{-4}$ for panel (a) and $\lambda = 1$ for panel(b). Note the difference in energy scales between the two panels.
-  For both cases, we set $N_k = 20000$, $g=0.8$, and $\debye = \SI{10}{meV}$.}
+  We used $\lambda = 10^{-4}$ for panels (a) and $\lambda = 1$ for panels (b).
+  The left column (1) shows the gap functions zoomed to a small region around the Fermi edge,
+  while the right column (2) depicts them across the entire numerical range.
+  Note the difference in energy scales between the panels.
+  For both cases, we set $N_k = 20000$ and $g=0.8$.}
   \label{fig:gap_coulomb}
 \end{figure}
 
@@ -296,30 +321,31 @@ Nonetheless, we will continue using the exact form for this article.
   \label{fig:gap_behavior}
 \end{figure}
 
-Next, we activate the Coulomb interaction again which results in considerable changes to the gap function.
+Next, we add the Coulomb interaction again which results in considerable changes to the gap function.
 A plot of two exemplary gap functions can be seen in \autoref{fig:gap_coulomb}.
-Here, we used $N_k = 20000$, $g=0.8$, and $\debye = \SI{10}{meV}$. 
+Here, we used $N_k = 20000$ and $g=0.8$. 
 In the top panel, the screening is set to $\lambda = 10^{-4}$ while the bottom panel has it set to $\lambda = 1$.
 Again, the functions are qualitatively generic with regard to change in $g$ and $\debye$.
 Naturally, increasing the screening also increases the gap's magnitude.
-Also, as mentioned before, the correction to the Fock energy $\epsilon_C$ is neglectably small.
-\newline
+Also, as mentioned before, the correction to the Fock energy $\epsilon_C$ is negligibly small.
+
 The most striking new feature is that the gap function, indepedent of the screening, stretches to all $k$ values.
 While its main contribution is still confined to a small region around the edge, 
 it approach a constant value for $k \to 0$ and follows a $1/k^2$ behavior as $k \to \infty$. 
-\textcolor{red}{Das kann man analytisch zeigen - wollen/sollen wir das hier tun?}
+A proof of this statement can be seen in \autoref{sec:limiting_gaps}.
+
 Furthermore, due to the repulsive nature of the Coulomb interaction, the gap function has a radial node when said interaction starts dominating over the phononic one.
 \textcolor{red}{TODO: etwas Literatureinordnung gem\"a\ss{} der Quellen von Ilya.}
 At this point, it should be mentioned that the complex phase of the gap function can still be fixed to be real.
 We repeated the calculation allowing for an arbitrary complex phase, but the results are essentially identical:
 Instead of changing sign at the nodal points, the complex phase of the gap function jumps by $\pi$.
-\newline
-Considering a small screening, i.e., $\lambda = 10^{-4}$ in panel (a), results in a rather narrow valley in $\Delta_\mathrm{C}$ around the Fermi edge.
+
+Considering a small screening, i.e., $\lambda = 10^{-4}$ in panel (a), results in a rather narrow valley in $\deltaC$ around the Fermi edge.
 It is noteworthy, that this result is essentially identical to the one obtained by omiting the screening entirely because this feature originates from integrating over a logarithmic singularity.
 While this part of our calculations can still be easily performed without a screening, the later parts require atleast a small one as to avoid numerically dividing by $0$.
-\newline
+
 The aforementioned feature disappears entirely if we use the screening wavevector presented in Ref. \cite{rickayzen80}, i.e., $\lambda = 1$ in panel (b).
-In this case, the contribution of $\Delta_\mathrm{C}$ around the Fermi edge is essentially a constant.
+In this case, the contribution of $\deltaC$ around the Fermi edge is essentially a constant.
 This corroborates the qualitative statements of the commonly used result by Morel and Anderson \cite{morel1962}
 that a screened Coulomb interaction essentially boils down to a constant pseudo-potential around the Fermi edge \cite{sigrist2005,kostrzewa2018,simonato2023}.
 
@@ -345,11 +371,11 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
   \centering
   \includegraphics[width=.48\textwidth]{plots/resolvent_overview.pdf}
   \caption{The plot shows the spectral functions $\spectral{Phase}$ (blue solid line) and $\spectral{Higgs}$ (orange dashed line) excluding the Coulomb interaction.
-  In the upper panels (a), we used the exact interaction \eqref{eqn:phonon_int} while we used the approximation \eqref{eqn:approx_g} in the lower ones.
+  In the upper panels (a), we used the full interaction \eqref{eqn:phonon_int} while we used the approximation \eqref{eqn:approx_g} in the lower ones.
   The left column (.1) depicts the results for $g=0.4$ and the right one (.2) those for $g=1$.
   The grey area marks the two-particle continuum.
   Prominently, we can identify the phase mode at $\omega=0$, and, for small $g$ the Higgs mode at $\omega=2\maxGap$.
-  The former moves, and additional modes appear, only for the exact interaction, as $g$ is increased.}
+  The former moves, and additional modes appear, only for the full interaction, as $g$ is increased.}
   \label{fig:resolvent_overview}
 \end{figure}
 
@@ -373,9 +399,7 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
   The phononic coupling strength $g$ is varied along the $x$-axis.
   For the individual columns, we used (1) no Coulomb interaction, (2) $\lambda=1$, and (3) $\lambda=10^{-4}$.
   Note, that the plots (2) and (3) do not start at $g=0$ because the superconducting state siezes to exist due to the repulsive Coulomb interaction before that point is reached.
-  The green dotted line shows the lower edge of the two-particle continuum at $2\maxGap$.
-  \textcolor{red}{Bis auf (a.1) ist die Kontinuumskante ja schon ganz gut aufgel\"ost. Ich teste gerade, ob ich das mit moderatem Rechenaufwand auch für (a.1) noch besser hinkriege [auch hier ist es schon viel besser als vorher].
-  Ansonsten w\"urde ich sagen, dass uns L\"ucken von 50 meV eh nicht interessieren...}}
+  The green dotted line shows the lower edge of the two-particle continuum at $2\maxGap$.}
   \label{fig:heatmap_resolvent}
 \end{figure*}
 
@@ -436,7 +460,7 @@ we cannot lift nor easily avoid these kinds of singularities and ultimately requ
 
 \subsection{Discussion of the numerical results}
 
-\textbullet Cut the ieom basis so that it only uses the fine inner mesh, using $N_k=20000$ and $\debye = \SI{10}{meV}$.
+\textbullet Cut the ieom basis so that it only uses the fine inner mesh, using $N_k=20000$.
 Not necessary for the approximate interaction \eqref{eqn:approx_g} as the cutoff comes naturally with the Heaviside functions.
 
 \textbullet No Coulomb interaction: extra modes as $g$ is increased - but only for rather large gaps \autoref{fig:resolvent_overview}.
@@ -480,6 +504,29 @@ Therefore, the mode likely behaves as depicted in \autoref{fig:phase_peaks} for 
 
 \appendix
 
+\section{Limiting behavior of the gap function}
+\label{sec:limiting_gaps}
+In this section, we want to briefly and analytically show how the gap function behaves in the limits $k \to 0$ and $k \to \infty$.
+First and foremost, we take note that the phononic contribution \eqref{eqn:phonon_int} vanishes in both of these limits.
+Thus, we will only discuss the Coulomb contribution \eqref{eqn:delta_coulomb}.
+For the first case, consider
+\begin{subequations}
+\begin{align}
+  \lim_{k \to 0}& \deltaC (k) = \\
+    &= \lim_{k \to 0} \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right)\nonumber \\
+    &= \frac{e^2}{8 \pi^2 \epsilon_0} \lim_{k \to 0} \frac{1}{k} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} q \left( \frac{4 k q}{k_s^2 + q^2} + \mathcal{O}(k^3) \right) \\
+    &= \frac{e^2}{2 \pi^2 \epsilon_0} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} \frac{q^2}{k_s^2 + q^2} \\
+    &= \mathrm{const}.
+\end{align}
+\end{subequations}
+Similarly, we obtain for the second case
+\begin{subequations}
+\begin{align}
+  \deltaC (k \gg \kf ) &= \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} q \left( \frac{4q}{k} + \mathcal{O}\left( \frac{1}{k^3} \right) \right) \\
+  &= \frac{e^2}{2 \pi^2 \epsilon_0 } \frac{1}{k^2} \int_0^\infty \mathrm{d} q q^2 \expec{f_{q}^\dagger} \\
+  &\propto \frac{1}{k^2}.
+\end{align}
+\end{subequations}
 
 
 \bibliography{main}

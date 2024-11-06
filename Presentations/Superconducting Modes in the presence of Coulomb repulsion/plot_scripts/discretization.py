@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
+import os
 import __path_appender as __ap
 __ap.append()
 from get_data import *
@@ -20,7 +20,5 @@ ax.axvline(3 * NK // 4, ls="--", color="black")
 
 ax.set_xlabel(r"$n$")
 ax.set_ylabel(r"$k / k_\mathrm{F}$")
-#ax.legend()
 fig.tight_layout()
-
-plt.show()
+fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

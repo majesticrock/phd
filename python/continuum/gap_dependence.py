@@ -8,8 +8,11 @@ from get_data import *
 def am_mu(ks, kf):
     return 0.12652559550141668 / ( 2 * kf ) * np.log((ks**2 + 4 * kf**2) / (ks**2))
 
+def mu_star(mu, omega_D, Ef):
+    return mu / (1 + mu * np.log(Ef / omega_D))
+
 def anderson_morel(g, omega_D, Ef, mu):
-    denom = g - (mu / (1 + mu * np.log(Ef / omega_D)))
+    denom = g - mu_star(mu, omega_D, Ef)
     return np.where(denom > 0, 2. * omega_D * np.exp(- 1. / denom), 0)
 
 all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "gap.json.gz").query("k_F == 4.25 & omega_D == 10")

@@ -10,10 +10,10 @@ BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
 
 class HeatmapPlotter:
-    def __init__(self, data_frame_param, parameter_name, xlabel='Y-axis', zlabel=r'$A$ [$\mathrm{meV}^{-1}$]', xscale="linear", yscale="linear"):
+    def __init__(self, data_frame_param, parameter_name, xlabel='Y-axis', zlabel=r'$A$ [$\mathrm{eV}^{-1}$]', xscale="linear", yscale="linear"):
         data_frame = data_frame_param.sort_values(parameter_name).reset_index(drop=True)
         
-        self.y = np.linspace(0., 60., 2000)
+        self.y = np.linspace(0., 60., 4000)
         self.x = (data_frame[parameter_name]).to_numpy()
         self.resolvents = [cf.ContinuedFraction(pd_row, messages=False) for index, pd_row in data_frame.iterrows()]
         self.gaps = [2 * gap for gap in data_frame["Delta_max"]]
@@ -43,22 +43,27 @@ class HeatmapPlotter:
             ax.set_yscale(self.yscale)
 
         if(labels):
-            axes[0].set_ylabel(r"$\omega [\mathrm{eV}]$")
-            axes[1].set_ylabel(r"$\omega [\mathrm{eV}]$")
+            axes[0].set_ylabel(r"$\omega [\mathrm{meV}]$")
+            axes[1].set_ylabel(r"$\omega [\mathrm{meV}]$")
         axes[1].set_xlabel(self.xlabel)
 
         return contour_higgs
 
-all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
+data_cuts = [4, 14]
+data_10 = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query(f"k_F == 4.25 & Delta_max < {data_cuts[0]}")
+data_20 = load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query(f"k_F == 4.25 & Delta_max >= {data_cuts[0]} & Delta_max < {data_cuts[1]}")
+data_25 = load_all("continuum/offset_25/N_k=25000/T=0.0", "resolvents.json.gz").query(f"k_F == 4.25 & Delta_max >= {data_cuts[1]}")
+
+all_data = pd.concat([data_10, data_20, data_25])
 
 ##########################
 #####       g        #####
 ##########################
 
 tasks = [
-    (all_data.query("coulomb_scaling == 0 & lambda_screening == 0 & omega_D == 10 & g > 0.25 & g < 3.5"),     "g", r"$g$"),
-    (all_data.query("coulomb_scaling == 1 & lambda_screening == 1 & omega_D == 10 & g > 0.7 & g < 3.5"),      "g", r"$g$"),
-    (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g > 0.7 & g < 3.5"), "g", r"$g$"),
+    (all_data.query("coulomb_scaling == 0 & lambda_screening == 0 & omega_D == 10 & g < 3.5"),      "g", r"$g$"),
+    (all_data.query("coulomb_scaling == 1 & lambda_screening == 1 & omega_D == 10 & g < 3.5"),      "g", r"$g$"),
+    (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g < 3.5"), "g", r"$g$"),
 ]
 
 fig, axes = plt.subplots(nrows=2, ncols=len(tasks), figsize=(12.8, 6.4), sharex='col', sharey='row')
@@ -87,6 +92,7 @@ fig.savefig(filename)
 #####     lambda     #####
 ##########################
 all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
+
 tasks = [
     (all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.5 & lambda_screening > 1e-2"), "lambda_screening", r"$\lambda$", "log"),
     #(all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.7 & lambda_screening > 1e-2"), "lambda_screening", r"$\lambda$", "log"),
