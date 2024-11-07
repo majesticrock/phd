@@ -49,10 +49,14 @@ class HeatmapPlotter:
 
         return contour_higgs
 
-data_cuts = [4, 14]
+data_cuts = [4, 17]
 data_10 = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query(f"k_F == 4.25 & Delta_max < {data_cuts[0]}")
 data_20 = load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query(f"k_F == 4.25 & Delta_max >= {data_cuts[0]} & Delta_max < {data_cuts[1]}")
 data_25 = load_all("continuum/offset_25/N_k=25000/T=0.0", "resolvents.json.gz").query(f"k_F == 4.25 & Delta_max >= {data_cuts[1]}")
+
+t10 = data_10.query("coulomb_scaling == 1 & lambda_screening == 1     & omega_D == 10 & g < 3.5").sort_values("g")
+for g in t10["g"]:
+    print(g)
 
 all_data = pd.concat([data_10, data_20, data_25])
 
@@ -61,8 +65,8 @@ all_data = pd.concat([data_10, data_20, data_25])
 ##########################
 
 tasks = [
-    (all_data.query("coulomb_scaling == 0 & lambda_screening == 0 & omega_D == 10 & g < 3.5"),      "g", r"$g$"),
-    (all_data.query("coulomb_scaling == 1 & lambda_screening == 1 & omega_D == 10 & g < 3.5"),      "g", r"$g$"),
+    (all_data.query("coulomb_scaling == 0 & lambda_screening == 0      & omega_D == 10 & g < 3.5"), "g", r"$g$"),
+    (all_data.query("coulomb_scaling == 1 & lambda_screening == 1      & omega_D == 10 & g < 3.5"), "g", r"$g$"),
     (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g < 3.5"), "g", r"$g$"),
 ]
 
