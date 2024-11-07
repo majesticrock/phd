@@ -4,8 +4,8 @@
 ## or look up the slurm documentation under https://slurm.schedmed.com/sbatch.html
 
 ## Mandatory:
-#SBATCH --job-name=modes
-#SBATCH --output=/home/althueser/phd/cpp/ContinuumSystem/modes_output.txt
+#SBATCH --job-name=ul3.2
+#SBATCH --output=/home/althueser/phd/cpp/ContinuumSystem/output_ul_3.2.txt
 #SBATCH --time=48:00:00         ## maximum runtime; hours:minutes:seconds
 #SBATCH --partition=ultralong       ## choose queue
 
