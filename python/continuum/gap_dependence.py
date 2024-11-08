@@ -15,12 +15,12 @@ def anderson_morel(g, omega_D, Ef, mu):
     denom = g - mu_star(mu, omega_D, Ef)
     return np.where(denom > 0, 2. * omega_D * np.exp(- 1. / denom), 0)
 
-all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "gap.json.gz").query("k_F == 4.25 & omega_D == 10")
+all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "gap.json.gz").query("k_F == 4.25 & omega_D == 10 & g < 1")
 omega_debye = 10
 k_F = 4.25
 screening_factor = 0.4107320221286488672 * np.sqrt(k_F)
 
-g_lin = np.linspace(0., 5., 200)
+g_lin = np.linspace(0., 1., 200)
 
 fig, ax = plt.subplots()
 

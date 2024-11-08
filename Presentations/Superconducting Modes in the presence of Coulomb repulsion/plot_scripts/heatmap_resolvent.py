@@ -60,8 +60,6 @@ data_25 = load_all("continuum/offset_25/N_k=25000/T=0.0", "resolvents.json.gz").
     f"k_F == 4.25 & Delta_max >= {data_cuts[1]}"
     )
 
-for g in data_25["g"]:
-    print(g)
 
 all_data = pd.concat([data_10, data_20, data_25])
 

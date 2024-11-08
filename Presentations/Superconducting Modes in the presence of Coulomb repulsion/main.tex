@@ -120,6 +120,8 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
 
 \section{Introduction}\label{sec:introduction}
 
+\textcolor{red}{Definiere iEoM als iterated equations of motion. Diskutiere Eliasberg, bezogen auf Retadierung } \cite{kehrein2006}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%                                                   Model                                                   %%%%%
@@ -182,7 +184,7 @@ In the same manner, we define a dimensionless scaling $\lambda$ for the screenin
 \begin{equation}
   k_s \coloneqq \lambda \sqrt{\frac{e^2 m_e}{3 \pi^2 \epsilon_0} \kf}.
 \end{equation}
-The square-root expression is an estimate for the Thomas-Fermi wavevector in real materials provided by Ref. \cite{rickayzen80}.
+The square-root expression is an estimate for the Thomas-Fermi wavevector in real materials provided by Ref. \cite{rickayzen1980}.
 Lastly, we will define the following operators for brevity
 \begin{equation}
   f_{\vec{k}} \coloneqq \opSC{k},\qquad n_{\vec{k}\sigma} \coloneqq \opd{k}{\sigma} \ope{k}{\sigma}.
@@ -199,9 +201,8 @@ Lastly, we will define the following operators for brevity
 
 \subsection{General considerations}
 
-Computing quantities within the model \eqref{eqn:base_hamiltonian} requires some treatment of the interaction terms.
-Within this article, we use the approach described in Ref. \cite{althuser2024}.
-Therefore, we begin by formulating a mean-field decoupling of the interaction terms, which will provide us with access to various expectation values.
+We use a mean-field approximation to decouple the interaction terms in \eqref{eqn:base_hamiltonian}.
+This will grant us access to the expectation values and the gap functions of interest.
 
 The phononic contribution boils down to a single non-vanishing term
 \begin{equation}
@@ -344,7 +345,7 @@ Considering a small screening, i.e., $\lambda = 10^{-4}$ in panel (a), results i
 It is noteworthy, that this result is essentially identical to the one obtained by omitting the screening entirely because this feature originates from integrating over a logarithmic singularity.
 While this part of our calculations can still be easily performed without a screening, the later parts require atleast a small one as to avoid numerically dividing by $0$.
 
-The aforementioned feature disappears entirely if we use the screening wavevector presented in Ref. \cite{rickayzen80}, i.e., $\lambda = 1$ in panel (b).
+The aforementioned feature disappears entirely if we use the screening wavevector presented in Ref. \cite{rickayzen1980}, i.e., $\lambda = 1$ in panel (b).
 In this case, the contribution of $\deltaC$ around the Fermi edge is essentially a constant.
 This corroborates the qualitative statements of the commonly used result by Morel and Anderson \cite{morel1962}
 that a screened Coulomb interaction essentially boils down to a constant pseudo-potential around the Fermi edge \cite{sigrist2005,kostrzewa2018,simonato2023}.
@@ -372,7 +373,7 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
   \includegraphics[width=.48\textwidth]{plots/resolvent_overview.pdf}
   \caption{The plot shows the spectral functions $\spectral{Phase}$ (blue solid line) and $\spectral{Higgs}$ (orange dashed line) excluding the Coulomb interaction.
   In the upper panels (a), we used the full interaction \eqref{eqn:phonon_int} while we used the approximation \eqref{eqn:approx_g} in the lower ones.
-  The left column (.1) depicts the results for $g=0.4$ and the right one (.2) those for $g=1$.
+  The left column (1) depicts the results for $g=0.4$ and the right one (2) those for $g=1$.
   The grey area marks the two-particle continuum.
   Prominently, we can identify the phase mode at $\omega=0$, and, for small $g$ the Higgs mode at $\omega=2\maxGap$.
   The former moves, and additional modes appear, only for the full interaction \eqref{eqn:phonon_int}, as $g$ is increased.}
@@ -418,9 +419,11 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
   \label{fig:phase_peaks}
 \end{figure}
 
-\textbullet use ieom as described in \cite{althuser2024}.
+Analyzing collective excitations is more involved and lies beyond the simple mean-field approach discussed in the previous section.
+Namely, we follow the iEoM approach as discussed in Ref. \cite{althuser2024} to compute the relevant Green's functions.
+The occurring commutators are computed with respect to the full Hamiltonian \eqref{eqn:base_hamiltonian}, but the expectation values are computed on the mean-field level.
 
-\textbullet Similar basis idea:
+
 \begin{equation}
   B_k \coloneqq \frac{1}{\sqrt{V}} \sum_{\vec{q}} h(k - |\vec{q}|) O_{\vec{q}}.
 \end{equation}
