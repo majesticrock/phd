@@ -7,15 +7,15 @@ X_BOUNDS = [1 - 0.004, 1 + 0.004]
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "offset_10", "gap.json.gz", 
-                    **continuum_params(N_k=4000, T=0, coulomb_scaling=0, screening=0, k_F=4.25, g=0.5, omega_D=10))
+main_df = load_panda("continuum", "offset_5", "gap.json.gz", 
+                    **continuum_params(N_k=8000, T=0, coulomb_scaling=0, screening=0, k_F=4.25, g=0.11, omega_D=10))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 plot_range = pd_data.query(f'ks > {0.8 * X_BOUNDS[0]} & ks < {1.2 * X_BOUNDS[1]}')
 plot_range.plot("ks", "Delta_Phonon", ax=ax, label=r"$\Delta_\mathrm{exact}$", ls="-", c="C0")
 
 main_df = load_panda("continuum", "theta_approx", "gap.json.gz", 
-                    **continuum_params(N_k=4000, T=0, coulomb_scaling=0, screening=0, k_F=4.25, g=0.5, omega_D=10))
+                    **continuum_params(N_k=8000, T=0, coulomb_scaling=0, screening=0, k_F=4.25, g=0.11, omega_D=10))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 plot_range = pd_data.query(f'Delta_Phonon > 0')
