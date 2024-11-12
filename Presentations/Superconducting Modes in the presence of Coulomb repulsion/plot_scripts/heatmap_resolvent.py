@@ -8,15 +8,22 @@ from get_data import *
 
 BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
+data_cuts = [4, 14]
 
 class HeatmapPlotter:
     def __init__(self, data_frame_param, parameter_name, xlabel='Y-axis', zlabel=r'$A$ [$\mathrm{eV}^{-1}$]', xscale="linear", yscale="linear"):
         data_frame = data_frame_param.sort_values(parameter_name).reset_index(drop=True)
         
-        self.y = np.linspace(0., 60., 4000)
+        self.y = np.linspace(0., 60., 20000)
         self.x = (data_frame[parameter_name]).to_numpy()
-        self.resolvents = [cf.ContinuedFraction(pd_row, messages=False) for index, pd_row in data_frame.iterrows()]
+        self.resolvents = [cf.ContinuedFraction(pd_row, messages=False, ignore_first=5, ignore_last=90) for index, pd_row in data_frame.iterrows()]
         self.gaps = [2 * gap for gap in data_frame["Delta_max"]]
+        
+        self.g_cuts = np.zeros(2)
+        for i in range(2):
+            filtered_df = data_frame[data_frame['Delta_max'] < data_cuts[i]]
+            closest_row = filtered_df.loc[(data_cuts[i] - filtered_df['Delta_max']).idxmin()]
+            self.g_cuts[i] = closest_row['g']
 
         self.xlabel = xlabel
         self.zlabel = zlabel
@@ -41,6 +48,8 @@ class HeatmapPlotter:
             ax.set_ylim(0., max(self.y))
             ax.set_xscale(self.xscale)
             ax.set_yscale(self.yscale)
+            ax.axvline(self.g_cuts[0], color="C4")
+            ax.axvline(self.g_cuts[1], color="C4")
 
         if(labels):
             axes[0].set_ylabel(r"$\omega [\mathrm{meV}]$")
@@ -49,7 +58,6 @@ class HeatmapPlotter:
 
         return contour_higgs
 
-data_cuts = [4, 14]
 data_10 = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query(
     f"k_F == 4.25 & Delta_max < {data_cuts[0]}"
     )
@@ -60,7 +68,6 @@ data_25 = load_all("continuum/offset_25/N_k=25000/T=0.0", "resolvents.json.gz").
     f"k_F == 4.25 & Delta_max >= {data_cuts[1]}"
     )
 
-
 all_data = pd.concat([data_10, data_20, data_25])
 
 ##########################
@@ -68,12 +75,12 @@ all_data = pd.concat([data_10, data_20, data_25])
 ##########################
 
 tasks = [
-    (all_data.query("coulomb_scaling == 0 & lambda_screening == 0      & omega_D == 10 & g < 3.5"),      "g", r"$g$"),
-    (all_data.query("coulomb_scaling == 1 & lambda_screening == 1      & omega_D == 10 & g < 3.5"),      "g", r"$g$"),
+    (all_data.query("coulomb_scaling == 0 & lambda_screening == 0      & omega_D == 10 & g < 3.5"), "g", r"$g$"),
+    (all_data.query("coulomb_scaling == 1 & lambda_screening == 1      & omega_D == 10 & g < 3.5"), "g", r"$g$"),
     (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g < 3.5"), "g", r"$g$"),
 ]
 
-fig, axes = plt.subplots(nrows=2, ncols=len(tasks), figsize=(12.8, 6.4), sharex='col', sharey='row')
+fig, axes = plt.subplots(nrows=2, ncols=len(tasks), figsize=(12.8, 6.4), sharex=True, sharey=True)
 fig.subplots_adjust(wspace=0.05, hspace=0.1)
 
 import string
@@ -92,13 +99,15 @@ for i, (data_query, x_column, xlabel) in enumerate(tasks):
 cbar = fig.colorbar(contour_for_colorbar, ax=axes[:, -1], orientation='vertical', fraction=0.1, pad=0.05, extend='max')
 cbar.set_label(r'$A$ [$\mathrm{meV}^{-1}$]')
 
+axes[0][0].set_xticks([0, 1, 2, 3])
 filename = os.path.join(BUILD_DIR, f"{os.path.basename(__file__).split('.')[0]}{FILE_ENDING}")
 fig.savefig(filename)
+
 
 ##########################
 #####     lambda     #####
 ##########################
-all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
+all_data = load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
 
 tasks = [
     (all_data.query("coulomb_scaling == 1 & omega_D == 10 & g == 0.5 & lambda_screening > 1e-2"), "lambda_screening", r"$\lambda$", "log"),

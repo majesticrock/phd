@@ -16,6 +16,8 @@
 //#define mielke_coulomb
 //#define _complex
 
+#define _iterative_selfconsistency
+
 namespace Continuum {
 	using c_float = double;
 #ifdef _complex
@@ -23,7 +25,6 @@ namespace Continuum {
 #else
 	using c_complex = c_float;
 #endif
-
 	constexpr c_float PI = static_cast<c_float>(M_PI);
 	constexpr c_float PI_2 = static_cast<c_float>(M_PI_2);
 
