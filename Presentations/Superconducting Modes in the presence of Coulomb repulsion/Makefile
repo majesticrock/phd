@@ -1,7 +1,8 @@
 all: build/main.pdf
 
-PLTS_SCR=gap_theta.py gap_coulomb.py resolvent_overview.py heatmap_resolvent.py gap_behavior.py phase_peaks.py discretization.py
-	
+PLTS_SCR=gap_theta.py gap_coulomb.py resolvent_overview.py heatmap_resolvent.py gap_behavior.py phase_peaks.py discretization.py \
+	fit_gap_dependence.py
+
 #phase_limits.py peak_fits.py higgs_peak.py 
 
 PLTS_PDF=$(addprefix plots/, $(subst .py,.pdf,$(PLTS_SCR)))

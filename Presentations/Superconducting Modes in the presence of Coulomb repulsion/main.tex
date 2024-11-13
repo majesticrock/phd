@@ -270,7 +270,7 @@ If the gap is small, a small value is beneficial as to resolve the relevant part
 If the gap is large, however, we require a larger $x_\mathrm{cut}$ so that we include the entire relevant part in the first place.
 In practice, we choose $x_\mathrm{cut} = 10$ for a maximum gap value $\maxGap < \SI{4}{meV}$, $x_\mathrm{cut} = 20$ for $\maxGap < \SI{14}{meV}$, and $x_\mathrm{cut} = 25$ beyond that. 
 These cutoffs are not sharp, i.e., varying these values slightly does not impact the results, as long as one chooses a large enough $N_k$.
-In practice, $N_k = 25000$ produces good results for the latter case, while $N_k = 20000$ is sufficiently precise for the other two cases.
+In practice, $N_k = 30000$ produces good results for the latter case, while $N_k = 20000$ is sufficiently precise for the other two cases.
 
 \subsection{Discussion of the numerical results}
 
@@ -280,7 +280,7 @@ In practice, $N_k = 25000$ produces good results for the latter case, while $N_k
   \caption{The superconducting gap function without Coulomb interactions. 
   The blue solid line shows the result for the full interaction \eqref{eqn:phonon_int}
   while the orange dashed line depicts the data for the approximation \eqref{eqn:approx_g}.
-  For both cases, we set $N_k = 4000$ and $g=0.5$.}
+  In each case, we set $N_k = 8000$ and $g$ according to the text in each subfigure.}
   \label{fig:gap_theta}
 \end{figure}
 
@@ -293,11 +293,12 @@ It is then described by
   g(k, k') \coloneqq G \Theta(\debye - |\xi(k)|) \Theta(\debye - |\xi(k')|).
 \end{equation}
 We will briefly study this case as well to compare the results of both approaches.
-An exemplary gap function for both, this approximate interaction and the full one \eqref{eqn:phonon_int}, is depicted in \autoref{fig:gap_theta}.
-We set $N_k = 4000$ and $g=0.5$, but the gap function itself is qualitatively generic.
-Increasing $g$ increases its magnitude and increasing $\debye$ increases its width.
+Three exemplary gap functions for both, this approximate interaction and the full one \eqref{eqn:phonon_int}, are depicted in \autoref{fig:gap_theta}.
+We set $N_k = 8000$ and $g=\{0.15, 0.5, 1.0\}$. The gap functions themselves are qualitatively generic.
+Increasing $g$ increases their magnitude and increasing $\debye$ increases its width.
 As to be expected, both functions are restricted to a small region around the Fermi edge.
 The latter, however, is slightly wider but exhibits a smaller magnitude.
+Its general form approaches the approximate form in the limit $g \ll 1$.
 Usually, the focus of studies lies in the gap's magnitude at the Fermi edge.
 Here, though the results differ slightly, the approximation \eqref{eqn:approx_g} is certainly sufficient for a qualitative description of the physics.
 Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this article.
@@ -326,6 +327,13 @@ Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this art
   \label{fig:gap_behavior}
 \end{figure}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=.48\textwidth]{plots/fit_gap_dependence.pdf}
+  \caption{}
+  \label{fig:fit_gap_dependence}
+\end{figure}
+
 Next, we add the Coulomb interaction again which results in considerable changes to the gap function.
 A plot of two exemplary gap functions can be seen in \autoref{fig:gap_coulomb}.
 Here, we used $N_k = 20000$ and $g=0.8$. 
@@ -337,7 +345,7 @@ Also, as mentioned before, the correction to the Fock energy $\epsilon_C$ is neg
 A striking new feature is that the gap function, indepedent of the screening, stretches to all $k$ values.
 While its main contribution is still confined to a small region around the edge, 
 it approach a constant value for $k \to 0$ and follows a $1/k^2$ behavior as $k \to \infty$. 
-A proof of this statement can be seen in \autoref{sec:limiting_gaps}.
+A proof of this statement can be seen in appendix \ref{sec:limiting_gaps}.
 
 Furthermore, due to the repulsive nature of the Coulomb interaction, the gap function has a radial node when said interaction starts dominating over the phononic one.
 \textcolor{red}{TODO: etwas Literatureinordnung gem\"a\ss{} der Quellen von Ilya.}

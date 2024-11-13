@@ -54,7 +54,6 @@ print(popt)
 plot_data = ls.query("coulomb_scaling == 1 & lambda_screening == 1").sort_values("g")
 E_F = plot_data["E_F"].iloc[0]
 x_data = x_func(plot_data["g"], mu_star(E_F, am_mu(screening_factor)))
-print(mu_star(E_F, am_mu(screening_factor)), am_mu(screening_factor))
 ax.plot(x_data, np.log(plot_data["Delta_max"]), "X", color="C1", label=r"$\lambda=1$")
 popt, pcov = ez_linear_fit(x_data, np.log(plot_data["Delta_max"]), ax, 
               x_bounds=[0.8 * min(x_data), 1.2 * max(x_data)], color="C1")
@@ -64,8 +63,7 @@ print(popt)
 
 plot_data = ss.query("coulomb_scaling == 1 & lambda_screening == 0.0001").sort_values("g")
 E_F = plot_data["E_F"].iloc[0]
-x_data = x_func(plot_data["g"], mu_star(E_F, am_mu(1e-4 * screening_factor)))
-print(mu_star(E_F, am_mu(1e-4 * screening_factor)), am_mu(1e-4 * screening_factor))
+x_data = x_func(plot_data["g"], 2.85 * mu_star(E_F, am_mu(1e-4 * screening_factor)))
 ax.plot(x_data, np.log(plot_data["Delta_max"]), "X", color="C2", label=r"$\lambda=10^{-4}$")
 popt, pcov = ez_linear_fit(x_data, np.log(plot_data["Delta_max"]), ax, 
               x_bounds=[0.8 * min(x_data), 1.2 * max(x_data)], color="C2")
