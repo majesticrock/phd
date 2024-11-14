@@ -12,7 +12,6 @@ from alpha_zip import *
 ##########################
 
 fig, axes = plt.subplots(nrows=2, ncols=2, sharex=True, figsize=(6.4, 6.4), sharey=True)
-fig.subplots_adjust(hspace=0, wspace=0)
 w_lin = np.linspace(-0.1e-3, 24e-3, 15000) + 1e-5j
 
 for i, (ax, g) in enumerate(zip(axes[0], [0.4, 1])):
@@ -45,6 +44,8 @@ axes[1][1].set_xlabel(r"$\omega [\mathrm{meV}]$")
 axes[0][0].set_ylabel(r"$\mathcal{A} (\omega) [\mathrm{eV}^{-1}]$")
 axes[1][0].set_ylabel(r"$\mathcal{A} (\omega) [\mathrm{eV}^{-1}]$")
 import os
+fig.tight_layout()
+fig.subplots_adjust(hspace=0, wspace=0)
 fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 
 ##########################
@@ -52,7 +53,6 @@ fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 ##########################
 
 fig, axes = plt.subplots(nrows=2,sharex=True, figsize=(6.4, 6.4))
-fig.subplots_adjust(hspace=0)
 for i, (ax, g, label) in enumerate(alpha_label(axes, [1, 2])):
     pd_data = load_panda("continuum", "offset_20", "resolvents.json.gz", 
                         **continuum_params(N_k=20000, T=0, coulomb_scaling=1, screening=1e-4, k_F=4.25, g=g, omega_D=10))
@@ -69,4 +69,7 @@ axes[0].legend()
 axes[1].set_xlabel(r"$\omega [\mathrm{meV}]$")
 axes[0].set_ylabel(r"$\mathcal{A} (\omega) [\mathrm{eV}^{-1}]$")
 axes[1].set_ylabel(r"$\mathcal{A} (\omega) [\mathrm{eV}^{-1}]$")
+
+fig.tight_layout()
+fig.subplots_adjust(hspace=0)
 fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}_coulomb.pdf")

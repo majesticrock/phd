@@ -8,7 +8,6 @@ X_BOUNDS = [1 - 0.003, 1 + 0.003]
 Gs = [0.15, 0.5, 1.]
 
 fig, axes = plt.subplots(nrows=len(Gs), sharex=True, figsize=(6.4, 6.4))
-fig.subplots_adjust(hspace=0)
 
 for ax, g, plot_label in alpha_label(axes, Gs):
     main_df = load_panda("continuum", "offset_10", "gap.json.gz", 
@@ -35,5 +34,7 @@ ax.set_xlim(*X_BOUNDS)
 ax.set_xlabel(r"$k / k_\mathrm{F}$")
 axes[0].legend()
 
+fig.subplots_adjust(hspace=0)
+
 import os
-plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
+fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

@@ -6,7 +6,6 @@ import os
 import string
 
 fig, axes = plt.subplots(nrows=2, ncols=2, sharex="col", figsize=(6.4, 6.4))
-fig.subplots_adjust(hspace=0.05, wspace=0.05)
 
 for i, (axis, screening) in enumerate(zip(axes, [1e-4, 1])):
     main_df = load_panda("continuum", "offset_20", "gap.json.gz", 
@@ -29,8 +28,8 @@ for i, (axis, screening) in enumerate(zip(axes, [1e-4, 1])):
     axis[1].yaxis.set_ticks_position('both')
     axis[0].set_xlim(1-0.004, 1.004)
 
-axes[0][1].set_ylim(-0.45, 0.01)
-axes[1][1].set_ylim(-0.45, 0.01)
+axes[0][1].set_ylim(-0.45, 0.02)
+axes[1][1].set_ylim(-0.45, 0.02)
 axes[1][0].set_xlabel(r"$k / k_\mathrm{F}$")
 axes[1][1].set_xlabel(r"$k / k_\mathrm{F}$")
 axes[1][1].set_xticks([0, 1, 2])
@@ -44,4 +43,5 @@ bb.y0 -= SHIFT
 bb.y1 -= SHIFT
 legend.set_bbox_to_anchor(bb, transform=axes[0][1].transAxes)
 
+fig.subplots_adjust(hspace=0.05, wspace=0.05)
 fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

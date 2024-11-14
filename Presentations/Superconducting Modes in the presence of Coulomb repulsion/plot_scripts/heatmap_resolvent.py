@@ -8,13 +8,13 @@ from get_data import *
 
 BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
-data_cuts = [1.2, 4, 12]
+data_cuts = [0, 4, 12]
 
 class HeatmapPlotter:
     def __init__(self, data_frame_param, parameter_name, xlabel='Y-axis', zlabel=r'$A$ [$\mathrm{eV}^{-1}$]', xscale="linear", yscale="linear"):
         data_frame = data_frame_param.sort_values(parameter_name).reset_index(drop=True)
         
-        self.y = np.linspace(0., 60., 20000)
+        self.y = np.linspace(0., 55., 20000)
         self.x = (data_frame[parameter_name]).to_numpy()
         self.resolvents = [cf.ContinuedFraction(pd_row, messages=False, ignore_first=5, ignore_last=88) for index, pd_row in data_frame.iterrows()]
         self.gaps = [2 * gap for gap in data_frame["Delta_max"]]
@@ -100,9 +100,9 @@ for i, (data_query, x_column, xlabel) in enumerate(tasks):
     plotter = HeatmapPlotter(data_query, x_column, xlabel=xlabel)
     contour_for_colorbar = plotter.plot(axes[:, i], labels=not bool(i))
     
-    for j in range(2):
-        for k in range(len(data_cuts)):
-            axes[j][i].axvline(plotter.g_cuts[k], color="C4")
+    #for j in range(2):
+    #    for k in range(len(data_cuts)):
+    #        axes[j][i].axvline(plotter.g_cuts[k], color="C4")
 
 cbar = fig.colorbar(contour_for_colorbar, ax=axes[:, -1], orientation='vertical', fraction=0.1, pad=0.05, extend='max')
 cbar.set_label(r'$A$ [$\mathrm{meV}^{-1}$]')

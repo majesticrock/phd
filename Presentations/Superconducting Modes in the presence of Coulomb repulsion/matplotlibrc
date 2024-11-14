@@ -4,6 +4,8 @@ font.serif : Latin Modern Math
 
 axes.xmargin : 0
 
+savefig.bbox : tight
+
 xtick.direction : in
 ytick.direction : in
 xtick.top : True
