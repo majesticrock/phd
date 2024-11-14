@@ -8,7 +8,7 @@ from get_data import *
 
 BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
-data_cuts = [4, 10]
+data_cuts = [1.2, 4, 12]
 
 class HeatmapPlotter:
     def __init__(self, data_frame_param, parameter_name, xlabel='Y-axis', zlabel=r'$A$ [$\mathrm{eV}^{-1}$]', xscale="linear", yscale="linear"):
@@ -19,11 +19,14 @@ class HeatmapPlotter:
         self.resolvents = [cf.ContinuedFraction(pd_row, messages=False, ignore_first=5, ignore_last=88) for index, pd_row in data_frame.iterrows()]
         self.gaps = [2 * gap for gap in data_frame["Delta_max"]]
         
-        self.g_cuts = np.zeros(2)
-        for i in range(2):
+        self.g_cuts = np.zeros(len(data_cuts))
+        for i in range(len(data_cuts)):
             filtered_df = data_frame[data_frame['Delta_max'] < data_cuts[i]]
-            closest_row = filtered_df.loc[(data_cuts[i] - filtered_df['Delta_max']).idxmin()]
-            self.g_cuts[i] = closest_row['g']
+            if len(filtered_df) == 0:
+                self.g_cuts[i] = 0
+            else:
+                closest_row = filtered_df.loc[(data_cuts[i] - filtered_df['Delta_max']).idxmin()]
+                self.g_cuts[i] = closest_row['g']
 
         self.xlabel = xlabel
         self.zlabel = zlabel
@@ -56,17 +59,20 @@ class HeatmapPlotter:
 
         return contour_higgs
 
+data_5 = load_all("continuum/offset_5/N_k=20000/T=0.0", "resolvents.json.gz").query(
+    f"k_F == 4.25 & Delta_max < {data_cuts[len(data_cuts) - 3]}"
+    )
 data_10 = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query(
-    f"k_F == 4.25 & Delta_max < {data_cuts[0]}"
+    f"k_F == 4.25 & Delta_max >= {data_cuts[len(data_cuts) - 3]} & Delta_max < {data_cuts[len(data_cuts) - 2]}"
     )
 data_20 = load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query(
-    f"k_F == 4.25 & Delta_max >= {data_cuts[0]} & Delta_max < {data_cuts[1]}"
+    f"k_F == 4.25 & Delta_max >= {data_cuts[len(data_cuts) - 2]} & Delta_max < {data_cuts[len(data_cuts) - 1]}"
     )
 data_25 = load_all("continuum/offset_25/N_k=30000/T=0.0", "resolvents.json.gz").query(
-    f"k_F == 4.25 & Delta_max >= {data_cuts[1]}"
+    f"k_F == 4.25 & Delta_max >= {data_cuts[len(data_cuts) - 1]}"
     )
 
-all_data = pd.concat([data_10, data_20, data_25])
+all_data = pd.concat([data_5, data_10, data_20, data_25])
 
 ##########################
 #####       g        #####
@@ -95,8 +101,8 @@ for i, (data_query, x_column, xlabel) in enumerate(tasks):
     contour_for_colorbar = plotter.plot(axes[:, i], labels=not bool(i))
     
     for j in range(2):
-        axes[j][i].axvline(plotter.g_cuts[0], color="C4")
-        axes[j][i].axvline(plotter.g_cuts[1], color="C4")
+        for k in range(len(data_cuts)):
+            axes[j][i].axvline(plotter.g_cuts[k], color="C4")
 
 cbar = fig.colorbar(contour_for_colorbar, ax=axes[:, -1], orientation='vertical', fraction=0.1, pad=0.05, extend='max')
 cbar.set_label(r'$A$ [$\mathrm{meV}^{-1}$]')

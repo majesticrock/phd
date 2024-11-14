@@ -159,9 +159,7 @@ namespace Continuum {
 		//#pragma omp parallel for
 		for (MomentumIterator it(&momentumRanges); it < DISCRETIZATION; ++it) {
 			result(it.idx) = integral_screening(sc_expectation_value, it.k);
-#ifndef mielke_coulomb
 			result(it.idx + DISCRETIZATION) = integral_screening(delta_n_wrapper, it.k);
-#endif
 #ifdef approximate_theta
 			// approximate theta(omega - 0.5*|l^2 - k^2|) as theta(omega - eps_k)theta(omega - eps_l)
 			if (std::abs(phonon_alpha(it.k) - 2. * fermi_energy) > 2.0 * omega_debye) {
