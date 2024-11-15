@@ -248,7 +248,7 @@ which is usually of the order of a few microelectronvolts.
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/discretization.pdf}
+  \includegraphics[width=\columnwidth]{plots/discretization.pdf}
   \caption{Schematic representation of the numerical discretization showing the magnitude of $k$ versus the discretization index $n$.
   The black dashed lines show the cutoff points at which the discretization switches from coarse to fine and vice versa.}
   \label{fig:discretization}
@@ -276,7 +276,7 @@ In practice, $N_k = 30000$ produces good results for the latter case, while $N_k
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/gap_theta.pdf}
+  \includegraphics[width=\columnwidth]{plots/gap_theta.pdf}
   \caption{The superconducting gap function without Coulomb interactions. 
   The blue solid line shows the result for the full interaction \eqref{eqn:phonon_int}
   while the orange dashed line depicts the data for the approximation \eqref{eqn:approx_g}.
@@ -305,7 +305,7 @@ Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this art
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/gap_coulomb.pdf}
+  \includegraphics[width=\columnwidth]{plots/gap_coulomb.pdf}
   \caption{The superconducting gap function with Coulomb interactions. 
   The blue and orange dashed lines depict the phononic \eqref{eqn:delta_phonon} and Coulomb \eqref{eqn:delta_coulomb} contributions to the gap function,
   which itself is represented by the black solid line.
@@ -320,19 +320,37 @@ Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this art
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/gap_behavior.pdf}
+  \includegraphics[width=\columnwidth]{plots/fit_gap_dependence.pdf}
+  \caption{Natural logarithm of $\maxGap$ in units of $2 \debye$ versus the phononic coupling strength $g$.
+  The markers represent the evaluated data points while the lines show the best fit in accordance with \eqref{eqn:fit_gap}.
+  The data represented by the blue and orange markers exlcudes the Coulomb interaction and used the approximate \eqref{eqn:approx_g} and full interaction \eqref{eqn:phonon_int}, respectively.
+  For the data in green and red, we used the latter interaction type and included the Coulomb interaction while fixing the screening to $\lambda=1$ and $\lambda=10^{-4}$.
+  The fit parameters are shown in \autoref{tab:fit_gap_dependence}.}
+  \label{fig:fit_gap_dependence}
+\end{figure}
+
+\begin{table*}
+  \centering
+  \caption{Fit parameters for the fits in \autoref{fig:fit_gap_dependence} as well as the values of the pseudopotentials proposed by Bogoliubov \eqref{eqn:bogoliubov_mu}, and Morel and Anderson \eqref{eqn:anderson_morel_mu}.}
+  \label{tab:fit_gap_dependence}
+  \begin{tabular}{l@{\hspace{4\tabcolsep}}ccc@{\hspace{4\tabcolsep}}cc}
+  \toprule
+  Data set          &                \multicolumn{3}{c}{Fit parameters}             & \multicolumn{2}{c}{Predictions} \\ \cmidrule(lr){2-4} \cmidrule(lr){5-6}
+                    & $\alpha$              & $\beta$               & $\mu^*$                   & $\mu$    & $\mu^*$  \\ \midrule
+  Approx. $g(k,k')$ & $0.99995 \pm 0.00034$ & $0.99994 \pm 0.00011$ & $(8 \pm 9) \cdot 10^{-6}$ & $0$      & $0$      \\
+  Full    $g(k,k')$ & $0.7804 \pm 0.0009$   & $0.9679 \pm 0.0004$   & $0.001537 \pm 0.000032$   & $0$      & $0$      \\
+  $\lambda=1$       & $0.707 \pm 0.012$     & $1.056 \pm 0.006$     & $0.0526 \pm 0.0005$       & $0.0688$ & $0.0469$ \\
+  $\lambda=10^{-4}$ & $0.31 \pm 0.04$       & $1.02 \pm 0.06$       & $0.291 \pm 0.006$         & $0.3428$ & $0.1035$ \\ \bottomrule
+  \end{tabular}
+\end{table*}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{plots/gap_behavior.pdf}
   \caption{Plot of the maximum gap value $\maxGap$ depending on the screening $\lambda$.
   The former is scaled logarithmically. The phononic interaction strength is set to $g=0.5$ (blue solid line) and $g=0.7$ (orange dashed line).
   Otherwise, the parameters are identical to the ones in \autoref{fig:gap_coulomb}}
   \label{fig:gap_behavior}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=.48\textwidth]{plots/fit_gap_dependence.pdf}
-  \caption{Natural logarithm of $\maxGap$ in units of $2 \debye$ versus the phononic coupling strength $g$.
-  The markers represent the evaluated data points while the lines show the best fit in accordance with }
-  \label{fig:fit_gap_dependence}
 \end{figure}
 
 Next, we add the Coulomb interaction again which results in considerable changes to the gap function.
@@ -356,24 +374,42 @@ Instead of changing sign at the nodal points, the complex phase of the gap funct
 
 Considering a small screening, i.e., $\lambda = 10^{-4}$ in panel (a), results in a rather narrow valley in $\deltaC$ around the Fermi edge.
 It is noteworthy, that this result is essentially identical to the one obtained by omitting the screening entirely because this feature originates from integrating over a logarithmic singularity.
-While this part of our calculations can still be easily performed without a screening, the later parts require atleast a small one as to avoid numerically dividing by $0$.
+While this part of our calculations can still be easily performed without a screening, the later parts require at least a small one as to avoid numerically dividing by $0$.
 
 The aforementioned feature disappears entirely if we use the screening wavevector presented in Ref. \cite{rickayzen1980}, i.e., $\lambda = 1$ in panel (b).
 In this case, the contribution of $\deltaC$ around the Fermi edge is essentially a constant.
 This corroborates the qualitative statements of the commonly used result by Morel and Anderson \cite{morel1962}
-that a screened Coulomb interaction essentially boils down to a constant pseudo-potential $\mu^*$ around the Fermi edge \cite{morel1962,sigrist2005,kostrzewa2018,fischer2018,simonato2023}.
-A first form was provided by Bogoliubov as \cite{bogoliubov1958}
+that a screened Coulomb interaction essentially boils down to a constant pseudopotential $\mu^*$ around the Fermi edge, making relevant interaction strength $g - \mu^*$ \cite{mielke1997,sigrist2005,kostrzewa2018,fischer2018,simonato2023}.
+Bogoliubov provided a first expression \cite{bogoliubov1958} that in dimensionless form is given by
 \begin{equation}
-  \mu = \frac{e^2 \rho_F }{4 \epsilon_0 \kf^2 } \ln \left( \frac{k_s^2 + 4 \kf^2}{k_s^2} \right)
+  \label{eqn:bogoliubov_mu}
+  \mu = \frac{e^2 \rho_F }{4 \epsilon_0 \kf^2 } \ln \left( \frac{k_s^2 + 4 \kf^2}{k_s^2} \right).
 \end{equation}
-and later refined by Morel and Anderson, yielding finally the gap equation in the weak coupling limit $\mu \ll 1$ \cite{morel1962}
-\begin{subequations}
-  \begin{align}
-  \label{eqn:anderson_morel_estimate}
-  \ln \left( \frac{\maxGap}{2 \debye} \right) &= \frac{1}{g - \mu^*}, \text{ where}\\
-  \mu^* &= \frac{\mu}{1 + \mu \ln \left( \frac{\Ef}{\debye} \right)}.
-\end{align}
-\end{subequations}
+Later, Morel and Anderson showed that this expression takes a reduced value in the weak coupling limit $\mu \ll 1$ as
+\begin{equation}
+  \label{eqn:anderson_morel_mu}
+  \mu^* = \frac{\mu}{1 + \mu \ln \left( \frac{\Ef}{\debye} \right)},
+\end{equation}
+which they finally used to obtain \cite{morel1962}
+\begin{equation}
+  \label{eqn:anderson_morel_gap}
+  \ln \left( \frac{\maxGap}{2 \debye} \right) = \frac{1}{g - \mu^*}.
+\end{equation}
+By means of this expression, we can fit our results for $\maxGap$. 
+Note, however, that this expression was derived under the assumption of a constant phononic interaction.
+We already saw in \autoref{fig:gap_theta} that our interaction leads to a slightly reduced gap value at the Fermi edge.
+Thus, we introduce two additional fit parameters $\alpha$ and $\beta$
+\begin{equation}
+  \label{eqn:fit_gap}
+  \ln \left( \frac{\maxGap}{2 \debye} \right) = \ln \alpha - \frac{\beta}{g - \mu^*}.
+\end{equation}
+Here, $\alpha$ represents a constant ratio relating $\maxGap$ to $\debye$, while $\beta$ serves as the scaling factor in the exponential.
+Naturally, based on \eqref{eqn:anderson_morel_gap}, we expect these values to be at least close to $1$.
+In \autoref{fig:fit_gap_dependence}, we show the fits of the data both excluding and including the Coulomb interaction.
+For the former, we investigated both the approximate \eqref{eqn:approx_g} and the full interaction \eqref{eqn:phonon_int},
+and for the latter, we show only the full interaction and the screening is set to $\lambda=1$ and $\lambda=10^{-4}$.
+The corresponding fit paramters are shown in \autoref{tab:fit_gap_dependence}.
+
 
 
 \autoref{fig:gap_behavior} shows the maximum gap value $\maxGap$ depending on the screening $\lambda$.
@@ -402,7 +438,7 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/resolvent_overview.pdf}
+  \includegraphics[width=\columnwidth]{plots/resolvent_overview.pdf}
   \caption{The plot shows the spectral functions $\spectral{Phase}$ (blue solid line) and $\spectral{Higgs}$ (orange dashed line) excluding the Coulomb interaction.
   In the upper panels (a), we used the full interaction \eqref{eqn:phonon_int} while we used the approximation \eqref{eqn:approx_g} in the lower ones.
   The left column (1) depicts the results for $g=0.4$ and the right one (2) those for $g=1$.
@@ -414,7 +450,7 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/resolvent_overview_coulomb.pdf}
+  \includegraphics[width=\columnwidth]{plots/resolvent_overview_coulomb.pdf}
   \caption{The plot shows the spectral functions $\spectral{Phase}$ (blue solid line) and $\spectral{Higgs}$ (orange dashed line) including the Coulomb interaction.
   Panel (a) and (b) depict the results for $g=1$ and $g=2$, respectively. For both cases we used an almost vanishing screening $\lambda=10^{-4}$.
   The Higgs mode persists after introduction of the Coulomb interaction.
@@ -438,14 +474,14 @@ Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/heatmap_resolvent_screening.pdf}
+  \includegraphics[width=\columnwidth]{plots/heatmap_resolvent_screening.pdf}
   \caption{Same as \autoref{fig:heatmap_resolvent} except that $\lambda$ is varied logarithmically and the phononic coupling strength is fixed to $g=0.5$.}
   \label{fig:heatmap_resolvent_screening}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=.48\textwidth]{plots/phase_peaks.pdf}
+  \includegraphics[width=\columnwidth]{plots/phase_peaks.pdf}
   \caption{Double logarithmic plot of the position $\omega_P$ of the peak in $\spectral{Phase}$ as seen in \autoref{fig:heatmap_resolvent_screening} depending on the screening $\lambda$.
   \textcolor{red}{TODO: Vllt werde ich den kleinen Sprung noch los - ansonsten erkl\"aren.}}
   \label{fig:phase_peaks}
@@ -484,7 +520,7 @@ This indicates that the proper starting state $\vec{a}$ for, e.g., the Higgs mod
     \end{cases}.
 \end{equation}
 
-\textbullet For these calculations, we finally require atleast a small screening because the commutators yield otherwise divergent terms.
+\textbullet For these calculations, we finally require at least a small screening because the commutators yield otherwise divergent terms.
 As an example consider 
 $\expec{[ f_{\vec{l}}^\dagger  - f_{\vec{l}} , [H,  f_{\vec{k}} - f_{\vec{k}}^\dagger ]]}$.
 One of the resulting terms is

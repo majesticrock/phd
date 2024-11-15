@@ -70,12 +70,12 @@ for i in range(nrows):
 axs[0][0].set_title("Square lattice", pad=22 if not poster_plot else 25)
 axs[0][1].set_title("Simple cubic lattice", pad=22 if not poster_plot else 25)
 
-axs[0][0].text(0.93, 0.59, "(a.1)\n$\Delta_\\mathrm{CDW} = 0$",                   transform = axs[0][0].transAxes, ma="right", ha="right")
-axs[1][0].text(0.93, 0.59, "(b.1)\n$\Delta_\\mathrm{SC} = 0$",                    transform = axs[1][0].transAxes, ma="right", ha="right")
-axs[2][0].text(0.93, 0.59, "(c.1)\n$\Delta_\\mathrm{SC} = \Delta_\\mathrm{CDW}$", transform = axs[2][0].transAxes, ma="right", ha="right")
-axs[0][1].text(0.93, 0.59, "(a.2)\n$\Delta_\\mathrm{CDW} = 0$",                   transform = axs[0][1].transAxes, ma="right", ha="right")
-axs[1][1].text(0.93, 0.59, "(b.2)\n$\Delta_\\mathrm{SC} = 0$",                    transform = axs[1][1].transAxes, ma="right", ha="right")
-axs[2][1].text(0.93, 0.59, "(c.2)\n$\Delta_\\mathrm{SC} = \Delta_\\mathrm{CDW}$", transform = axs[2][1].transAxes, ma="right", ha="right")
+axs[0][0].text(0.93, 0.59, "(a.1)\n$\\Delta_\\mathrm{CDW} = 0$",                   transform = axs[0][0].transAxes, ma="right", ha="right")
+axs[1][0].text(0.93, 0.59, "(b.1)\n$\\Delta_\\mathrm{SC} = 0$",                    transform = axs[1][0].transAxes, ma="right", ha="right")
+axs[2][0].text(0.93, 0.59, "(c.1)\n$\\Delta_\\mathrm{SC} = \\Delta_\\mathrm{CDW}$", transform = axs[2][0].transAxes, ma="right", ha="right")
+axs[0][1].text(0.93, 0.59, "(a.2)\n$\\Delta_\\mathrm{CDW} = 0$",                   transform = axs[0][1].transAxes, ma="right", ha="right")
+axs[1][1].text(0.93, 0.59, "(b.2)\n$\\Delta_\\mathrm{SC} = 0$",                    transform = axs[1][1].transAxes, ma="right", ha="right")
+axs[2][1].text(0.93, 0.59, "(c.2)\n$\\Delta_\\mathrm{SC} = \\Delta_\\mathrm{CDW}$", transform = axs[2][1].transAxes, ma="right", ha="right")
 
 fig.tight_layout()
 plt.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")

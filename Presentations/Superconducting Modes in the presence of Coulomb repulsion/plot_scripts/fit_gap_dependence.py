@@ -6,6 +6,8 @@ __ap.append()
 from get_data import *
 from scipy.optimize import curve_fit
 import os
+from uncertainties import ufloat
+import uncertainties.umath as unp
 
 k_F = 4.25
 screening_factor = 0.4107320221286488672 * np.sqrt(k_F)
@@ -30,52 +32,66 @@ def fit_func(g, lnA, B, mu_star):
     return lnA - B / (g - mu_star)
 
 
-dmax = 0.3
+dmax = 0.15
+dmin = 0.01
+approx = load_all("continuum/theta_approx/N_k=8000/T=0.0/coulomb_scaling=0.0", "gap.json.gz").query(
+    f"k_F == 4.25 & omega_D == 10 & Delta_max < {dmax} & Delta_max > {dmin}"
+    ).sort_values("g")
 nc = load_all("continuum/offset_5/N_k=20000/T=0.0/coulomb_scaling=0.0", "gap.json.gz").query(
-    f"k_F == 4.25 & omega_D == 10 & Delta_max < {dmax} & Delta_max > 0.008"
+    f"k_F == 4.25 & omega_D == 10 & Delta_max < {dmax} & Delta_max > {dmin}"
     ).sort_values("g")
 ls = load_all("continuum/offset_5/N_k=20000/T=0.0/coulomb_scaling=1.0", "gap.json.gz", condition="screening=1.0").query(
-    f"k_F == 4.25 & omega_D == 10 & Delta_max < {dmax} & Delta_max > 0.008"
+    f"k_F == 4.25 & omega_D == 10 & Delta_max < {dmax} & Delta_max > {dmin}"
     ).sort_values("g")
 ss = load_all("continuum/offset_5/N_k=20000/T=0.0/coulomb_scaling=1.0", "gap.json.gz", condition="screening=0.0001").query(
-    f"k_F == 4.25 & omega_D == 10 & Delta_max < {dmax} & Delta_max > 0.008"
+    f"k_F == 4.25 & omega_D == 10 & Delta_max < {dmax} & Delta_max > {dmin}"
     ).sort_values("g")
-dfs = [nc, ls, ss]
+dfs = [approx, nc, ls, ss]
 
 
 fig, ax = plt.subplots()
 
-for idx, (plot_data, label, screening) in enumerate(zip(dfs, ["No Coulomb", r"$\lambda=1$", r"$\lambda=10^{-4}$"], [None, 1, 1e-4])):
-    g_lin = np.linspace(plot_data["g"].min() - 0.02, plot_data["g"].max() + 0.02, 200)
+for idx, (plot_data, label, screening) in enumerate(zip(dfs, ["Approx. g(k,k')$", "Full $g(k,k')$", r"$\lambda=1$", r"$\lambda=10^{-4}$"], [None, None, 1, 1e-4])):
+    g_lin = np.linspace(plot_data["g"].min() - 0.015, plot_data["g"].max() + 0.02, 200)
     E_F = plot_data["E_F"].iloc[0]
     y_data = np.log(plot_data["Delta_max"] / (2. * plot_data["omega_D"].iloc[0]))
-    ax.plot(plot_data["g"], y_data, ls="", marker=f"{idx+1}", ms=12, color=f"C{idx}", label=label)
-    popt, pcov = curve_fit(fit_func, plot_data["g"], y_data, p0=(2.7, 1, idx**3 * 0.05))
-    ax.plot(g_lin, fit_func(g_lin, *popt), color=f"C{idx}")
+    ax.plot(plot_data["g"], y_data, ls="", marker=f"{idx+1}", ms=14, markeredgewidth=2, color=f"C{idx}", label=label)
+    popt, pcov = curve_fit(fit_func, plot_data["g"], y_data, p0=(2.7, 1, (idx-1)**3 * 0.05))
+    ax.plot(g_lin, fit_func(g_lin, *popt), color=f"C{idx}", ls="--")
     
-    #devi = np.sqrt(np.diag(pcov))
-    #print(label, ":")
-    #print(f"AM prediction: 0.0000   ||   Fit: {popt[0]:1.4f} +/- {devi[0]:1.4f}")
-    #print(f"AM prediction: 1.0000   ||   Fit: {popt[1]:1.4f} +/- {devi[1]:1.4f}")
-    #print(f"AM prediction: {am_mu_star(E_F, screening):1.4f}   ||   Fit: {popt[2]:1.4f} +/- {devi[2]:1.4f}")
+    devi = np.sqrt(np.diag(pcov))
+    alpha = unp.exp( ufloat(popt[0], devi[0]) )
+#    print(label, ":")
+#    print(f"AM prediction: 1.0000   ||   Fit: {alpha}")
+#    print(f"AM prediction: 1.0000   ||   Fit: {ufloat(popt[1], devi[1])}")
+#    print(f"AM prediction: {am_mu_star(E_F, screening)}   ||   Fit: {ufloat(popt[-1], devi[-1])}")
+#    print(f"Bogo mu      : {bogo_mu(screening)}")
 
 ##### Results #####
-#  No Coulomb :
-#  AM prediction: 0.0000   ||   Fit: -0.2256 +/- 0.0099
-#  AM prediction: 1.0000   ||   Fit: 0.9766 +/- 0.0035
-#  AM prediction: 0.0000   ||   Fit: 0.0007 +/- 0.0003
+#  Approx. $G$ :
+#  AM prediction: 1.0000   ||   Fit: 0.99995+/-0.00034
+#  AM prediction: 1.0000   ||   Fit: 0.99994+/-0.00011
+#  AM prediction: 0.0      ||   Fit: (8+/-9)e-06
+#  Bogo mu      : 0
+#  Full $G$ :
+#  AM prediction: 1.0000   ||   Fit: 0.7804+/-0.0009
+#  AM prediction: 1.0000   ||   Fit: 0.9679+/-0.0004
+#  AM prediction: 0.0      ||   Fit: 0.001537+/-0.000032
+#  Bogo mu      : 0
 #  $\lambda=1$ :
-#  AM prediction: 0.0000   ||   Fit: -0.3041 +/- 0.0072
-#  AM prediction: 1.0000   ||   Fit: 1.0715 +/- 0.0029
-#  AM prediction: 0.0470   ||   Fit: 0.0514 +/- 0.0003
+#  AM prediction: 1.0000                 ||   Fit: 0.707+/-0.012
+#  AM prediction: 1.0000                 ||   Fit: 1.056+/-0.006
+#  AM prediction: 0.046970974711624806   ||   Fit: 0.0526+/-0.0005
+#  Bogo mu      : 0.06881081989309847
 #  $\lambda=10^{-4}$ :
-#  AM prediction: 0.0000   ||   Fit: -1.0022 +/- 0.1147
-#  AM prediction: 1.0000   ||   Fit: 1.0651 +/- 0.0524
-#  AM prediction: 0.1035   ||   Fit: 0.2885 +/- 0.0054
+#  AM prediction: 1.0000               ||   Fit: 0.31+/-0.04
+#  AM prediction: 1.0000               ||   Fit: 1.02+/-0.06
+#  AM prediction: 0.1035079098250726   ||   Fit: 0.291+/-0.006
+#  Bogo mu      : 0.3428623732280431
 
 
 ax.set_xlabel(r"$g$")
 ax.set_ylabel(r"$\ln (\Delta_\mathrm{max} / (2 \omega_\mathrm{D}))$")
-ax.legend()
+ax.legend(ncols=2)
 fig.tight_layout()
 fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
