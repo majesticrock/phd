@@ -25,7 +25,7 @@ Ts = np.array([0.])
 Us = np.array([np.concatenate((-Us_square[::-1], Us_square)), np.concatenate((-Us_cube[::-1], Us_cube))], dtype=object)
 Vs = np.array([1.0])
 
-folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
+folders = ["../../data/pre_pandas/modes/square/dos_6000/", "../../data/pre_pandas/modes/cube/dos_6000/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffices = ["CDW", "AFM"]

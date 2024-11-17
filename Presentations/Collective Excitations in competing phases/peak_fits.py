@@ -10,7 +10,7 @@ import continued_fraction as cf
 import plot_settings as ps
 import resolvent_peak as rp
 
-folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
+folders = ["../../data/pre_pandas/modes/square/dos_6000/", "../../data/pre_pandas/modes/cube/dos_6000/"]
 
 fig, axs = plt.subplots(nrows=4, ncols=2, figsize=(12.8, 9.6), sharey="row", sharex=True, gridspec_kw=dict(hspace=0, wspace=0))
 def plot_general_peak(plot_axs, T, U, V, name_suffix, initial_search_bounds, text="", reversed=False):

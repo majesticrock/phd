@@ -27,7 +27,7 @@ ax.set_ylim(0, 0.03)
 
 for j, lattice_folder in enumerate(lattice_folders):
     for i, n in enumerate(N):
-        folder = f"../../data/modes/{lattice_folder}/dos_{n}/"
+        folder = f"../../data/pre_pandas/modes/{lattice_folder}/dos_{n}/"
         peak = rp.Peak(f"{folder}{name}", name_suffix, imaginary_offset=1e-7)
         peak_pos_value = np.copy(peak.peak_position)
         peak_result = peak.improved_peak_position(xtol=1e-14)
@@ -41,7 +41,7 @@ for j, lattice_folder in enumerate(lattice_folders):
     if(j==0):
         def func(x, a, b):
             return a*np.sqrt(x) + b
-        popt, pcov = ez_general_fit(1/N, peak_positions, func, label="$a \\sqrt{1/N_\gamma} + b$", x_space=np.linspace(0, max(1/N), 300))
+        popt, pcov = ez_general_fit(1/N, peak_positions, func, label="$a \\sqrt{1/N_\\gamma} + b$", x_space=np.linspace(0, max(1/N), 300))
         ax.text(0.00175, 0.0175, f"$a = {popt[0]:.5f}$\n$b = {popt[1]:.5f}$")
 
 ax.tick_params(axis='x', pad=10)

@@ -17,7 +17,7 @@ T = 0.
 U = -2.5
 V = 0.0
 
-folders = ["../../data/modes/square/dos_6000", "../../data/modes/cube/dos_6000"]
+folders = ["../../data/pre_pandas/modes/square/dos_6000", "../../data/pre_pandas/modes/cube/dos_6000"]
 folder_extensions = ["_SC/", "_CDW/", "/"]
 name_suffices = ["higgs_SC", "higgs_CDW", "higgs_SC"]
 

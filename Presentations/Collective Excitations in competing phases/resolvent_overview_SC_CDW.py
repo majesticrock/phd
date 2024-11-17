@@ -19,7 +19,7 @@ else:
     legend_args = { "bbox_to_anchor" : (0., 1.15)}
 
 params = [ [0., -2.5, -0.1], [0., -2.5, 0.1], [0., -2.5, 0.5] ]
-folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
+folders = ["../../data/pre_pandas/modes/square/dos_6000/", "../../data/pre_pandas/modes/cube/dos_6000/"]
 nrows = 3
 ncols = 2
 # ax = axs[row][col]

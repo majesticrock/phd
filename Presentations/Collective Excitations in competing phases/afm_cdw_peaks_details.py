@@ -26,7 +26,7 @@ Us = np.array([Us_square, Us_cube], dtype=object)
 Vs = np.array([0.])
 
 
-folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
+folders = ["../../data/pre_pandas/modes/square/dos_6000/", "../../data/pre_pandas/modes/cube/dos_6000/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffix = "AFM"
