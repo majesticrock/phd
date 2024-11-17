@@ -29,7 +29,7 @@ Vs = np.array([ #"-0.000001", "-0.0000013", "-0.0000015", "-0.0000017", "-0.0000
                 "-0.1", "-0.13", "-0.15", "-0.2", "-0.25", "-0.28"
                 ])
 
-folders = ["../../data/modes/square/dos_6000/", "../../data/modes/cube/dos_6000/"]
+folders = ["../../data/pre_pandas/modes/square/dos_6000/", "../../data/pre_pandas/modes/cube/dos_6000/"]
 element_names = ["a", "a+b", "a+ib"]
 
 name_suffix = "higgs_CDW"
