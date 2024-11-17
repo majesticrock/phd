@@ -333,7 +333,7 @@ Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this art
   \centering
   \caption{Fit parameters for the fits in \autoref{fig:fit_gap_dependence} as well as the values of the pseudopotentials proposed by Bogoliubov \eqref{eqn:bogoliubov_mu}, and Morel and Anderson \eqref{eqn:anderson_morel_mu}.}
   \label{tab:fit_gap_dependence}
-  \begin{tabular}{l@{\hspace{4\tabcolsep}}ccc@{\hspace{4\tabcolsep}}cc}
+  \begin{tabular}{l@{\hspace{8\tabcolsep}}ccc@{\hspace{8\tabcolsep}}cc}
   \toprule
   Data set          &                \multicolumn{3}{c}{Fit parameters}             & \multicolumn{2}{c}{Predictions} \\ \cmidrule(lr){2-4} \cmidrule(lr){5-6}
                     & $\alpha$              & $\beta$               & $\mu^*$                   & $\mu$    & $\mu^*$  \\ \midrule
@@ -348,7 +348,7 @@ Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this art
   \centering
   \includegraphics[width=\columnwidth]{plots/gap_behavior.pdf}
   \caption{Plot of the maximum gap value $\maxGap$ depending on the screening $\lambda$.
-  The former is scaled logarithmically. The phononic interaction strength is set to $g=0.5$ (blue solid line) and $g=0.7$ (orange dashed line).
+  The former is scaled logarithmically. The phononic interaction strength is set to three distinct values in accordance with the legend.
   Otherwise, the parameters are identical to the ones in \autoref{fig:gap_coulomb}}
   \label{fig:gap_behavior}
 \end{figure}
@@ -393,12 +393,12 @@ Later, Morel and Anderson showed that this expression takes a reduced value in t
 which they finally used to obtain \cite{morel1962}
 \begin{equation}
   \label{eqn:anderson_morel_gap}
-  \ln \left( \frac{\maxGap}{2 \debye} \right) = \frac{1}{g - \mu^*}.
+  \ln \left( \frac{\maxGap}{2 \debye} \right) = -\frac{1}{g - \mu^*}.
 \end{equation}
 By means of this expression, we can fit our results for $\maxGap$. 
 Note, however, that this expression was derived under the assumption of a constant phononic interaction.
 We already saw in \autoref{fig:gap_theta} that our interaction leads to a slightly reduced gap value at the Fermi edge.
-Thus, we introduce two additional fit parameters $\alpha$ and $\beta$
+Thus, we introduce two additional fit parameters $\alpha$ and $\beta$ and fit to
 \begin{equation}
   \label{eqn:fit_gap}
   \ln \left( \frac{\maxGap}{2 \debye} \right) = \ln \alpha - \frac{\beta}{g - \mu^*}.
@@ -410,21 +410,26 @@ For the former, we investigated both the approximate \eqref{eqn:approx_g} and th
 and for the latter, we show only the full interaction and the screening is set to $\lambda=1$ and $\lambda=10^{-4}$.
 The corresponding fit paramters are shown in \autoref{tab:fit_gap_dependence}.
 
+First and foremost, since the approximation \eqref{eqn:approx_g} is just the standard BCS interaction, we expect exactly the BCS behavior $\ln(\maxGap / (2 \debye)) = -1/g$,
+which is within numerical accuracy exactly what we find.
+The full interaction \eqref{eqn:phonon_int} deviates from that only slightly, namely in $\alpha$, i.e., the ratio between $\maxGap$ and $\debye$ which is slightly smaller now.
+Notably, the exponential scaling factor $\beta$ agrees well with the expectation $\beta=1$ in all cases.
+
+Switching on the Coulomb interaction provides more insights.
+Firstly, using a typical screening $\lambda=1$ results in a $\mu^*$ that is in reasonable agreement with \eqref{eqn:anderson_morel_mu}.
+A small screening of $\lambda=10^{-4}$, however, yields considerable deviations.
+
 
 
 \autoref{fig:gap_behavior} shows the maximum gap value $\maxGap$ depending on the screening $\lambda$.
 Naturally, it grows as the screening is increased, but it does not seem to follow any elementary function.
-Expectatly, the function approaches a constant value for both cases $\lambda \to 0$ and $\lambda \to \infty$.
+Expectedly, the function approaches a constant value for both cases $\lambda \to 0$ and $\lambda \to \infty$.
 The general behavior is generic across various values of the phononic coupling strength $g$.
+Nevertheless, this is no contradiction to the original statement as it was derived for $\mu \ll 1$, 
+which is no longer given here.
 
 
 
-
-
-
-\textcolor{red}{Man k\"onnte jetzt natürlich noch mehr im Detail diskutieren, was mit der L\"ucke passiert, wenn wir an den Parametern drehen.
-Aber im Gro\ss{}en und Ganzen wird da nur das Bekannte rauskommen. D.h. $\maxGap$ skaliert mit $g$ zun\"achst exponentiell und dann linear und mit $\debye$ immer linear.
-Vermutlich brauchen wir das hier nicht nochmal aufschreiben?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
