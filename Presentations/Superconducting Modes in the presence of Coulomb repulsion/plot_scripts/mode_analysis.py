@@ -52,8 +52,8 @@ scatter_data = np.array(scatter_data).transpose()
 from ez_fit import ez_linear_fit
 popt, pcov = ez_linear_fit(scatter_data[0], scatter_data[1], ax, x_bounds=[0, 1.1 * scatter_data[0].max()], zorder=-20, color="k", ls="--")
 
-ax.text(0.05, 0.57, f"$a = {popt[0]:1.4f} \\pm {np.sqrt(pcov[0][0]):1.4f}$", transform=ax.transAxes)
-ax.text(0.05, 0.47, f"$b = {popt[1]:1.4f} \\pm {np.sqrt(pcov[1][1]):1.4f}$", transform=ax.transAxes)
+ax.text(0.02, 0.57, f"$a = ({popt[0]:1.3f} \\pm {np.sqrt(pcov[0][0]):1.3f})$", transform=ax.transAxes)
+ax.text(0.02, 0.47, f"$b = ({popt[1]:1.3f} \\pm {np.sqrt(pcov[1][1]):1.3f})\\mathrm{{meV}}$", transform=ax.transAxes)
 
 from matplotlib.lines import Line2D
 # Create legend for marker styles
