@@ -12,13 +12,19 @@ TeXOptions = -lualatex \
 			 -halt-on-error \
 			 -output-directory=build
 
-build/main.pdf: $(PLTS_PDF)
+build/main.pdf: $(PLTS_PDF) plots/mode_analysis.pdf
 
 build/main.pdf: FORCE | build
 	latexmk $(TeXOptions) main.tex 1> build/log || cat build/log
 
 plots/%.pdf: plot_scripts/%.py matplotlibrc | plots
 	TEXINPUTS=$$(pwd): python $<
+
+modes/higgs.pkl: plots/heatmap_resolvent.pdf
+
+plots/mode_analysis.pdf: plot_scripts/mode_analysis.py modes/higgs_0.pkl
+	TEXINPUTS=$$(pwd): python $<
+
 FORCE:
 
 plots:

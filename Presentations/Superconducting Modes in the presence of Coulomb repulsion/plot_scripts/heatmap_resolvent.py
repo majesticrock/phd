@@ -5,6 +5,7 @@ __ap.append()
 import continued_fraction_pandas as cf
 import os
 from get_data import *
+from scipy.signal import find_peaks
 
 BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
@@ -12,16 +13,17 @@ data_cuts = [0, 4, 12]
 
 class HeatmapPlotter:
     def __init__(self, data_frame_param, parameter_name, xlabel='Y-axis', zlabel=r'$A$ [$\mathrm{eV}^{-1}$]', xscale="linear", yscale="linear"):
-        data_frame = data_frame_param.sort_values(parameter_name).reset_index(drop=True)
+        self.data_frame = data_frame_param.sort_values(parameter_name).reset_index(drop=True)
         
-        self.y = np.linspace(0., 55., 20000)
-        self.x = (data_frame[parameter_name]).to_numpy()
-        self.resolvents = [cf.ContinuedFraction(pd_row, messages=False, ignore_first=5, ignore_last=88) for index, pd_row in data_frame.iterrows()]
-        self.gaps = [2 * gap for gap in data_frame["Delta_max"]]
+        self.y = np.linspace(0., 55., 10000)
+        self.x = (self.data_frame[parameter_name]).to_numpy()
+        self.resolvents = [cf.ContinuedFraction(pd_row, messages=False, ignore_first=5, ignore_last=88) for index, pd_row in self.data_frame.iterrows()]
+        self.gaps = [2 * gap for gap in self.data_frame["Delta_max"]]
+        self.N_data = len(self.gaps)
         
         self.g_cuts = np.zeros(len(data_cuts))
         for i in range(len(data_cuts)):
-            filtered_df = data_frame[data_frame['Delta_max'] < data_cuts[i]]
+            filtered_df = self.data_frame[self.data_frame['Delta_max'] < data_cuts[i]]
             if len(filtered_df) == 0:
                 self.g_cuts[i] = 0
             else:
@@ -33,9 +35,40 @@ class HeatmapPlotter:
         self.xscale = xscale
         self.yscale = yscale
 
+    def identify_modes(self, spectral, pos):
+        if self.gaps[pos] == 0:
+            return np.array([])
+        # returns an index such that self.x[index] >= 2 Delta, i.e., we are inside the continuum
+        continuum_begin = np.searchsorted((self.y - self.gaps[pos]), 0, side='left')
+        positions = find_peaks(spectral[:continuum_begin])[0]
+        return np.array([self.y[i] for i in positions])
+
     def plot(self, axes, cmap='inferno', labels=True):
         spectral_functions_higgs = np.array([res.spectral_density(1e-3 * self.y + 1e-6j, "amplitude_SC") for res in self.resolvents]).transpose()
         spectral_functions_phase = np.array([res.spectral_density(1e-3 * self.y + 1e-6j, "phase_SC") for res in self.resolvents]).transpose()
+
+        self.HiggsModes = pd.DataFrame([ {
+                "resolvent_type": "Higgs",
+                "energies": self.identify_modes(spectral_functions_higgs[:, i], i),
+                "Delta_max": self.data_frame["Delta_max"].iloc[i],
+                "T": self.data_frame["T"].iloc[i],
+                "g": self.data_frame["g"].iloc[i],
+                "omega_D": self.data_frame["omega_D"].iloc[i],
+                "E_F": self.data_frame["E_F"].iloc[i],
+                "k_F": self.data_frame["k_F"].iloc[i],
+                "lambda_screening": self.data_frame["lambda_screening"].iloc[i]
+            } for i in range(self.N_data) ])
+        self.PhaseModes = pd.DataFrame([ {
+                "resolvent_type": "Phase",
+                "energies": self.identify_modes(spectral_functions_phase[:, i], i),
+                "Delta_max": self.data_frame["Delta_max"].iloc[i],
+                "T": self.data_frame["T"].iloc[i],
+                "g": self.data_frame["g"].iloc[i],
+                "omega_D": self.data_frame["omega_D"].iloc[i],
+                "E_F": self.data_frame["E_F"].iloc[i],
+                "k_F": self.data_frame["k_F"].iloc[i],
+                "lambda_screening": self.data_frame["lambda_screening"].iloc[i]
+            } for i in range(self.N_data) ])
 
         vmax = max(spectral_functions_higgs.max(), spectral_functions_phase.max())
         levels = np.linspace(0., min(1.5, vmax), 101, endpoint=True)
@@ -100,6 +133,8 @@ for i, (data_query, x_column, xlabel) in enumerate(tasks):
     plotter = HeatmapPlotter(data_query, x_column, xlabel=xlabel)
     contour_for_colorbar = plotter.plot(axes[:, i], labels=not bool(i))
     
+    plotter.HiggsModes.to_pickle(f"modes/higgs_{i}.pkl")
+    plotter.PhaseModes.to_pickle(f"modes/phase_{i}.pkl")
     #for j in range(2):
     #    for k in range(len(data_cuts)):
     #        axes[j][i].axvline(plotter.g_cuts[k], color="C4")

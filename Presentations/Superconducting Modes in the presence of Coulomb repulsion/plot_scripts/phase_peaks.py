@@ -15,7 +15,7 @@ peak_positions = np.zeros(len(main_df))
 gaps = np.zeros(len(main_df))
 
 for index, pd_row in main_df.iterrows():
-    print(pd_row["lambda_screening"])
+#    print(pd_row["lambda_screening"])
     resolvents = cf.ContinuedFraction(pd_row, ignore_first=70, ignore_last=90, messages=False)
     w_lin = np.linspace(-0.005 * pd_row["continuum_boundaries"][1], 
                         1.1 * pd_row["continuum_boundaries"][1] if pd_row["lambda_screening"] > 0.01 else 23., 
