@@ -10,8 +10,8 @@ X_BOUNDS = [-0.1, 0.1]
 
 fig, ax = plt.subplots()
 
-main_df = load_panda("continuum", "offset_25", "gap.json.gz",
-                    **continuum_params(N_k=30000, T=0, coulomb_scaling=1, screening=1e-4, k_F=4.25, g=2, omega_D=10))
+main_df = load_panda("continuum", "test", "gap.json.gz",
+                    **continuum_params(N_k=4000, T=0, coulomb_scaling=1, screening=1e-4, k_F=4.25, g=0.5, omega_D=10))
 pd_data = main_df["data"]
 pd_data["ks"] /= main_df["k_F"]
 pd_data["xis"] /= main_df["E_F"]

@@ -15,7 +15,8 @@ peak_positions = np.zeros(len(main_df))
 gaps = np.zeros(len(main_df))
 
 for index, pd_row in main_df.iterrows():
-    resolvents = cf.ContinuedFraction(pd_row, messages=False)
+    print(pd_row["lambda_screening"])
+    resolvents = cf.ContinuedFraction(pd_row, ignore_first=70, ignore_last=90, messages=False)
     w_lin = np.linspace(-0.005 * pd_row["continuum_boundaries"][1], 
                         1.1 * pd_row["continuum_boundaries"][1] if pd_row["lambda_screening"] > 0.01 else 23., 
                         20000, dtype=complex)
@@ -33,11 +34,11 @@ peak_positions = np.log(peak_positions / gaps)
 
 cut = slice(0, 75)
 ax.plot(screenings[cut], peak_positions[cut], "o", label=r"Fitted $\omega_P$")
-ax.plot(screenings[:cut.start], peak_positions[:cut.start], "x", label=r"Omitted $\omega_P$")
-ax.plot(screenings[cut.stop:], peak_positions[cut.stop:], "x")
+ax.plot(screenings[:cut.start], peak_positions[:cut.start], "x", color="C1", label=r"Omitted $\omega_P$")
+ax.plot(screenings[cut.stop:], peak_positions[cut.stop:], "x", color="C1")
 
 from ez_fit import ez_linear_fit
-popt, pcov = ez_linear_fit(screenings[cut], peak_positions[cut], ax, x_bounds=(min(screenings), max(screenings)), label=r"Fit $a \ln(\lambda) + b$")
+popt, pcov = ez_linear_fit(screenings[cut], peak_positions[cut], ax, x_bounds=(min(screenings), max(screenings)), label=r"Fit $a \ln(\lambda) + b$", color="C3")
 ax.text(0.3, 0.9, f"$a = {popt[0]:1.5f} \\pm {np.sqrt(pcov[0][0]):1.5f}$", transform=ax.transAxes)
 ax.text(0.3, 0.8, f"$b = {popt[1]:1.5f} \\pm {np.sqrt(pcov[1][1]):1.5f}$", transform=ax.transAxes)
 ax.set_xlabel(r'$\ln (\lambda)$')
