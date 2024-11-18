@@ -40,7 +40,7 @@ class HeatmapPlotter:
             return np.array([])
         # returns an index such that self.x[index] >= 2 Delta, i.e., we are inside the continuum
         continuum_begin = np.searchsorted((self.y - self.gaps[pos]), 0, side='left')
-        positions = find_peaks(spectral[:continuum_begin])[0]
+        positions = find_peaks(spectral[:continuum_begin], distance=int(2. / (self.y[1] - self.y[0])))[0]
         return np.array([self.y[i] for i in positions])
 
     def plot(self, axes, cmap='inferno', labels=True):
