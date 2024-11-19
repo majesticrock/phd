@@ -2,7 +2,7 @@
 rm -rf auto_generated_scr/
 mkdir -p auto_generated_scr
 # Define the name of the input file
-input_file="params/for_auto.txt"
+input_file="params/auto_screening.txt"
 
 # Read the lines of the input file into an array of strings
 readarray -t NEW_VALUES < "${input_file}"
