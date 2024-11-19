@@ -6,7 +6,7 @@ import continued_fraction_pandas as cf
 
 from get_data import *
 
-main_df = load_all("continuum/offset_10/N_k=20000/T=0.0/coulomb_scaling=1.0", "resolvents.json.gz").query('g == 0.5 & k_F == 4.25 & omega_D == 10')
+main_df = load_all("continuum/offset_10/N_k=20000/T=0.0/coulomb_scaling=1.0", "resolvents.json.gz").query('g == 0.5 & k_F == 4.25 & omega_D == 10 & lambda_screening >= 1e-4')
 main_df.sort_values("lambda_screening", inplace=True)
 main_df.reset_index(inplace=True)
 
@@ -18,7 +18,7 @@ for index, pd_row in main_df.iterrows():
 #    print(pd_row["lambda_screening"])
     resolvents = cf.ContinuedFraction(pd_row, ignore_first=70, ignore_last=90, messages=False)
     w_lin = np.linspace(-0.005 * pd_row["continuum_boundaries"][1], 
-                        1.1 * pd_row["continuum_boundaries"][1] if pd_row["lambda_screening"] > 0.01 else 23., 
+                        1.1 * pd_row["continuum_boundaries"][1] if pd_row["lambda_screening"] > 0.01 else 25., 
                         20000, dtype=complex)
     w_lin += 1e-5j
 
@@ -26,6 +26,9 @@ for index, pd_row in main_df.iterrows():
     peak_positions[index] = 1e3 * w_lin.real[np.argmax(y_data)]# / pd_row["Delta_max"]
     screenings[index] = pd_row['lambda_screening']
     gaps[index] = 2 * pd_row["Delta_max"]
+
+for scr in screenings:
+    print(scr)
 
 fig, ax = plt.subplots()
 

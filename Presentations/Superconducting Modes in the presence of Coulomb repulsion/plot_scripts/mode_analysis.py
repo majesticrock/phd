@@ -6,9 +6,9 @@ import __path_appender as __ap
 __ap.append()
 
 ## Testing setup
-XTYPE= "Delta_max"
+XTYPE= "g"
 
-df = pd.read_pickle("modes/phase_0.pkl").sort_values("g")
+df = pd.read_pickle("modes/higgs_0.pkl").sort_values("g")
 filtered_df = df[df['energies'].apply(len) > 0].reset_index()
 fig, ax = plt.subplots()
 
@@ -32,6 +32,8 @@ N_MODES = 4
 N_SETS = 3
 scatter_data = []
 
+MU_STAR = [0, 0.0526, 0.291]
+
 fig, ax = plt.subplots()
 for j in range(N_SETS):
     for spectral_type, marker in zip(["higgs", "phase"], ["*", "^"]):
@@ -43,12 +45,16 @@ for j in range(N_SETS):
             valid_idx = first_entries.first_valid_index()
             if valid_idx is not None:
                 x = filtered_df[XTYPE].iloc[valid_idx]
+                if XTYPE == "g":
+                    x -= MU_STAR[j]
                 y = first_entries.iloc[valid_idx]
-                scatter_data.append([x, y])
+                scatter_data.append([x, y, j])
                 
                 ax.plot(x, y, color=f"C{j}", linestyle=None, marker=marker, markersize=10)
 
 scatter_data = np.array(scatter_data).transpose()
+for i in range(len(scatter_data[0])):
+    print(scatter_data[0][i])
 from ez_fit import ez_linear_fit
 popt, pcov = ez_linear_fit(scatter_data[0], scatter_data[1], ax, x_bounds=[0, 1.1 * scatter_data[0].max()], zorder=-20, color="k", ls="--")
 

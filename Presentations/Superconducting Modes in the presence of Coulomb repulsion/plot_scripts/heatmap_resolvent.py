@@ -38,10 +38,10 @@ class HeatmapPlotter:
     def identify_modes(self, spectral, pos):
         if self.gaps[pos] == 0:
             return np.array([])
-        # returns an index such that self.x[index] >= 2 Delta, i.e., we are inside the continuum
-        continuum_begin = np.searchsorted((self.y - self.gaps[pos]), 0, side='left')
-        positions = find_peaks(spectral[:continuum_begin], distance=int(2. / (self.y[1] - self.y[0])))[0]
-        return np.array([self.y[i] for i in positions])
+        indizes = find_peaks(spectral, distance=int(2. / (self.y[1] - self.y[0])))[0]
+        positions = np.array([self.y[i] for i in indizes])
+        positions = positions[positions < self.gaps[pos]]
+        return positions
 
     def plot(self, axes, cmap='inferno', labels=True):
         spectral_functions_higgs = np.array([res.spectral_density(1e-3 * self.y + 1e-6j, "amplitude_SC") for res in self.resolvents]).transpose()
