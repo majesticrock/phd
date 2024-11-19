@@ -6,20 +6,23 @@ import __path_appender as __ap
 __ap.append()
 
 ## Testing setup
-XTYPE= "g"
+XTYPE= "Delta_max"
+N_MODES = 5
+N_SETS = 3
+MU_STAR = [0, 0.0526, 0.291]
 
-df = pd.read_pickle("modes/higgs_0.pkl").sort_values("g")
-filtered_df = df[df['energies'].apply(len) > 0].reset_index()
 fig, ax = plt.subplots()
 
-for i in range(4):
-    first_entries = filtered_df["energies"].apply(lambda x: x[i] if len(x) > i else None)
-    valid_idx = first_entries.first_valid_index()  # Get the first index where first_entries is not None
-
-    if valid_idx is not None:  # Ensure there's a valid entry to plot
-        ax.plot(filtered_df[XTYPE], first_entries, color=f"C{i}")
-        ax.scatter(filtered_df[XTYPE].iloc[valid_idx], first_entries.iloc[valid_idx], color=f"C{i}", marker="*")
-        ax.axvline(filtered_df[XTYPE].iloc[valid_idx], ymax=first_entries.iloc[valid_idx], color=f"C{i}", ls="--")
+for idx, spectral_type in enumerate(["higgs", "phase"]):
+    df = pd.read_pickle(f"modes/{spectral_type}_0.pkl").sort_values("g")
+    filtered_df = df[df['energies'].apply(len) > 0].reset_index()
+    for i in range(N_MODES):
+        first_entries = filtered_df["energies"].apply(lambda x: x[i] if len(x) > i else None)
+        valid_idx = first_entries.first_valid_index()  # Get the first index where first_entries is not None
+        if valid_idx is not None:  # Ensure there's a valid entry to plot
+            ax.plot(filtered_df[XTYPE], first_entries, color=f"C{idx}")
+            ax.scatter(filtered_df[XTYPE].iloc[valid_idx], first_entries.iloc[valid_idx], color=f"C{idx}", marker="*")
+            #ax.axvline(filtered_df[XTYPE].iloc[valid_idx], ymax=first_entries.iloc[valid_idx], color=f"C{idx}", ls="--")
 
 ax.set_xlabel(r"$\Delta_\mathrm{max}$ $[\mathrm{meV}]$")
 ax.set_ylabel(r"$\omega_0$ $[\mathrm{meV}]$")
@@ -28,12 +31,10 @@ ax.set_xlim(0, filtered_df[XTYPE].max())
 fig.tight_layout()
 fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}_test.pdf")
 
-N_MODES = 4
-N_SETS = 3
+
+## Fitting setup
+
 scatter_data = []
-
-MU_STAR = [0, 0.0526, 0.291]
-
 fig, ax = plt.subplots()
 for j in range(N_SETS):
     for spectral_type, marker in zip(["higgs", "phase"], ["*", "^"]):
@@ -45,21 +46,18 @@ for j in range(N_SETS):
             valid_idx = first_entries.first_valid_index()
             if valid_idx is not None:
                 x = filtered_df[XTYPE].iloc[valid_idx]
-                if XTYPE == "g":
-                    x -= MU_STAR[j]
-                y = first_entries.iloc[valid_idx]
+                y = i + int(j==2 and spectral_type=="phase")# first_entries.iloc[valid_idx]
                 scatter_data.append([x, y, j])
                 
                 ax.plot(x, y, color=f"C{j}", linestyle=None, marker=marker, markersize=10)
 
 scatter_data = np.array(scatter_data).transpose()
-for i in range(len(scatter_data[0])):
-    print(scatter_data[0][i])
-from ez_fit import ez_linear_fit
-popt, pcov = ez_linear_fit(scatter_data[0], scatter_data[1], ax, x_bounds=[0, 1.1 * scatter_data[0].max()], zorder=-20, color="k", ls="--")
-
-ax.text(0.02, 0.57, f"$a = ({popt[0]:1.3f} \\pm {np.sqrt(pcov[0][0]):1.3f})$", transform=ax.transAxes)
-ax.text(0.02, 0.47, f"$b = ({popt[1]:1.3f} \\pm {np.sqrt(pcov[1][1]):1.3f})\\mathrm{{meV}}$", transform=ax.transAxes)
+#for i in range(len(scatter_data[0])):
+#    print(scatter_data[0][i])
+#from ez_fit import ez_linear_fit
+#popt, pcov = ez_linear_fit(scatter_data[0], scatter_data[1], ax, x_bounds=[0, 1.1 * scatter_data[0].max()], zorder=-20, color="k", ls="--")
+#ax.text(0.02, 0.57, f"$a = ({popt[0]:1.3f} \\pm {np.sqrt(pcov[0][0]):1.3f})$", transform=ax.transAxes)
+#ax.text(0.02, 0.47, f"$b = ({popt[1]:1.3f} \\pm {np.sqrt(pcov[1][1]):1.3f})\\mathrm{{meV}}$", transform=ax.transAxes)
 
 from matplotlib.lines import Line2D
 # Create legend for marker styles

@@ -54,7 +54,7 @@ fig.savefig(f"plots/{os.path.basename(__file__).split('.')[0]}.pdf")
 
 fig, axes = plt.subplots(nrows=2,sharex=True, figsize=(6.4, 6.4))
 for i, (ax, g, label) in enumerate(alpha_label(axes, [1, 2])):
-    pd_data = load_panda("continuum", "offset_20", "resolvents.json.gz", 
+    pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", 
                         **continuum_params(N_k=20000, T=0, coulomb_scaling=1, screening=1e-4, k_F=4.25, g=g, omega_D=10))
     resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=120)
     ax.set_ylim(0, 0.9)

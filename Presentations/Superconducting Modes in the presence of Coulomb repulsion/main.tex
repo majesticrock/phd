@@ -147,7 +147,7 @@ The individual terms are given by
 \bs
 \begin{align}
   H_\mathrm{Kin} &= \sum_{\vec{k} \sigma} \left( \frac{\hbar^2 k^2}{2 m_e} - \Ef \right) n_{k\sigma} \\
-  H_\mathrm{Ph} &= - \frac{1}{V} \sum_{\vec{k} \vec{k'}} g(k,k') \opSCd{k} \opSC{k'} \\
+  H_\mathrm{Ph} &= \frac{1}{V} \sum_{\vec{k} \vec{k'}} g(k,k') \opSCd{k} \opSC{k'} \\
   H_\mathrm{C} &= \frac{e^2}{2V \epsilon_0} \sum_{\sigma \sigma'} \sum_{\vec{k} \vec{k}' \vec{q}} \frac{1}{q^2 + k_s^2} \opd{k}{\sigma} \opd{k}{'\sigma} c_{\vec{k}'-\vec{q} \sigma'} c_{\vec{k}-\vec{q} \sigma} \\
   H_\mathrm{BG} &= - \frac{e^2}{2 \epsilon_0 k_s^2} \sum_{ \vec{k} \sigma } \rho   c_{ \vec{k}, \sigma }^\dagger  c_{ \vec{k}, \sigma }.
 \end{align}
@@ -156,23 +156,41 @@ Here, $V$ is the system's volume, $\Ef$ the Fermi energy, $\hbar$ the reduced Pl
 $e$ its charge, $\epsilon_0$ the vacuum permittivity, and $k_s$ the Thomas-Fermi screening wavevector.
 The operator $c_{ \vec{k}, \sigma }^{(\dagger)}$ annihilates (creates) an electron with momentum $\vec{k}$ and spin $\sigma$.
 
-The phononic interaction is given by \cite{krull2012}
-\begin{equation}
-\label{eqn:phonon_int}
-  g(k, k') = G \Theta( \debye - |\xi(k) - \xi(k')| ),
-\end{equation}
-where $G > 0$ is the interaction strength, $\debye$ the Debye frequency, $\Theta(k)$ the Heaviside function,
-and $\xi(k)$ describes the single-particle dispersion, i.e.,
-$\xi(k) = \hbar^2 k^2 / (2m_e) + \eFock(k) - \Ef$.
-The Fock energy $\eFock$ originates from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
-This interaction can be derived using continuous unitary transformation and is identical to the commonly known result by Fr\"ohlich for real processes \cite{frohlich1997,krull2012}.
-
 The quantity 
 \begin{equation}
   \rho \coloneqq \frac{1}{V} \sum_{\vec{k'} \sigma'} \expec{c_{ \vec{k}', \sigma' }^\dagger  c_{ \vec{k}', \sigma' }}
 \end{equation}
 describes the atomic nuclei qualitatively as a constant positive background charge.
 It exactly cancels with the divergent Hartree contribution in $H_\mathrm{C}$.
+
+Historically, a myriad of \textsl{ans\"atze} has been proposed for renormalizing electron-phonon interactions to an effective electron-electron interaction.
+Moreover, the resulting effective interactions are not necessarily identical.
+One of the most well-known formulations was presented by Fr\"ohlich \cite{frohlich1997}. It is given by
+\begin{equation}
+  g^\text{Fr\"ohlich} (\vec{k},\vec{k}') = \frac{|M_{\vec{q}}|^2 \omega_{\vec{q}}}{(\xi(k) - \xi(k'))^2 - \omega_{\vec{q}}^2},
+\end{equation}
+where $\vec{q} \coloneqq \vec{k} - \vec{k}'$, $M_{\vec{q}}$ is the electron-phonon coupling strength,
+$\omega_{\vec{q}}$ is the phonon frequency, and $\xi(\vec{k})$ refers to the single-particle energy.
+This form has two significant disadvantages compared to other formulations, namely, that it is only attractive in a small energy interval and that it includes divergences.
+
+Alternative \textsl{ans\"atze} resulted in expressions that remedied these issues, see, e.g., Refs. \cite{lenz1996,mielke1997,mielke1997a,hubsch2003,krull2012}.
+The most important commonality among all these results is that they coincide for real, i.e., energy-conserving, processes.
+This agreement is essential since these processes are the ones that can be practically observed \cite{kehrein2006}.
+
+For our purposes, we will adopt the formulation given in Ref. \cite{krull2012}, given by
+\begin{equation}
+\label{eqn:phonon_int}
+  g(k, k') = - \frac{|M_{\vec{q}}|^2}{\omega_{\vec{q}}} \Theta( \omega_{\vec{q}} - |\xi(k) - \xi(k')| ),
+\end{equation}
+where $\Theta(k)$ is the Heaviside function and the single-particle dispersion is given by $\xi(k) = \hbar^2 k^2 / (2m_e) + \eFock(k) - \Ef$.
+The Fock energy $\eFock (k)$ arises from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
+We will, furthermore, restrict our discussion to a single phonon mode at the Debye frequency, i.e., $\omega_{\vec{q}} = \debye$,
+and a constant interaction term $G \coloneqq |M_{\vec{q}}|^2 / \debye > 0$.
+This yields the interaction term
+\begin{equation}
+  g(k, k') = - G \Theta( \debye - |\xi(k) - \xi(k')| ).
+\end{equation}
+
 
 Throughout this article, we fix the Fermi wavevector to $\hbar \kf / \sqrt{m_e} = 4.25 \sqrt{\mathrm{eV}}$.
 This results in a Fermi energy around $\SI{8.5}{eV}$ to $\SI{9}{eV}$ depending on the screening wavevector $k_s$.
@@ -408,7 +426,7 @@ Naturally, based on \eqref{eqn:anderson_morel_gap}, we expect these values to be
 In \autoref{fig:fit_gap_dependence}, we show the fits of the data both excluding and including the Coulomb interaction.
 For the former, we investigated both the approximate \eqref{eqn:approx_g} and the full interaction \eqref{eqn:phonon_int},
 and for the latter, we show only the full interaction and the screening is set to $\lambda=1$ and $\lambda=10^{-4}$.
-The corresponding fit paramters are shown in \autoref{tab:fit_gap_dependence}.
+The corresponding fit parameters are shown in \autoref{tab:fit_gap_dependence}.
 
 First and foremost, since the approximation \eqref{eqn:approx_g} is just the standard BCS interaction, we expect exactly the BCS behavior $\ln(\maxGap / (2 \debye)) = -1/g$,
 which is within numerical accuracy exactly what we find.

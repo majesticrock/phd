@@ -38,7 +38,7 @@ class HeatmapPlotter:
     def identify_modes(self, spectral, pos):
         if self.gaps[pos] == 0:
             return np.array([])
-        indizes = find_peaks(spectral, distance=int(2. / (self.y[1] - self.y[0])))[0]
+        indizes = find_peaks(spectral, distance=int(2 / (self.y[1] - self.y[0])))[0]
         positions = np.array([self.y[i] for i in indizes])
         positions = positions[positions < self.gaps[pos]]
         return positions

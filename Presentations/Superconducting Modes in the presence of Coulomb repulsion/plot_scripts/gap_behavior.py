@@ -8,7 +8,7 @@ import os
 
 fig, ax = plt.subplots()
 
-all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25")
+all_data = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query("k_F == 4.25 & lambda_screening >= 1e-4")
 plot_data = all_data.query("coulomb_scaling == 1 & omega_D == 10 & g in [0.3, 0.5, 0.7]").sort_values("lambda_screening")
 
 linestyles = {0.3: '-', 0.5: '--', 0.7: ':'}
