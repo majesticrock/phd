@@ -20,12 +20,15 @@ build/main.pdf: FORCE | build
 plots/%.pdf: plot_scripts/%.py matplotlibrc | plots
 	TEXINPUTS=$$(pwd): python $<
 
-modes/higgs_0.pkl: plots/heatmap_resolvent.pdf
+modes/higgs_0.pkl: plots/heatmap_resolvent.pdf | modes
 
 plots/mode_analysis.pdf: plot_scripts/mode_analysis.py modes/higgs_0.pkl
 	TEXINPUTS=$$(pwd): python $<
 
 FORCE:
+
+modes:
+	mkdir -p modes/
 
 plots:
 	mkdir -p plots/
@@ -36,3 +39,4 @@ build:
 clean:
 	rm -rf build/
 	rm -rf plots/
+	rm -rf modes/

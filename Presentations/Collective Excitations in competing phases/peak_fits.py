@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 
 import os, sys
 if os.name == "nt":
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + r"\PhdUtility\python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + r"\PhdUtility\python")
 else:
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))) + "/PhdUtility/python")
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) + "/PhdUtility/python")
 import continued_fraction as cf
 import plot_settings as ps
 import resolvent_peak as rp
