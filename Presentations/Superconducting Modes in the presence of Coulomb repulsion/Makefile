@@ -20,7 +20,7 @@ build/main.pdf: FORCE | build
 plots/%.pdf: plot_scripts/%.py matplotlibrc | plots
 	TEXINPUTS=$$(pwd): python $<
 
-modes/higgs.pkl: plots/heatmap_resolvent.pdf
+modes/higgs_0.pkl: plots/heatmap_resolvent.pdf
 
 plots/mode_analysis.pdf: plot_scripts/mode_analysis.py modes/higgs_0.pkl
 	TEXINPUTS=$$(pwd): python $<

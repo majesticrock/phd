@@ -1,0 +1,3 @@
+[submodule "PhdUtility"]
+	path = PhdUtility
+	url = git@github.com:majesticrock/PhdUtility.git
