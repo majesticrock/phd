@@ -27,9 +27,6 @@ for index, pd_row in main_df.iterrows():
     screenings[index] = pd_row['lambda_screening']
     gaps[index] = 2 * pd_row["Delta_max"]
 
-for scr in screenings:
-    print(scr)
-
 fig, ax = plt.subplots()
 
 screenings = np.log(screenings)

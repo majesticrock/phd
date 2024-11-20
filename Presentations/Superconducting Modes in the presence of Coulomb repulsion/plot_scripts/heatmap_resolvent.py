@@ -9,6 +9,7 @@ from scipy.signal import find_peaks
 
 BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
+G_MAX = 3.4
 data_cuts = [0, 4, 12]
 
 class HeatmapPlotter:
@@ -112,9 +113,9 @@ all_data = pd.concat([data_5, data_10, data_20, data_25])
 ##########################
 
 tasks = [
-    (all_data.query("coulomb_scaling == 0 & lambda_screening == 0      & omega_D == 10 & g < 3.2"), "g", r"$g$"),
-    (all_data.query("coulomb_scaling == 1 & lambda_screening == 1      & omega_D == 10 & g < 3.2"), "g", r"$g$"),
-    (all_data.query("coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g < 3.2"), "g", r"$g$"),
+    (all_data.query(f"coulomb_scaling == 0 & lambda_screening == 0      & omega_D == 10 & g <= {G_MAX}"), "g", r"$g$"),
+    (all_data.query(f"coulomb_scaling == 1 & lambda_screening == 1      & omega_D == 10 & g <= {G_MAX}"), "g", r"$g$"),
+    (all_data.query(f"coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g <= {G_MAX}"), "g", r"$g$"),
 ]
 
 fig, axes = plt.subplots(nrows=2, ncols=len(tasks), figsize=(12.8, 6.4), sharex=True, sharey=True)
@@ -143,6 +144,7 @@ cbar = fig.colorbar(contour_for_colorbar, ax=axes[:, -1], orientation='vertical'
 cbar.set_label(r'$A$ [$\mathrm{meV}^{-1}$]')
 
 axes[0][0].set_xticks([0, 1, 2, 3])
+axes[0][0].set_xlim(0, G_MAX)
 filename = os.path.join(BUILD_DIR, f"{os.path.basename(__file__).split('.')[0]}{FILE_ENDING}")
 fig.savefig(filename)
 

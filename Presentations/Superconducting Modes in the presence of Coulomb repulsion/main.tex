@@ -43,6 +43,7 @@
 \usepackage{color}
 \usepackage{placeins}
 \usepackage[normalem]{ulem}
+\usepackage[compat=1.0.0]{tikz-feynman}
 %\usepackage{mhchem}
 
 %=======================
@@ -81,6 +82,8 @@
 
 \def\hmath$#1${\texorpdfstring{{\rmfamily\mathrmit{#1}}}{#1}}
 
+\def\plusheight{-\the\dimexpr\fontdimen22\textfont2\relax}
+
 \begin{document} 
 
 % Preliminary title
@@ -106,8 +109,20 @@ Otto-Hahn Stra\ss{}e 4, 44227 Dortmund, Germany}
 %%%%%                                                 Abstract                                                  %%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 1. plural
+% 
 \begin{abstract}
-    Hic sunt dracones.
+    We numerically study the collective excitations present in superconductors.
+    Using the iterated equations of motion (iEoM) approach, we gain access to the system's Green's functions,
+    which ultimately enables a comprehensive analysis of these collective excitations.
+    The effective phonon-mediated interaction between electrons is commonly approximated to be constant and attractive in a small energy shell around the Fermi edge and zero everywhere else.
+    This yields the the well-known amplitude (Higgs) and phase (Anderson-Bogoliubov) modes.
+    However, more precise formulations are available. We make use of one that was derived via continuous unitary transformation (CUT).
+    In doing so, we find additional modes appearing below the quasiparticle continuum as the phononic interaction strength is increased.
+    These modes, in contrast to the phase mode at $\omega = 0$, persist even when Coulomb interactions are included.
+    In addition to the collective excitations, we compute the gap function and find good agreement between our results and the literature predictions within the weak-coupling limit.
+    Furthermore, our approach is not restricted to this regime. 
 \end{abstract}
 
 \maketitle
@@ -202,11 +217,69 @@ Furthermore, we define the dimensionless parameter
   g \coloneqq \rho_\mathrm{F} G = G \frac{m_e \kf}{2 \pi^2 \hbar^2},
 \end{equation}
 where $\rho_\mathrm{F}$ is the density of states of the non-interacting system at the Fermi edge.
+
 In the same manner, we define a dimensionless scaling $\lambda$ for the screening wavevector
 \begin{equation}
-  k_s \coloneqq \lambda \sqrt{\frac{e^2 m_e}{3 \pi^2 \epsilon_0} \kf}.
+  k_s \coloneqq \lambda \sqrt{\frac{e^2 m_e}{3 \pi^2 \hbar^2 \epsilon_0} \kf}.
 \end{equation}
 The square-root expression is an estimate for the Thomas-Fermi wavevector in real materials provided by Ref. \cite{rickayzen1980}.
+Mathematically, this screening translates to the real-space potential $V(r) \propto \exp (- k_s r) / r$.
+Physically, its existence can be motivated in the following manner:
+An electric field naturally causes a displacement of the free charge carriers. 
+This, in turn, generates an additional electric field that displaces the electrons, generating another field and so on.
+Diagramatically, this process results in an effective interaction given by
+\begin{align*}
+  \begin{tikzpicture}[baseline=\plusheight]
+  \feynmandiagram [baseline={(current bounding box.center)}, horizontal=a to b, layered layout] {
+    a -- [decorate, decoration={snake, amplitude=.8mm, segment length=2.5mm, post length=0mm}, double] b
+  };
+  \end{tikzpicture}
+  \ &\raisebox{0.6ex}{=}\ %
+  \begin{tikzpicture}[baseline=\plusheight]
+    \feynmandiagram [horizontal=a to b, layered layout] {
+      a -- [photon] b
+    };
+  \end{tikzpicture}\\
+  \ &\raisebox{0.6ex}{+}\ %
+  \begin{tikzpicture}[baseline=\plusheight]
+    \feynmandiagram [horizontal=a to b, layered layout, scale=0.45] {
+      i1 -- [photon] a
+      -- [fermion, half left] b
+      -- [fermion, half left] a,
+      b -- [photon] f1
+    };
+  \end{tikzpicture}\\
+  \ &\raisebox{0.6ex}{+}\ %
+  \begin{tikzpicture}[baseline=\plusheight]
+    \feynmandiagram [horizontal=a to d, layered layout, scale=0.45] {
+      i1 -- [photon] a
+      -- [fermion, half left] b
+      -- [fermion, half left] a,
+      b -- [photon] c
+      -- [fermion, half left] d
+      -- [fermion, half left] c,
+      d -- [photon] f1
+    };
+  \end{tikzpicture}\\
+  &\raisebox{0.6ex}{+}\ %
+  \begin{tikzpicture}[baseline=\plusheight]
+    \feynmandiagram [horizontal=a to f, layered layout, scale=0.45] {
+      init -- [photon] a
+      -- [fermion, half left] b
+      -- [fermion, half left] a,
+      b -- [photon] c
+      -- [fermion, half left] d
+      -- [fermion, half left] c,
+      d -- [photon] e
+      -- [fermion, half left] f
+      -- [fermion, half left] e,
+      f -- [photon] final
+    }; 
+  \end{tikzpicture}
+  \ \raisebox{0.6ex}{+ \ldots,} %
+\end{align*}
+which corresponds to the aforementioned screened Coulomb potential \cite{rickayzen1980}.
+
 Lastly, we will define the following operators for brevity
 \begin{equation}
   f_{\vec{k}} \coloneqq \opSC{k},\qquad n_{\vec{k}\sigma} \coloneqq \opd{k}{\sigma} \ope{k}{\sigma}.
@@ -238,13 +311,13 @@ where the phononic contribution to the superconducting gap function is given by
 \end{align}
 Repeating the same calculation for $H_\mathrm{C}$ yields
 \begin{align}
-  \tilde{H}_\mathrm{C} &= - \sum_{\vec{k}} \deltaC (k) f_{\vec{k}} + \mathrm{H.c.} \nonumber \\
+  \tilde{H}_\mathrm{C} &= - \sum_{\vec{k}} \deltaC (k) f_{\vec{k}}^\dagger + \mathrm{H.c.} \nonumber \\
     &+ \sum_{\vec{k} \sigma} (\eFock(k) + \epsilon_\mathrm{C}(k)) n_{\vec{k} \sigma}.
 \end{align}
 The additional contribution to the gap function is given by
 \begin{equation}
 \label{eqn:delta_coulomb}
-  \deltaC (k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \expec{f_{q}^\dagger} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right).
+  \deltaC (k) = \frac{e^2}{8 \pi^2 \epsilon_0 k} \int_0^\infty \mathrm{d} q \expec{f_{q}} q \ln \left( \frac{k_s^2 + (q + k)^2}{k_s^2 + (q - k)^2} \right).
 \end{equation}
 Note, that this term has the opposite sign of \eqref{eqn:delta_phonon}.
 Assuming $\expec{n_{\vec{k} \sigma}} = \Theta (\kf - k)$, the Fock energy reads
