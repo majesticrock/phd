@@ -9,7 +9,8 @@ from scipy.signal import find_peaks
 
 BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
-G_MAX = 3.4
+G_MAX_LOAD = 4.25
+G_MAX_PLOT = 3.4
 data_cuts = [0, 4, 12]
 
 class HeatmapPlotter:
@@ -18,9 +19,10 @@ class HeatmapPlotter:
         
         self.y = np.linspace(0., 55., 10000)
         self.x = (self.data_frame[parameter_name]).to_numpy()
-        self.resolvents = [cf.ContinuedFraction(pd_row, messages=False, ignore_first=5, ignore_last=88) for index, pd_row in self.data_frame.iterrows()]
-        self.gaps = [2 * gap for gap in self.data_frame["Delta_max"]]
-        self.N_data = len(self.gaps)
+        self.resolvents = [cf.ContinuedFraction(pd_row, messages=False, ignore_first=30, ignore_last=88) for index, pd_row in self.data_frame.iterrows()]
+        self.max_gaps = [2 * gap for gap in self.data_frame["Delta_max"]]
+        self.true_gaps = [1e3 * float(t_gap[0]) for t_gap in self.data_frame["continuum_boundaries"]]
+        self.N_data = len(self.max_gaps)
         
         self.g_cuts = np.zeros(len(data_cuts))
         for i in range(len(data_cuts)):
@@ -37,11 +39,11 @@ class HeatmapPlotter:
         self.yscale = yscale
 
     def identify_modes(self, spectral, pos):
-        if self.gaps[pos] == 0:
+        if self.max_gaps[pos] == 0:
             return np.array([])
-        indizes = find_peaks(spectral, distance=int(2 / (self.y[1] - self.y[0])))[0]
+        indizes = find_peaks(spectral, distance=int(1 / (self.y[1] - self.y[0])))[0]
         positions = np.array([self.y[i] for i in indizes])
-        positions = positions[positions < self.gaps[pos]]
+        positions = positions[positions < self.true_gaps[pos]]
         return positions
 
     def plot(self, axes, cmap='inferno', labels=True):
@@ -52,6 +54,7 @@ class HeatmapPlotter:
                 "resolvent_type": "Higgs",
                 "energies": self.identify_modes(spectral_functions_higgs[:, i], i),
                 "Delta_max": self.data_frame["Delta_max"].iloc[i],
+                "true_gap": self.true_gaps[i],
                 "T": self.data_frame["T"].iloc[i],
                 "g": self.data_frame["g"].iloc[i],
                 "omega_D": self.data_frame["omega_D"].iloc[i],
@@ -63,6 +66,7 @@ class HeatmapPlotter:
                 "resolvent_type": "Phase",
                 "energies": self.identify_modes(spectral_functions_phase[:, i], i),
                 "Delta_max": self.data_frame["Delta_max"].iloc[i],
+                "true_gap": self.true_gaps[i],
                 "T": self.data_frame["T"].iloc[i],
                 "g": self.data_frame["g"].iloc[i],
                 "omega_D": self.data_frame["omega_D"].iloc[i],
@@ -80,7 +84,7 @@ class HeatmapPlotter:
         contour_phase.set_edgecolor('face')
         
         for ax in axes:
-            ax.plot(self.x, self.gaps, color="lime", ls=":")
+            ax.plot(self.x, self.true_gaps, color="lime", ls=":")
             ax.set_rasterization_zorder(-10)
             ax.set_ylim(0., max(self.y))
             ax.set_xscale(self.xscale)
@@ -113,9 +117,9 @@ all_data = pd.concat([data_5, data_10, data_20, data_25])
 ##########################
 
 tasks = [
-    (all_data.query(f"coulomb_scaling == 0 & lambda_screening == 0      & omega_D == 10 & g <= {G_MAX}"), "g", r"$g$"),
-    (all_data.query(f"coulomb_scaling == 1 & lambda_screening == 1      & omega_D == 10 & g <= {G_MAX}"), "g", r"$g$"),
-    (all_data.query(f"coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g <= {G_MAX}"), "g", r"$g$"),
+    (all_data.query(f"coulomb_scaling == 0 & lambda_screening == 0      & omega_D == 10 & g <= {G_MAX_LOAD}"), "g", r"$g$"),
+    (all_data.query(f"coulomb_scaling == 1 & lambda_screening == 1      & omega_D == 10 & g <= {G_MAX_LOAD}"), "g", r"$g$"),
+    (all_data.query(f"coulomb_scaling == 1 & lambda_screening == 0.0001 & omega_D == 10 & g <= {G_MAX_LOAD}"), "g", r"$g$"),
 ]
 
 fig, axes = plt.subplots(nrows=2, ncols=len(tasks), figsize=(12.8, 6.4), sharex=True, sharey=True)
@@ -144,7 +148,7 @@ cbar = fig.colorbar(contour_for_colorbar, ax=axes[:, -1], orientation='vertical'
 cbar.set_label(r'$A$ [$\mathrm{meV}^{-1}$]')
 
 axes[0][0].set_xticks([0, 1, 2, 3])
-axes[0][0].set_xlim(0, G_MAX)
+axes[0][0].set_xlim(0, G_MAX_PLOT)
 filename = os.path.join(BUILD_DIR, f"{os.path.basename(__file__).split('.')[0]}{FILE_ENDING}")
 fig.savefig(filename)
 

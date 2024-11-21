@@ -5,7 +5,7 @@ __ap.append()
 from create_zoom import *
 from get_data import load_panda, continuum_params
 pd_data = load_panda("continuum", "offset_25", "resolvents.json.gz",
-                    **continuum_params(N_k=30000, T=0, coulomb_scaling=0, screening=1e-4, k_F=4.25, g=1.8, omega_D=10))
+                    **continuum_params(N_k=30000, T=0, coulomb_scaling=1, screening=1, k_F=4.25, g=3.45, omega_D=10))
 
 import continued_fraction_pandas as cf
 import plot_settings as ps
@@ -21,7 +21,7 @@ plotter = ps.CURVEFAMILY(6, axis=ax)
 plotter.set_individual_colors("nice")
 plotter.set_individual_linestyles(["-", "-.", "--", "-", "--", ":"])
 
-w_lin = np.linspace(-0.005 * pd_data["continuum_boundaries"][1], 1.1 * pd_data["continuum_boundaries"][1], 15000, dtype=complex)
+w_lin = np.linspace(-0.005 * pd_data["continuum_boundaries"][1], 1.1 * pd_data["continuum_boundaries"][1], 150000, dtype=complex)
 #w_lin = np.linspace(0, 150, 15000, dtype=complex)
 w_lin += 1e-4j
 

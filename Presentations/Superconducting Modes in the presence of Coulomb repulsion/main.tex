@@ -178,7 +178,8 @@ The quantity
 describes the atomic nuclei qualitatively as a constant positive background charge.
 It exactly cancels with the divergent Hartree contribution in $H_\mathrm{C}$.
 
-Historically, a myriad of \textsl{ans\"atze} has been proposed for renormalizing electron-phonon interactions to an effective electron-electron interaction.
+Obtaining an effective electron-electron interaction based on the physical electron-phonon interaction was a major subject of past studies.
+A myriad of \textsl{ans\"atze} has been proposed that achieve just that.
 Moreover, the resulting effective interactions are not necessarily identical.
 One of the most well-known formulations was presented by Fr\"ohlich \cite{frohlich1997}. It is given by
 \begin{equation}
@@ -192,7 +193,7 @@ Alternative \textsl{ans\"atze} resulted in expressions that remedied these issue
 The most important commonality among all these results is that they coincide for real, i.e., energy-conserving, processes.
 This agreement is essential since these processes are the ones that can be practically observed \cite{kehrein2006}.
 
-For our purposes, we will adopt the formulation given in Ref. \cite{krull2012}, given by
+For our purposes, we will adopt a formulation that was derived using a continuous unitary transformation (CUT) found in Ref. \cite{krull2012}, given by
 \begin{equation}
 \label{eqn:phonon_int}
   g(k, k') = - \frac{|M_{\vec{q}}|^2}{\omega_{\vec{q}}} \Theta( \omega_{\vec{q}} - |\xi(k) - \xi(k')| ),
@@ -200,7 +201,7 @@ For our purposes, we will adopt the formulation given in Ref. \cite{krull2012}, 
 where $\Theta(k)$ is the Heaviside function and the single-particle dispersion is given by $\xi(k) = \hbar^2 k^2 / (2m_e) + \eFock(k) - \Ef$.
 The Fock energy $\eFock (k)$ arises from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
 We will, furthermore, restrict our discussion to a single phonon mode at the Debye frequency, i.e., $\omega_{\vec{q}} = \debye$,
-and a constant interaction term $G \coloneqq |M_{\vec{q}}|^2 / \debye > 0$.
+and a constant interaction strength $G \coloneqq |M_{\vec{q}}|^2 / \debye > 0$.
 This yields the interaction term
 \begin{equation}
   g(k, k') = - G \Theta( \debye - |\xi(k) - \xi(k')| ).
@@ -218,7 +219,7 @@ Furthermore, we define the dimensionless parameter
 \end{equation}
 where $\rho_\mathrm{F}$ is the density of states of the non-interacting system at the Fermi edge.
 
-In the same manner, we define a dimensionless scaling $\lambda$ for the screening wavevector
+In the same manner, we define a dimensionless scaling ratio $\lambda$ for the screening wavevector
 \begin{equation}
   k_s \coloneqq \lambda \sqrt{\frac{e^2 m_e}{3 \pi^2 \hbar^2 \epsilon_0} \kf}.
 \end{equation}
