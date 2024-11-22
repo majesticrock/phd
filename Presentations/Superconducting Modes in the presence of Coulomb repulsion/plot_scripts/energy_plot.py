@@ -30,7 +30,7 @@ axes[0].set_xticks([-0.0008, 0.0008])
 axes[1].set_xticks([-0.0006, 0.0006])      
 axes[2].set_xticks([-0.0003, 0.0003])    
  
-axes[0].set_ylabel(r"$E [\mathrm{meV}]$")
+axes[0].set_ylabel(r"$E - \Delta_\mathrm{max} [\mathrm{meV}]$")
 axes[-1].legend(loc="upper right", ncols=2)
 axes[-1].set_ylim(-1, 4)
 fig.subplots_adjust(wspace=0.2, hspace=0.1)

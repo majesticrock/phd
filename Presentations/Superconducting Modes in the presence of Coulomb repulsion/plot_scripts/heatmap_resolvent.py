@@ -6,12 +6,12 @@ import continued_fraction_pandas as cf
 import os
 from get_data import *
 from scipy.signal import find_peaks
+from __all_data_pickler import DATA_CUTS, load_pickled
 
 BUILD_DIR = "plots/"
 FILE_ENDING = ".pdf"
 G_MAX_LOAD = 4.25
 G_MAX_PLOT = 3.4
-data_cuts = [0, 4, 12]
 
 class HeatmapPlotter:
     def __init__(self, data_frame_param, parameter_name, xlabel='Y-axis', zlabel=r'$A$ [$\mathrm{eV}^{-1}$]', xscale="linear", yscale="linear"):
@@ -24,13 +24,13 @@ class HeatmapPlotter:
         self.true_gaps = [1e3 * float(t_gap[0]) for t_gap in self.data_frame["continuum_boundaries"]]
         self.N_data = len(self.max_gaps)
         
-        self.g_cuts = np.zeros(len(data_cuts))
-        for i in range(len(data_cuts)):
-            filtered_df = self.data_frame[self.data_frame['Delta_max'] < data_cuts[i]]
+        self.g_cuts = np.zeros(len(DATA_CUTS))
+        for i in range(len(DATA_CUTS)):
+            filtered_df = self.data_frame[self.data_frame['Delta_max'] < DATA_CUTS[i]]
             if len(filtered_df) == 0:
                 self.g_cuts[i] = 0
             else:
-                closest_row = filtered_df.loc[(data_cuts[i] - filtered_df['Delta_max']).idxmin()]
+                closest_row = filtered_df.loc[(DATA_CUTS[i] - filtered_df['Delta_max']).idxmin()]
                 self.g_cuts[i] = closest_row['g']
 
         self.xlabel = xlabel
@@ -46,6 +46,15 @@ class HeatmapPlotter:
         positions = positions[positions < self.true_gaps[pos]]
         return positions
 
+    def __get_error__(self, key, i):
+        __OFFSET__ = 2
+        if key == "true_gap":
+            return [self.true_gaps[i]     - self.true_gaps[i - __OFFSET__] if i - __OFFSET__ >= 0                   else None,
+                    self.true_gaps[i + __OFFSET__] - self.true_gaps[i]     if i + __OFFSET__ <  len(self.true_gaps) else None]
+    
+        return [self.data_frame[key].iloc[i]     - self.data_frame[key].iloc[i - __OFFSET__] if i - __OFFSET__ >= 0                         else None,
+                self.data_frame[key].iloc[i + __OFFSET__] - self.data_frame[key].iloc[i]     if i + __OFFSET__ <  len(self.data_frame["g"]) else None]
+
     def plot(self, axes, cmap='inferno', labels=True):
         spectral_functions_higgs = np.array([res.spectral_density(1e-3 * self.y + 1e-6j, "amplitude_SC") for res in self.resolvents]).transpose()
         spectral_functions_phase = np.array([res.spectral_density(1e-3 * self.y + 1e-6j, "phase_SC") for res in self.resolvents]).transpose()
@@ -55,8 +64,11 @@ class HeatmapPlotter:
                 "energies": self.identify_modes(spectral_functions_higgs[:, i], i),
                 "Delta_max": self.data_frame["Delta_max"].iloc[i],
                 "true_gap": self.true_gaps[i],
-                "T": self.data_frame["T"].iloc[i],
                 "g": self.data_frame["g"].iloc[i],
+                "error_g": self.__get_error__("g", i),
+                "error_Delta_max": self.__get_error__("Delta_max", i),
+                "error_true_gap": self.__get_error__("true_gap", i),
+                "T": self.data_frame["T"].iloc[i],
                 "omega_D": self.data_frame["omega_D"].iloc[i],
                 "E_F": self.data_frame["E_F"].iloc[i],
                 "k_F": self.data_frame["k_F"].iloc[i],
@@ -67,8 +79,11 @@ class HeatmapPlotter:
                 "energies": self.identify_modes(spectral_functions_phase[:, i], i),
                 "Delta_max": self.data_frame["Delta_max"].iloc[i],
                 "true_gap": self.true_gaps[i],
-                "T": self.data_frame["T"].iloc[i],
                 "g": self.data_frame["g"].iloc[i],
+                "error_g": self.__get_error__("g", i),
+                "error_Delta_max": self.__get_error__("Delta_max", i),
+                "error_true_gap": self.__get_error__("true_gap", i),
+                "T": self.data_frame["T"].iloc[i],
                 "omega_D": self.data_frame["omega_D"].iloc[i],
                 "E_F": self.data_frame["E_F"].iloc[i],
                 "k_F": self.data_frame["k_F"].iloc[i],
@@ -97,20 +112,7 @@ class HeatmapPlotter:
 
         return contour_higgs
 
-data_5 = load_all("continuum/offset_5/N_k=20000/T=0.0", "resolvents.json.gz").query(
-    f"k_F == 4.25 & Delta_max < {data_cuts[len(data_cuts) - 3]}"
-    )
-data_10 = load_all("continuum/offset_10/N_k=20000/T=0.0", "resolvents.json.gz").query(
-    f"k_F == 4.25 & Delta_max >= {data_cuts[len(data_cuts) - 3]} & Delta_max < {data_cuts[len(data_cuts) - 2]}"
-    )
-data_20 = load_all("continuum/offset_20/N_k=20000/T=0.0", "resolvents.json.gz").query(
-    f"k_F == 4.25 & Delta_max >= {data_cuts[len(data_cuts) - 2]} & Delta_max < {data_cuts[len(data_cuts) - 1]}"
-    )
-data_25 = load_all("continuum/offset_25/N_k=30000/T=0.0", "resolvents.json.gz").query(
-    f"k_F == 4.25 & Delta_max >= {data_cuts[len(data_cuts) - 1]}"
-    )
-
-all_data = pd.concat([data_5, data_10, data_20, data_25])
+all_data = load_pickled()
 
 ##########################
 #####       g        #####
@@ -141,7 +143,7 @@ for i, (data_query, x_column, xlabel) in enumerate(tasks):
     plotter.HiggsModes.to_pickle(f"modes/higgs_{i}.pkl")
     plotter.PhaseModes.to_pickle(f"modes/phase_{i}.pkl")
     #for j in range(2):
-    #    for k in range(len(data_cuts)):
+    #    for k in range(len(DATA_CUTS)):
     #        axes[j][i].axvline(plotter.g_cuts[k], color="C4")
 
 cbar = fig.colorbar(contour_for_colorbar, ax=axes[:, -1], orientation='vertical', fraction=0.1, pad=0.05, extend='max')
