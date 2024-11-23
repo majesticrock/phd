@@ -156,54 +156,50 @@ We will focus on a rather general Hamiltonian at zero temperature given by
 where $H_\mathrm{kin}$ describes the kinetic part,
 $H_\mathrm{Ph}$ describes an effective electron-electron interaction mediated by phonons, 
 $H_\mathrm{C}$ describes the repulsive Coulomb interaction between electrons,
-and $H_\mathrm{BG}$ describes the electronic interaction between the electrons and the atomic nuclei.
+and $H_\mathrm{BG}$ describes the electronic interaction between the electrons and the atomic nuclei,
+which we represent as a constant positive background charge $\rho$.
+This term exactly cancels with the divergent Hartree contribution in $H_\mathrm{C}$.
 The individual terms are given by
 \bs
 \begin{align}
-  H_\mathrm{Kin} &= \sum_{\vec{k} \sigma} \left( \frac{\hbar^2 k^2}{2 m_e} - \Ef \right) n_{k\sigma} \\
+  H_\mathrm{Kin} &= \sum_{\vec{k} \sigma} \left( \epsilon_0 (k) - \Ef \right) n_{k\sigma} \\
   H_\mathrm{Ph} &= \frac{1}{V} \sum_{\vec{k} \vec{k'}} g(k,k') \opSCd{k} \opSC{k'} \\
   H_\mathrm{C} &= \frac{e^2}{2V \epsilon_0} \sum_{\sigma \sigma'} \sum_{\vec{k} \vec{k}' \vec{q}} \frac{1}{q^2 + k_s^2} \opd{k}{\sigma} \opd{k}{'\sigma} c_{\vec{k}'-\vec{q} \sigma'} c_{\vec{k}-\vec{q} \sigma} \\
-  H_\mathrm{BG} &= - \frac{e^2}{2 \epsilon_0 k_s^2} \sum_{ \vec{k} \sigma } \rho   c_{ \vec{k}, \sigma }^\dagger  c_{ \vec{k}, \sigma }.
+  H_\mathrm{BG} &= - \frac{e^2}{2 \epsilon_0 k_s^2} \sum_{ \vec{k} \sigma } \rho c_{ \vec{k}, \sigma }^\dagger c_{ \vec{k}, \sigma }.
 \end{align}
 \es
-Here, $V$ is the system's volume, $\Ef$ the Fermi energy, $\hbar$ the reduced Planck's constant, $m_e$ the electron mass, 
+Here, $V$ is the system's volume, $\epsilon_0 (k) = \hbar^2 k^2 / (2 m_e)$ the free particle dispersion, 
+$\Ef$ the Fermi energy, $\hbar$ the reduced Planck's constant, $m_e$ the electron mass, 
 $e$ its charge, $\epsilon_0$ the vacuum permittivity, and $k_s$ the Thomas-Fermi screening wavevector.
 The operator $c_{ \vec{k}, \sigma }^{(\dagger)}$ annihilates (creates) an electron with momentum $\vec{k}$ and spin $\sigma$.
 
-The quantity 
-\begin{equation}
-  \rho \coloneqq \frac{1}{V} \sum_{\vec{k'} \sigma'} \expec{c_{ \vec{k}', \sigma' }^\dagger  c_{ \vec{k}', \sigma' }}
-\end{equation}
-describes the atomic nuclei qualitatively as a constant positive background charge.
-It exactly cancels with the divergent Hartree contribution in $H_\mathrm{C}$.
-
-Obtaining an effective electron-electron interaction based on the physical electron-phonon interaction was a major subject of past studies.
-A myriad of \textsl{ans\"atze} has been proposed that achieve just that.
+Obtaining an effective electron-electron interaction based on the physical electron-phonon interaction has been a major subject of past studies.
+Many \textsl{ans\"atze} have been proposed that achieve just that.
 Moreover, the resulting effective interactions are not necessarily identical.
-One of the most well-known formulations was presented by Fr\"ohlich \cite{frohlich1997}. It is given by
+One of the best-known formulations was presented by Fr\"ohlich \cite{frohlich1997}
 \begin{equation}
-  g^\text{Fr\"ohlich} (\vec{k},\vec{k}') = \frac{|M_{\vec{q}}|^2 \omega_{\vec{q}}}{(\xi(k) - \xi(k'))^2 - \omega_{\vec{q}}^2},
+  g^\text{Fr\"ohlich} (\vec{k},\vec{k}') = \frac{|M_{\vec{q}}|^2 \omega_{\vec{q}}}{(\epsilon(k) - \epsilon(k'))^2 - \omega_{\vec{q}}^2},
 \end{equation}
 where $\vec{q} \coloneqq \vec{k} - \vec{k}'$, $M_{\vec{q}}$ is the electron-phonon coupling strength,
-$\omega_{\vec{q}}$ is the phonon frequency, and $\xi(\vec{k})$ refers to the single-particle energy.
+$\omega_{\vec{q}}$ is the phonon frequency, and $\epsilon(\vec{k})$ refers to the single-particle energy.
 This form has two significant disadvantages compared to other formulations, namely, that it is only attractive in a small energy interval and that it includes divergences.
 
-Alternative \textsl{ans\"atze} resulted in expressions that remedied these issues, see, e.g., Refs. \cite{lenz1996,mielke1997,mielke1997a,hubsch2003,krull2012}.
+Alternative \textsl{ans\"atze} resulted in expressions that remedied these issues, see, e.g., Refs. \cite{kehrein2006,lenz1996,mielke1997,mielke1997a,hubsch2003,krull2012}.
 The most important commonality among all these results is that they coincide for real, i.e., energy-conserving, processes.
 This agreement is essential since these processes are the ones that can be practically observed \cite{kehrein2006}.
 
-For our purposes, we will adopt a formulation that was derived using a continuous unitary transformation (CUT) found in Ref. \cite{krull2012}, given by
+For our purposes, we will adopt a formulation that was derived using a continuous unitary transformation (CUT) found in Ref. \cite{krull2012}
 \begin{equation}
 \label{eqn:phonon_int}
-  g(k, k') = - \frac{|M_{\vec{q}}|^2}{\omega_{\vec{q}}} \Theta( \omega_{\vec{q}} - |\xi(k) - \xi(k')| ),
+  g(k, k') = - \frac{|M_{\vec{q}}|^2}{\omega_{\vec{q}}} \Theta( \omega_{\vec{q}} - |\epsilon(k) - \epsilon(k')| ),
 \end{equation}
-where $\Theta(k)$ is the Heaviside function and the single-particle dispersion is given by $\xi(k) = \hbar^2 k^2 / (2m_e) + \eFock(k) - \Ef$.
+where $\Theta(k)$ is the Heaviside function and the single-particle dispersion is given by $\epsilon(k) = \epsilon_0 (k) + \eFock(k) - \Ef$.
 The Fock energy $\eFock (k)$ arises from the mean-field treatment of $H_\mathrm{C}$, see \eqref{eqn:fock_coulomb} below.
 We will, furthermore, restrict our discussion to a single phonon mode at the Debye frequency, i.e., $\omega_{\vec{q}} = \debye$,
 and a constant interaction strength $G \coloneqq |M_{\vec{q}}|^2 / \debye > 0$.
 This yields the interaction term
 \begin{equation}
-  g(k, k') = - G \Theta( \debye - |\xi(k) - \xi(k')| ).
+  g(k, k') = - G \Theta( \debye - |\epsilon(k) - \epsilon(k')| ).
 \end{equation}
 
 
@@ -218,6 +214,61 @@ Furthermore, we define the dimensionless parameter
 \end{equation}
 where $\rho_\mathrm{F}$ is the density of states of the non-interacting system at the Fermi edge.
 
+\begin{figure}
+  \begin{align*}
+    \begin{tikzpicture}[baseline=\plusheight]
+    \feynmandiagram [baseline={(current bounding box.center)}, horizontal=a to b, layered layout] {
+      a -- [decorate, decoration={snake, amplitude=.8mm, segment length=2.5mm, post length=0mm}, double] b
+    };
+    \end{tikzpicture}
+    \ &\raisebox{0.6ex}{=}\ %
+    \begin{tikzpicture}[baseline=\plusheight]
+      \feynmandiagram [horizontal=a to b, layered layout] {
+        a -- [photon] b
+      };
+    \end{tikzpicture}\\
+    \ &\raisebox{0.6ex}{+}\ %
+    \begin{tikzpicture}[baseline=\plusheight]
+      \feynmandiagram [horizontal=a to b, layered layout, scale=0.45] {
+        i1 -- [photon] a
+        -- [fermion, half left] b
+        -- [fermion, half left] a,
+        b -- [photon] f1
+      };
+    \end{tikzpicture}\\
+    \ &\raisebox{0.6ex}{+}\ %
+    \begin{tikzpicture}[baseline=\plusheight]
+      \feynmandiagram [horizontal=a to d, layered layout, scale=0.45] {
+        i1 -- [photon] a
+        -- [fermion, half left] b
+        -- [fermion, half left] a,
+        b -- [photon] c
+        -- [fermion, half left] d
+        -- [fermion, half left] c,
+        d -- [photon] f1
+      };
+    \end{tikzpicture}\\
+    &\raisebox{0.6ex}{+}\ %
+    \begin{tikzpicture}[baseline=\plusheight]
+      \feynmandiagram [horizontal=a to f, layered layout, scale=0.45] {
+        init -- [photon] a
+        -- [fermion, half left] b
+        -- [fermion, half left] a,
+        b -- [photon] c
+        -- [fermion, half left] d
+        -- [fermion, half left] c,
+        d -- [photon] e
+        -- [fermion, half left] f
+        -- [fermion, half left] e,
+        f -- [photon] final
+      }; 
+    \end{tikzpicture}
+    \ \raisebox{0.6ex}{+ \ldots,} %
+  \end{align*}
+  \caption{Diagramatic representation of the effective screened Coulomb interaction as described in Ref. \cite{rickayzen1980}.}
+  \label{fig:feynman}
+\end{figure}
+
 In the same manner, we define a dimensionless scaling ratio $\lambda$ for the screening wavevector
 \begin{equation}
   k_s \coloneqq \lambda \sqrt{\frac{e^2 m_e}{3 \pi^2 \hbar^2 \epsilon_0} \kf}.
@@ -227,57 +278,7 @@ Mathematically, this screening translates to the real-space potential $V(r) \pro
 Physically, its existence can be motivated in the following manner:
 An electric field naturally causes a displacement of the free charge carriers. 
 This, in turn, generates an additional electric field that displaces the electrons, generating another field and so on.
-Diagramatically, this process results in an effective interaction given by
-\begin{align*}
-  \begin{tikzpicture}[baseline=\plusheight]
-  \feynmandiagram [baseline={(current bounding box.center)}, horizontal=a to b, layered layout] {
-    a -- [decorate, decoration={snake, amplitude=.8mm, segment length=2.5mm, post length=0mm}, double] b
-  };
-  \end{tikzpicture}
-  \ &\raisebox{0.6ex}{=}\ %
-  \begin{tikzpicture}[baseline=\plusheight]
-    \feynmandiagram [horizontal=a to b, layered layout] {
-      a -- [photon] b
-    };
-  \end{tikzpicture}\\
-  \ &\raisebox{0.6ex}{+}\ %
-  \begin{tikzpicture}[baseline=\plusheight]
-    \feynmandiagram [horizontal=a to b, layered layout, scale=0.45] {
-      i1 -- [photon] a
-      -- [fermion, half left] b
-      -- [fermion, half left] a,
-      b -- [photon] f1
-    };
-  \end{tikzpicture}\\
-  \ &\raisebox{0.6ex}{+}\ %
-  \begin{tikzpicture}[baseline=\plusheight]
-    \feynmandiagram [horizontal=a to d, layered layout, scale=0.45] {
-      i1 -- [photon] a
-      -- [fermion, half left] b
-      -- [fermion, half left] a,
-      b -- [photon] c
-      -- [fermion, half left] d
-      -- [fermion, half left] c,
-      d -- [photon] f1
-    };
-  \end{tikzpicture}\\
-  &\raisebox{0.6ex}{+}\ %
-  \begin{tikzpicture}[baseline=\plusheight]
-    \feynmandiagram [horizontal=a to f, layered layout, scale=0.45] {
-      init -- [photon] a
-      -- [fermion, half left] b
-      -- [fermion, half left] a,
-      b -- [photon] c
-      -- [fermion, half left] d
-      -- [fermion, half left] c,
-      d -- [photon] e
-      -- [fermion, half left] f
-      -- [fermion, half left] e,
-      f -- [photon] final
-    }; 
-  \end{tikzpicture}
-  \ \raisebox{0.6ex}{+ \ldots,} %
-\end{align*}
+Diagramatically, this process results in an effective interaction as depicted in \autoref{fig:feynman},
 which corresponds to the aforementioned screened Coulomb potential \cite{rickayzen1980}.
 
 Lastly, we will define the following operators for brevity
@@ -381,7 +382,7 @@ Often, the effective electron-electron interaction is assumed to be constant in 
 It is then described by
 \begin{equation}
 \label{eqn:approx_g}
-  g(k, k') \coloneqq G \Theta(\debye - |\xi(k)|) \Theta(\debye - |\xi(k')|).
+  g(k, k') \coloneqq G \Theta(\debye - |\epsilon(k)|) \Theta(\debye - |\epsilon(k')|).
 \end{equation}
 We will briefly study this case as well to compare the results of both approaches.
 Three exemplary gap functions for both, this approximate interaction and the full one \eqref{eqn:phonon_int}, are depicted in \autoref{fig:gap_theta}.

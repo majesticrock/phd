@@ -17,17 +17,15 @@ build/main.pdf: $(PLTS_PDF)
 build/main.pdf: FORCE | build
 	latexmk $(TeXOptions) main.tex 1> build/log || cat build/log
 
-plots/%.pdf: plot_scripts/%.py matplotlibrc | plots
-	TEXINPUTS=$$(pwd): python $<
-
-modes/higgs_0.pkl: plots/heatmap_resolvent.pdf | modes
-
-modes/all_data.pkl: plot_scripts/__all_data_pickler.py | modes
-	python $<
-
 plots/mode_analysis.pdf: modes/higgs_0.pkl
 plots/heatmap_resolvent.pdf: modes/all_data.pkl
 plots/max_true.pdf: plot_scripts/max_true.py modes/all_data.pkl
+	TEXINPUTS=$$(pwd): python $<
+modes/higgs_0.pkl: plots/heatmap_resolvent.pdf | modes
+modes/all_data.pkl: plot_scripts/__all_data_pickler.py | modes
+	python $<
+
+plots/%.pdf: plot_scripts/%.py matplotlibrc | plots
 	TEXINPUTS=$$(pwd): python $<
 
 FORCE:
