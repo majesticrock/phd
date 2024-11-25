@@ -56,6 +56,7 @@ def __load_full_pickle__():
 
 def load_and_pickle():
     all_data = __load_full_pickle__()
+    #all_data = __load_raw__()
     all_data.to_pickle(PICKLE_NAME)
     return all_data
     

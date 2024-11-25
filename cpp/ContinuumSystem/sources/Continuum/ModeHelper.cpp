@@ -275,11 +275,15 @@ namespace Continuum {
 	std::vector<c_float> ModeHelper::continuum_boundaries() const
 	{
 		const m_iterator buf(&model->momentumRanges);
-		c_float prev_min { 100000 };
-		c_float min { -1 };
-		for(InnerIterator it(&model->momentumRanges); it < m_iterator::max_idx(); ++it) {
+		c_float prev_min { DBL_MAX };
+		c_float min { DBL_MAX };
+		for(InnerIterator it(&model->momentumRanges); it < InnerIterator::max_idx(); ++it) {
 			if (this->model->energy(it.k) < prev_min)
+			{
+				prev_min = this->model->energy(it.k);
 				min = it.k;
+			}
+			std::cout << it.k / model->fermi_wavevector << " -> " << this->model->energy(it.k) << std::endl;
 		}
 
 		std::cout << "Found min at " << min / model->fermi_wavevector 
