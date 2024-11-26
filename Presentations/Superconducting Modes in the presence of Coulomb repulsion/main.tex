@@ -519,7 +519,7 @@ Lastly, it should be mentioned that the quantity $\maxGap / \debye$ is fully ind
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{plots/max_true.pdf}
-  \caption{The upper row (a-c) depicts the quasiparticle energy, see \eqref{eqn:quasiparticle_energy}, relative to order parameter's peak value $\maxGap$.
+  \caption{The upper row (a-c) depicts the quasiparticle dispersion, see \eqref{eqn:quasiparticle_energy}, relative to order parameter's peak value $\maxGap$.
   The individual panels have (a) no Coulomb interaction, (b) the screening set to $\lambda = 1$, and (c) $\lambda = 10^{-4}$.
   Brighter lines represent stronger phononic interactions in accordance with the legend on top of the panels.
   Notably, the energy minimum is not located at $\kf$ for large $g$, but shifts to $k < \kf$.
@@ -530,10 +530,23 @@ Lastly, it should be mentioned that the quantity $\maxGap / \debye$ is fully ind
   \label{fig:max_true}
 \end{figure}
 
+As mentioned above, if we assume a constant interaction strength and neglect the Coulomb interaction,
+we obtain constant order parameter $\Delta (k)$ around the Fermi edge.
+It is then trivial to see that the quasiparticle dispersion
 \begin{equation}
   \label{eqn:quasiparticle_energy}
   E(k) = \sqrt{ (\epsilon(k) + \epsilon_\mathrm{C}(k))^2 + \Delta^2 (k) }
 \end{equation}
+has its global minimum at the $\kf$.
+However, this is not necessarily the case if the order parameter varies.
+In principle, it could diminish faster than the single-particle dispersion $\epsilon(k)$ rises for $k\neq \kf$.
+We can, in fact, observe this behavior if $g$ is large enough.
+A plot of this can be seen in \autoref{fig:max_true}. In the upper panels (a-c), we show the quasiparticle energy \eqref{eqn:quasiparticle_energy} relative to $\maxGap$ for various $g$.
+The Coulomb interaction is excluded in panel (a), and included with a screening of (b) $\lambda=1$ and (c) $\lambda=10^{-4}$.
+For all cases, there exists a $g$, at which the dispersion's minimum moves away from $\kf$, though the shift in momentum is tiny.
+We define the energy at this minimum as $\trueGap$ and compare it to $\maxGap$ in panel (d) of \autoref{fig:max_true}.
+Obviously, the line begins at $\trueGap / \maxGap - 1 = 0$ as they are identical for moderate $g$.
+Nevertheless, the above ratio slows down and even reverses as $g$ is further increased.
 
 \autoref{fig:gap_behavior} shows the order parameter's peak value $\maxGap$ depending on the screening $\lambda$.
 Naturally, it grows as the screening is increased, but it does not seem to follow any elementary function.
