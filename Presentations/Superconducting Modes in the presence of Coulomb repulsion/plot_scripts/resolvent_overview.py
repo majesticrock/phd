@@ -17,7 +17,7 @@ w_lin = np.linspace(-0.1e-3, 24e-3, 15000) + 1e-5j
 for i, (ax, g) in enumerate(zip(axes[0], [0.4, 1])):
     pd_data = load_panda("continuum", "offset_20", "resolvents.json.gz", 
                         **continuum_params(N_k=20000, T=0, coulomb_scaling=0, screening=0, k_F=4.25, g=g, omega_D=10))
-    resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=120)
+    resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=120, messages=False)
     ax.set_ylim(0, 0.9)
 
     ax.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "phase_SC",     withTerminator=True), label="Phase", ls="-")
@@ -29,7 +29,7 @@ for i, (ax, g) in enumerate(zip(axes[0], [0.4, 1])):
 for i, (ax, g) in enumerate(zip(axes[1], [0.4, 1])):
     pd_data = load_panda("continuum", "theta_approx", "resolvents.json.gz", 
                         **continuum_params(N_k=8000, T=0, coulomb_scaling=0, screening=0, k_F=4.25, g=g, omega_D=10))
-    resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=120)
+    resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=120, messages=False)
     ax.set_ylim(0, 0.9)
 
     ax.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "phase_SC",     withTerminator=True), label="Phase", ls="-")
@@ -56,7 +56,7 @@ fig, axes = plt.subplots(nrows=2,sharex=True, figsize=(6.4, 6.4))
 for i, (ax, g, label) in enumerate(alpha_label(axes, [1, 2])):
     pd_data = load_panda("continuum", "offset_10", "resolvents.json.gz", 
                         **continuum_params(N_k=20000, T=0, coulomb_scaling=1, screening=1e-4, k_F=4.25, g=g, omega_D=10))
-    resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=120)
+    resolvents = cf.ContinuedFraction(pd_data, ignore_first=5, ignore_last=120, messages=False)
     ax.set_ylim(0, 0.9)
 
     ax.plot(1e3 * w_lin.real, resolvents.spectral_density(w_lin, "phase_SC",     withTerminator=True), label="Phase", ls="-")

@@ -59,6 +59,7 @@
 \newcommand{\eFock}{\epsilon_\mathrm{Fock}}
 
 \newcommand{\maxGap}{\Delta_\mathrm{max}}
+\newcommand{\trueGap}{\Delta_\mathrm{true}}
 \newcommand{\deltaC}{\Delta_\mathrm{C}}
 \newcommand{\deltaPh}{\Delta_\mathrm{Ph}}
 
@@ -360,7 +361,8 @@ A schematic representation of this can be seen in \autoref{fig:discretization}.
 Choosing $x_\mathrm{cut}$ is somewhat arbitrary.
 If the gap is small, a small value is beneficial as to resolve the relevant part of the gap function in more detail.
 If the gap is large, however, we require a larger $x_\mathrm{cut}$ so that we include the entire relevant part in the first place.
-In practice, we choose $x_\mathrm{cut} = 10$ for a maximum gap value $\maxGap < \SI{4}{meV}$, $x_\mathrm{cut} = 20$ for $\maxGap < \SI{14}{meV}$, and $x_\mathrm{cut} = 25$ beyond that. 
+The relevant metric is the order parameter's value at its maximum $\maxGap$.
+In practice, we choose $x_\mathrm{cut} = 10$ for $\maxGap < \SI{4}{meV}$, $x_\mathrm{cut} = 20$ for $\maxGap < \SI{14}{meV}$, and $x_\mathrm{cut} = 25$ beyond that. 
 These cutoffs are not sharp, i.e., varying these values slightly does not impact the results, as long as one chooses a large enough $N_k$.
 In practice, $N_k = 30000$ produces good results for the latter case, while $N_k = 20000$ is sufficiently precise for the other two cases.
 
@@ -439,7 +441,7 @@ Nonetheless, we will continue using the form \eqref{eqn:phonon_int} for this art
 \begin{figure}
   \centering
   \includegraphics[width=\columnwidth]{plots/gap_behavior.pdf}
-  \caption{Plot of the maximum gap value $\maxGap$ depending on the screening $\lambda$.
+  \caption{Plot of the order parameter's peak value $\maxGap$ depending on the screening $\lambda$.
   The former is scaled logarithmically. The phononic interaction strength is set to three distinct values in accordance with the legend.
   Otherwise, the parameters are identical to the ones in \autoref{fig:gap_coulomb}}
   \label{fig:gap_behavior}
@@ -514,8 +516,26 @@ Nevertheless, this is no contradiction to the original statement as it was deriv
 
 Lastly, it should be mentioned that the quantity $\maxGap / \debye$ is fully indepedent of $\debye$, i.e., $\maxGap \propto \debye$, and is therefore not explicitly depicted here.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{plots/max_true.pdf}
+  \caption{The upper row (a-c) depicts the quasiparticle energy, see \eqref{eqn:quasiparticle_energy}, relative to order parameter's peak value $\maxGap$.
+  The individual panels have (a) no Coulomb interaction, (b) the screening set to $\lambda = 1$, and (c) $\lambda = 10^{-4}$.
+  Brighter lines represent stronger phononic interactions in accordance with the legend on top of the panels.
+  Notably, the energy minimum is not located at $\kf$ for large $g$, but shifts to $k < \kf$.
+  The plot is not entirely symmetry abot $\kf$ due to the parabolic dispersion, though the effect is minuscule.
+  The lower panel (d) depicts system's true energy gap $\trueGap$ in units of order parameter's peak value $\maxGap$ versus the phononic interaction strength $g$.
+  The individual lines represent the form of the Coulomb interaction as described above in accordance with the legend.
+  The $y$-axis is shifted by $1$. Note, that the $x$-axis begins at $g=1$ because $\trueGap = \maxGap$ holds for moderate $g$.}
+  \label{fig:max_true}
+\end{figure}
 
-\autoref{fig:gap_behavior} shows the maximum gap value $\maxGap$ depending on the screening $\lambda$.
+\begin{equation}
+  \label{eqn:quasiparticle_energy}
+  E(k) = \sqrt{ (\epsilon(k) + \epsilon_\mathrm{C}(k))^2 + \Delta^2 (k) }
+\end{equation}
+
+\autoref{fig:gap_behavior} shows the order parameter's peak value $\maxGap$ depending on the screening $\lambda$.
 Naturally, it grows as the screening is increased, but it does not seem to follow any elementary function.
 Expectedly, the function approaches a constant value for both cases $\lambda \to 0$ and $\lambda \to \infty$.
 The general behavior is generic across various values of the phononic coupling strength $g$.

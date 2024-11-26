@@ -55,7 +55,8 @@ fig, ax = plt.subplots()
 for idx, (plot_data, label, screening) in enumerate(zip(dfs, ["Approx. $g(k,k')$", "Full $g(k,k')$", r"$\lambda=1$", r"$\lambda=10^{-4}$"], [None, None, 1, 1e-4])):
     g_lin = np.linspace(plot_data["g"].min() - 0.015, plot_data["g"].max() + 0.02, 200)
     E_F = plot_data["E_F"].iloc[0]
-    y_data = np.log(plot_data["Delta_max"] / (2. * plot_data["omega_D"].iloc[0]))
+    OMEGA_D = plot_data["omega_D"].iloc[0]
+    y_data = np.log(plot_data["Delta_max"] / (2. * OMEGA_D))
     ax.plot(plot_data["g"], y_data, ls="", marker=f"{idx+1}", ms=14, markeredgewidth=2, color=f"C{idx}", label=label)
     
     popt, pcov = curve_fit(fit_func, plot_data["g"], y_data, p0=(2.7, 1, (idx-1)**3 * 0.05))
