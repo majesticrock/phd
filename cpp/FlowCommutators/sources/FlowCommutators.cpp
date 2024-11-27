@@ -12,19 +12,19 @@ int main(int argc, char** argv) {
 				Operator(momentum_pairs({ std::make_pair(1, 'l'), std::make_pair(1, 'q') }), Index::Sigma, false),
 				}));
     
-    const Term CUT_eta_annihilation(1, Coefficient("A", MomentumList({ 'P', 'Q' })), 
-                SumContainer{ MomentumSum({ 'P', 'Q' }), IndexSum( Index::GeneralSpin_S ) },
+    const Term CUT_eta_annihilation(-1, Coefficient("A", MomentumList({ 'P', 'Q' })), 
+                SumContainer{ MomentumSum({ 'P', 'Q' }), IndexSum( Index::Sigma ) },
                 std::vector<Operator>({
-                    Operator('Q', -1, false, true, false),
-                    Operator(momentum_pairs({ std::make_pair(1, 'P'), std::make_pair(1, 'Q') }), Index::GeneralSpin_S, true),
-                    Operator('P', 1, false, Index::GeneralSpin_S, false)
+                    Operator::Boson(Momentum('Q'), false),
+                    Operator(momentum_pairs({ std::make_pair(1, 'P'), std::make_pair(1, 'Q') }), Index::Sigma, true),
+                    Operator('P', 1, false, Index::Sigma, false)
                 }));
     const Term CUT_eta_creation(1, Coefficient("B", MomentumList({ 'P', 'Q' })), 
-                SumContainer{ MomentumSum({ 'P', 'Q' }), IndexSum( Index::GeneralSpin_S ) },
+                SumContainer{ MomentumSum({ 'P', 'Q' }), IndexSum( Index::Sigma ) },
                 std::vector<Operator>({
-                    Operator('Q', 1, false, false, false),
-                    Operator(momentum_pairs({ std::make_pair(1, 'P'), std::make_pair(1, 'Q') }), Index::GeneralSpin_S, true),
-                    Operator('P', 1, false, Index::GeneralSpin_S, false)
+                    Operator::Boson(Momentum('Q', -1), false),
+                    Operator(momentum_pairs({ std::make_pair(1, 'P'), std::make_pair(1, 'Q') }), Index::Sigma, true),
+                    Operator('P', 1, false, Index::Sigma, false)
                 }));
     const std::vector<Term> CUT_eta { CUT_eta_annihilation, CUT_eta_creation };
     std::cout << "\\begin{align*}\n\t \\eta = " 
