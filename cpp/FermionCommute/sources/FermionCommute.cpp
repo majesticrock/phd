@@ -207,10 +207,7 @@ int main(int argc, char** argv) {
 			wicks_theorem(terms, templates, wicks);
 			clearEtas(wicks);
 			cleanWicks(wicks, symmetries);
-			if (debug || print) {
-				std::cout << "\\begin{align*}\n\t[ " << toStringWithoutPrefactor(basis_daggered[j])
-					<< ", [H, " << toStringWithoutPrefactor(basis[i]) << " ]] =" << wicks << "\\end{align*}" << std::endl;
-			}
+			
 			for (auto& wickterm : wicks) {
 				if (wickterm.coefficients.front().name == "\\rho") {
 					wickterm.sums.push_back(Index::SigmaPrime);
