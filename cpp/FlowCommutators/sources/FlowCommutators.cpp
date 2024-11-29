@@ -4,7 +4,8 @@
 using namespace SymbolicOperators;
 
 int main(int argc, char** argv) {
-	const Term H_C(IntFractional(1, 2), Coefficient("V", Momentum('q')),
+	const Term H_C(IntFractional(1, 4), 
+		Coefficient("V", MomentumList({ 'k', 'l', 'q' }), IndexWrapper{}, false, false),
 		SumContainer{ MomentumSum({ 'k', 'l', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 		std::vector<Operator>({
 			Operator('k', 1, false, Index::Sigma, true),
@@ -12,15 +13,27 @@ int main(int argc, char** argv) {
 			Operator(momentum_pairs({ std::make_pair(1, 'l'), std::make_pair(-1, 'q') }), Index::SigmaPrime, false),
 			Operator(momentum_pairs({ std::make_pair(1, 'k'), std::make_pair(1, 'q') }), Index::Sigma, false),
 		}));
+	const Term H_C_mixed(IntFractional(1, 4), 
+		Coefficient("V", MomentumList({ Momentum('l'), Momentum('k'), Momentum('q', -1) }), IndexWrapper{}, false, false),
+		SumContainer{ MomentumSum({ 'k', 'l', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
+		std::vector<Operator>({
+			Operator('k', 1, false, Index::Sigma, true),
+			Operator('l', 1, false, Index::SigmaPrime, true),
+			Operator(momentum_pairs({ std::make_pair(1, 'l'), std::make_pair(-1, 'q') }), Index::SigmaPrime, false),
+			Operator(momentum_pairs({ std::make_pair(1, 'k'), std::make_pair(1, 'q') }), Index::Sigma, false),
+		}));
+	const std::vector<Term> H_sym{H_C, H_C_mixed};
 	
-	const Term CUT_eta_creation(1, Coefficient("A", MomentumList({ 'P', 'Q' }), IndexWrapper{}, false, false),
+	const Term CUT_eta_creation(1, 
+		Coefficient("A", MomentumList({ 'P', 'Q' }), IndexWrapper{}, false, false),
 		SumContainer{ MomentumSum({ 'P', 'Q' }), IndexSum(Index::GeneralSpin_S) },
 		std::vector<Operator>({
 			Operator::Boson(Momentum('Q', -1), true),
 			Operator(momentum_pairs({ std::make_pair(1, 'P'), std::make_pair(1, 'Q') }), Index::GeneralSpin_S, true),
 			Operator('P', 1, false, Index::GeneralSpin_S, false)
 		}));
-	const Term CUT_eta_annihilation(-1, Coefficient("B", MomentumList({ 'P', 'Q' }), IndexWrapper{}, false, false), 
+	const Term CUT_eta_annihilation(-1, 
+		Coefficient("B", MomentumList({ 'P', 'Q' }), IndexWrapper{}, false, false), 
 		SumContainer{ MomentumSum({ 'P', 'Q' }), IndexSum( Index::GeneralSpin_S ) },
 		std::vector<Operator>({
 			 Operator::Boson(Momentum('Q'), false),
@@ -31,17 +44,20 @@ int main(int argc, char** argv) {
 	const std::vector<Term> CUT_eta { CUT_eta_creation, CUT_eta_annihilation };
 	std::cout << "The Coulomb interaction term is" << std::endl;
 	std::cout << "\\begin{align*}\n\tH_\\mathrm{C} = "
-		<< H_C
+		<< H_sym
 		<< ",\n\\end{align*}" << std::endl;
+	std::cout << "Here, we used the symmetry of the potential $V(k, l, q) = V(l, k, q)$ and $V(k, l, q) = V(k, l, -q)$."
+		<< "We can even define\n\\begin{equation}\n\tV^\\mathrm{sym} (k, l, q) \\equiv (1/2) \\cdot (V(k, l, q) + V(l, k, -q))\n\\end{equation}\n"
+		<< "because this quantity will appear throughout the flow." << std::endl;
 	std::cout << "Our generator for the CUT is " << std::endl;
 	std::cout << "\\begin{align*}\n\t\\eta = " 
 			  << CUT_eta 
 			  << ", \\end{align*}" << std::endl;
 	std::cout << "where\n\\begin{align}\n\tA(P,Q) &= M_{P,Q} \\sgn ( \\epsilon_{P+Q} - \\epsilon_P + \\omega_{-Q} ) \\\\\n"
 		<< "\tB(P,Q) &= M_{P+Q,-Q}^* \\sgn ( \\epsilon_{P+Q} - \\epsilon_P - \\omega_Q )\n\\end{align}\n" << std::endl;
-	
+
 	std::vector<Term> commutation_result;
-	commutator(commutation_result, CUT_eta, H_C);
+	commutator(commutation_result, CUT_eta, H_sym);
 	cleanUp(commutation_result);
 	for (auto& term : commutation_result) {
 		term.renameMomenta('q', 'x');
@@ -89,10 +105,10 @@ int main(int argc, char** argv) {
 
 			// Using the symmetry of the Coulomb potential V(q) = V(-q)
 			// The second coefficient is the Coulomb one
-			Coefficient& coulomb = term.coefficients[1];
-			assert(coulomb.name == "V");
-			assert(coulomb.momenta.front().momentum_list.size() == 1);
-			coulomb.momenta.front().momentum_list[0].first = std::abs(coulomb.momenta.front().momentum_list[0].first);
+			//Coefficient& coulomb = term.coefficients[1];
+			//assert(coulomb.name == "V");
+			//assert(coulomb.momenta.back().momentum_list.size() == 1);
+			//coulomb.momenta.back().momentum_list[0].first = std::abs(coulomb.momenta.back().momentum_list[0].first);
 		}
 		// Sort the sum indizes to be identical
 		std::sort(term.sums.momenta.begin(), term.sums.momenta.end());
@@ -102,13 +118,28 @@ int main(int argc, char** argv) {
 	std::cout << "The first commutation yields" << std::endl;
 	std::cout << "\\begin{align*}\n\t[\\eta, H_\\mathrm{C}] = " 
 			  << commutation_result 
+			  << ". \\end{align*}" << std::endl;
+	std::cout << "Here, we recognize our $V^\\mathrm{sym}$! Symplifying the expression to" << std::endl;
+	for (auto& term : commutation_result) {
+		Coefficient& coeff = term.coefficients[1];
+		if (coeff.momenta[0].uses('l')) {
+			std::swap(coeff.momenta[0], coeff.momenta[1]);
+		}
+		if (coeff.momenta[2] == Momentum('q', -1)) {
+			coeff.momenta[2].flipMomentum();
+		}
+		coeff.name = "V^\\mathrm{sym}";
+	}
+	clear_duplicates(commutation_result);
+	std::cout << "\\begin{align*}\n\t[\\eta, H_\\mathrm{C}] = " 
+			  << commutation_result 
 			  << ", \\end{align*}" << std::endl;
 	std::cout << "which has no two-electron interaction terms." 
 		<< " Thus, we include the resulting terms into our Hamiltonian as " << std::endl;
 
 	const std::vector<Term> H_prime(
 		{
-			Term(1, Coefficient("C_1", MomentumList({ 'k', 'p', 'q' }), IndexWrapper{}, false, false),
+			Term(1, Coefficient("C_1", MomentumList({ 'k', 'l', 'p', 'q' }), IndexWrapper{}, false, false),
 			SumContainer{ MomentumSum({ 'k', 'l', 'p', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 			std::vector<Operator>({
 				Operator::Boson(Momentum('p', -1), true),
@@ -117,7 +148,7 @@ int main(int argc, char** argv) {
 				Operator(momentum_pairs({ std::make_pair(1, 'l'), std::make_pair(-1, 'q') }), Index::SigmaPrime, false),
 				Operator(momentum_pairs({ std::make_pair(1, 'k'), std::make_pair(1, 'q') }), Index::Sigma, false),
 			})),
-			Term(1, Coefficient("C_2", MomentumList({ 'k', 'p', 'q' }), IndexWrapper{}, false, false),
+			Term(1, Coefficient("C_2", MomentumList({ 'k', 'l', 'p', 'q' }), IndexWrapper{}, false, false),
 			SumContainer{ MomentumSum({ 'k', 'l', 'p', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 			std::vector<Operator>({
 				Operator::Boson(Momentum('p', 1), false),
@@ -203,10 +234,72 @@ int main(int argc, char** argv) {
 			}
 		}
 	}
+	{
+		// We are allowed to change the p in any manner we like - to obtain the same notation across all terms we do the following:
+		Term* term_ptr = &(second_commutation_result[0]);
+		// \sum_{ p l k q } \sum_{ \sigma \sigma' } A( k+q, -k+p )  C_2( p, l, k-p, q )   c_{ k, \sigma }^\dagger  c_{ l, \sigma' }^\dagger  c_{ l-q, \sigma' } c_{ k+q, \sigma }
+		Momentum replacement = Momentum('x') + Momentum('k');
+		term_ptr->transform_momentum_sum('p', replacement, 'x');
+		term_ptr->renameMomenta('x', 'p');
+
+		term_ptr = &(second_commutation_result[1]);
+		// \sum_{ p l k q } \sum_{ \sigma \sigma' } A( l-q, -k+p )  C_2( p, l, k-p, k-p+q )   c_{ k, \sigma }^\dagger  c_{ l, \sigma' }^\dagger  c_{ l-q, \sigma' } c_{ k+q, \sigma }
+		term_ptr->transform_momentum_sum('p', replacement, 'x');
+		term_ptr->renameMomenta('x', 'p');
+
+		term_ptr = &(second_commutation_result[3]);
+		// \sum_{ p l k q } \sum_{ \sigma \sigma' } B( k+l-p, -k+p )  C_1( p, k+l-p, k-p, k-p+q )   c_{ k, \sigma }^\dagger  c_{ l, \sigma' }^\dagger  c_{ l-q, \sigma' } c_{ k+q, \sigma } 
+		term_ptr->transform_momentum_sum('p', replacement, 'x');
+		term_ptr->renameMomenta('x', 'p');
+	}
 
 	std::cout << "\\begin{align*}\n\t[\\eta, H'] \\approx "
 		<< second_commutation_result
 		<< "\\end{align*}" << std::endl;
 
+	std::cout << "Inserting the definitions for $A$ and $B$ yields" << std::endl;
+	std::cout << "\\begin{align*}\n\t\\partial_{\\lambda} V(\\lambda; k, l, q) \\approx - \\sum_{p} \\bigg\\{ ";
+	
+	std::array<Coefficient, 4> M_lambdas;
+	M_lambdas.fill(Coefficient("M_{\\lambda}"));
+	std::array<std::array<Coefficient, 3>, 4> in_signums;
+	in_signums.fill({ Coefficient("\\epsilon"), Coefficient("\\epsilon"), Coefficient("\\omega") });
+	for (size_t i = 0U; i < second_commutation_result.size(); ++i) {
+		// The first coefficient is always A or B
+		const Coefficient& term_coeff = second_commutation_result[i].coefficients[0];
+		assert(term_coeff.name == "A" || term_coeff.name == "B");
+		M_lambdas[i].translational_invariance = false;
+		M_lambdas[i].momenta.resize(2);
+		if (term_coeff.name == "A") {
+			M_lambdas[i].momenta[0] = term_coeff.momenta[0];
+			M_lambdas[i].momenta[1] = term_coeff.momenta[1];
+		} 
+		else {
+			M_lambdas[i].momenta[0] = term_coeff.momenta[0] + term_coeff.momenta[1];
+			M_lambdas[i].momenta[1] = -term_coeff.momenta[1];
+			M_lambdas[i].is_daggered = true;
+		}
+
+		in_signums[i][0].momenta.push_back(term_coeff.momenta[0] + term_coeff.momenta[1]);
+		in_signums[i][1].momenta.push_back(term_coeff.momenta[0]);
+		in_signums[i][2].momenta.push_back(term_coeff.name == "A" ? -term_coeff.momenta[1] : term_coeff.momenta[1]);
+		
+		if(i > 0) {
+			std::cout << "\t+ ";
+		}
+		std::cout << "&" << M_lambdas[i] << " \\sgn \\left[ ";
+		for(int j = 0; j < 3; ++j) {
+			if (j == 1) {
+				std::cout << " - ";
+			}
+			else if (j == 2) {
+				std::cout << (term_coeff.name == "A" ? "+" : "-");
+			}
+			std::cout << in_signums[i][j];
+		}
+		std::cout << " \\right]" << second_commutation_result[i].coefficients[1];
+		if(i < second_commutation_result.size() - 1) std::cout << "\\\\\n";
+	}
+	std::cout << " \\bigg\\}\n\\end{align*}" << std::endl;
 	return 0;
 }
