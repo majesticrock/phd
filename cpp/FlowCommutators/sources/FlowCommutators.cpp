@@ -4,7 +4,7 @@
 using namespace SymbolicOperators;
 
 int main(int argc, char** argv) {
-	const Term H_C(1, Coefficient("V", Momentum('q')),
+	const Term H_C(IntFractional(1, 2), Coefficient("V", Momentum('q')),
 		SumContainer{ MomentumSum({ 'k', 'l', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 		std::vector<Operator>({
 			Operator('k', 1, false, Index::Sigma, true),
@@ -63,8 +63,41 @@ int main(int argc, char** argv) {
 			term.transform_momentum_sum(base.momentum_list[0].second, replacement, 'x');
 			term.renameMomenta('x', 'k');
 		}
-	}
+		// We may have terms like c_k^+ c_l+p^+ ... instead of c_k+p^+ c_l^+ ...
+		// Those are actually identical by swapping k <-> l, q <-> -q, and sigma <-> sigma'
+		// And lastly swapping the two creation operators, and swapping the two annihilation operators.
+		// We perfom this action now
+		if (term.operators[2].momentum.momentum_list.size() == 2) {
+			// Starting at 1, because the boson does not have a spin
+			for (size_t i = 1U; i < term.operators.size(); ++i) {
+				if (term.operators[i].first_index() == Index::Sigma) {
+					term.operators[i].set_first_index(Index::SigmaPrime);
+				}
+				else if (term.operators[i].first_index() == Index::SigmaPrime) {
+					term.operators[i].set_first_index(Index::Sigma);
+				}
+				else {
+					throw std::runtime_error("Expected only Sigma and SigmaPrime as indizes!");
+				}
+			}
+			term.renameMomenta('k', 'x');
+			term.renameMomenta('l', 'k');
+			term.renameMomenta('x', 'l');
+			term.invert_momentum_sum('q');
+			std::swap(term.operators[1], term.operators[2]);
+			std::swap(term.operators[3], term.operators[4]);
 
+			// Using the symmetry of the Coulomb potential V(q) = V(-q)
+			// The second coefficient is the Coulomb one
+			Coefficient& coulomb = term.coefficients[1];
+			assert(coulomb.name == "V");
+			assert(coulomb.momenta.front().momentum_list.size() == 1);
+			coulomb.momenta.front().momentum_list[0].first = std::abs(coulomb.momenta.front().momentum_list[0].first);
+		}
+		// Sort the sum indizes to be identical
+		std::sort(term.sums.momenta.begin(), term.sums.momenta.end());
+	}
+	clear_duplicates(commutation_result);
 
 	std::cout << "The first commutation yields" << std::endl;
 	std::cout << "\\begin{align*}\n\t[\\eta, H_\\mathrm{C}] = " 
@@ -73,10 +106,9 @@ int main(int argc, char** argv) {
 	std::cout << "which has no two-electron interaction terms." 
 		<< " Thus, we include the resulting terms into our Hamiltonian as " << std::endl;
 
-
 	const std::vector<Term> H_prime(
 		{
-			Term(1, Coefficient("C_1", MomentumList({ 'k', 'l', 'p', 'q' }), IndexWrapper{}, false, false),
+			Term(1, Coefficient("C_1", MomentumList({ 'k', 'p', 'q' }), IndexWrapper{}, false, false),
 			SumContainer{ MomentumSum({ 'k', 'l', 'p', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 			std::vector<Operator>({
 				Operator::Boson(Momentum('p', -1), true),
@@ -85,7 +117,7 @@ int main(int argc, char** argv) {
 				Operator(momentum_pairs({ std::make_pair(1, 'l'), std::make_pair(-1, 'q') }), Index::SigmaPrime, false),
 				Operator(momentum_pairs({ std::make_pair(1, 'k'), std::make_pair(1, 'q') }), Index::Sigma, false),
 			})),
-			Term(1, Coefficient("C_2", MomentumList({ 'k', 'l', 'p', 'q' }), IndexWrapper{}, false, false),
+			Term(1, Coefficient("C_2", MomentumList({ 'k', 'p', 'q' }), IndexWrapper{}, false, false),
 			SumContainer{ MomentumSum({ 'k', 'l', 'p', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 			std::vector<Operator>({
 				Operator::Boson(Momentum('p', 1), false),
@@ -100,7 +132,6 @@ int main(int argc, char** argv) {
 	std::cout << "\\begin{align*}\n\tH'= "
 		<< H_prime
 		<< ", \\end{align*}" << std::endl;
-
 
 	std::vector<Term> second_commutation_result;
 	commutator(second_commutation_result, CUT_eta, H_prime);
