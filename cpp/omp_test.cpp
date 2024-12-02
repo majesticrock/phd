@@ -5,7 +5,7 @@
 #include <iostream>
 #include <mpi.h>
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 	// First call MPI_Init
 	MPI_Init(&argc, &argv);
 
