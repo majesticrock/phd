@@ -5,7 +5,7 @@
 #include <algorithm>
 
 
-inline void coulomb_transform() {
+inline void coulomb_transform_second_order() {
 	using namespace SymbolicOperators;
 
 	const Term H_C(IntFractional(1, 2),
