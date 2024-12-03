@@ -2,28 +2,29 @@
 #include <SymbolicOperators/Term.hpp>
 #include <vector>
 #include <array>
+#include <algorithm>
 
 
 inline void coulomb_transform() {
 	using namespace SymbolicOperators;
 
-	const Term H_C(IntFractional(1, 4),
+	const Term H_C(IntFractional(1, 2),
 		Coefficient("V", MomentumList({ 'k', 'l', 'q' }), IndexWrapper{}, false, false),
 		SumContainer{ MomentumSum({ 'k', 'l', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 		std::vector<Operator>({
-			Operator('k', 1, false, Index::Sigma, true),
-			Operator('l', 1, false, Index::SigmaPrime, true),
-			Operator(momentum_pairs({ std::make_pair(1, 'l'), std::make_pair(-1, 'q') }), Index::SigmaPrime, false),
-			Operator(momentum_pairs({ std::make_pair(1, 'k'), std::make_pair(1, 'q') }), Index::Sigma, false),
+			Operator(Momentum('k'), Index::Sigma, true),
+			Operator(Momentum('l'), Index::SigmaPrime, true),
+			Operator(Momentum("l-q"), Index::SigmaPrime, false),
+			Operator(Momentum("k+q"), Index::Sigma, false),
 			}));
-	const Term H_C_mixed(IntFractional(1, 4),
-		Coefficient("V", MomentumList({ Momentum('l'), Momentum('k'), Momentum('q', -1) }), IndexWrapper{}, false, false),
+	const Term H_C_mixed(IntFractional(1, 2),
+		Coefficient("V", MomentumList({ Momentum('l'), Momentum('k'), Momentum('q', 1) }), IndexWrapper{}, false, false),
 		SumContainer{ MomentumSum({ 'k', 'l', 'q' }), IndexSum({ Index::Sigma, Index::SigmaPrime }) },
 		std::vector<Operator>({
-			Operator('k', 1, false, Index::Sigma, true),
-			Operator('l', 1, false, Index::SigmaPrime, true),
-			Operator(momentum_pairs({ std::make_pair(1, 'l'), std::make_pair(-1, 'q') }), Index::SigmaPrime, false),
-			Operator(momentum_pairs({ std::make_pair(1, 'k'), std::make_pair(1, 'q') }), Index::Sigma, false),
+			Operator(Momentum("k"), Index::Sigma, true),
+			Operator(Momentum("l"), Index::SigmaPrime, true),
+			Operator(Momentum("l-q"), Index::SigmaPrime, false),
+			Operator(Momentum("k+q"), Index::Sigma, false),
 			}));
 	const std::vector<Term> H_sym{ H_C, H_C_mixed };
 
@@ -44,24 +45,24 @@ inline void coulomb_transform() {
 				 Operator(momentum_pairs({ std::make_pair(1, 'P'), std::make_pair(1, 'Q') }), Index::GeneralSpin_S, true),
 				 Operator('P', 1, false, Index::GeneralSpin_S, false)
 			})),
-		/* Term(1, Coefficient("A_2", MomentumList({ 'K', 'L', 'P', 'Q' }), IndexWrapper{}, false, false),
+		Term(1, Coefficient("A_2", MomentumList({ 'K', 'L', 'P', 'Q' }), IndexWrapper{}, false, false),
 			SumContainer{ MomentumSum({ 'K', 'L', 'P', 'Q' }), IndexSum({ Index::GeneralSpin_S, Index::GeneralSpin_SPrime }) },
 			std::vector<Operator>({
 				Operator::Boson(Momentum('P', -1), true),
-				Operator(momentum_pairs({ std::make_pair(1, 'K'), std::make_pair(1, 'P')}), Index::GeneralSpin_S, true),
+				Operator(Momentum("K+P"), Index::GeneralSpin_S, true),
 				Operator('L', 1, false, Index::GeneralSpin_SPrime, true),
-				Operator(momentum_pairs({ std::make_pair(1, 'L'), std::make_pair(-1, 'Q') }), Index::GeneralSpin_SPrime, false),
-				Operator(momentum_pairs({ std::make_pair(1, 'K'), std::make_pair(1, 'Q') }), Index::GeneralSpin_S, false),
+				Operator(Momentum("L-Q"), Index::GeneralSpin_SPrime, false),
+				Operator(Momentum("K+Q"), Index::GeneralSpin_S, false),
 			})),
 		Term(-1, Coefficient("B_2", MomentumList({ 'K', 'L', 'P', 'Q' }), IndexWrapper{}, false, false),
 			SumContainer{ MomentumSum({ 'K', 'L', 'P', 'Q' }), IndexSum({ Index::GeneralSpin_S, Index::GeneralSpin_SPrime }) },
 			std::vector<Operator>({
 				Operator::Boson(Momentum('P', 1), false),
-				Operator(momentum_pairs({ std::make_pair(1, 'K'), std::make_pair(1, 'P')}), Index::GeneralSpin_S, true),
+				Operator(Momentum("K+P"), Index::GeneralSpin_S, true),
 				Operator('L', 1, false, Index::GeneralSpin_SPrime, true),
-				Operator(momentum_pairs({ std::make_pair(1, 'L'), std::make_pair(-1, 'Q') }), Index::GeneralSpin_SPrime, false),
-				Operator(momentum_pairs({ std::make_pair(1, 'K'), std::make_pair(1, 'Q') }), Index::GeneralSpin_S, false),
-			})) */
+				Operator(Momentum("L-Q"), Index::GeneralSpin_SPrime, false),
+				Operator(Momentum("K+Q"), Index::GeneralSpin_S, false),
+			}))
 	});
 	std::cout << "The Coulomb interaction term is" << std::endl;
 	std::cout << "\\begin{align*}\n\tH_\\mathrm{C} = "
@@ -84,12 +85,7 @@ inline void coulomb_transform() {
 	std::erase_if(commutation_result, [](const Term& term) { return term.operators.size() > 6U; });
 
 	for (auto& term : commutation_result) {
-		term.rename_momenta('q', 'x');
-		term.rename_momenta('p', 'k');
-		term.rename_momenta('r', 'l');
-		term.rename_momenta('s', 'q');
-		term.rename_momenta('x', 'p');
-
+		assert(term.operators.size() == 5U);
 		if (term.operators[1].first_index() != Index::Sigma) {
 			if (term.operators[2].first_index() == Index::Sigma) {
 				term.rename_indizes(term.operators[1].first_index(), Index::UndefinedIndex);
@@ -101,59 +97,121 @@ inline void coulomb_transform() {
 			term.rename_indizes(term.operators[2].first_index(), Index::SigmaPrime);
 		}
 
-		// Third terms of the
-		if (term.operators[3].momentum.momentum_list.size() == 3U) {
-			Momentum& base = term.operators[3].momentum;
-			Momentum replacement = Momentum('x') + Momentum('p');
-			term.transform_momentum_sum(base.momentum_list[0].second, replacement, 'x');
-			term.rename_momenta('x', 'l');
+		// Boson
+		term.rename_momenta('p', 'z');
+		Momentum* current_momentum = &(term.operators[0].momentum);
+		if(current_momentum->size() > 1U) {
+			const momentum_pair select = current_momentum->front();
+			if(select.first < 0) {
+				term.invert_momentum_sum(select.second);
+			}
+			const Momentum replacement = Momentum('p') - ((*current_momentum) - Momentum(select.second));
+			term.transform_momentum_sum(select.second, replacement, 'p');
 		}
-		else if (term.operators[4].momentum.momentum_list.size() == 3U) {
-			Momentum& base = term.operators[4].momentum;
-			Momentum replacement = Momentum('x') + Momentum('p');
-			term.transform_momentum_sum(base.momentum_list[0].second, replacement, 'x');
-			term.rename_momenta('x', 'k');
+		else {
+			const char current = term.operators.front().momentum.front().second;
+			if (current != 'p') {
+				term.swap_momenta('p', current);
+			}
 		}
-		// We may have terms like c_k^+ c_l+p^+ ... instead of c_k+p^+ c_l^+ ...
-		// Those are actually identical by swapping k <-> l, q <-> -q, and sigma <-> sigma'
-		// And lastly swapping the two creation operators, and swapping the two annihilation operators.
-		// We perfom this action now
-		if (term.operators[2].momentum.momentum_list.size() == 2) {
-			// Starting at 1, because the boson does not have a spin
-			for (size_t i = 1U; i < term.operators.size(); ++i) {
-				if (term.operators[i].first_index() == Index::Sigma) {
-					term.operators[i].set_first_index(Index::SigmaPrime);
+		if ((term.operators.front().momentum.front().first > 0) == term.operators.front().is_daggered) {
+			term.invert_momentum_sum('p');
+		}
+		
+		term.rename_momenta('q', 'x');
+		// first fermion c_{k+p}^+
+		current_momentum = &(term.operators[1].momentum);
+		if (current_momentum->size() != 2U) {
+			const momentum_pair select = (current_momentum->front().second != 'p' 
+				? current_momentum->front() : (*current_momentum)[1]);
+			if(select.first < 0) {
+				term.invert_momentum_sum(select.second);
+			}
+			const Momentum replacement = Momentum('k') - ((*current_momentum) - Momentum(select.second)) + Momentum('p');
+			term.transform_momentum_sum(select.second, replacement, 'k');
+		}
+		else {
+			if ((*current_momentum)[0].second == 'p' || (*current_momentum)[1].second == 'k') {
+				std::swap((*current_momentum)[0], (*current_momentum)[1]);
+			}
+			if ((*current_momentum)[1].second != 'p') {
+				term.rename_momenta((*current_momentum)[0].second, '*');
+				if ((*current_momentum)[0].first < 0) {
+					term.invert_momentum_sum('*');
 				}
-				else if (term.operators[i].first_index() == Index::SigmaPrime) {
-					term.operators[i].set_first_index(Index::Sigma);
-				}
-				else {
-					throw std::runtime_error("Expected only Sigma and SigmaPrime as indizes!");
+				const momentum_pair select = (*current_momentum)[0];
+				const Momentum replacement = Momentum('k') + Momentum('p') - Momentum((*current_momentum)[1]);
+				term.transform_momentum_sum(select.second, replacement, 'k');
+			}
+			else {
+				term.rename_momenta((*current_momentum)[0].second, 'k');
+				if((*current_momentum)[0].first < 0) {
+					term.invert_momentum_sum('k');
 				}
 			}
-			term.rename_momenta('k', 'x');
-			term.rename_momenta('l', 'k');
-			term.rename_momenta('x', 'l');
-			term.invert_momentum_sum('q');
-			std::swap(term.operators[1], term.operators[2]);
-			std::swap(term.operators[3], term.operators[4]);
-
-			// Using the symmetry of the Coulomb potential V(q) = V(-q)
-			// The second coefficient is the Coulomb one
-			//Coefficient& coulomb = term.coefficients[1];
-			//assert(coulomb.name == "V");
-			//assert(coulomb.momenta.back().momentum_list.size() == 1);
-			//coulomb.momenta.back().momentum_list[0].first = std::abs(coulomb.momenta.back().momentum_list[0].first);
 		}
+		
+		// second fermion c_l^+
+		current_momentum = &(term.operators[2].momentum);
+		if (current_momentum->size() != 1U) {
+			const momentum_pair select = *std::find_if_not(current_momentum->begin(), current_momentum->end(), 
+				[](const momentum_pair& _pair) {
+					return (_pair.second == 'p' || _pair.second == 'k');
+				});
+			if (select.first < 0) {
+				term.invert_momentum_sum(select.second);
+			}
+			const Momentum replacement = Momentum('l') - ((*current_momentum) - Momentum(select.second));
+			term.transform_momentum_sum(select.second, replacement, 'l');
+		}
+		else {
+			term.rename_momenta(current_momentum->front().second, 'l');
+		}
+		if((*current_momentum)[0].first < 0) {
+			term.invert_momentum_sum('l');
+		}
+
+		// third fermion c_{l-q}
+		current_momentum = &(term.operators[3].momentum);
+		const momentum_pair select = *std::find_if_not(current_momentum->begin(), current_momentum->end(), 
+			[](const momentum_pair& _pair) {
+				return (_pair.second == 'p' || _pair.second == 'k' || _pair.second == 'l');
+			});
+		if(select.first < 0) {
+			term.invert_momentum_sum(select.second);
+		}
+		const Momentum replacement = Momentum('l') - Momentum('q') - ((*current_momentum) - Momentum(select.second));
+		term.transform_momentum_sum(select.second, replacement, 'q');
+		// fourth should be fixed automatically
+
+		// There should not be an x anywhere
+		term.rename_momenta('x', '$');
+		term.rename_momenta('z', 'x');
+		/* if (term.sums.momenta.size() == 5U && term.coefficients[0].momenta[0].size() == 3U) {
+			//term.invert_momentum_sum('x');
+			Momentum replacement = Momentum('y') - Momentum(term.coefficients[0].momenta[0][1]);
+			term.transform_momentum_sum('x', replacement, 'y');
+			term.rename_momenta('y', 'x');
+		} */
+		
+
 		// Sort the sum indizes to be identical
-		std::sort(term.sums.momenta.begin(), term.sums.momenta.end());
+		std::ranges::sort(term.sums.momenta);
+		std::ranges::sort(term.sums.spins);
 	}
 	clear_duplicates(commutation_result);
+	std::ranges::sort(commutation_result, [](const Term& A, const Term& B) {
+		if (A.operators[0].is_daggered && !B.operators[0].is_daggered) return true;
+		if (A.coefficients[0].name < B.coefficients[0].name) return true;
+		if (A.coefficients[1].name < B.coefficients[1].name) return true;
+		return false;
+	});
 
 	std::cout << "The first commutation, while omitting terms with 6 fermionic operators, yields" << std::endl;
 	std::cout << "\\begin{align*}\n\t[\\eta, H_\\mathrm{C}] = "
 		<< commutation_result
 		<< ". \\end{align*}" << std::endl;
+	return;
 	std::cout << "Here, we recognize our $V^\\mathrm{sym}$! Symplifying the expression to" << std::endl;
 	for (auto& term : commutation_result) {
 		Coefficient& coeff = term.coefficients[1];
