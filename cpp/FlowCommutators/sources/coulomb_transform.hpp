@@ -5,42 +5,54 @@
 #include <algorithm>
 
 
-inline std::string get_M(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q, bool conjugate) {
+inline std::string get_M(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q, bool conjugate, bool minus_at_0 = false) {
     std::string str = "M_{" + q.to_string() + "}";
     if (conjugate) str += "^*";
+	if (minus_at_0) str += " \\left( ";
     str += " e^{ - | \\alpha (" + k.to_string() + "," + q.to_string() + ") | \\lambda }";
+	if (minus_at_0) str += " - 1 \\right)";
     return str;
 }
 
-inline std::string get_coeff_A(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q) {
-    std::string str = "\\sgn \\left[ \\alpha (" + k.to_string() + ", " + q.to_string() + ") \\right] ";
-    str += get_M(k, q, false);
+inline std::string get_alpha(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q) {
+	return ("\\alpha (" + k.to_string() + ", " + q.to_string() + ")");
+}
+
+inline std::string get_beta(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q) {
+	return ("\\alpha (" + (k + q).to_string() + ", " + (-q).to_string() + ")");
+}
+
+inline std::string get_coeff_A(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q, bool minus_at_0 = false) {
+    std::string str = "\\sgn \\left[" + get_alpha(k, q) + "\\right] ";
+    str += get_M(k, q, false, minus_at_0);
     return str;
 }
 
-inline std::string get_coeff_B(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q) {
-    std::string str = "\\sgn \\left[ \\alpha (" + (k + q).to_string() + ", " + (-q).to_string() + ") \\right] ";
-    str += get_M(k + q, -q, true);
+inline std::string get_coeff_B(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& q, bool minus_at_0 = false) {
+    std::string str = "\\sgn \\left[ " + get_beta(k, q) + " \\right] ";
+    str += get_M(k + q, -q, true, minus_at_0);
     return str;
 }
 
 inline std::string get_C_1(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& l, 
-                const SymbolicOperators::Momentum& p, const SymbolicOperators::Momentum& q) 
+                const SymbolicOperators::Momentum& p, const SymbolicOperators::Momentum& q, const std::string& between_summands = "\\\\\n\t\t&") 
 {
-    std::string str = "V(\\lambda;" + k.to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
-    str += get_coeff_A(k, p);
-    str += " - V(\\lambda;" + (k + p).to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
-    str += get_coeff_A(k + q, p);
+    std::string str = "- V(" + k.to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
+    str += "\\frac{" + get_coeff_A(k, p, true) + "}{|" + get_alpha(k, p) + "|}";
+	str+= between_summands;
+    str += " + V(" + (k + p).to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
+    str += "\\frac{" + get_coeff_A(k + q, p, true) + "}{|" + get_alpha(k + q, p) + "|}";
     return str;
 }
 
 inline std::string get_C_2(const SymbolicOperators::Momentum& k, const SymbolicOperators::Momentum& l, 
-                const SymbolicOperators::Momentum& p, const SymbolicOperators::Momentum& q) 
+                const SymbolicOperators::Momentum& p, const SymbolicOperators::Momentum& q, const std::string& between_summands = "\\\\\n\t\t&") 
 {
-    std::string str = "- V(\\lambda;" + k.to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
-    str += get_coeff_B(k, p);
-    str += " + V(\\lambda;" + (k + p).to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
-    str += get_coeff_B(k + q, p);
+    std::string str = "+ V(" + k.to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
+    str += "\\frac{" + get_coeff_B(k, p, true) + "}{|" + get_beta(k, p) + "|}";
+	str+= between_summands;
+    str += " - V(" + (k + p).to_string() + ", " + l.to_string() + ", " + q.to_string() + ") ";
+    str += "\\frac{" + get_coeff_B(k + q, p, true) + "}{|" + get_beta(k + q, p) + "|}";
     return str;
 }
 
@@ -97,7 +109,7 @@ inline void coulomb_transform() {
 			  << CUT_eta 
 			  << ", \\end{align*}" << std::endl;
 	std::cout << "where\n\\begin{align}\n\tA(P,Q) &= M_{P,Q} \\sgn ( \\epsilon_{P+Q} - \\epsilon_P + \\omega_{-Q} ) \\\\\n"
-		<< "\tB(P,Q) &= M_{P+Q,-Q}^* \\sgn ( \\epsilon_{P+Q} - \\epsilon_P - \\omega_Q )\n\\end{align}\n" << std::endl;
+		<< "\tB(P,Q) &= M_{P+Q,-Q}^* \\sgn ( \\epsilon_{P+Q} - \\epsilon_P - \\omega_Q ) = - A^* (P+Q, -Q)\n\\end{align}\n" << std::endl;
 
 	std::vector<Term> commutation_result;
 	commutator(commutation_result, CUT_eta, H_sym);
@@ -221,16 +233,20 @@ inline void coulomb_transform() {
 		<< ". \\end{align*}" << std::endl; */
     std::cout << "From this, we learn "
         << "\\begin{align*}\n\t"
-		<< "\\partial_\\lambda C_1(k,l,p,q) &= " << get_M(commutation_result[0].coefficients[0].momenta[0], commutation_result[0].coefficients[0].momenta[1], false) 
+		<< "\\partial_\\lambda C_1(k,l,p,q) &= " << get_coeff_A(commutation_result[0].coefficients[0].momenta[0], commutation_result[0].coefficients[0].momenta[1]) 
             << " " << commutation_result[0].coefficients[1]
-        << " - " << get_M(commutation_result[1].coefficients[0].momenta[0], commutation_result[1].coefficients[0].momenta[1], false)
+        << " - " << get_coeff_A(commutation_result[1].coefficients[0].momenta[0], commutation_result[1].coefficients[0].momenta[1])
             << " " << commutation_result[1].coefficients[1]
 		<< ". \\end{align*}" << std::endl;
 
-    std::cout << "Thus, we get "
-        << "\\begin{align*}\n\t"
+    std::cout << "We assume $V(\\lambda) \\approx \\mathrm{const}$ because it changes only in order $\\mathcal{O}(M^2)$"
+		<< "which makes its effect on $C_1$ of order $\\mathcal{O}(M^3)$, which we neglect anyways. Thus, we get "
+        << "\\begin{align*}\n\tC_1(\\lambda; k, l, p, q) =&"
         << get_C_1(Momentum('k'), Momentum('l'), Momentum('p'), Momentum('q'))
-        << ". \\end{align*}" << std::endl;
+        << "\\end{align*}" << std::endl;
+	std::cout << "and\n\\begin{align*}\n\tC_2(\\lambda; k, l, p, q) =&"
+	 	<< get_C_2(Momentum('k'), Momentum('l'), Momentum('p'), Momentum('q'))
+        << "\\end{align*}" << std::endl;
 
 	std::vector<Term> second_commutation_result;
 	commutator(second_commutation_result, CUT_eta, H_prime);
@@ -327,7 +343,7 @@ inline void coulomb_transform() {
 
 	std::cout << "Inserting the definitions for $A$ and $B$ yields" << std::endl;
 	std::cout << "\\begin{align*}\n\t\\partial_{\\lambda} V(\\lambda; k, l, q) \\approx - \\sum_{p} \\bigg\\{ ";
-	
+	second_commutation_result[3].invert_momentum_sum('p');
 	std::array<Coefficient, 4> M_lambdas;
 	M_lambdas.fill(Coefficient("M_{\\lambda}"));
 	std::array<std::array<Coefficient, 3>, 4> in_signums;
@@ -370,21 +386,32 @@ inline void coulomb_transform() {
 	}
 	std::cout << " \\bigg\\}\n\\end{align*}" << std::endl;
 
-    std::cout << "We plug in the results" << std::endl;
+	second_commutation_result[1].swap_momenta('k', 'l');
+	second_commutation_result[1].invert_momentum('q');
+
+	second_commutation_result[3].swap_momenta('k', 'l');
+	second_commutation_result[3].invert_momentum('q');
+
+	std::cout << "We are allowed to transform $k \\to l, l \\to k, q \\to -q$ without affecting the operators part of the terms. "
+		<< "Therefore, the potential must also be symmetric under this transformation (or can be constructed as such). We perfom that in line 2 and 4. "
+		<< "Then, we obtain by plugging in the results for $C_1$ and $C_2$" << std::endl;
     std::cout << "\\begin{align*}\n\t\\partial_{\\lambda} V(\\lambda; k, l, q) \\approx - \\sum_{p} \\bigg\\{ ";
 
     for (const Term& term : second_commutation_result) {
-        std::cout << "&";
+        std::cout << "&+";
         if (term.coefficients[0].name == "A") {
-            std::cout << get_coeff_A(term.coefficients[0].momenta[0], term.coefficients[0].momenta[1]);
-            std::cout << " " << get_C_2(term.coefficients[1].momenta[0], term.coefficients[1].momenta[1], term.coefficients[1].momenta[2], term.coefficients[1].momenta[3]);
+            std::cout << get_coeff_A(term.coefficients[0].momenta[0], term.coefficients[0].momenta[1]) << "\\\\\n\t\t&\\qquad\\cdot\\bigg[ ";
+            std::cout << " " << get_C_2(term.coefficients[1].momenta[0], term.coefficients[1].momenta[1], 
+										term.coefficients[1].momenta[2], term.coefficients[1].momenta[3], "\\\\\n\t\t&\\qquad")
+				<< " \\bigg]";
         } 
         else {
-            std::cout << get_coeff_B(term.coefficients[0].momenta[0], term.coefficients[0].momenta[1]);
-            std::cout << " " << get_C_1(term.coefficients[1].momenta[0], term.coefficients[1].momenta[1], term.coefficients[1].momenta[2], term.coefficients[1].momenta[3]);
+            std::cout << get_coeff_B(term.coefficients[0].momenta[0], term.coefficients[0].momenta[1]) << "\\\\\n\t\t&\\qquad\\cdot\\bigg[ ";
+            std::cout << " " << get_C_1(term.coefficients[1].momenta[0], term.coefficients[1].momenta[1], 
+										term.coefficients[1].momenta[2], term.coefficients[1].momenta[3], "\\\\\n\t\t&\\qquad")
+				<< " \\bigg]";
         }
         std::cout << "\\\\\n\t";
     }
-
-    std::cout << " \\bigg\\}\n\\end{align*}" << std::endl;
+	std::cout << " \\bigg\\}\n\\end{align*}" << std::endl;
 }
