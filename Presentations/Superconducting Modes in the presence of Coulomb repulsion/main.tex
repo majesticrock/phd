@@ -158,7 +158,7 @@ where $H_\mathrm{kin}$ describes the kinetic part,
 $H_\mathrm{Ph}$ describes an effective electron-electron interaction mediated by phonons, 
 $H_\mathrm{C}$ describes the repulsive Coulomb interaction between electrons,
 and $H_\mathrm{BG}$ describes the electronic interaction between the electrons and the atomic nuclei,
-which we represent as a constant positive background charge $\rho$.
+which we represent as a uniform positive background charge $\rho$.
 This term exactly cancels with the divergent Hartree contribution in $H_\mathrm{C}$.
 The individual terms are given by
 \bs
@@ -189,7 +189,7 @@ Alternative \textsl{ans\"atze} resulted in expressions that remedied these issue
 The most important commonality among all these results is that they coincide for real, i.e., energy-conserving, processes.
 This agreement is essential since these processes are the ones that can be practically observed \cite{kehrein2006}.
 
-For our purposes, we will adopt a formulation that was derived using a continuous unitary transformation (CUT) found in Ref. \cite{krull2012}
+For our purposes, we adopt a formulation that is derived using a continuous unitary transformation (CUT) \cite{krull2012}
 \begin{equation}
 \label{eqn:phonon_int}
   g(k, k') = - \frac{|M_{\vec{q}}|^2}{\omega_{\vec{q}}} \Theta( \omega_{\vec{q}} - |\epsilon(k) - \epsilon(k')| ),
@@ -207,7 +207,7 @@ This yields the interaction term
 Throughout this article, we fix the Fermi wavevector to $\hbar \kf / \sqrt{m_e} = 4.25 \sqrt{\mathrm{eV}}$.
 This results in a Fermi energy around $\SI{8.5}{eV}$ to $\SI{9}{eV}$ depending on the screening wavevector $k_s$.
 Additionally, we fix the Debye frequency to $\debye = \SI{10}{meV}$.
-These values are taken to be close to the actual parameters found in lead and our results are qualitatively indepedent of them.
+These values are taken to be close to the actual parameters found in lead, but our results are qualitatively indepedent of them.
 
 Furthermore, we define the dimensionless parameter 
 \begin{equation}
@@ -266,7 +266,7 @@ where $\rho_\mathrm{F}$ is the density of states of the non-interacting system a
     \end{tikzpicture}
     \ \raisebox{0.6ex}{+ \ldots,} %
   \end{align*}
-  \caption{Diagramatic representation of the effective screened Coulomb interaction as described in Ref. \cite{rickayzen1980}.}
+  \caption{Diagramatic representation of the effective screened Coulomb interaction.}
   \label{fig:feynman}
 \end{figure}
 
@@ -274,15 +274,14 @@ In the same manner, we define a dimensionless scaling ratio $\lambda$ for the sc
 \begin{equation}
   k_s \coloneqq \lambda \sqrt{\frac{e^2 m_e}{3 \pi^2 \hbar^2 \epsilon_0} \kf}.
 \end{equation}
-The square-root expression is an estimate for the Thomas-Fermi wavevector in real materials provided by Ref. \cite{rickayzen1980}.
+The square-root expression is an estimate for the Thomas-Fermi wavevector in real materials \cite{rickayzen1980}.
 Mathematically, this screening translates to the real-space potential $V(r) \propto \exp (- k_s r) / r$.
 Physically, its existence can be motivated in the following manner:
-An electric field naturally causes a displacement of the free charge carriers. 
-This, in turn, generates an additional electric field that displaces the electrons, generating another field and so on.
+An electric field naturally causes a displacement of the charge carriers implying a polarization which in turn modifies the effective electric field.
 Diagramatically, this process results in an effective interaction as depicted in \autoref{fig:feynman},
 which corresponds to the aforementioned screened Coulomb potential \cite{rickayzen1980}.
 
-Lastly, we will define the following operators for brevity
+Lastly, we define the following operators for brevity
 \begin{equation}
   f_{\vec{k}} \coloneqq \opSC{k},\qquad n_{\vec{k}\sigma} \coloneqq \opd{k}{\sigma} \ope{k}{\sigma}.
 \end{equation}
