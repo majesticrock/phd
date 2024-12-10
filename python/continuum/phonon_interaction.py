@@ -5,8 +5,9 @@ from matplotlib import colors
 LEVELS = 400
 N_EPSILON = 100
 
-X_LABEL = r"$E (k, k', q) / \omega_\mathrm{D}$"
-Y_LABEL = r"$E_P (k', q) / \omega_\mathrm{D}$"
+X_LABEL = r"$\Delta \epsilon (k, q) / \omega_\mathrm{D}$"
+Y_LABEL = r"$\Delta \epsilon (k', q) / \omega_\mathrm{D}$"
+G_LABEL = r"$G(k, k', q) / (M^2 / \omega_\mathrm{D})$"
 
 def alpha(delta_epsilon):
     return delta_epsilon + 1.
@@ -31,7 +32,7 @@ def symmetrize_interaction(interaction, delta_eps, delta_eps_prime):
     return 0.5 * (interaction(delta_eps, delta_eps_prime) + interaction(delta_eps_prime, delta_eps))
     
 def axis_transform(E, E_P):
-    return (E - E_P, E_P)
+    return (E, E_P)
 
 fig, ax = plt.subplots()
 epsilon_space = np.linspace(-5, 5, N_EPSILON)
@@ -46,7 +47,7 @@ cbar = fig.colorbar(contour)
 ax.set_title("CUT")
 ax.set_xlabel(X_LABEL)
 ax.set_ylabel(Y_LABEL)
-cbar.set_label(r"$G(k, k', q) / (M^2 / \omega_\mathrm{D})$")
+cbar.set_label(G_LABEL)
 
 fig2, ax2 = plt.subplots()
 Z2 = symmetrize_interaction(interaction_lenz_wegner, *axis_transform(X, Y))
@@ -58,7 +59,7 @@ cbar2 = fig2.colorbar(contour2, extend='both')
 ax2.set_title("Lenz-Wegner")
 ax2.set_xlabel(X_LABEL)
 ax2.set_ylabel(Y_LABEL)
-cbar2.set_label(r"$G(k, k', q) / \omega_\mathrm{D}$")
+cbar2.set_label(G_LABEL)
 
 fig3, ax3 = plt.subplots()
 Z3 = symmetrize_interaction(interaction_froehlich, *axis_transform(X, Y))
@@ -70,6 +71,6 @@ cbar3 = fig3.colorbar(contour3, extend='both')
 ax3.set_title("Fröhlich")
 ax3.set_xlabel(X_LABEL)
 ax3.set_ylabel(Y_LABEL)
-cbar3.set_label(r"$G(k, k', q) / \omega_\mathrm{D}$")
+cbar3.set_label(G_LABEL)
 
 plt.show()
