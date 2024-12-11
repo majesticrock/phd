@@ -141,14 +141,43 @@ Especially the former effect has a myriad of possible pratical applications, spu
 
 The first successful theoretical discreptions of these phenomenona utilized an isotropic interaction that is attractive in a small region around the Fermi edge and vanishes otherwise \cite{bardeen1957,bogoliubov1958}.
 Within this picture, two collective excitations occur.
-One corresponds to amplitude fluctuations of the order parameter (Higgs mode) while the other to phase fluctuations (Anderson-Bogoliubov mode).
-The former is located at the lower edge of the quasiparticle continuum and has been observed both experimentally and theoretically by plethora of previous studies. It is commonly understood as the minimum amount of energy necessary to break up a Cooper pair.
-Later, these results were enhanced by the inclusion of Coulomb interactions between the electrons.
+One corresponds to amplitude fluctuations of the order parameter (Higgs mode) while the other to its phase fluctuations (Anderson-Bogoliubov mode).
+The former is located at the lower edge of the quasiparticle continuum and has been observed both experimentally and theoretically by plethora of previous studies \cite{schmid1975,varma2002,cea2014,measson2014,tsuji2015,reinhoffer2022,sulaiman2024,fischer2018,althuser2024}. 
+It is commonly understood as the minimum amount of energy necessary to break up a Cooper pair.
+Neglecting long-range Coulomb interactions, i.e., considering a neutral superfluid, causes the phase mode be a gapless Goldstone mode.
+The inclusion of these interactions, however, couples the phase of the order parameter to the electromagnetic field, which, ultimately, shifts the phase mode towards the plasma frequency \cite{anderson1958,bogoliubov1958,brieskorn1974,schmid1975,simanek1975,schon1976,kulik1981,maiti2015,fischer2018,sun2020,fan2022,althuser2024}.
+
+In the present article, we will numerically investigate such superconducting systems.
+Omitting Coulomb interactions and assuming a constant attractive interaction around the Fermi edge, we obtain exactly the expected results.
+However, we expand upon this, first, by using a more precise, varying interaction.
+The basis for an attraction between two electrons is usually attributed to an electron-phonon interaction that can be renormalized to an effective electron-electron interaction.
+The first such description, presented by Fr\"ohlich, is repulsive for large energy transfers and includes singularities, but it provides the necessary attractive interaction for small energy transfers \cite{frohlich1997}.
+Later, additional \textsl{ans\"atze} were employed to obtain alternative descriptions that exhibit more favorable characteristics, in that they are never repulsive and are confined to a small energy region \cite{lenz1996,mielke1997,mielke1997a,hubsch2003,kehrein2006,krull2012}.
+While all these distinct formulations differ in their description of processes that have a finite energy transfer,
+they are identical for all real, i.e., energy-conserving, processes.
+Naturally, this has to be the case as those kinds of processes can in principle be observed \cite{kehrein2006}.
+
+We make use of a result that can be obtained via a flow-equation approach, namely, a continuous unitary transformation (CUT) \cite{mielke1997,mielke1997a,krull2012,schmiedinghoff2022,walther2023,hering2024}.
+In the BCS channel, this formulation results in an attractive interaction that is proportional to a Heaviside function that depends on the magnitude of the energy transfer \cite{krull2012}.
+To compute the momentum-depend superconducting order parameter, we employ a mean-field approximation to decouple the interaction terms.
+This provides a gap that is qualitatively and quantitatively similar to the gap predicted by the standard BCS theory \cite{bardeen1957,bogoliubov1958} but lacks the sharp cutoffs observed at certain distances from the Fermi edge.
+
+An alternative approach is the Eliashberg formalism.
+Here, the retardation effects, which are commonly used to argue why the phononic attraction dominates over the instantaneous Coulomb repulsion, are explicitly included \cite{eliashberg1960,combescot1990,joas2002,chang2007}.
+On that regard, however, our interaction has another advantage over Fr\"ohlich's expression.
+Namely, it vanishes if the energy tranfers is larger than the phonon energy $\omega_\mathrm{D}$.
+This means that only scattering processes on a timescale larger than $\omega_\mathrm{D}$ contribute which is precisely what is meant if we talk about retardation \cite{kehrein2006}.
+
+Additionally, we will switch on Coulomb interactions and observe their effect both on the order parameter as well as on the collective excitations.
+On the mean-field level, this effectively renormalizes the attractive interaction by a pseudopotential $\mu^*$ \cite{bogoliubov1958,morel1962}
+and causes the gap function to extend to arbitrary momenta.
+The order parameter also switches its sign close to the Fermi edge to optimally exploit the repulsive nature of the Coulomb interaction \cite{morel1962,carbotte1990,sigrist2005}.
+
 
 
 \textbullet Definiere iEoM als iterated equations of motion
 
-\textbullet Diskutiere Eliasberg, bezogen auf Retadierung \cite{kehrein2006}
+\textbullet Diskutiere Eliashberg, bezogen auf Retadierung \cite{kehrein2006}
 
 \textbullet Bogoliubov $\mu$ \cite{bogoliubov1958} reduziert durch Anderson-Morel zu $\mu^*$ \cite{morel1962}
 
@@ -708,8 +737,8 @@ Therefore, the mode likely behaves as depicted in \autoref{fig:phase_peaks} for 
 % Acknowledgments 
 %==============================================================================
 \begin{acknowledgments} 
-	This research was partially funded by the MERCUR Kooperation
-		in project KO-2021-0027. We acknowledge very helpful discussions with 
+	This research was partially funded by the MERCUR Kooperation in project KO-2021-0027. 
+  We acknowledge very helpful discussions with D. Hering, J. Stolze, I. Eremin, M. Sigrist, and J. Schmalian.
 \end{acknowledgments}
 
 

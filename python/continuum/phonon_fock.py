@@ -83,5 +83,5 @@ def plot_function_heatmap(x_min=-0.1, x_max=0.1, y_min=0.9, y_max=1.1, num_point
     plt.show()
 
 
-plot_function(x_value=0.0)
+plot_function(x_value=0.002)
 #plot_function_heatmap()
