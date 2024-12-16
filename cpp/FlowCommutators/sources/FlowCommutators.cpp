@@ -5,8 +5,8 @@
 using namespace SymbolicOperators;
 
 int main(int argc, char** argv) {
-	//phonon_first_order();
+	phonon_first_order();
 	//phonon_higher_order();
-	coulomb_transform();
+	//coulomb_transform();
 	return 0;
 }
