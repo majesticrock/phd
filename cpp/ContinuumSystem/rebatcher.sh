@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default folder name
-DEFAULT_FOLDER="auto_generated"
+BASE_FOLDER="auto_generated"
 
 # Get suffix from user input
 echo "Enter suffix (or leave empty for none): "
