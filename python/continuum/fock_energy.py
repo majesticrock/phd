@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def fock(k, k_s):
-    return -( 1. + k_s * ( np.atan( (k - 1) / k_s ) - np.atan( (k + 1) / k_s ) ) 
+    return -( 1. + k_s * ( np.arctan( (k - 1) / k_s ) - np.arctan( (k + 1) / k_s ) ) 
                 + (1 + k_s**2 - k**2) / (2 * k) * np.log( ( k_s**2 + (1 + k)**2 ) / ( k_s**2 + (1 - k)**2 ) ) )
     
 screenings = np.array([1e-4, 0.1, 0.5, 1., 2.])

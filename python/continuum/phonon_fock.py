@@ -1,87 +1,54 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import integrate
 
-def plot_function(x_value, y_min=0.9, y_max=1.1, num_points=50000):
-    """
-    Plots the function:
-    sqrt(1+x)*ln|(y+sqrt(1+x))/(y-sqrt(1+x))| - sqrt(1-x)*ln|(y+sqrt(1-x))/(y-sqrt(1-x))|
+OMEGA_D = 0.01 # eV
+K_F = 4.25
+LAMBDA = 1e-4
+SCREENING = LAMBDA * 0.4107320221286488672 / np.sqrt(K_F)
+def coulomb_fock(x):
+    if LAMBDA == 0:
+        return 0
+    k_diff = x - 1
+    k_sum = x + 1
+    ln_factor = (SCREENING * SCREENING + 1 - x * x) / (2.0 * x)
+    log_expression = np.log((SCREENING * SCREENING + k_sum * k_sum) / (SCREENING * SCREENING + k_diff * k_diff))
+    return -0.12652559550141668 * K_F * (
+        1 + ln_factor * log_expression + SCREENING * (np.arctan(k_diff / SCREENING) - np.arctan(k_sum / SCREENING))
+    )
 
-    Parameters:
-    y_value (float): The fixed value for y.
-    x_min (float): The minimum value of x.
-    x_max (float): The maximum value of x.
-    num_points (int): Number of points for plotting.
-    """
-    # Generate x values within the range
-    y = np.linspace(y_min, y_max, num_points)
-    
-    # Avoid invalid ranges (e.g., values of x that cause division by zero)
-    epsilon = 0
-    sqrt_y_plus_x = np.sqrt(y + x_value)
-    sqrt_y_minus_x = np.sqrt(y - x_value)
+E_F = 0.5 * K_F**2 + coulomb_fock(1) # eV
+RHO_F = K_F / (2 * np.pi**2)
+G = 0.5 / RHO_F # M^2 / omega_D, yields Delta_max = 2.3 meV
+G_TILDE = (G * OMEGA_D / E_F) / (np.pi**2)
+omega_tilde = OMEGA_D / E_F
 
-    # Compute the function values safely
-    try:
-        term1 = sqrt_y_plus_x  * np.log(np.abs((1 + sqrt_y_plus_x)  / ((1 - sqrt_y_plus_x)  + epsilon)))
-        term2 = sqrt_y_minus_x * np.log(np.abs((1 + sqrt_y_minus_x) / ((1 - sqrt_y_minus_x) + epsilon)))
-        f = term1 - term2
-    except Exception as e:
-        print(f"Error while computing function values: {e}")
-        return
+OFFSET = 0.002
+EPS = 1e-8
+x = np.linspace(1 - OFFSET, 1 + OFFSET, 1000)
 
-    # Plot the function
-    plt.figure(figsize=(10, 6))
-    plt.plot(y, f, label=f"x = {x_value}")
-    plt.title(r"$\sqrt{y+x}\ln\left|\frac{1+\sqrt{y+x}}{1-\sqrt{y+x}}\right| - \sqrt{y-x}\ln\left|\frac{1+\sqrt{y-x}}{1-\sqrt{y-x}}\right|$")
-    plt.xlabel("$y$")
-    plt.ylabel("$f(y)$")
-    #plt.axhline(0, color='black', linewidth=0.8, linestyle='--')
-    #plt.axvline(0, color='black', linewidth=0.8, linestyle='--')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+def bare_dispersion(x):
+    return 0.5 * K_F**2 * ( x**2 - 1 ) 
 
-def plot_function_heatmap(x_min=-0.1, x_max=0.1, y_min=0.9, y_max=1.1, num_points=500):
-    """
-    Plots a heatmap of the function:
-    sqrt(1+x)*ln|(y+sqrt(1+x))/(y-sqrt(1+x))| - sqrt(1-x)*ln|(y+sqrt(1-x))/(y-sqrt(1-x))|
+def phonon_fock(x):
+    sqrt_plus = np.sqrt(x*x + omega_tilde)
+    sqrt_minus = np.sqrt(x*x - omega_tilde)
 
-    Parameters:
-    x_min (float): The minimum value of x.
-    x_max (float): The maximum value of x.
-    y_min (float): The minimum value of y.
-    y_max (float): The maximum value of y.
-    num_points (int): Number of points for plotting along each axis.
-    """
-    # Generate x and y values within the range
-    x = np.linspace(x_min, x_max, num_points)
-    y = np.linspace(y_min, y_max, num_points)
-    X, Y = np.meshgrid(x, y)
+    term1 = sqrt_plus  * np.log(  (1 + sqrt_plus)  / np.abs( (1 - sqrt_plus ) + EPS) )
+    term2 = sqrt_minus * np.log(  (1 + sqrt_minus) / np.abs( (1 - sqrt_minus) + EPS) )
+    return G_TILDE * (term1 - term2)
 
-    # Avoid invalid ranges (e.g., values of x that cause division by zero)
-    epsilon = 1e-8
-    sqrt_y_plus_x = np.sqrt(Y + X)
-    sqrt_y_minus_x = np.sqrt(Y - X)
+print("Phononic Fock energy at singularity =", phonon_fock(np.sqrt(1 - omega_tilde)), "eV")
+print("Integral on paper =", integrate.quad(phonon_fock, 0.5, 1.))
 
-    # Compute the function values safely
-    try:
-        term1 = sqrt_y_plus_x  * np.log(np.abs((1 + sqrt_y_plus_x)  / (1 - sqrt_y_plus_x) + epsilon))
-        term2 = sqrt_y_minus_x * np.log(np.abs((1 + sqrt_y_minus_x) / (1 - sqrt_y_minus_x) + epsilon))
-        Z = term1 - term2
-    except Exception as e:
-        print(f"Error while computing function values: {e}")
-        return
-
-    # Plot the heatmap
-    plt.figure(figsize=(10, 8))
-    plt.contourf(X, Y, Z, levels=100, cmap='seismic')
-    plt.colorbar(label="f(x, y)")
-    plt.title(r"$\sqrt{y+x}\ln\left|\frac{1+\sqrt{y+x}}{1-\sqrt{y+x}}\right| - \sqrt{y-x}\ln\left|\frac{1+\sqrt{y-x}}{1-\sqrt{y-x}}\right|$")
-    plt.xlabel("$x$")
-    plt.ylabel("$y$")
-    plt.grid(False)
-    plt.show()
-
-
-plot_function(x_value=0.002)
-#plot_function_heatmap()
+plt.plot(x, bare_dispersion(x), label=r"$\epsilon_0$")
+plt.plot(x, phonon_fock(x), label=r"$\epsilon_\mathrm{Fock}^\mathrm{Ph}$")
+plt.plot(x, bare_dispersion(x) + phonon_fock(x), label=r"$\epsilon$")
+plt.plot(x, coulomb_fock(x) - coulomb_fock(1), label=r"$\epsilon_\mathrm{Fock}^\mathrm{C} (x, \lambda=10^{-4})$")
+#plt.title(r"$\sqrt{x^2 + \tilde{ \omega }}\ln\left|\frac{1+\sqrt{x^2 + \tilde{ \omega }}}{1-\sqrt{x^2 + \tilde{ \omega }}}\right| - \sqrt{x^2 - \tilde{ \omega }}\ln\left|\frac{1+\sqrt{x^2 - \tilde{ \omega }}}{1-\sqrt{x^2 - \tilde{ \omega }}}\right|$")
+plt.xlabel(r"$x = k / k_\mathrm{F}$")
+plt.ylabel(r"$\epsilon (x) [eV]$")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
