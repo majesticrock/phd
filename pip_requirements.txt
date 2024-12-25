@@ -1,0 +1,7 @@
+numpy
+scipy
+uncertainties
+matplotlib
+pandas
+setuptools
+pybind11
