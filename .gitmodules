@@ -1,3 +1,15 @@
 [submodule "Phdutility"]
 	path = PhdUtility
 	url = git@github.com:majesticrock/PhdUtility.git
+[submodule "cpp/FermionCommute"]
+	path = cpp/FermionCommute
+	url = git@github.com:majesticrock/FermionCommute.git
+[submodule "cpp/ContinuumSystem"]
+	path = cpp/ContinuumSystem
+	url = git@github.com:majesticrock/ContinuumSystem.git
+[submodule "cpp/Hubbard"]
+	path = cpp/Hubbard
+	url = git@github.com:majesticrock/Hubbard.git
+[submodule "cpp/FlowCommutators"]
+	path = cpp/FlowCommutators
+	url = git@github.com:majesticrock/FlowCommutators.git
