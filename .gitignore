@@ -11,22 +11,14 @@ data
 **/Debug/
 **/Release/
 **/build/
-**/build_cluster/
-**/build_MKL/
+**/build*/
 *.csv
 stdout*
 stderr*
 **/__pycache__
 **/auto_generated/
 **/auto_generated*/
-**/build*/
-cpp/HubbardMeanField/small_auto_generated
-cpp/HubbardMeanField/small_auto_generated2
-cpp/HubbardMeanField/cube_auto_generated
-cpp/HubbardMeanField/square_auto_generated
-cpp/HubbardMeanField/small_cube_auto_generated
-cpp/HubbardMeanField/small_square_auto_generated
-cpp/HubbardMeanField/doxy
+**/*auto_generated/
 *.bin
 paper/plots
 
@@ -36,7 +28,7 @@ paper/plots
 
 #ignore data that is subject to change
 **/test/
-**/test2/
+**/test*/
 
 *.aux
 *.blg
