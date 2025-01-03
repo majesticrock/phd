@@ -13,3 +13,9 @@
 [submodule "cpp/FlowCommutators"]
 	path = cpp/FlowCommutators
 	url = git@github.com:majesticrock/FlowCommutators.git
+[submodule "phd_plot_scripts"]
+	path = phd_plot_scripts
+	url = git@github.com:majesticrock/phd_plot_scripts.git
+[submodule "PresentationsPhd"]
+	path = PresentationsPhd
+	url = git@github.com:majesticrock/PresentationsPhd.git
