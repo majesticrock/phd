@@ -1,4 +1,4 @@
-[submodule "Phdutility"]
+[submodule "PhdUtility"]
 	path = PhdUtility
 	url = git@github.com:majesticrock/PhdUtility.git
 [submodule "cpp/FermionCommute"]
