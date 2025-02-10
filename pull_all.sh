@@ -3,6 +3,7 @@ ssh-add
 
 pull_repo() {
     local repo_path=$1
+    print("Updating $repo_path")
     cd "$repo_path" || exit
     git pull
     cd - || exit
