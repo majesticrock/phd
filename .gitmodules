@@ -19,3 +19,6 @@
 [submodule "PresentationsPhd"]
 	path = PresentationsPhd
 	url = git@github.com:majesticrock/PresentationsPhd.git
+[submodule "cpp/HigherHarmonics"]
+	path = cpp/HigherHarmonics
+	url = git@github.com:majesticrock/HigherHarmonics.git
