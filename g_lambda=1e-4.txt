@@ -336,8 +336,6 @@ lambda=1e-4
 4.125
 4.15
 4.175
-
-## Continue calculations here
 4.2
 2.46
 2.47
