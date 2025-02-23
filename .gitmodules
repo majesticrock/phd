@@ -22,3 +22,6 @@
 [submodule "cpp/HigherHarmonics"]
 	path = cpp/HigherHarmonics
 	url = git@github.com:majesticrock/HigherHarmonics.git
+[submodule "ThesisPhd"]
+	path = ThesisPhd
+	url = git@github.com:majesticrock/ThesisPhd.git
