@@ -9,6 +9,7 @@ pull_repo() {
     cd - || exit
 }
 
+pull_repo "ThesisPhd"
 pull_repo "PhdUtility"
 pull_repo "PresentationsPhd"
 pull_repo "phd_plot_scripts"
