@@ -1,0 +1,90 @@
+\documentclass[tikz]{standalone}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+
+\begin{document}
+
+% Set custom 3D view
+\tdplotsetmaincoords{80}{40}
+
+\begin{tikzpicture}[tdplot_main_coords, scale=1.2]
+
+% Lattice size
+\def\Nx{2}
+\def\Ny{2}
+\def\Nz{2}
+\def\dx{1}
+\def\dy{1}
+\def\dz{1}
+
+% Draw connecting lines
+\foreach \i in {0,...,\Nx} {
+  \foreach \j in {0,...,\Ny} {
+    \foreach \k in {0,...,\Nz} {
+
+      \pgfmathsetmacro{\x}{\i*\dx}
+      \pgfmathsetmacro{\y}{\j*\dy}
+      \pgfmathsetmacro{\z}{\k*\dz}
+      \pgfmathtruncatemacro{\sumij}{mod(\i+\j,2)}
+      \ifnum\sumij=0
+        \def\ptcolor{red}
+      \else
+        \def\ptcolor{blue}
+      \fi
+
+      % x-direction
+      \ifnum\i<\Nx
+        \draw[black] (\x,\y,\z) -- ({\x+\dx},\y,\z);
+
+        % Label t at (0,0,0) x-bond
+        \ifnum\i=1 \ifnum\j=0 \ifnum\k=0
+          \node at ({\x+0.5\dx},{\y-0.05\dy},{\z-0.15\dz}) {$t$};
+        \fi\fi\fi
+      \fi
+
+      % y-direction
+      \ifnum\j<\Ny
+        \draw[black,dashed] (\x,\y,\z) -- (\x,{\y+\dy},\z);
+
+        % Label it at (0,0,0) y-bond
+        \ifnum\i=2 \ifnum\j=0 \ifnum\k=0
+          \node at ({\x+0.15\dx},{\y+0.5*\dy},{\z-0.15\dz}) {$\mathrm{i}t$};
+        \fi\fi\fi
+      \fi
+
+      % z-direction
+      \ifnum\k<\Nz
+        \draw[\ptcolor] (\x,\y,\z) -- (\x,\y,{\z+\dz});
+
+        % Label +t or -t near (0,0,0) z-bond
+        \ifnum\i=0 \ifnum\j=0 \ifnum\k=0
+            \node at (\x-0.3,\y,\z+0.45*\dz) {\textcolor{red}{$+t$}};
+        \fi\fi\fi
+        \ifnum\i=0 \ifnum\j=1 \ifnum\k=0
+            \node at (\x-0.3,\y,\z+0.45*\dz) {\textcolor{blue}{$-t$}};
+        \fi\fi\fi
+      \fi
+    }
+  }
+}
+
+% Draw lattice sites on top
+\foreach \i in {0,...,\Nx} {
+  \foreach \j in {0,...,\Ny} {
+    \foreach \k in {0,...,\Nz} {
+      \pgfmathsetmacro{\x}{\i*\dx}
+      \pgfmathsetmacro{\y}{\j*\dy}
+      \pgfmathsetmacro{\z}{\k*\dz}
+      \pgfmathtruncatemacro{\sumij}{mod(\i+\j,2)}
+      \ifnum\sumij=0
+        \def\ptcolor{red}
+      \else
+        \def\ptcolor{blue}
+      \fi
+      \fill[\ptcolor] (\x,\y,\z) circle(2pt);
+    }
+  }
+}
+
+\end{tikzpicture}
+\end{document}
