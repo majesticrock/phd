@@ -10,14 +10,12 @@ include(CMakeFindDependencyMacro)
 find_dependency(Boost REQUIRED COMPONENTS serialization iostreams)
 
 # --- Library Definition ---
-add_library(test_boost_cmake INTERFACE)
+add_executable(test_boost_cmake test.cpp)
 
-target_include_directories(test_boost_cmake INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-target_link_libraries(test_boost_cmake INTERFACE 
+target_link_libraries(test_boost_cmake PRIVATE 
     Boost::serialization
     Boost::iostreams
 )
+target_include_directories(test_boost_cmake PRIVATE ${Boost_INCLUDE_DIRS})
+
+message(WARNING "Loading boost libraries from ${Boost_INCLUDE_DIRS}")
