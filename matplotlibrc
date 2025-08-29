@@ -1,8 +1,10 @@
-font.size : 14
-#font.family : serif
+font.size : 12
+font.family : serif
 font.serif : Latin Modern Math
 
-axes.xmargin : 0.005
+axes.xmargin : 0
+
+savefig.bbox : tight
 
 xtick.direction : in
 ytick.direction : in
@@ -11,14 +13,12 @@ ytick.right : True
 xtick.minor.visible : True
 ytick.minor.visible : True
 
-lines.linewidth : 2
+lines.linewidth : 1.5
 
 pgf.rcfonts : False
 
-#backend : pgf
-## TeX benutzen
-#text.usetex : True
-#pgf.texsystem : lualatex
-
-savefig.directory : ./finished_plots
-savefig.format : pdf
+# backend : pgf
+# TeX benutzen
+text.usetex : True
+# pgf.preamble : \input{settings/mpl_header.tex}
+pgf.texsystem : lualatex
