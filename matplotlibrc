@@ -1,6 +1,6 @@
 font.size : 12
 font.family : serif
-font.serif : Latin Modern Math
+# font.serif : Latin Modern Math
 
 axes.xmargin : 0
 
@@ -19,6 +19,6 @@ pgf.rcfonts : False
 
 # backend : pgf
 # TeX benutzen
-text.usetex : True
+# text.usetex : True
 # pgf.preamble : \input{settings/mpl_header.tex}
-pgf.texsystem : lualatex
+# pgf.texsystem : lualatex
