@@ -25,9 +25,6 @@
 [submodule "ThesisPhd"]
 	path = ThesisPhd
 	url = git@github.com:majesticrock/ThesisPhd.git
-[submodule "cpp/Fourier-HHG"]
-	path = cpp/Fourier-HHG
-	url = git@github.com:majesticrock/Fourier-HHG.git
 [submodule "cpp/LatticeCUT"]
 	path = cpp/LatticeCUT
 	url = git@github.com:majesticrock/LatticeCUT.git
