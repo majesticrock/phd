@@ -13,7 +13,7 @@ ytick.right : True
 xtick.minor.visible : True
 ytick.minor.visible : True
 
-lines.linewidth : 1.5
+lines.linewidth : 2
 
 pgf.rcfonts : False
 
