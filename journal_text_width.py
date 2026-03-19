@@ -1,0 +1,1 @@
+TEXT_WIDTH = 1200
