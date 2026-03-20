@@ -19,7 +19,7 @@ std::vector<Term> hamiltonian(char momentum_1, char momentum_2)
 			Operator(momentum_1, 1, false, Index::Sigma, true), Operator(momentum_1, 1, false, Index::Sigma, false)
 			})
         );
-    const Term H_Ph(-1, Coefficient("g"),
+    const Term H_Ph(-1, Coefficient::RealInversionSymmetric("g", MomentumList({ 'q', 'p' }), std::function<void(Coefficient&)>([](Coefficient& coeff){ coeff.momenta.sort(); })),
 		SumContainer{ MomentumSum({ momentum_2, momentum_1 }) },
 		std::vector<Operator>({
 			c_k_dagger.with_momentum(momentum_1), c_minus_k_dagger.with_momentum(momentum_1),
@@ -32,21 +32,56 @@ int main(int argc, char** argv) {
 	std::vector<Term> hamiltonian1 = hamiltonian('q', 'p');
 	std::vector<Term> hamiltonian2 = hamiltonian('r', 's');
 	
-	std::vector<Term> phase_term = std::vector<Term>({
+	const std::vector<Term> phase_term = std::vector<Term>({
 					Term(1, std::vector<Operator>({ c_minus_k, c_k })),
 					Term(-1, std::vector<Operator>({ c_k_dagger, c_minus_k_dagger }))
 			});
+	const std::vector<Term> higgs_term = std::vector<Term>({
+					Term(1, std::vector<Operator>({ c_minus_k, c_k })),
+					Term(1, std::vector<Operator>({ c_k_dagger, c_minus_k_dagger }))
+			});
+	const std::vector<Term> number_term = std::vector<Term>({
+					Term(1, std::vector<Operator>({ c_minus_k_dagger, c_minus_k })),
+					Term(1, std::vector<Operator>({ c_k_dagger, c_k }))
+			});
 
+	std::vector<Term> higgs_commutator = commutator(hamiltonian1, higgs_term);
+	clean_up(higgs_commutator);
+	std::ranges::sort(higgs_commutator, [](const Term& l, const Term& r) {
+		if (l.operators.size() < r.operators.size()) return true;
+		if (l.operators.size() > r.operators.size()) return false;
+		if (!l.operators.front().is_daggered && r.operators.front().is_daggered) return true;
+		return false;
+		});
+	std::cout << "\\begin{align*}\n\t[H, c_{-k \\downarrow } c_{k \\uparrow } + c_{k \\uparrow}^\\dagger c_{-k \\downarrow}^\\dagger ] = "
+		<< higgs_commutator
+		<< "\\end{align*}" << std::endl;
+
+	std::vector<Term> number_commutator = commutator(hamiltonian1, number_term);
+	clean_up(number_commutator);
+	std::ranges::sort(number_commutator, [](const Term& l, const Term& r) {
+		if (l.operators.size() < r.operators.size()) return true;
+		if (l.operators.size() > r.operators.size()) return false;
+		if (!l.operators.front().is_daggered && r.operators.front().is_daggered) return true;
+		return false;
+		});
+	std::cout << "\\begin{align*}\n\t[H, c_{k \\uparrow}^\\dagger c_{k \\uparrow } + c_{-k \\downarrow}^\\dagger c_{-k \\downarrow} ] = "
+		<< number_commutator
+		<< "\\end{align*}" << std::endl;
+
+	return 0;
+	
 	std::vector<Term> inner_commutator = commutator(hamiltonian1, phase_term);
 	clean_up(inner_commutator);
+	std::ranges::sort(inner_commutator, [](const Term& l, const Term& r) {
+		if (l.operators.size() < r.operators.size()) return true;
+		if (l.operators.size() > r.operators.size()) return false;
+		if (!l.operators.front().is_daggered && r.operators.front().is_daggered) return true;
+		return false;
+		});
 	
 	std::vector<Term> commutation_result = commutator(hamiltonian2, inner_commutator);
 	clean_up(commutation_result);
-
-	std::cout << "\\begin{align*}\n\tH = "
-		<< hamiltonian1
-		<< "\\end{align*}" << std::endl;
-	
 	std::ranges::sort(commutation_result, [](const Term& l, const Term& r) {
 		if (l.operators.size() < r.operators.size()) return true;
 		if (l.operators.size() > r.operators.size()) return false;
