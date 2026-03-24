@@ -1,0 +1,53 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(DWave VERSION 2.1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+list(APPEND CMAKE_PREFIX_PATH "~/usr/local")
+include_directories(
+    $ENV{HOME}/usr/local/include
+)
+
+set(MKL_LINK static)
+set(MKL_THREADING gnu_thread)
+set(MKL_INTERFACE lp64)
+
+find_package(MKL CONFIG QUIET HINTS $ENV{MKLROOT})
+if (MKL_FOUND)
+    set(USE_MKL ON CACHE BOOL "Use Intel MKL" FORCE)
+else()
+    set(USE_MKL OFF CACHE BOOL "Use Intel MKL" FORCE)
+endif()
+
+include(${CMAKE_SOURCE_DIR}/cmake/MKLFlags.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/SelectClusterBuildOptions.cmake)
+
+find_package(OpenMP REQUIRED)
+find_package(mrock REQUIRED)
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../PhdUtility/cmake/mrock-information.cmake)
+
+add_executable(DWave 
+    sources/DWave.cpp
+)
+target_sources(DWave PRIVATE
+    sources/DWave/Model.cpp
+    sources/DWave/T_C.cpp
+)
+SET_COMPILER_FLAGS(DWave)
+
+option(LATTICE_CUT_RESIDUALS "Compute residuals and eigenvectors of the transformed dynamical matrix." OFF)
+if (LATTICE_CUT_RESIDUALS)
+    target_compile_definitions(DWave PRIVATE LATTICE_CUT_RESIDUALS)
+endif()
+option(LATTICE_CUT_FULL_DIAG "Fully diagonalize the transformed dynamical matrix." OFF)
+if (LATTICE_CUT_FULL_DIAG)
+    target_compile_definitions(DWave PRIVATE LATTICE_CUT_FULL_DIAG)
+endif()
+
+
+target_link_libraries(DWave PRIVATE OpenMP::OpenMP_CXX ${mrock_LIBRARIES})
+target_include_directories(DWave PRIVATE ${mrock_INCLUDE_DIRS})
