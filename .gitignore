@@ -20,6 +20,8 @@ stderr*
 **/auto_generated*/
 **/*auto_generated/
 *.bin
+*.gz
+*json
 paper/plots
 
 #include literature
