@@ -9,11 +9,14 @@ typedef std::complex<double> cdouble;
 
 // Constants
 constexpr double pi = std::numbers::pi;
-constexpr double a = 1.0;
-constexpr double beta = 30.;
-constexpr double W = 1.0;
-constexpr double E_F = -0.5;
-constexpr int N = 200;
+constexpr double a = 2.0; // angstrom
+constexpr double v_unitcell = 0.5 * a*a*a;
+constexpr double beta = 30.; // eV^-1
+constexpr double W = 2.0; // eV
+constexpr double E_F = -0.5 * W; // eV
+constexpr double alpha = 180.951282 / v_unitcell; // eV / angstrom^2
+constexpr double rho_F = 0.5 * 0.6591234790556394 / W; // 1/eV
+constexpr int N = 32;
 constexpr int n_segment = 100;
 
 template<class T>

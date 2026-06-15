@@ -5,6 +5,9 @@
 #include <nlohmann/json.hpp>
 #include "helper_functions.hpp"
 
+//#define COMPUTE_Q_PATH
+#define COMPUTE_Q_AVERAGE
+
 std::vector<cdouble> lindhard(const kvec_t& q, 
                 const std::vector<cdouble>& omegas,
                 const triple_array<kvec_t>& cosines,
@@ -60,11 +63,10 @@ int main(int argc, char** argv) {
     clock::time_point begin = clock::now();
 
     std::vector<cdouble> omegas = {
-         {0.0, 1e-5},
-         {0.1, 5e-3},
-         {0.2, 5e-3},
-         {0.5, 5e-3},
-    };
+         {0.0  * W, 1e-5},
+         {0.02 * W, 5e-3},
+         {0.04 * W, 5e-3}
+    }; // eV
 
     const triple_array<kvec_t> kvecs = generate_kvecs();
     const triple_array<kvec_t> cosines = compute_cosines(kvecs);;
@@ -72,6 +74,8 @@ int main(int argc, char** argv) {
     const triple_array<double> xis = compute_xis(cosines);
     const triple_array<double> fermis = compute_fermis(xis);
 
+
+#ifdef COMPUTE_Q_PATH
     std::array<kvec_t, 4> high_symmetry_points{}; // Gamma, X, M, R
     // Gamma
     high_symmetry_points[0] = {0., 0., 0.};
@@ -112,9 +116,66 @@ int main(int argc, char** argv) {
 	};
 	mrock::utility::saveString(jChi.dump(4), "chi.json.gz");
 	std::cout << "Data saved!" << std::endl;
+#endif
+#ifdef COMPUTE_Q_AVERAGE
+    std::vector<double> v_screens(omegas.size());
+
+    #pragma omp parallel
+    {
+        std::vector<double> v_screens_local(omegas.size(), 0.0);
+
+        #pragma omp for collapse(3)
+        for (size_t x = 0; x < N; ++x) {
+            for (size_t y = 0; y < N; ++y) {
+                for (size_t z = 0; z < N; ++z) {
+                    const auto& q = kvecs[x][y][z];
+                    const double q_sqr =
+                        q[0]*q[0] + q[1]*q[1] + q[2]*q[2];
+
+                    if (q_sqr < 1e-12)
+                        continue;
+
+                    const double vq = alpha / q_sqr;
+                    const auto lindhards = lindhard(q, omegas, cosines, sines, xis, fermis);
+
+                    for (size_t o = 0; o < omegas.size(); ++o) {
+                        v_screens_local[o] += vq / (1.0 + vq * lindhards[o].real());
+                    }
+                }
+            }
+        }
+
+        #pragma omp critical
+        {
+            for (size_t o = 0; o < omegas.size(); ++o) {
+                v_screens[o] += v_screens_local[o];
+            }
+        }
+    }
+    std::vector<double> Us(omegas.size());
+    for (size_t o=0U; o<omegas.size(); ++o) {
+        v_screens[o] /= (N*N*N);
+        Us[o] = v_screens[o] * rho_F;
+    }
+    
+
+    /*
+    * output  data
+    */
+    std::vector<double> real_omegas(omegas.size());
+    for(size_t o=0U;o<omegas.size();++o){
+        real_omegas[o] = omegas[o].real();
+    }
+	nlohmann::json jScreen = {
+        { "Us",         Us          },
+		{ "v_screens",	v_screens   },
+        { "omegas",     real_omegas }
+	};
+	mrock::utility::saveString(jScreen.dump(4), "v_screens.json.gz");
+	std::cout << "Data saved!" << std::endl;
+#endif
 
     clock::time_point end = clock::now();
 	std::cout << "Runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
-
     return 0;
 }
