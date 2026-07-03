@@ -97,14 +97,14 @@ namespace DWave {
             {
                 if (std::abs(energy_k - dispersion(unravel_x(l), unravel_y(l))) <= omega_debye)
                 {
-                    __part -= _expecs[mrock::symbolic_operators::SC_Type][l];
+                    __part -= _expecs[mrock::symbolic_operators::OperatorType::SC][l];
                 }
             }
             result(k) = phonon_coupling * __part;
             __part = l_float{};
             for (int l = 0; l < N*N; ++l)
             {
-                __part -= _expecs[mrock::symbolic_operators::SC_Type][l] * dwave_factor(unravel_x(l), unravel_y(l));
+                __part -= _expecs[mrock::symbolic_operators::OperatorType::SC][l] * dwave_factor(unravel_x(l), unravel_y(l));
             }
             result(k) += dwave_coupling * dwave_factor(unravel_x(k), unravel_y(k)) * __part;
         }
@@ -181,13 +181,13 @@ namespace DWave {
     const std::map<mrock::symbolic_operators::OperatorType, std::vector<l_float>> &Model::get_expectation_values() const
     {
 		if (_expecs.empty()) {
-			_expecs.emplace(mrock::symbolic_operators::Number_Type, std::vector<l_float>(N*N));
-			_expecs.emplace(mrock::symbolic_operators::SC_Type, std::vector<l_float>(N*N));
+			_expecs.emplace(mrock::symbolic_operators::OperatorType::Number, std::vector<l_float>(N*N));
+			_expecs.emplace(mrock::symbolic_operators::OperatorType::SC, std::vector<l_float>(N*N));
 		}
 #pragma omp parallel for
 		for (int k = 0; k < N*N; ++k) {
-			_expecs.at(mrock::symbolic_operators::Number_Type)[k] = this->occupation_number(unravel_x(k), unravel_y(k));
-			_expecs.at(mrock::symbolic_operators::SC_Type)[k]  = this->sc_expectation_value(unravel_x(k), unravel_y(k));
+			_expecs.at(mrock::symbolic_operators::OperatorType::Number)[k] = this->occupation_number(unravel_x(k), unravel_y(k));
+			_expecs.at(mrock::symbolic_operators::OperatorType::SC)[k]  = this->sc_expectation_value(unravel_x(k), unravel_y(k));
 		}
 
 		return _expecs;
