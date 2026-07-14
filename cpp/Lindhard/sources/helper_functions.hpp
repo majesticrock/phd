@@ -3,10 +3,10 @@
 inline triple_array<kvec_t> compute_cosines(const triple_array<kvec_t>& kvecs) 
 {
     triple_array<kvec_t> cosines{};
-    for (size_t x=0U; x<N; ++x) {
-        for (size_t y=0U; y<N; ++y) {
-            for (size_t z=0U; z<N; ++z) {
-                for (size_t k=0; k<3; ++k) {
+    for (std::size_t x=0U; x<N; ++x) {
+        for (std::size_t y=0U; y<N; ++y) {
+            for (std::size_t z=0U; z<N; ++z) {
+                for (std::size_t k=0; k<3; ++k) {
                     cosines[x][y][z][k] = std::cos(0.5 * a * kvecs[x][y][z][k]);
                 }
             }
@@ -18,10 +18,10 @@ inline triple_array<kvec_t> compute_cosines(const triple_array<kvec_t>& kvecs)
 inline triple_array<kvec_t> compute_sines(const triple_array<kvec_t>& kvecs) 
 {
     triple_array<kvec_t> sines{};
-    for (size_t x=0U; x<N; ++x) {
-        for (size_t y=0U; y<N; ++y) {
-            for (size_t z=0U; z<N; ++z) {
-                for (size_t k=0; k<3; ++k) {
+    for (std::size_t x=0U; x<N; ++x) {
+        for (std::size_t y=0U; y<N; ++y) {
+            for (std::size_t z=0U; z<N; ++z) {
+                for (std::size_t k=0; k<3; ++k) {
                     sines[x][y][z][k] = std::sin(0.5 * a * kvecs[x][y][z][k]);
                 }
             }
@@ -33,11 +33,11 @@ inline triple_array<kvec_t> compute_sines(const triple_array<kvec_t>& kvecs)
 inline triple_array<double> compute_xis(const triple_array<kvec_t>& cosines) 
 {
     triple_array<double> xis{};
-    for (size_t x=0U; x<N; ++x) {
-        for (size_t y=0U; y<N; ++y) {
-            for (size_t z=0U; z<N; ++z) {
+    for (std::size_t x=0U; x<N; ++x) {
+        for (std::size_t y=0U; y<N; ++y) {
+            for (std::size_t z=0U; z<N; ++z) {
                 xis[x][y][z] = W;
-                for (size_t k=0; k<3; ++k) {
+                for (std::size_t k=0; k<3; ++k) {
                     xis[x][y][z] *= -cosines[x][y][z][k];
                 }
                 xis[x][y][z] -= E_F;
@@ -55,7 +55,7 @@ inline double shifted_xi(const kvec_t& q,
     const kvec_t sinq = { std::sin(0.5*a*q[0]), std::sin(0.5*a*q[1]), std::sin(0.5*a*q[2]) };
 
     double xi_q{W};
-    for (size_t k=0; k<3; ++k) {
+    for (std::size_t k=0; k<3; ++k) {
         xi_q *= -(cosq[k] * cosines[k] - sinq[k] * sines[k]);
     }
     xi_q -= E_F;
@@ -66,9 +66,9 @@ inline double shifted_xi(const kvec_t& q,
 inline triple_array<double> compute_fermis(const triple_array<double>& xis) 
 {
     triple_array<double> fermis{};
-    for (size_t x=0U; x<N; ++x) {
-        for (size_t y=0U; y<N; ++y) {
-            for (size_t z=0U; z<N; ++z) {
+    for (std::size_t x=0U; x<N; ++x) {
+        for (std::size_t y=0U; y<N; ++y) {
+            for (std::size_t z=0U; z<N; ++z) {
                 fermis[x][y][z] = 1.0 / (std::exp(beta * xis[x][y][z]) + 1.0);
             }
         }

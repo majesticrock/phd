@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 		Model model(input);
 		auto solver = mrock::utility::Selfconsistency::make_broyden<l_float>(&model, &(model.Delta), 300);
 
-		constexpr size_t BROYDEN_ITER = 700;
+		constexpr std::size_t BROYDEN_ITER = 700;
 		constexpr double BROYDEN_EPS = 1e-8;
 		solver.compute(false, BROYDEN_ITER, BROYDEN_EPS);
 

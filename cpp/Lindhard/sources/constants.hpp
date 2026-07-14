@@ -32,7 +32,7 @@ constexpr std::array<kvec_t, 3> basis_vectors = {
 
 constexpr kvec_t& addInPlace(kvec_t& k1, const kvec_t& k2) 
 {
-    for(size_t i=0U; i<k1.size(); ++i){
+    for(std::size_t i=0U; i<k1.size(); ++i){
         k1[i] += k2[i];
     }
     return k1;
@@ -59,7 +59,7 @@ constexpr double coeff(int i) {
 }
 constexpr N_array<double> generate_coeffs() {
     N_array<double> coeffs;
-    for (size_t i=0U; i<N; ++i) {
+    for (std::size_t i=0U; i<N; ++i) {
         coeffs[i] = coeff(i);
     }
     return coeffs;
@@ -70,9 +70,9 @@ constexpr triple_array<kvec_t> generate_kvecs ()
     constexpr N_array<double> coeffs = generate_coeffs();
     triple_array<kvec_t>kvecs{};
 
-    for (size_t x=0U; x<N; ++x) {
-        for (size_t y=0U; y<N; ++y) {
-            for (size_t z=0U; z<N; ++z) {
+    for (std::size_t x=0U; x<N; ++x) {
+        for (std::size_t y=0U; y<N; ++y) {
+            for (std::size_t z=0U; z<N; ++z) {
                 addInPlace(kvecs[x][y][z], multiply(coeffs[x], basis_vectors[0]));
                 addInPlace(kvecs[x][y][z], multiply(coeffs[y], basis_vectors[1]));
                 addInPlace(kvecs[x][y][z], multiply(coeffs[z], basis_vectors[2]));

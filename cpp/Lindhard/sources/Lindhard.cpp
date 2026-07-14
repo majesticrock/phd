@@ -18,12 +18,12 @@ std::vector<cdouble> lindhard(const kvec_t& q,
     const double qnorm_sqr = q[0]*q[0] + q[1]*q[1] + q[2]*q[2];
     std::vector<cdouble> chis(omegas.size());
 
-    for (size_t o=0U; o<omegas.size(); ++o) {
+    for (std::size_t o=0U; o<omegas.size(); ++o) {
         if (omegas[o].real() < omegas[o].imag() && qnorm_sqr < omegas[o].imag()*omegas[o].imag()) {
             // help
-            for (size_t x=0U; x<N; ++x) {
-                for (size_t y=0U; y<N; ++y) {
-                    for (size_t z=0U; z<N; ++z) {
+            for (std::size_t x=0U; x<N; ++x) {
+                for (std::size_t y=0U; y<N; ++y) {
+                    for (std::size_t z=0U; z<N; ++z) {
                         chis[o] += derivative_fermi(xis[x][y][z]);
                     }
                 }
@@ -32,9 +32,9 @@ std::vector<cdouble> lindhard(const kvec_t& q,
         else {
             if (qnorm_sqr < omegas[o].imag()*omegas[o].imag())
             {
-                for (size_t x=0U; x<N; ++x) {
-                    for (size_t y=0U; y<N; ++y) {
-                        for (size_t z=0U; z<N; ++z) {
+                for (std::size_t x=0U; x<N; ++x) {
+                    for (std::size_t y=0U; y<N; ++y) {
+                        for (std::size_t z=0U; z<N; ++z) {
                             chis[o] += fermis[x][y][z] * (shifted_xi(q, cosines[x][y][z], sines[x][y][z]) - xis[x][y][z]);
                         }
                     }
@@ -43,9 +43,9 @@ std::vector<cdouble> lindhard(const kvec_t& q,
             }
             else {
                 double xi_q;
-                for (size_t x=0U; x<N; ++x) {
-                    for (size_t y=0U; y<N; ++y) {
-                        for (size_t z=0U; z<N; ++z) {
+                for (std::size_t x=0U; x<N; ++x) {
+                    for (std::size_t y=0U; y<N; ++y) {
+                        for (std::size_t z=0U; z<N; ++z) {
                             xi_q = shifted_xi(q, cosines[x][y][z], sines[x][y][z]); 
                             chis[o] += (fermis[x][y][z] - fermi(xi_q)) / (xis[x][y][z] - xi_q + omegas[o]);
                         }
@@ -89,12 +89,12 @@ int main(int argc, char** argv) {
     std::array<std::vector<std::array<double, n_segment>>, 4> chi_paths;
     chi_paths.fill(std::vector<std::array<double, n_segment>>(omegas.size()));
 
-    for (size_t i=0U; i<4U; ++i) {
+    for (std::size_t i=0U; i<4U; ++i) {
         const auto& qvecs = connector_line(high_symmetry_points[i], high_symmetry_points[(i+1)%4]);
 #pragma omp parallel for
         for (int q=0; q<n_segment; ++q) {
             std::vector<cdouble> result = lindhard(qvecs[q], omegas, cosines, sines, xis, fermis);
-            for (size_t r=0U; r<result.size(); ++r) {
+            for (std::size_t r=0U; r<result.size(); ++r) {
                 chi_paths[i][r][q] = result[r].real();
             }
         }
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
     * output  data
     */
     std::vector<double> real_omegas(omegas.size());
-    for(size_t o=0U;o<omegas.size();++o){
+    for(std::size_t o=0U;o<omegas.size();++o){
         real_omegas[o] = omegas[o].real();
     }
 	nlohmann::json jChi = {
@@ -125,9 +125,9 @@ int main(int argc, char** argv) {
         std::vector<double> v_screens_local(omegas.size(), 0.0);
 
         #pragma omp for collapse(3)
-        for (size_t x = 0; x < N; ++x) {
-            for (size_t y = 0; y < N; ++y) {
-                for (size_t z = 0; z < N; ++z) {
+        for (std::size_t x = 0; x < N; ++x) {
+            for (std::size_t y = 0; y < N; ++y) {
+                for (std::size_t z = 0; z < N; ++z) {
                     const auto& q = kvecs[x][y][z];
                     const double q_sqr =
                         q[0]*q[0] + q[1]*q[1] + q[2]*q[2];
@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
                     const double vq = alpha / q_sqr;
                     const auto lindhards = lindhard(q, omegas, cosines, sines, xis, fermis);
 
-                    for (size_t o = 0; o < omegas.size(); ++o) {
+                    for (std::size_t o = 0; o < omegas.size(); ++o) {
                         v_screens_local[o] += vq / (1.0 + vq * lindhards[o].real());
                     }
                 }
@@ -147,13 +147,13 @@ int main(int argc, char** argv) {
 
         #pragma omp critical
         {
-            for (size_t o = 0; o < omegas.size(); ++o) {
+            for (std::size_t o = 0; o < omegas.size(); ++o) {
                 v_screens[o] += v_screens_local[o];
             }
         }
     }
     std::vector<double> Us(omegas.size());
-    for (size_t o=0U; o<omegas.size(); ++o) {
+    for (std::size_t o=0U; o<omegas.size(); ++o) {
         v_screens[o] /= (N*N*N);
         Us[o] = v_screens[o] * rho_F;
     }
@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
     * output  data
     */
     std::vector<double> real_omegas(omegas.size());
-    for(size_t o=0U;o<omegas.size();++o){
+    for(std::size_t o=0U;o<omegas.size();++o){
         real_omegas[o] = omegas[o].real();
     }
 	nlohmann::json jScreen = {
