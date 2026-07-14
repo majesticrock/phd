@@ -10,13 +10,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_PREFIX_PATH "~/usr/local")
 
-include_directories(
-    $ENV{HOME}/usr/local/include
-)
-
 find_package(OpenMP REQUIRED)
 find_package(Boost REQUIRED COMPONENTS serialization)
-find_package(mrock REQUIRED)
+find_package(mrock 
+    REQUIRED 
+    COMPONENTS 
+        utility
+)
 
 add_executable(Lindhard 
     sources/Lindhard.cpp
@@ -40,6 +40,4 @@ else()
     message(FATAL_ERROR "Unsupported compiler ${CMAKE_CXX_COMPILER_ID}. Only GCC is supported.")
 endif()
 
-
-target_include_directories(Lindhard PRIVATE ${Boost_INCLUDE_DIRS} ${mrock_INCLUDE_DIRS})
 target_link_libraries(Lindhard PUBLIC OpenMP::OpenMP_CXX ${mrock_LIBRARIES})

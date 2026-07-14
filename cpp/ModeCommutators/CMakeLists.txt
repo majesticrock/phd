@@ -10,10 +10,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_PREFIX_PATH "~/usr/local")
 
-include_directories(
-    $ENV{HOME}/usr/local/include
-)
-
 add_executable(ModeCommutators 
     sources/ModeCommutators.cpp
 )
@@ -36,9 +32,10 @@ else()
     message(FATAL_ERROR "Unsupported compiler ${CMAKE_CXX_COMPILER_ID}. Only GCC is supported.")
 endif()
 
-find_package(Boost REQUIRED COMPONENTS serialization)
-target_include_directories(ModeCommutators PRIVATE ${Boost_INCLUDE_DIRS})
+find_package(mrock 
+    REQUIRED 
+    COMPONENTS 
+        symbolic_operators 
+)
 
-find_package(mrock REQUIRED)
-target_include_directories(ModeCommutators PUBLIC ${mrock_INCLUDE_DIRS})
 target_link_libraries(ModeCommutators PUBLIC ${mrock_LIBRARIES})

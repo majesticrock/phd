@@ -13,7 +13,7 @@ $(BUILD_DIR)/Lindhard: $(BUILD_DIR)/Makefile
 
 $(BUILD_DIR)/Makefile: CMakeLists.txt sources/*
 	@mkdir -p $(BUILD_DIR)
-	@cd $(BUILD_DIR) && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
+	@cd $(BUILD_DIR) && cmake -DCMAKE_CXX_COMPILER=g++ ..
 
 clean:
 	rm -rf $(BUILD_DIR)
