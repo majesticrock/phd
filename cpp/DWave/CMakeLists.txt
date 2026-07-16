@@ -1,26 +1,8 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.30)
 
-project(DWave VERSION 2.1.0 LANGUAGES CXX)
+project(DWave VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-list(APPEND CMAKE_PREFIX_PATH "~/usr/local")
-
-set(MKL_LINK static)
-set(MKL_THREADING gnu_thread)
-set(MKL_INTERFACE lp64)
-
-find_package(MKL CONFIG QUIET HINTS $ENV{MKLROOT})
-if (MKL_FOUND)
-    set(USE_MKL ON CACHE BOOL "Use Intel MKL" FORCE)
-else()
-    set(USE_MKL OFF CACHE BOOL "Use Intel MKL" FORCE)
-endif()
-
-include(${CMAKE_SOURCE_DIR}/cmake/MKLFlags.cmake)
-include(${CMAKE_SOURCE_DIR}/cmake/SelectClusterBuildOptions.cmake)
+list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/usr/local")
 
 find_package(OpenMP REQUIRED)
 find_package(mrock 
@@ -31,8 +13,6 @@ find_package(mrock
         utility
 )
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../PhdUtility/cmake/mrock-information.cmake)
-
 add_executable(DWave 
     sources/DWave.cpp
 )
@@ -40,7 +20,24 @@ target_sources(DWave PRIVATE
     sources/DWave/Model.cpp
     sources/DWave/T_C.cpp
 )
-SET_COMPILER_FLAGS(DWave)
+
+# provided by the mrock library
+mrock_generate_information_header(
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/generated/dwave/info.h"
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    OUT_HEADER MROCK_GENERATED_INFO_HEADER
+    OUT_INCLUDE_DIR MROCK_GENERATED_INCLUDE_DIR
+)
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/dwave_options.cmake)
+# Sets include dir for the generated metadata header file
+target_include_directories(dwave_options INTERFACE ${MROCK_GENERATED_INCLUDE_DIR})
+
+target_link_libraries(DWave 
+    PRIVATE  
+        OpenMP::OpenMP_CXX 
+        ${mrock_LIBRARIES}
+        dwave_options
+)
 
 option(LATTICE_CUT_RESIDUALS "Compute residuals and eigenvectors of the transformed dynamical matrix." OFF)
 if (LATTICE_CUT_RESIDUALS)
@@ -50,6 +47,3 @@ option(LATTICE_CUT_FULL_DIAG "Fully diagonalize the transformed dynamical matrix
 if (LATTICE_CUT_FULL_DIAG)
     target_compile_definitions(DWave PRIVATE LATTICE_CUT_FULL_DIAG)
 endif()
-
-
-target_link_libraries(DWave PRIVATE OpenMP::OpenMP_CXX ${mrock_LIBRARIES})
