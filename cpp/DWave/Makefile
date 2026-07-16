@@ -18,30 +18,6 @@ $(BUILD_DIR)/Makefile: CMakeLists.txt
 		-DLATTICE_CUT_FULL_DIAG=$(FULL_DIAG) \
 		..
 
-cascadelake: $(CASCADELAKE_BUILD_DIR)/Makefile
-	@$(MAKE) -C $(CASCADELAKE_BUILD_DIR)
-
-$(CASCADELAKE_BUILD_DIR)/Makefile: CMakeLists.txt
-	@mkdir -p $(CASCADELAKE_BUILD_DIR)
-	@cd $(CASCADELAKE_BUILD_DIR) && cmake \
-	    -DCMAKE_CXX_COMPILER=g++ \
-	    -DCLUSTER_BUILD=cascadelake \
-	    -DLATTICE_CUT_RESIDUALS=$(RESIDUALS) \
-	    -DLATTICE_CUT_FULL_DIAG=$(FULL_DIAG) \
-	    ..
-
-icelake: $(ICELAKE_BUILD_DIR)/Makefile
-	@$(MAKE) -C $(ICELAKE_BUILD_DIR)
-
-$(ICELAKE_BUILD_DIR)/Makefile: CMakeLists.txt
-	@mkdir -p $(ICELAKE_BUILD_DIR)
-	@cd $(ICELAKE_BUILD_DIR) && cmake \
-	    -DCMAKE_CXX_COMPILER=g++ \
-	    -DCLUSTER_BUILD=icelake \
-	    -DLATTICE_CUT_RESIDUALS=$(RESIDUALS) \
-	    -DLATTICE_CUT_FULL_DIAG=$(FULL_DIAG) \
-	    ..
-
 debug: $(DEBUG_BUILD_DIR)/Makefile
 	@$(MAKE) -C $(DEBUG_BUILD_DIR)
 

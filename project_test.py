@@ -16,7 +16,7 @@ def run_command(command, cwd=None, requires_linux=False):
         return subprocess.run(command, cwd=cwd, check=True)
 
 def generate_execution_command(app, params):
-    return ["mpirun", "-n", "1", "--map-by", f"node:PE={multiprocessing.cpu_count() // 2}", "--bind-to", "core", f"./build/{app}", params]
+    return ["mpirun", "-n", "1", "--map-by", f"node:PE={multiprocessing.cpu_count() // 2}", "--bind-to", "core", f"./build/default/{app}", params]
 
 ###################################################################################################
 def run_tests_PhdUtility():
