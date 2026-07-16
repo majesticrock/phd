@@ -15,12 +15,16 @@ def run_command(command, cwd=None, requires_linux=False):
     else:
         return subprocess.run(command, cwd=cwd, check=True)
 
+def generate_mpi_execution_command(app, params, dir="default"):
+    return [f"./build/{dir}/{app}", params]
+
 def generate_execution_command(app, params):
     return ["mpirun", "-n", "1", "--map-by", f"node:PE={multiprocessing.cpu_count() // 2}", "--bind-to", "core", f"./build/default/{app}", params]
 
+
 ###################################################################################################
 def run_tests_PhdUtility():
-    run_command(["make", "test", "-j"], cwd="PhdUtility", requires_linux=True)
+    run_command(["make", "test"], cwd="PhdUtility", requires_linux=True)
 
 def install_PhdUtility():
     run_command(["make", "install"], cwd="PhdUtility", requires_linux=True)
@@ -31,7 +35,7 @@ def build_FermionCommute():
 
 ###################################################################################################
 def build_continuum():
-    run_command(["make", "-j"], cwd="cpp/ContinuumSystem", requires_linux=True)
+    run_command(["make"], cwd="cpp/ContinuumSystem", requires_linux=True)
 
 def run_continuum(i):
     if i == 0:
@@ -49,7 +53,7 @@ def run_continuum(i):
 
 ###################################################################################################
 def build_hubbard():
-    run_command(["make", "-j"], cwd="cpp/Hubbard", requires_linux=True)
+    run_command(["make"], cwd="cpp/Hubbard", requires_linux=True)
 
 def run_hubbard(i):
     if i == 0:
@@ -63,7 +67,22 @@ def run_hubbard(i):
     else:
         raise ValueError("Hubbard execution: Invalid index")
     
-    run_command(generate_execution_command("HubbardMeanField", f"test_params/{param_name}"), cwd="cpp/Hubbard", requires_linux=True)
+    run_command(generate_mpi_execution_command("HubbardMeanField", f"test_params/{param_name}"), cwd="cpp/Hubbard", requires_linux=True)
+
+###################################################################################################
+def build_latticecut():
+    run_command(["make", "FULL_DIAG=ON"], cwd="cpp/LatticeCUT", requires_linux=True)
+
+def run_latticecut(i):
+    if i == 0:
+        param_name = "ed.config"
+    elif i == 1:
+        param_name = "enhanced.config"
+    else:
+        raise ValueError("LatticeCUT execution: Invalid index")
+    
+    run_command(generate_execution_command("latticecut", f"test_params/{param_name}"), cwd="cpp/LatticeCUT", requires_linux=True)
+
 
 ###################################################################################################
 def manual_data_check(app, i=None):
@@ -100,6 +119,10 @@ if __name__ == "__main__":
         for i in range(4):
             run_continuum(i)
             manual_data_check("continuum", i)
+        build_latticecut()
+        for i in range(2):
+            run_latticecut(i)
+            manual_data_check("latticecut", i)
     elif args.step == 'PhdUtility':
         run_tests_PhdUtility()
     elif args.step == 'Hubbard':
@@ -112,5 +135,10 @@ if __name__ == "__main__":
         for i in range(4):
             run_continuum(i)
             manual_data_check("continuum", i)
+    elif args.step == 'LatticeCUT':
+        build_latticecut()
+        for i in range(2):
+            run_latticecut(i)
+            manual_data_check("latticecut", i)
 
     print("Testing successful!")
