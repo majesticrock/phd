@@ -23,6 +23,7 @@ stderr*
 *.gz
 *json
 paper/plots
+.mrock/
 
 #include literature
 !literature/*.pdf

@@ -13,7 +13,6 @@ all: $(BUILD_DIR)/Makefile
 $(BUILD_DIR)/Makefile: CMakeLists.txt
 	@mkdir -p $(BUILD_DIR)
 	@cd $(BUILD_DIR) && cmake \
-		-DCMAKE_CXX_COMPILER=g++ \
 		-DLATTICE_CUT_RESIDUALS=$(RESIDUALS) \
 		-DLATTICE_CUT_FULL_DIAG=$(FULL_DIAG) \
 		..
@@ -24,7 +23,6 @@ debug: $(DEBUG_BUILD_DIR)/Makefile
 $(DEBUG_BUILD_DIR)/Makefile: CMakeLists.txt
 	@mkdir -p $(DEBUG_BUILD_DIR)
 	@cd $(DEBUG_BUILD_DIR) && cmake \
-		-DCMAKE_CXX_COMPILER=g++ \
 		-DCMAKE_BUILD_TYPE=Debug \
 		-DLATTICE_CUT_RESIDUALS=$(RESIDUALS) \
 		-DLATTICE_CUT_FULL_DIAG=$(FULL_DIAG) \

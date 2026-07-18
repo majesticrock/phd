@@ -1,59 +1,58 @@
+#include "helper_functions.hpp"
+
 #include <mrock/utility/OutputConvenience.hpp>
+#include <nlohmann/json.hpp>
+
 #include <chrono>
 #include <iostream>
 #include <omp.h>
-#include <nlohmann/json.hpp>
-#include "helper_functions.hpp"
 
-//#define COMPUTE_Q_PATH
+// #define COMPUTE_Q_PATH
 #define COMPUTE_Q_AVERAGE
 
-std::vector<cdouble> lindhard(const kvec_t& q, 
-                const std::vector<cdouble>& omegas,
-                const triple_array<kvec_t>& cosines,
-                const triple_array<kvec_t>& sines,
-                const triple_array<double>& xis,
-                const triple_array<double>& fermis)
-{
-    const double qnorm_sqr = q[0]*q[0] + q[1]*q[1] + q[2]*q[2];
+std::vector<cdouble> lindhard(const kvec_t& q,
+                              const std::vector<cdouble>& omegas,
+                              const triple_array<kvec_t>& cosines,
+                              const triple_array<kvec_t>& sines,
+                              const triple_array<double>& xis,
+                              const triple_array<double>& fermis) {
+    const double qnorm_sqr = q[0] * q[0] + q[1] * q[1] + q[2] * q[2];
     std::vector<cdouble> chis(omegas.size());
 
-    for (std::size_t o=0U; o<omegas.size(); ++o) {
-        if (omegas[o].real() < omegas[o].imag() && qnorm_sqr < omegas[o].imag()*omegas[o].imag()) {
+    for (std::size_t o = 0U; o < omegas.size(); ++o) {
+        if (omegas[o].real() < omegas[o].imag() && qnorm_sqr < omegas[o].imag() * omegas[o].imag()) {
             // help
-            for (std::size_t x=0U; x<N; ++x) {
-                for (std::size_t y=0U; y<N; ++y) {
-                    for (std::size_t z=0U; z<N; ++z) {
+            for (std::size_t x = 0U; x < N; ++x) {
+                for (std::size_t y = 0U; y < N; ++y) {
+                    for (std::size_t z = 0U; z < N; ++z) {
                         chis[o] += derivative_fermi(xis[x][y][z]);
                     }
                 }
             }
-        }
-        else {
-            if (qnorm_sqr < omegas[o].imag()*omegas[o].imag())
-            {
-                for (std::size_t x=0U; x<N; ++x) {
-                    for (std::size_t y=0U; y<N; ++y) {
-                        for (std::size_t z=0U; z<N; ++z) {
-                            chis[o] += fermis[x][y][z] * (shifted_xi(q, cosines[x][y][z], sines[x][y][z]) - xis[x][y][z]);
+        } else {
+            if (qnorm_sqr < omegas[o].imag() * omegas[o].imag()) {
+                for (std::size_t x = 0U; x < N; ++x) {
+                    for (std::size_t y = 0U; y < N; ++y) {
+                        for (std::size_t z = 0U; z < N; ++z) {
+                            chis[o] +=
+                                fermis[x][y][z] * (shifted_xi(q, cosines[x][y][z], sines[x][y][z]) - xis[x][y][z]);
                         }
                     }
                 }
-                chis[o] /= omegas[o]*omegas[o];
-            }
-            else {
+                chis[o] /= omegas[o] * omegas[o];
+            } else {
                 double xi_q;
-                for (std::size_t x=0U; x<N; ++x) {
-                    for (std::size_t y=0U; y<N; ++y) {
-                        for (std::size_t z=0U; z<N; ++z) {
-                            xi_q = shifted_xi(q, cosines[x][y][z], sines[x][y][z]); 
+                for (std::size_t x = 0U; x < N; ++x) {
+                    for (std::size_t y = 0U; y < N; ++y) {
+                        for (std::size_t z = 0U; z < N; ++z) {
+                            xi_q = shifted_xi(q, cosines[x][y][z], sines[x][y][z]);
                             chis[o] += (fermis[x][y][z] - fermi(xi_q)) / (xis[x][y][z] - xi_q + omegas[o]);
                         }
                     }
                 }
             }
         }
-        chis[o] *= -2. / (N*N*N);
+        chis[o] *= -2. / (N * N * N);
     }
     return chis;
 }
@@ -62,21 +61,18 @@ int main(int argc, char** argv) {
     using clock = std::chrono::high_resolution_clock;
     clock::time_point begin = clock::now();
 
-    std::vector<cdouble> omegas = {
-         {0.0  * W, 1e-5},
-         {0.02 * W, 5e-3},
-         {0.04 * W, 5e-3}
-    }; // eV
+    std::vector<cdouble> omegas = {{0.0 * W, 1e-5}, {0.02 * W, 5e-3}, {0.04 * W, 5e-3}};  // eV
 
     const triple_array<kvec_t> kvecs = generate_kvecs();
-    const triple_array<kvec_t> cosines = compute_cosines(kvecs);;
-    const triple_array<kvec_t> sines = compute_sines(kvecs);;
+    const triple_array<kvec_t> cosines = compute_cosines(kvecs);
+    ;
+    const triple_array<kvec_t> sines = compute_sines(kvecs);
+    ;
     const triple_array<double> xis = compute_xis(cosines);
     const triple_array<double> fermis = compute_fermis(xis);
 
-
 #ifdef COMPUTE_Q_PATH
-    std::array<kvec_t, 4> high_symmetry_points{}; // Gamma, X, M, R
+    std::array<kvec_t, 4> high_symmetry_points{};  // Gamma, X, M, R
     // Gamma
     high_symmetry_points[0] = {0., 0., 0.};
     // X
@@ -89,48 +85,45 @@ int main(int argc, char** argv) {
     std::array<std::vector<std::array<double, n_segment>>, 4> chi_paths;
     chi_paths.fill(std::vector<std::array<double, n_segment>>(omegas.size()));
 
-    for (std::size_t i=0U; i<4U; ++i) {
-        const auto& qvecs = connector_line(high_symmetry_points[i], high_symmetry_points[(i+1)%4]);
+    for (std::size_t i = 0U; i < 4U; ++i) {
+        const auto& qvecs = connector_line(high_symmetry_points[i], high_symmetry_points[(i + 1) % 4]);
 #pragma omp parallel for
-        for (int q=0; q<n_segment; ++q) {
+        for (int q = 0; q < n_segment; ++q) {
             std::vector<cdouble> result = lindhard(qvecs[q], omegas, cosines, sines, xis, fermis);
-            for (std::size_t r=0U; r<result.size(); ++r) {
+            for (std::size_t r = 0U; r < result.size(); ++r) {
                 chi_paths[i][r][q] = result[r].real();
             }
         }
     }
 
     /*
-    * output  data
-    */
+     * output  data
+     */
     std::vector<double> real_omegas(omegas.size());
-    for(std::size_t o=0U;o<omegas.size();++o){
+    for (std::size_t o = 0U; o < omegas.size(); ++o) {
         real_omegas[o] = omegas[o].real();
     }
-	nlohmann::json jChi = {
-		{ "chi_Gamma_X",	chi_paths[0] },
-	    { "chi_X_M",    	chi_paths[1] },
-        { "chi_M_R",    	chi_paths[2] },
-        { "chi_R_Gamma",	chi_paths[3] },
-        { "omegas",         real_omegas  }
-	};
-	mrock::utility::saveString(jChi.dump(4), "chi.json.gz");
-	std::cout << "Data saved!" << std::endl;
+    nlohmann::json jChi = {{"chi_Gamma_X", chi_paths[0]},
+                           {"chi_X_M", chi_paths[1]},
+                           {"chi_M_R", chi_paths[2]},
+                           {"chi_R_Gamma", chi_paths[3]},
+                           {"omegas", real_omegas}};
+    mrock::utility::save_string(jChi.dump(4), "chi.json.gz");
+    std::cout << "Data saved!" << std::endl;
 #endif
 #ifdef COMPUTE_Q_AVERAGE
     std::vector<double> v_screens(omegas.size());
 
-    #pragma omp parallel
+#pragma omp parallel
     {
         std::vector<double> v_screens_local(omegas.size(), 0.0);
 
-        #pragma omp for collapse(3)
+#pragma omp for collapse(3)
         for (std::size_t x = 0; x < N; ++x) {
             for (std::size_t y = 0; y < N; ++y) {
                 for (std::size_t z = 0; z < N; ++z) {
                     const auto& q = kvecs[x][y][z];
-                    const double q_sqr =
-                        q[0]*q[0] + q[1]*q[1] + q[2]*q[2];
+                    const double q_sqr = q[0] * q[0] + q[1] * q[1] + q[2] * q[2];
 
                     if (q_sqr < 1e-12)
                         continue;
@@ -145,7 +138,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        #pragma omp critical
+#pragma omp critical
         {
             for (std::size_t o = 0; o < omegas.size(); ++o) {
                 v_screens[o] += v_screens_local[o];
@@ -153,29 +146,25 @@ int main(int argc, char** argv) {
         }
     }
     std::vector<double> Us(omegas.size());
-    for (std::size_t o=0U; o<omegas.size(); ++o) {
-        v_screens[o] /= (N*N*N);
+    for (std::size_t o = 0U; o < omegas.size(); ++o) {
+        v_screens[o] /= (N * N * N);
         Us[o] = v_screens[o] * rho_F;
     }
-    
 
     /*
-    * output  data
-    */
+     * output  data
+     */
     std::vector<double> real_omegas(omegas.size());
-    for(std::size_t o=0U;o<omegas.size();++o){
+    for (std::size_t o = 0U; o < omegas.size(); ++o) {
         real_omegas[o] = omegas[o].real();
     }
-	nlohmann::json jScreen = {
-        { "Us",         Us          },
-		{ "v_screens",	v_screens   },
-        { "omegas",     real_omegas }
-	};
-	mrock::utility::saveString(jScreen.dump(4), "v_screens.json.gz");
-	std::cout << "Data saved!" << std::endl;
+    nlohmann::json jScreen = {{"Us", Us}, {"v_screens", v_screens}, {"omegas", real_omegas}};
+    mrock::utility::save_string(jScreen.dump(4), "v_screens.json.gz");
+    std::cout << "Data saved!" << std::endl;
 #endif
 
     clock::time_point end = clock::now();
-	std::cout << "Runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+    std::cout << "Runtime = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]"
+              << std::endl;
     return 0;
 }
