@@ -1,17 +1,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from mrock_centralized_scripts import path_appender
-path_appender.append()
-import get_data
+from mrock.get_data import *
+data_loader = DataLoader()
 
 N=100
-df = get_data.load_panda("dwave", "test", "single_gap.json.gz",
-                         **get_data.dwave_params(N=N, 
-                                                 g=1, 
-                                                 V=0.2, 
-                                                 E_F=-0.2, 
-                                                 omega_D=0.04))
+df = data_loader.load_panda("dwave", "test", "single_gap.json.gz",
+                         **dwave_params(N=N, 
+                                        g=1, 
+                                        V=0.2, 
+                                        E_F=-0.2, 
+                                        omega_D=0.04))
 
 kx = np.linspace(-1, 1, N, endpoint=False)
 ky = np.linspace(-1, 1, N, endpoint=False)

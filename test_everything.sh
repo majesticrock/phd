@@ -94,9 +94,10 @@ run_make_test() {
 # Combined convenience: build then (optionally) run test
 build_and_maybe_test() {
   local dir="$1"
-  run_make_build "$dir"
   if [[ "$BUILD_ONLY" == "false" ]]; then
     run_make_test "$dir"
+  else
+    run_make_build "$dir"
   fi
 }
 

@@ -1,19 +1,21 @@
-# List of things, that I believe to be interesting, but have not (yet) investigated
+# Code for Collective Excitations in Correlated Quantum Materials
 
-## Effect of dispersive phonons
-Don't consider \omega(q) = \omega_D = const, but rather a real dispersion.
-Must likely be restricted to momentum sums, i.e., 1D or 2D systems.
+This is the superproject root README file.
 
-## Let the pair creation operators flow in the CUT as well
-This would only change the operators entering the Green's functions, so I believe that this should not affect the occurring modes.
-Yet, it might be interesting to check that.
+## Related publications
 
-## Dispersions of collective excitations
-On 1D or 2D systems, compute and study the dispersions of the secondary modes.
+This superproject contains all code relevant to my doctoral thesis (not yet published) and the following publications
+ 
+- Collective excitations in competing phases in two and three dimensions, J. Althüser & G. S. Uhrig, 
+ 		Physical Review B 109, 205153 (2024), https://doi.org/10.1103/PhysRevB.109.205153
+- Collective modes in superconductors including Coulomb repulsion, J. Althüser & G. S. Uhrig, 
+ 		SciPost Physics 19, 067 (2025) https://doi.org/10.21468/SciPostPhys.19.3.067
+- Enhanced Superconductivity in Proximity to Peaks in Densities of States, J. Althüser, I. M. Eremin & G. S. Uhrig,
+ 		(preprint) arXiv:2512.11451 (2025) https://doi.org/10.48550/arXiv.2512.11451
+- Secondary Collective Excitations in Intermediate to Strong-Coupling Superconductors, J. Althüser & G. S. Uhrig, 
+ 		(preprint) arXiv:2605.20059 (2026) https://doi.org/10.48550/arXiv.2605.20059
 
-## Multiband systems
-Multiband (and multigap) systems exhibit another mode related to the phase difference between the two gaps.
-See, how this is affected by the CUT interaction
 
-## Difference between Lenz-Wegner, Fröhlich, and our CUT approach
-See what differences occur.
+## Using the programs
+
+Have a look in the individual directories!

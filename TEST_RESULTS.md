@@ -23,6 +23,8 @@ SC and CDW only in Continuum
 Peak at ω=0 in t.AFM
 Peak at ω=2Δ in l.AFM 
 
+
+
 # Continuum
 
 ## No Coulomb
@@ -40,3 +42,13 @@ Higgs peak at ω=2Δ
 ## Strong attraction
 Phase peak at ω=0
 Multiple peaks at ω<2Δ
+
+
+# LatticeCUT
+
+# Standard
+Operator amplitudes should exhibit oscillatory behavior with 2 additional roots per mode.
+
+# Enhanced
+Should display subgap peaks (gap is hard to distinguish from the continuum due to the small discretization).
+Additionally: Large weight inside the continuum around ω=0.3.
