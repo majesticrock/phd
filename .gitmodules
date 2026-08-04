@@ -28,3 +28,6 @@
 [submodule "cpp/LatticeCUT"]
 	path = cpp/LatticeCUT
 	url = git@github.com:majesticrock/LatticeCUT.git
+[submodule "cpp/cpp/NickelCUT"]
+	path = cpp/cpp/NickelCUT
+	url = git@github.com:majesticrock/NickelCUT.git
