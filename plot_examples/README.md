@@ -26,12 +26,12 @@ These are short example plotting scripts that demonstrate common workflows with 
 - hubbard_resolvent.py
   Loads the Hubbard resolvent data and evaluates spectral densities for the superconducting phase and amplitude channels using the continued-fraction evaluator. Plots spectra in meV and shades the continuum region.
 
-How to run:
+## How to run
 - Execute each script with Python (e.g. `python continuum_delta.py`).
 - Ensure required packages are installed (mrock, numpy, matplotlib, scipy, ...).
 - If your data is not in the package default directory, set MROCK_DATA_DIR to point to your data folder.
 
-These scripts are minimal examples; modify parameters (sampling N, g, U, E_F, omega_D, ignore ranges for continued fractions, etc.) as needed for your tests.
+These scripts are minimal examples; modify parameters (discretizations, interaction strengths, etc.) as needed.
 
 Naturally, the data must exist to plot it.
 Either take them from [here be TuDoData once I put all the data there] or generate them using the corresponding executable.
