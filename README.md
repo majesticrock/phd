@@ -1,6 +1,20 @@
 # Code for Collective Excitations in Correlated Quantum Materials
 
-This repository contains the code used for the mean-field calculations, collective-mode analyses, and plotting workflows behind the thesis and publications listed below. The root of this project gives the basic structure and workflow, while the detailed instructions, and execution notes live in the corresponding subdirectories.
+Computing spectral functions is a demanding task. Here, the iterated equations of motion scheme is used to address the issue.
+Employing the method involves calculating various commutators and the reduction of high-order expectation values to computable bilinear expressions using Wick's theorem.
+This daunting task is handled by the [symbolic_operators](PhdUtility/symbolic_operators/README.md) sublibrary located in `PhdUtility`.
+
+The algorithms derived in [Ref. 1](https://doi.org/10.1103/PhysRevB.109.205153) and [Ref. 4](https://doi.org/10.48550/arXiv.2605.20059) are implemented in the [iEoM](PhdUtility/iEoM/README.md) sublibrary also located in `PhdUtility`.
+
+The sublibrary [utility](PhdUtility/utility/README.md) (also located in `PhdUtility`) contains various functionality that is reused throughout the projects.
+
+The `cpp` directory contains the three applications that employ the aforementioned libraries to evaluate the spectra of collective excitations in different systems.
+
+The `plot_examples` directory contains a few example scripts for plotting the results using matplotlib in python.
+
+The computationally demanding parts of the code are written in C++.
+
+The root of this project gives the basic structure and workflow, while the detailed instructions, and execution notes live in the corresponding subdirectories.
 
 ## Basic workflow
 
@@ -13,6 +27,7 @@ This repository contains the code used for the mean-field calculations, collecti
 ## What belongs where
 
 - [PhdUtility](PhdUtility/README.md): the shared C++ library, build system, and installation logic.
+- [cpp/FermionCommute](cpp/FermionCommute/README.md): Application using the [symbolic_operators](PhdUtility/symbolic_operators/README.md) sublibrary to evaluate commutators and expectation values.
 - [cpp/Hubbard](cpp/Hubbard/README.md): mean-filed and collective-mode calculations on the half-filled extended Hubbard model.
 - [cpp/ContinuumSystem](cpp/ContinuumSystem/README.md): using an effective interaction in a continuum-model.
 - [cpp/LatticeCUT](cpp/LatticeCUT/README.md): using an effective interaction on lattices, including full-diagonalization workflows.
@@ -38,7 +53,7 @@ The entire project can be tested using `test_everything.sh`.
 
 This superproject contains all code relevant to my doctoral thesis (not yet published) and the following publications:
 
-- Collective excitations in competing phases in two and three dimensions, J. Althüser & G. S. Uhrig, Physical Review B 109, 205153 (2024), https://doi.org/10.1103/PhysRevB.109.205153
-- Collective modes in superconductors including Coulomb repulsion, J. Althüser & G. S. Uhrig, SciPost Physics 19, 067 (2025), https://doi.org/10.21468/SciPostPhys.19.3.067
-- Enhanced Superconductivity in Proximity to Peaks in Densities of States, J. Althüser, I. M. Eremin & G. S. Uhrig, (preprint) arXiv:2512.11451 (2025), https://doi.org/10.48550/arXiv.2512.11451
-- Secondary Collective Excitations in Intermediate to Strong-Coupling Superconductors, J. Althüser & G. S. Uhrig, (preprint) arXiv:2605.20059 (2026), https://doi.org/10.48550/arXiv.2605.20059
+1. Collective excitations in competing phases in two and three dimensions, J. Althüser & G. S. Uhrig, Physical Review B 109, 205153 (2024), https://doi.org/10.1103/PhysRevB.109.205153
+1. Collective modes in superconductors including Coulomb repulsion, J. Althüser & G. S. Uhrig, SciPost Physics 19, 067 (2025), https://doi.org/10.21468/SciPostPhys.19.3.067
+1. Enhanced Superconductivity in Proximity to Peaks in Densities of States, J. Althüser, I. M. Eremin & G. S. Uhrig, (preprint) arXiv:2512.11451 (2025), https://doi.org/10.48550/arXiv.2512.11451
+1. Secondary Collective Excitations in Intermediate to Strong-Coupling Superconductors, J. Althüser & G. S. Uhrig, (preprint) arXiv:2605.20059 (2026), https://doi.org/10.48550/arXiv.2605.20059
