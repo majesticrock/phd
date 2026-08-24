@@ -8,7 +8,7 @@ The algorithms derived in [Ref. 1](https://doi.org/10.1103/PhysRevB.109.205153) 
 
 The sublibrary [utility](PhdUtility/utility/README.md) (also located in `PhdUtility`) contains various functionality that is reused throughout the projects.
 
-The `cpp` directory contains the three applications that employ the aforementioned libraries to evaluate the spectra of collective excitations in different systems.
+The `cpp` directory contains the four applications that employ the aforementioned libraries to evaluate the spectra of collective excitations in different systems.
 
 The `plot_examples` directory contains a few example scripts for plotting the results using matplotlib in python.
 
@@ -28,7 +28,7 @@ The root of this project gives the basic structure and workflow, while the detai
 
 - [PhdUtility](PhdUtility/README.md): the shared C++ library, build system, and installation logic.
 - [cpp/FermionCommute](cpp/FermionCommute/README.md): Application using the [symbolic_operators](PhdUtility/symbolic_operators/README.md) sublibrary to evaluate commutators and expectation values.
-- [cpp/Hubbard](cpp/Hubbard/README.md): mean-filed and collective-mode calculations on the half-filled extended Hubbard model.
+- [cpp/Hubbard](cpp/Hubbard/README.md): mean-field and collective-mode calculations on the half-filled extended Hubbard model.
 - [cpp/ContinuumSystem](cpp/ContinuumSystem/README.md): using an effective interaction in a continuum-model.
 - [cpp/LatticeCUT](cpp/LatticeCUT/README.md): using an effective interaction on lattices, including full-diagonalization workflows.
 - [plot_examples](plot_examples/README.md): Python scripts that demonstrate how to load and plot the generated data.
