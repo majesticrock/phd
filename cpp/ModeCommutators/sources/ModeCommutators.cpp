@@ -1,6 +1,7 @@
 #include <mrock/symbolic_operators/Momentum.hpp>
 #include <mrock/symbolic_operators/Operator.hpp>
 #include <mrock/symbolic_operators/Term.hpp>
+#include <mrock/symbolic_operators/TermCollector.hpp>
 
 #include <vector>
 
@@ -12,7 +13,7 @@ const Operator c_minus_k = Operator{-base_k, Index::SpinDown, false};
 const Operator c_k_dagger = Operator{base_k, Index::SpinUp, true};
 const Operator c_minus_k_dagger = Operator{-base_k, Index::SpinDown, true};
 
-std::vector<Term> get_hamiltonian() {
+TermCollector get_hamiltonian() {
     const Term H_Kin(1, Coefficient("\\epsilon_0", Momentum('q')), SumContainer{MomentumSum({'q'}), Index::Sigma},
                      std::vector<Operator>(
                          {Operator('q', 1, false, Index::Sigma, true), Operator('q', 1, false, Index::Sigma, false)}));
@@ -27,18 +28,18 @@ std::vector<Term> get_hamiltonian() {
 }
 
 int main(int argc, char** argv) {
-    std::vector<Term> hamiltonian = get_hamiltonian();
+    TermCollector hamiltonian = get_hamiltonian();
 
-    const std::vector<Term> pc_term =
-        std::vector<Term>({Term(1, std::vector<Operator>({c_k_dagger, c_minus_k_dagger}))});
-    const std::vector<Term> higgs_term =
-        std::vector<Term>({Term(1, std::vector<Operator>({c_minus_k, c_k})),
+    const TermCollector pc_term =
+        TermCollector({Term(1, std::vector<Operator>({c_k_dagger, c_minus_k_dagger}))});
+    const TermCollector higgs_term =
+        TermCollector({Term(1, std::vector<Operator>({c_minus_k, c_k})),
                            Term(1, std::vector<Operator>({c_k_dagger, c_minus_k_dagger}))});
-    const std::vector<Term> number_term =
-        std::vector<Term>({Term(1, std::vector<Operator>({c_minus_k_dagger, c_minus_k})),
+    const TermCollector number_term =
+        TermCollector({Term(1, std::vector<Operator>({c_minus_k_dagger, c_minus_k})),
                            Term(1, std::vector<Operator>({c_k_dagger, c_k}))});
 
-    const std::vector<Term> delta_k_operator = std::vector<Term>(
+    const TermCollector delta_k_operator = TermCollector(
         {Term(1,
               Coefficient::RealInversionSymmetric(
                   "g", MomentumList({'k', 't'}),
@@ -46,8 +47,8 @@ int main(int argc, char** argv) {
               SumContainer{MomentumSum({'t'})},
               std::vector<Operator>({c_k_dagger.with_momentum('t'), c_minus_k_dagger.with_momentum('t')}))});
 
-    std::vector<Term> higgs_commutator = commutator(hamiltonian, higgs_term);
-    clean_up(higgs_commutator);
+    TermCollector higgs_commutator = commutator(hamiltonian, higgs_term);
+    higgs_commutator.clean_up();
     std::ranges::sort(higgs_commutator, [](const Term& l, const Term& r) {
         if (l.operators.size() < r.operators.size())
             return true;
@@ -61,8 +62,8 @@ int main(int argc, char** argv) {
                  "\\downarrow}^\\dagger ] = "
               << higgs_commutator << "\\end{align*}" << std::endl;
 
-    std::vector<Term> number_commutator = commutator(hamiltonian, number_term);
-    clean_up(number_commutator);
+    TermCollector number_commutator = commutator(hamiltonian, number_term);
+    number_commutator.clean_up();
     std::ranges::sort(number_commutator, [](const Term& l, const Term& r) {
         if (l.operators.size() < r.operators.size())
             return true;
@@ -76,8 +77,8 @@ int main(int argc, char** argv) {
                  "\\downarrow} ] = "
               << number_commutator << "\\end{align*}" << std::endl;
 
-    std::vector<Term> delta_commutator = commutator(hamiltonian, delta_k_operator);
-    clean_up(delta_commutator);
+    TermCollector delta_commutator = commutator(hamiltonian, delta_k_operator);
+    delta_commutator.clean_up();
     std::ranges::sort(delta_commutator, [](const Term& l, const Term& r) {
         if (l.operators.size() < r.operators.size())
             return true;
@@ -90,8 +91,8 @@ int main(int argc, char** argv) {
     std::cout << "\\begin{align*}\n\t[H, \\hat{\\Delta}_{k}^\\dagger ] = " << delta_commutator << "\\end{align*}"
               << std::endl;
 
-    std::vector<Term> pc_commutator = commutator(hamiltonian, pc_term);
-    clean_up(pc_commutator);
+    TermCollector pc_commutator = commutator(hamiltonian, pc_term);
+    pc_commutator.clean_up();
     std::ranges::sort(pc_commutator, [](const Term& l, const Term& r) {
         if (l.operators.size() < r.operators.size())
             return true;
